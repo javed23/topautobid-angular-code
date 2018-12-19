@@ -1,0 +1,104 @@
+@media only screen and ( max-width: 1800px){
+    .map-location-search-sec form .form-field:nth-child(1){ width: 15%;}
+}
+
+@media only screen and ( max-width: 1365px){
+    .map-location-search-sec form .form-field:nth-child(1){ width: 14.4%;}
+}
+@media only screen and ( max-width: 1199px){
+    .map-location-search-sec .form-field{ width: 24.55% !important; margin: 2px 2px !important;}
+	.map-location-search-sec form .form-field:nth-child(8){ width: 19% !important}
+	.map-location-search-sec form .form-field:nth-child(9){ width: 5% !important}
+}
+@media only screen and ( max-width: 991px){
+    .about-pic{ width: 100%;}
+    .inner-container{ padding: 0;}
+    .email-heading{}
+    .email-heading h3{ text-align: center;}
+    .email-heading h6{ text-align: center; margin-bottom: 15px;}
+    
+    .map-location-search-sec .form-field{ width: 24.4% !important; }
+    
+    .cta-btn{ padding: 0 24px;}
+}
+@media only screen and ( max-width: 767px){
+    .search-area{ width: 490px;}
+    .inp-box-lg{ height: 51px;}
+    .search-btn-lg{ height: 51px; width: 51px; background-size: 20px;}
+    .search-area h2{ font-size: 36px;}
+    .about-pic{ margin-bottom: 30px;}
+    .about-sec{ padding: 40px 0;}
+    .search-area h6{ margin: 8px 0 24px;}
+    .search-area{ top: 58%;}
+    .logo{ left: 15px; transform: none;}
+    
+    .map-location-search-sec .form-field{ width: 32.6% !important; }
+	.map-location-search-sec form .form-field:nth-child(8){ width: 32.6% !important}
+	.map-location-search-sec form .form-field:nth-child(9){ width: 32.6% !important}
+    .map-location-search-sec{ position: relative;}
+    
+    .detail-listing-main .col-md-8.col-sm-7,
+    .detail-listing-main .col-md-4.col-sm-5{ float: none !important; width: 100% !important;}
+    .detail-right-side{ padding: 10px 0}
+}
+@media only screen and ( max-width: 567px){
+    .search-area{ width: 420px;}
+    .email-form{ padding: 45px 20px 20px;}
+    footer .col-sm-6{ float: none !important; width: 100%; text-align: center;}
+    footer .col-sm-6 ul{ float: none !important; width: 100%;}
+    
+    .map-location-search-sec .form-field{ width: 48.9% !important; }
+	.map-location-search-sec form .form-field:nth-child(8){ width: 38% !important}
+	.map-location-search-sec form .form-field:nth-child(9){ width: 10% !important}
+    .fixed-footer{ position: static;}
+    
+    .cta-btn{ font-size: 15px; padding: 0 18px; height: 47px; line-height: 47px;}
+}
+@media only screen and ( max-width: 479px){
+    .search-area{ width: 290px;}
+    .search-area h2{ font-size: 30px;}
+    .search-area h6{ font-size: 16px;}
+    .about-sec h2{ font-size: 32px;}
+    .email-heading h3{ font-size: 26px;}
+    .email-form form .col-xs-4,
+    .email-form form .col-xs-5,
+    .email-form form .col-xs-3{
+         width: 100%;
+        padding: 5px 15px !important;
+    }
+    .email-form{ padding: 40px 0 10px;}
+    .logo{ width: 150px;}
+    .logo img{ width: 100%;}
+    header{ height: 82px;}
+    .social-icon{ top: 25px;}
+    footer p{ font-size: 12px;}
+    
+    .map-location-search-sec .form-field{ width: 100% !important; margin: 0 0 6px 0 !important;}
+	.map-location-search-sec form .form-field:nth-child(8){ width: 100% !important}
+	.map-location-search-sec form .form-field:nth-child(9){ width: 100% !important}
+	
+    .map-location-search-sec{ top: 82px;}
+    
+    .page-heading h2{ font-size: 28px;}
+    .detail-page-sec{ padding-top: 82px;}
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

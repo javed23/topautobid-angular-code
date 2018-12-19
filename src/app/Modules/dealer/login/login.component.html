@@ -1,0 +1,29 @@
+
+
+<button class="btn btn-social-icon btn-microsoft" (click)="microsoftLogin()"><span class="fa fa-windows"></span></button>
+<button class="btn btn-social-icon btn-google" (click)="signInWithGoogle()"><span class="fa fa-google"></span></button>
+<button class="btn btn-social-icon btn-facebook" (click)="signInWithFB()"><span class="fa fa-facebook"></span></button>
+
+
+<form [formGroup]="userForm" (ngSubmit)="submit()">
+    <div>
+      <input  placeholder="name" formControlName="name" required>
+      <p *ngIf="userForm.controls.name.touched">
+        <app-form-validation-errors  [errors]="userForm.get('name').errors"></app-form-validation-errors>      
+      </p>
+    </div>
+      <div>
+      <input  placeholder="file name" formControlName="fileName" required>
+      <p *ngIf="userForm.controls.fileName.touched">
+        <app-form-validation-errors  [errors]="userForm.get('name').errors" errorPrefix="The file is"></app-form-validation-errors>      
+       </p>
+    </div>
+    <div>
+      <input  placeholder="email" formControlName="email" required>
+      <p *ngIf="userForm.controls.email.touched">
+        <app-form-validation-errors  [errors]="userForm.get('email').errors" errorPrefix="Email is"></app-form-validation-errors>
+      </p>
+    </div>
+     <button  color="accent">{{ 'HOME.SELECT'| translate:user  }}</button>
+  </form>
+  
