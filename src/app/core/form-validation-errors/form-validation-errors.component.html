@@ -1,0 +1,17 @@
+<ng-container *ngIf="errors && errors['required']">{{errorPrefix}} {{ 'FORM-VALIDATIONS.REQUIRED'| translate }}<br/></ng-container>
+<ng-container *ngIf="errors && errors['notUnique']">{{errorPrefix}} {{ 'FORM-VALIDATIONS.NOT-UNIQUE'| translate }}<br/></ng-container>
+<ng-container *ngIf="errors && errors['email']">{{errorPrefix}} {{ 'FORM-VALIDATIONS.EMAIL'| translate }}<br/></ng-container>
+<ng-container *ngIf="errors && errors['minlength']">{{errorPrefix}} {{ 'FORM-VALIDATIONS.MIN-LENGTH'| translate }}<br/></ng-container>
+
+<ng-container *ngIf="errors && errors['hasNumber']">{{errorPrefix}} {{ 'FORM-VALIDATIONS.HAS-NUMBER'| translate }}<br/></ng-container>
+<ng-container *ngIf="errors && errors['hasCapitalCase']">{{errorPrefix}} {{ 'FORM-VALIDATIONS.HAS-CAPITAL-CASE'| translate }}<br/></ng-container>
+<ng-container *ngIf="errors && errors['hasSmallCase']">{{errorPrefix}} {{ 'FORM-VALIDATIONS.HAS-SMALL-CASE'| translate }}<br/></ng-container>
+<ng-container *ngIf="errors && errors['hasSpecialCharacters']">{{errorPrefix}} {{ 'FORM-VALIDATIONS.HAS-SPECIAL-CHARACTERS'| translate }}<br/></ng-container>
+<ng-container *ngIf="errors && errors['NoPassswordMatch']">{{errorPrefix}} {{ 'FORM-VALIDATIONS.NO-PASSWORD-MATCH'| translate }}<br/></ng-container>
+<ng-container *ngIf="errors && errors['emailTaken']">{{errorPrefix}} {{ 'FORM-VALIDATIONS.EMAIL-TAKEN'| translate }}<br/></ng-container>
+<ng-container *ngIf="errors && errors['validPhone']">{{errorPrefix}} {{ 'FORM-VALIDATIONS.VALID-PHONE'| translate }}<br/></ng-container>
+<ng-container *ngIf="errors && errors['defaultPhoneMaxSelected']">{{errorPrefix}} {{ 'FORM-VALIDATIONS.DEFAULT-PHONE-MAX-SELECTED'| translate }}<br/></ng-container>
+<ng-container *ngIf="errors && errors['defaultPhoneNotSelected']">{{errorPrefix}} {{ 'FORM-VALIDATIONS.DEFAULT-PHONE-NOT-SELECTED'| translate }}<br/></ng-container>
+<ng-container *ngIf="errors && errors['defaultEmailMaxSelected']">{{errorPrefix}} {{ 'FORM-VALIDATIONS.DEFAULT-EMAIL-MAX-SELECTED'| translate }}<br/></ng-container>
+<ng-container *ngIf="errors && errors['defaultEmailNotSelected']">{{errorPrefix}} {{ 'FORM-VALIDATIONS.DEFAULT-EMAIL-NOT-SELECTED'| translate }}<br/></ng-container>
+<ng-container *ngIf="errors && errors['emailNotExist']">{{errorPrefix}} {{ 'FORM-VALIDATIONS.EMAIL-NOT-EXIST'| translate }}<br/></ng-container>

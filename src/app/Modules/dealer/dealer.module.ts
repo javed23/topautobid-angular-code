@@ -22,8 +22,11 @@ import { DealerRoutingModule } from './dealer-routing.module';
 //import components
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
-import { FormValidationErrorsComponent } from '../../shared/components/form-validation-errors/form-validation-errors.component';
 import { SignupComponent } from './signup/signup.component'
+
+
+import { SharedModule } from '../../core/shared.module';
+
 
 //facebook, google authentication configuration
 /*const fbLoginOptions: LoginOpt = {
@@ -57,7 +60,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
 @NgModule({
-  declarations: [LoginComponent, HomeComponent,FormValidationErrorsComponent, SignupComponent],
+  declarations: [LoginComponent, HomeComponent, SignupComponent],
   imports: [
     CommonModule,
     DealerRoutingModule,
@@ -65,6 +68,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     FormsModule,
     ReactiveFormsModule,
     SocialLoginModule,
+    SharedModule,
     TranslateModule.forRoot({
       loader: {
           provide: TranslateLoader,

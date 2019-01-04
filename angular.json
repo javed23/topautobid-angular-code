@@ -22,11 +22,43 @@
               "src/favicon.ico",
               "src/assets"
             ],
-            "styles": [
+            "styles": [    
+              "src/assets/css/bootstrap.min.css",
+              "src/assets/css/flaticon.css",
+              "src/assets/css/mega-menu/mega_menu.css",
+              "src/assets/css/font-awesome.min.css",
+              "src/assets/css/owl-carousel/owl.carousel.css",
+              "src/assets/css/magnific-popup/magnific-popup.css",
+              "src/assets/revolution/css/settings.css",
+              "src/assets/css/style.css",
+              "src/assets/css/responsive.css",              
               "src/styles.css",
               "src/assets/css/css-loader.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/js/jquery-3.3.1.min.js",
+              "src/assets/js/popper.js",
+              "src/assets/js/bootstrap.min.js",
+              "src/assets/js/mega-menu/mega_menu.js",
+              "src/assets/js/jquery.appear.js",
+              "src/assets/js/counter/jquery.countTo.js",
+              "src/assets/js/owl-carousel/owl.carousel.min.js",
+              "src/assets/js/select/jquery-select.js",
+              "src/assets/js/magnific-popup/jquery.magnific-popup.min.js",
+              "src/assets/revolution/js/jquery.themepunch.tools.min.js",
+
+              "src/assets/revolution/js/jquery.themepunch.revolution.min.js",
+              "src/assets/revolution/js/extensions/revolution.extension.actions.min.js",
+              "src/assets/revolution/js/extensions/revolution.extension.carousel.min.js",
+              "src/assets/revolution/js/extensions/revolution.extension.kenburn.min.js",
+              "src/assets/revolution/js/extensions/revolution.extension.layeranimation.min.js",
+              "src/assets/revolution/js/extensions/revolution.extension.migration.min.js",
+              "src/assets/revolution/js/extensions/revolution.extension.navigation.min.js",
+              "src/assets/revolution/js/extensions/revolution.extension.parallax.min.js",
+              "src/assets/revolution/js/extensions/revolution.extension.slideanims.min.js",
+              "src/assets/revolution/js/extensions/revolution.extension.video.min.js",
+              "src/assets/js/custom.js"
+            ]
           },
           "configurations": {
             "production": {

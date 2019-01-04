@@ -7,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SignupComponent implements OnInit {
 
+  title:string = 'Register';
+  breadcrumbs:any = [{page:'Home',link:'#'},{page:'pages',link:'#'},{page:'Register',link:''}]
+
   constructor() { }
 
   ngOnInit() {

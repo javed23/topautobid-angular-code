@@ -1,4 +1,4 @@
-<div *ngIf="alertMsgObj!=undefined && alertMsgObj.type" class="alert-dismissable">
+<div *ngIf="alertMsgObj!=undefined && alertMsgObj.type" [ngClass]="{ 'alert-danger ': alertMsgObj!=undefined && alertMsgObj.type=='error' }" [ngClass]="{ 'alert-success ': alertMsgObj!=undefined && alertMsgObj.type=='success' }" class="fixed alert alert-dismissable">
   {{alertMsgObj?.message}}
   <a class="close">&times;</a>
 </div>

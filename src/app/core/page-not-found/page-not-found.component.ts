@@ -7,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PageNotFoundComponent implements OnInit {
 
+  //define the component properties
+  title:string = 'Page Not Found';
+  breadcrumbs:any = [{page:'Home',link:'#'},{page:'Page Not Found',link:''}]
   constructor() { }
 
   ngOnInit() {

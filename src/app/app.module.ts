@@ -22,12 +22,17 @@ import { AppComponent } from './app.component';
   //services
   import { AlertService, PageLoaderService } from './shared/_services'
 
+  //import core services
+  import { UserAuthService } from './core/_services';
+
+  //import shared module
+  import { SharedModule } from './core/shared.module';
 
 
 
-//importing guards
-import { AuthGuardService } from './core/guards/auth-guard.service';
 
+//importing intercepters
+import { ApiIntercepter } from './core/intercepters/api.intercepter';
 
 
 
@@ -38,14 +43,24 @@ import { AuthGuardService } from './core/guards/auth-guard.service';
     HeaderComponent,
     FooterComponent,
     AlertComponent,
-    PageLoaderComponent    
+    PageLoaderComponent
+    
   ],
   imports: [
     BrowserModule,    
     AppRoutingModule,
-    HttpClientModule,    
+    HttpClientModule,
+    SharedModule 
   ],
-  providers: [AlertService,PageLoaderService,AuthGuardService ],
+  providers: [
+    AlertService,
+    PageLoaderService,
+    UserAuthService,
+   {
+      provide:HTTP_INTERCEPTORS,
+      useClass:ApiIntercepter,multi: true
+    }
+   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

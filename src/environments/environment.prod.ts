@@ -1,6 +1,8 @@
 export const environment = {
   production: true,  
-  APIEndpoint:'http://localhost:3000',
+  APIEndpoint:'http://18.233.76.36:3000',
+  GOOGLE_0AUTH_CLIENT_ID:'',
+  FACEBOOK_APP_ID:'276034269759175',
   //microsoft authentication credentials
   config: {
     tenant: 'careportfol.io',

@@ -5,6 +5,14 @@ import { PageNotFoundComponent } from './core/page-not-found/page-not-found.comp
 
 const routes: Routes = [
   {
+    path:'',
+    loadChildren: './Modules/website-front/website-front.module#WebsiteFrontModule'
+  },
+  {
+    path:'web',
+    loadChildren: './Modules/website-front/website-front.module#WebsiteFrontModule'
+  },
+  {
     path:'dealer',
     loadChildren:'./Modules/dealer/dealer.module#DealerModule'
   },
