@@ -1,0 +1,21 @@
+select {padding:11px;}
+.form-group input , .form-group select {margin:0px;}
+.custom-css ul.steps-indicator li, .custom-css ul li {list-style: none !important;}
+.custom-css ul.steps-indicator li.current div a {color:#db2d2e;}
+.custom-css ul.steps-indicator li.done div a {color:green;}
+.custom-css aw-wizard-navigation-bar.horizontal.small ul.steps-indicator li.current::after {background-color: #db2d2e;}
+.custom-css aw-wizard-navigation-bar.horizontal.small ul.steps-indicator {padding-bottom:40px;}
+.custom-css .form-group p {padding:0px; margin:0px;}
+.custom-css .form-group p app-form-validation-errors {color:red;}
+.custom-css button{cursor: pointer;}
+
+.custom-css .sub-heading {color:#db2d2e;font-size: 18px; font-weight: bold; border-bottom: 1px solid rgb(221, 221, 221); padding: 0px 0px 15px 0px; margin:10px 0px 0px 0px;}
+i.float-right {margin-top: 2px; font-size: 12px !important;}
+.custom-css label i {padding:0px 5px 0px 0px;}
+.custom-css .left-column-form {padding-right:20px;}    
+.custom-css .margin-top42 {margin-top:42px;}
+
+.custom-css .calendar_col select.custom-select {width: auto;
+    padding-right: 15px;
+    min-width: 63px;
+    margin-right: 10px;}

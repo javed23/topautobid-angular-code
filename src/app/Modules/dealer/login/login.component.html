@@ -1,29 +1,82 @@
+<!--=================================
+ breadcrumbs and inner-intro -->
+
+<app-breadcrumbs [pageTitle]="title" [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+
+<!--=================================
+ breadcrumbs and inner-intro -->
 
 
-<button class="btn btn-social-icon btn-microsoft" (click)="microsoftLogin()"><span class="fa fa-windows"></span></button>
-<button class="btn btn-social-icon btn-google" (click)="signInWithGoogle()"><span class="fa fa-google"></span></button>
-<button class="btn btn-social-icon btn-facebook" (click)="signInWithFB()"><span class="fa fa-facebook"></span></button>
+<!--=================================
+ login-form  -->
 
-
-<form [formGroup]="userForm" (ngSubmit)="submit()">
-    <div>
-      <input  placeholder="name" formControlName="name" required>
-      <p *ngIf="userForm.controls.name.touched">
-        <app-form-validation-errors  [errors]="userForm.get('name').errors"></app-form-validation-errors>      
-      </p>
+<section #contentSection class="login-form page-section-ptb">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="section-title">
+          <span>Log in with your id or social media</span>
+          <h2>Login To Your Account</h2>
+          <div class="separator"></div>
+        </div>
+      </div>
     </div>
-      <div>
-      <input  placeholder="file name" formControlName="fileName" required>
-      <p *ngIf="userForm.controls.fileName.touched">
-        <app-form-validation-errors  [errors]="userForm.get('name').errors" errorPrefix="The file is"></app-form-validation-errors>      
-       </p>
+    <div class="row justify-content-center">
+      <div class="col-lg-6 col-md-12">
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <div class="gray-form clearfix">
+
+            <div class="form-group">
+              <label for="email">Email* </label>
+              <input id="email" class="form-control" [ngClass]="{ 'is-invalid': (loginForm.controls.email.touched || submitted) && loginForm.get('email').errors }"
+                type="text" placeholder="Enter Email" formControlName="email">
+              <p *ngIf="loginForm.controls.email.touched || submitted">
+                <app-form-validation-errors errorPrefix="Email " [errors]="loginForm.get('email').errors"></app-form-validation-errors>
+              </p>
+            </div>
+
+            <div class="form-group">
+              <label for="Password">Password* </label>
+              <input id="Password" class="form-control" type="password" placeholder="Enter Password" formControlName="password"
+                [ngClass]="{ 'is-invalid': (loginForm.controls.password.touched || submitted) && loginForm.get('password').errors }">
+              <p *ngIf="loginForm.controls.password.touched || submitted">
+                <app-form-validation-errors errorPrefix="Password " [errors]="loginForm.get('password').errors"></app-form-validation-errors>
+              </p>
+
+            </div>
+
+            <div class="form-group">
+              <div class="remember-checkbox mb-4">
+                <input type="checkbox" formControlName="remember_me" id="remember_me">
+                <label for="remember_me"> REMEMBER ME</label>
+                <a routerLink="/dealer/forgot-password" class="float-right">Forgot Password?</a>
+
+              </div>
+            </div>
+
+            <button [ngClass]="{ 'submit-btn-disable': !loginForm.valid }" type="submit" class="button red">Log in
+            </button>
+
+          </div>
+        </form>
+
+        <div class="login-social text-center">
+          <h5>Login with Social media</h5>
+          <ul>
+            <li>
+              <button (click)="signInWithFB()" class="fb button" type="button"><i class="fa fa-facebook"></i> Facebook</button>
+
+
+            </li>
+            <li><button (click)="signInWithGoogle()" type="button" class="twitter button"><i class="fa fa-twitter"></i>
+                google+</button></li>
+            <li><button class="pinterest button" type="button"><i class="fa fa-windows"></i> Microsoft</button></li>
+          </ul>
+        </div>
+      </div>
     </div>
-    <div>
-      <input  placeholder="email" formControlName="email" required>
-      <p *ngIf="userForm.controls.email.touched">
-        <app-form-validation-errors  [errors]="userForm.get('email').errors" errorPrefix="Email is"></app-form-validation-errors>
-      </p>
-    </div>
-     <button  color="accent">{{ 'HOME.SELECT'| translate:user  }}</button>
-  </form>
-  
+  </div>
+</section>
+
+<!--=================================
+ login-form  -->

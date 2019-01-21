@@ -1,22 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import {Location} from '@angular/common';
-import { AbstractControl,  FormBuilder,  FormGroup,  Validators } from '@angular/forms';
-import { Router} from "@angular/router";
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Location } from '@angular/common';
+import { AbstractControl, FormGroup, FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs/Subscription';
+import { of, Observable } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
-//import shared services
-import { AlertService, PageLoaderService } from '../../../shared/_services'
+//import services
 
-//import core services
-import { UserAuthService } from '../../../core/_services'
+  //shared services
+  import { AlertService, PageLoaderService } from '../../../shared/_services'
 
+  //modules core services
+  import { UserAuthService, TitleService } from '../../../core/_services'
 
-//import core services
+//import custom validators
 import { CustomValidators } from '../../../core/custom-validators';
 
-declare var jQuery:any;
-declare var $:any;
-declare var POTENZA:any;
+
+import { environment } from '../../../../environments/environment'
 
 @Component({
   selector: 'app-signup',
@@ -25,38 +26,47 @@ declare var POTENZA:any;
 })
 export class SignupComponent implements OnInit {
 
-  title:string = 'Register';
-  breadcrumbs:any = [{page:'Home',link:''},{page:'Register',link:''}]
-  signupForm: FormGroup;
-  submitted = false;
-  
+  @ViewChild("contentSection") contentSection: ElementRef;
 
-  constructor( private modalService: NgbModal, private _location: Location, private alertService:AlertService, private userAuthService:UserAuthService, private pageLoaderService:PageLoaderService, private formBuilder: FormBuilder, private router: Router) { 
-    var PHONE_REGEXP = /^[(]{0,1}[0-9]{3}[)\.\- ]{0,1}[0-9]{3}[\.\- ]{0,1}[0-9]{4}$/;
-    this.signupForm = this.formBuilder.group({  
-      name:this.formBuilder.group({
+  //define default emails and phones formArrayName 
+  data = {
+    phones: [
+      {
+        phone: "",
+        default: true
+      }
+    ],
+    emails: [
+      {
+        email: "",
+        default: true
+      }
+    ]
+  }
+
+
+  title: string = 'Seller Signup';
+  breadcrumbs: any[] = [{ page: 'Home', link: '' }, { page: 'Signup', link: '' }]
+  signupForm: FormGroup;
+  submitted: boolean = false;
+  signupSubscription: Subscription;
+
+  constructor(private location: Location, private alertService: AlertService, private userAuthService: UserAuthService, private pageLoaderService: PageLoaderService, private formBuilder: FormBuilder, private titleService: TitleService) {
+
+    this.signupForm = this.formBuilder.group({
+      name: this.formBuilder.group({
         prefix: ['Mr.'],
-        first_name: [''],
-        last_name: ['']
-       
+        first_name: [null, Validators.compose([Validators.required])],
+        last_name: [null, Validators.compose([Validators.required])],
+
       }),
-      email: ['', [Validators.email,Validators.required],this.isEmailUnique.bind(this)],
-      phone: ['', Validators.compose([
-              Validators.required,            
-              // check whether the entered password has a special character
-              CustomValidators.patternValidator(
-                /[ d{3}-\d{3}-\d{4} ]/,
-                {
-                  validPhone: true
-                }
-              ),       
-            ])      
-      ],
+      phones: this.formBuilder.array([], Validators.required),
+      emails: this.formBuilder.array([], Validators.required),
       password: [
-        '',
+        null,
         Validators.compose([
           Validators.required,
-          /*
+
           // check whether the entered password has a number
           CustomValidators.patternValidator(/\d/, {
             hasNumber: true
@@ -75,44 +85,88 @@ export class SignupComponent implements OnInit {
             {
               hasSpecialCharacters: true
             }
-          ),*/
-          Validators.minLength(8)
+          ),
+          Validators.minLength(10)
         ])
       ],
-      repassword: ['', Validators.compose([Validators.required])],
-      model:['Seller']
+      repassword: [null, Validators.compose([Validators.required])],
+      model: ['Seller']
     },
-    {
-      // check whether our password and confirm password match
-      validator: CustomValidators.passwordMatchValidator
-    }
-  ); 
-  //this.signupForm.controls['email'].setAsyncValidators(CustomValidators.emailExist(this.authService, this.email));
+      {
+        // check whether our password and confirm password match
+        validators: CustomValidators.passwordMatchValidator
+      }
+    );
   }
-
-
-  
-
-  
-  verifyPhone(content) {
-    console.log('content:'+content);
-    this.modalService.open(content, { size: 'sm' });
-  }
-  isEmailUnique(control: AbstractControl) {
-    return this.userAuthService.emailExist({email:control.value, model:'Seller'}).map(res => {
-      return (res.status==200) ? { emailTaken: true } : null ;
-    });
-  }
-
-  
 
   ngOnInit() {
-    POTENZA.scrolltotop()
+    this.contentSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });
+    this.setPhones();
+    this.setEmails();
+    this.titleService.setTitle();
   }
 
+
+  //check the unique email on change
+
+  isEmailUnique(control: AbstractControl): Promise<{ [key: string]: any } | null>
+    | Observable<{ [key: string]: any } | null> {
+
+    return this.userAuthService.emailExist({ email: control.value, model: 'Seller' })
+      .pipe(
+        map(data => ({ emailTaken: true })),
+        catchError(error => of(null))
+      );
+    return of(null);
+  }
+  //check the unique phone number on change
+  isPhoneNumberUnique(control: AbstractControl): Promise<{ [key: string]: any } | null>
+    | Observable<{ [key: string]: any } | null> {
+    return this.userAuthService.phoneNumberExist({ phone: control.value, model: 'Seller' })
+      .pipe(
+        map(data => ({ phoneNumberTaken: true })),
+        catchError(error => of(null))
+      );
+    return of(null);
+  }
+
+  setEmails() {
+    let control = <FormArray>this.signupForm.controls.emails;
+    this.data.emails.forEach(x => {
+      control.push(this.formBuilder.group({
+        email: [null, [Validators.email, Validators.required], this.isEmailUnique.bind(this)],
+        default: [true],
+      })
+      )
+    })
+  }
+
+  setPhones() {
+    let control = <FormArray>this.signupForm.controls.phones;
+    this.data.phones.forEach(x => {
+      control.push(this.formBuilder.group({
+        phone: [null, Validators.compose([
+          Validators.required,
+          // check whether the entered password has a special character
+          CustomValidators.patternValidator(
+            /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/,
+            {
+              validPhone: true
+            }
+          ),
+        ]),
+          this.isPhoneNumberUnique.bind(this)
+        ],
+        default: [true],
+      })
+      )
+    })
+  }
+
+
+
   goBack() {
-    POTENZA.scrolltotop()
-    this._location.back();
+    this.location.back();
   }
 
   onSubmit() {
@@ -120,30 +174,30 @@ export class SignupComponent implements OnInit {
 
     // stop here if form is invalid
     if (this.signupForm.invalid) {
-        return;
+      return;
     }
-    console.log(this.signupForm.value)
+
     this.pageLoaderService.pageLoader(true);
-    this.userAuthService.sellerSignup(this.signupForm.value)
-        //.pipe(first())
-        .subscribe(
-            (data) => {
-              this.pageLoaderService.pageLoader(false);
-                if(data.status==200){                     
-                  var userData =  data.data;  
-                       
-                  localStorage.setItem('loggedinUser',JSON.stringify(userData))
-                  this.userAuthService.isLoggedIn(true);                  
-                  this.router.navigate(['/seller/home']);
-                }else{    
-                  this.alertService.setAlert('error',data.error); 
-                }
-            },
-            error => {
-                this.pageLoaderService.pageLoader(false);
-                this.alertService.setAlert('error','System got error');
-                
-            });
+    this.pageLoaderService.setLoaderText('Registering seller...');//setting loader text
+    this.signupSubscription = this.userAuthService.sellerSignup(this.signupForm.value)
+      .subscribe(
+        (response) => {
+          this.pageLoaderService.setLoaderText('Registered...');//setting loader text
+          this.pageLoaderService.pageLoader(false);
+          this.signupForm.reset();
+          this.alertService.setAlert('success', environment.MESSAGES.SIGNUP_SUCCESS);
+        },
+        error => {
+          this.pageLoaderService.setLoaderText(environment.MESSAGES.ERROR_TEXT_LOADER);//setting loader text
+          this.pageLoaderService.pageLoader(false);
+          this.alertService.setAlert('error', error);
+        });
+  }
+
+
+  //destroy all subscribers
+  ngOnDestroy() {
+    //this.signupSubscription.unsubscribe();
   }
 
 

@@ -1,68 +1,107 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable, throwError } from 'rxjs';
+import { retry, catchError } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
-
+import { Subject } from 'rxjs/Subject';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserAuthService {
-  public loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
+  public loggedIn: Subject<any> = new Subject<any>();
 
   constructor(private httpClient: HttpClient) { }
 
-  isLoggedIn(value: boolean) {
-      this.loggedIn.next(value);
+  isLoggedIn(value: boolean, userType: String) {
+    this.loggedIn.next({ isLoggedIn: value, userType: userType });
   }
-  checkLoggedinStatus():Observable<any> {
+  checkLoggedinStatus(): Observable<any> {
     return this.loggedIn.asObservable();
   }
-
-  checkLogin(postedData): Observable <any> {
-
-    return this.httpClient
-        .post('auth/login',postedData)
-        .map((response: Response) => {
-            return response;
-        })
-        .catch(this.handleError);
-  }
-
-  sellerSignup(postedData): Observable <any> {
+  fetchUserData(postedData): Observable<any> {
 
     return this.httpClient
-        .post('auth/sellerSignup',postedData)
-        .map((response: Response) => {
-            return response;
-        })
-        .catch(this.handleError);
+      .post('auth/fetchUserData', postedData)
+      .map((response: Response) => {
+        return response;
+      })
+
   }
 
-  socialLogin(postedData): Observable <any> {
-    return this.httpClient
-        .post('auth/socialLogin',postedData)
-        .map((response: Response) => {
-            return response;
-        })
-        .catch(this.handleError);
-  }
-  emailExist(postedData): Observable <any> {
+  checkLogin(postedData): Observable<any> {
 
     return this.httpClient
-        .post('auth/emailExist',postedData)
-        .map((response: Response) => {
-            return response;
-        })
-        .catch(this.handleError);
+      .post('auth/login', postedData, { observe: 'response' })
+      .map((response: any) => {
+        return response;
+      })
+
   }
 
+  sellerSignup(postedData): Observable<any> {
 
-  private handleError(error: Response) {
-    return Observable.throw(error);
+    return this.httpClient
+      .post('auth/sellerSignup', postedData)
+      .map((response: Response) => {
+        return response;
+      })
+
+  }
+  dealerSignup(postedData): Observable<any> {
+
+    return this.httpClient
+      .post('auth/dealerSignup', postedData)
+      .map((response: Response) => {
+        return response;
+      })
+
+  }
+
+  profile(postedData): Observable<any> {
+
+    return this.httpClient
+      .post('auth/profile', postedData)
+      .map((response: Response) => {
+        return response;
+      })
+
+  }
+
+  forgotPassword(postedData): Observable<any> {
+
+    return this.httpClient
+      .post('auth/forgotPassword', postedData)
+      .map((response: Response) => {
+        return response;
+      })
+  }
+
+  socialLogin(postedData): Observable<any> {
+    return this.httpClient
+      .post('auth/socialLogin', postedData)
+      .map((response: Response) => {
+        return response;
+      })
+  }
+
+  emailExist(postedData): Observable<any> {
+
+    return this.httpClient
+      .post('auth/emailExist', postedData)
+      .map((response: Response) => {
+        return response;
+      })
+  }
+
+  phoneNumberExist(postedData): Observable<any> {
+
+    return this.httpClient
+      .post('auth/phoneNumberExist', postedData)
+      .map((response: Response) => {
+        return response;
+      })
   }
 }

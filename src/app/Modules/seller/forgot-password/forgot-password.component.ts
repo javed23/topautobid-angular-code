@@ -1,18 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { AbstractControl,  FormBuilder,  FormGroup,  Validators } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
-import { Router} from "@angular/router";
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/operator/catch';
 
-//import shared services
-import { AlertService, PageLoaderService } from '../../../shared/_services'
+//import services
+  //import shared 
+  import { AlertService, PageLoaderService } from '../../../shared/_services'
 
-//import core services
-import { UserAuthService } from '../../../core/_services'
+  //import module services
+  import { UserAuthService } from '../../../core/_services'
 
-
-declare var jQuery:any;
-declare var $:any;
-declare var POTENZA:any;
+import { environment } from '../../../../environments/environment'
 
 @Component({
   selector: 'app-forgot-password',
@@ -21,45 +19,53 @@ declare var POTENZA:any;
 })
 export class ForgotPasswordComponent implements OnInit {
 
+  @ViewChild("contentSection") contentSection: ElementRef;
   //define the component properties
-  title:string = 'Forgot Password';
-  breadcrumbs:any = [{page:'Home',link:'#'},{page:'Login',link:'/seller/login'},{page:'Forgot password',link:''}]
+  title: string = 'Seller Forgot Password';
+  breadcrumbs: any[] = [{ page: 'Home', link: '#' }, { page: 'Login', link: '/seller/login' }, { page: 'Forgot password', link: '' }]
   forgotPasswordForm: FormGroup;
-  submitted = false;
+  submitted: boolean = false;
+  forgotPasswordSubscription: Subscription;
 
-  constructor(private translate: TranslateService,private alertService:AlertService, private userAuthService:UserAuthService, private pageLoaderService:PageLoaderService, private formBuilder: FormBuilder, private router: Router) { 
-    // this language will be used as a fallback when a translation isn't found in the current language
-    this.translate.setDefaultLang('en');
- 
-    // the lang to use, if the lang isn't available, it will use the current loader to get them
-    this.translate.use('en');
+  constructor(private alertService: AlertService, private userAuthService: UserAuthService, private pageLoaderService: PageLoaderService, private formBuilder: FormBuilder) {
 
-    this.forgotPasswordForm = this.formBuilder.group({     
-        email: ['', [Validators.email,Validators.required],this.isEmailExist.bind(this)],     
-        model:['Seller']
-      }
-    ); 
+    this.forgotPasswordForm = this.formBuilder.group({
+      email: [null, [Validators.email, Validators.required]],
+      model: ['Seller']
+    }
+    );
   }
 
   ngOnInit() {
+    this.contentSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });
   }
-
-  isEmailExist(control: AbstractControl) {
-    return this.userAuthService.emailExist({email:control.value, model:'Seller'}).map(res => {
-      return (res.status==200) ? null : { emailNotExist: true } ;
-    });
-  }
-
-  
 
   onSubmit() {
     this.submitted = true;
-    
-    
+
     // stop here if form is invalid
     if (this.forgotPasswordForm.invalid) {
-        return;
-    }    
+      return;
+    }
+
+    this.pageLoaderService.pageLoader(true);
+    this.pageLoaderService.setLoaderText('Checking email existance...');//setting loader text
+    this.forgotPasswordSubscription = this.userAuthService.forgotPassword(this.forgotPasswordForm.value)
+      .subscribe(
+        (response) => {
+          this.pageLoaderService.pageLoader(false);
+          this.forgotPasswordForm.reset();
+          this.alertService.setAlert('success', environment.MESSAGES.MAIL_SENT);
+        },
+        error => {
+          this.pageLoaderService.setLoaderText(environment.MESSAGES.ERROR_TEXT_LOADER);//setting loader text
+          this.pageLoaderService.pageLoader(false);
+          this.alertService.setAlert('error', error);
+        });
+  }
+  //destroy all subscribers
+  ngOnDestroy() {
+    // this.forgotPasswordSubscription.unsubscribe();
   }
 
 }

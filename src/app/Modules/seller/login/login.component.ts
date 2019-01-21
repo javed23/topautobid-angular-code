@@ -1,21 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
-import { AbstractControl,  FormBuilder,  FormGroup,  Validators } from '@angular/forms';
-import { Router} from "@angular/router";
-import { AuthService } from 'angularx-social-login';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from "@angular/router";
+import { Subscription } from 'rxjs/Subscription';
+
+//social login
+/*import { AuthService } from 'angularx-social-login';
 import { SocialUser } from 'angularx-social-login';
-import { GoogleLoginProvider, FacebookLoginProvider, LinkedInLoginProvider } from 'angularx-social-login';
+import { GoogleLoginProvider, FacebookLoginProvider, LinkedInLoginProvider } from 'angularx-social-login';*/
 
 
-//import shared services
-import { AlertService, PageLoaderService } from '../../../shared/_services'
+//import services
 
-//import core services
-import { UserAuthService } from '../../../core/_services'
+  //shared services
+  import { AlertService, PageLoaderService } from '../../../shared/_services'
 
-declare var jQuery:any;
-declare var $:any;
-declare var POTENZA:any;
+  //modules core services
+  import { UserAuthService, TitleService } from '../../../core/_services'
+
+  import { environment } from '../../../../environments/environment'
 
 @Component({
   selector: 'app-login',
@@ -24,35 +26,37 @@ declare var POTENZA:any;
 })
 export class LoginComponent implements OnInit {
 
-  title:string = 'Login';
-  breadcrumbs:any = [{page:'Home',link:''},{page:'Login',link:''}]
+  @ViewChild("contentSection") contentSection: ElementRef;
+  title: string = 'Seller Login';
+  breadcrumbs: any[] = [{ page: 'Home', link: '' }, { page: 'Login', link: '' }]
   loginForm: FormGroup;
-  submitted = false;
+  submitted: boolean = false;
+  loginSubscription: Subscription;
 
-  constructor( private authService: AuthService, private alertService:AlertService, private userAuthService:UserAuthService, private pageLoaderService:PageLoaderService, private translate: TranslateService, private formBuilder: FormBuilder, private router: Router) { 
-    this.loginForm = this.formBuilder.group({      
-      email: ['', [Validators.required]],
-      password: ['', [Validators.required]],  
-      remember_me: [''],
-      model:['Seller']
+  constructor( /*private authService: AuthService,*/ private alertService: AlertService, private userAuthService: UserAuthService, private pageLoaderService: PageLoaderService, private formBuilder: FormBuilder, private router: Router, private titleService: TitleService) {
+
+    this.loginForm = this.formBuilder.group({
+      email: ['', [Validators.email, Validators.required]],
+      password: [null, [Validators.required]],
+      remember_me: [null],
+      model: ['Seller']
     });
-    //this.translate.setDefaultLang('en');
-    this.translate.use('en');
-    //this.pageLoaderService.pageLoader(true);
+
   }
 
 
-  ngOnInit() {    
-    POTENZA.scrolltotop()
+  ngOnInit() {
+    this.contentSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });
+    this.titleService.setTitle();
   }
 
   //social logins methods
   signInWithGoogle(): void {
-    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then(x => console.log(x));
+    //this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then(x => console.log(x));
   }
 
   signInWithFB(): void {
-    this.authService.signIn(FacebookLoginProvider.PROVIDER_ID).then(x => console.log(x));
+    //this.authService.signIn(FacebookLoginProvider.PROVIDER_ID).then(x => console.log(x));
   }
 
   onSubmit() {
@@ -60,29 +64,40 @@ export class LoginComponent implements OnInit {
 
     // stop here if form is invalid
     if (this.loginForm.invalid) {
-        return;
+      return;
     }
-    this.pageLoaderService.pageLoader(true);
-    this.userAuthService.checkLogin(this.loginForm.value)
-        //.pipe(first())
-        .subscribe(
-            (data) => {
-              this.pageLoaderService.pageLoader(false);
-                if(data.status==200){                     
-                  var userData =  data.data;  
-                       
-                  localStorage.setItem('loggedinUser',JSON.stringify(userData))
-                  this.userAuthService.isLoggedIn(true);                  
-                  this.router.navigate(['/seller/home']);
-                }else{    
-                  this.alertService.setAlert('error',data.error); 
-                }
-            },
-            error => {
-                this.pageLoaderService.pageLoader(false);
-                this.alertService.setAlert('error','System got error');
-                
-            });
+    this.pageLoaderService.pageLoader(true);//show loader
+    this.pageLoaderService.setLoaderText('Checking authorisation');//setting loader text
+    
+    this.loginSubscription = this.userAuthService.checkLogin(this.loginForm.value)
+      .subscribe(
+        (response) => {
+          this.pageLoaderService.setLoaderText('Authorised...');//setting loader text
+          this.pageLoaderService.setLoaderText('Redirecting...');//setting loader text
+          this.pageLoaderService.pageLoader(false);
+          if (response) {
+            
+            //save to local storage
+            localStorage.setItem('loggedinUser', JSON.stringify(response.body))
+            localStorage.setItem('loggedinUserId', response.body._id)
+            localStorage.setItem('loggedinSellerUser', JSON.stringify(true))
+            localStorage.setItem('x-auth-token', response.headers.get('x-auth-token'))
+            this.userAuthService.isLoggedIn(true, 'Seller');
+            
+            this.router.navigate(['/seller/home']);
+          }
+        },
+        error => {
+          this.pageLoaderService.setLoaderText(environment.MESSAGES.ERROR_TEXT_LOADER);//setting loader text
+          this.pageLoaderService.pageLoader(false);
+          this.alertService.setAlert('error', error);
+
+        });
+  }
+
+  //destroy all subscribers
+  ngOnDestroy() {
+    //this.loginSubscription.unsubscribe();
   }
 
 }

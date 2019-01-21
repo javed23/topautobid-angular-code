@@ -46,7 +46,7 @@
               "src/assets/js/select/jquery-select.js",
               "src/assets/js/magnific-popup/jquery.magnific-popup.min.js",
               "src/assets/revolution/js/jquery.themepunch.tools.min.js",
-
+              "src/assets/js/isotope/isotope.pkgd.min.js",
               "src/assets/revolution/js/jquery.themepunch.revolution.min.js",
               "src/assets/revolution/js/extensions/revolution.extension.actions.min.js",
               "src/assets/revolution/js/extensions/revolution.extension.carousel.min.js",

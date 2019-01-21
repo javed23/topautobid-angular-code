@@ -5,8 +5,8 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
 
-import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
-import { FormValidationErrorsComponent } from './form-validation-errors/form-validation-errors.component';
+import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
+import { FormValidationErrorsComponent } from './components/form-validation-errors/form-validation-errors.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
@@ -22,15 +22,15 @@ export function HttpLoaderFactory(http: HttpClient) {
                 useFactory: HttpLoaderFactory,
                 deps: [HttpClient]
             }
-          })
-     ],
+        })
+    ],
     declarations: [
         BreadcrumbsComponent,
-        FormValidationErrorsComponent
+        FormValidationErrorsComponent,
     ],
     exports: [
         BreadcrumbsComponent,
         FormValidationErrorsComponent
     ]
 })
-export class SharedModule {}
+export class SharedModule { }

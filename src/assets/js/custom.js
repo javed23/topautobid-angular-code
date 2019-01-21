@@ -62,6 +62,7 @@ var POTENZA = {};
 *************************/  
 POTENZA.revolutionSlider = function (jQuery) {
   var tpj=jQuery;
+  console.log('rev_slider_2_1');
     var revapi2;
     revapi2 = tpj("#rev_slider_2_1").show().revolution({
       sliderType:"standard",
@@ -94,6 +95,68 @@ POTENZA.revolutionSlider = function (jQuery) {
       lazyType:"none",
       shadow:0,
       spinner:"spinner3",
+      stopLoop:"off",
+      stopAfterLoops:-1,
+      stopAtSlide:-1,
+      shuffle:"off",
+      autoHeight:"off",
+      disableProgressBar:"on",
+      hideThumbsOnMobile:"off",
+      hideSliderAtLimit:0,
+      hideCaptionAtLimit:0,
+      hideAllCaptionAtLilmit:0,
+      debugMode:false,
+      fallbacks: {
+        simplifyAll:"off",
+        nextSlideOnWindowFocus:"off",
+        disableFocusListener:false,
+      }
+    });
+};
+
+
+
+POTENZA.revolutionSlider = function (jQuery) {
+  var tpj=jQuery;
+  console.log('rev_slider_7_1');
+    var revapi7;
+    revapi7 = tpj("#rev_slider_7_1").show().revolution({
+      sliderType:"standard",
+      sliderLayout:"fullwidth",
+      dottedOverlay:"none",
+      delay:9000,
+      navigation: {
+        keyboardNavigation:"off",
+        keyboard_direction: "horizontal",
+        mouseScrollNavigation:"off",
+                       mouseScrollReverse:"default",
+        onHoverStop:"off",
+        arrows: {
+          style:"zeus",
+          enable:true,
+          hide_onmobile:false,
+          hide_onleave:false,
+          tmp:'<div class="tp-title-wrap">    <div class="tp-arr-imgholder"></div> </div>',
+          left: {
+            h_align:"left",
+            v_align:"center",
+            h_offset:20,
+                              v_offset:0
+          },
+          right: {
+            h_align:"right",
+            v_align:"center",
+            h_offset:20,
+                              v_offset:0
+          }
+        }
+      },
+      visibilityLevels:[1240,1024,778,480],
+      gridwidth:1170,
+      gridheight:630,
+      lazyType:"none",
+      shadow:0,
+      spinner:"spinner0",
       stopLoop:"off",
       stopAfterLoops:-1,
       stopAtSlide:-1,
@@ -445,8 +508,8 @@ POTENZA.revolutionSlider = function (jQuery) {
       var $isotope = $(".isotope"),
           $itemElement = '.grid-item',
           $filters = $('.isotope-filters');      
-        if ($isotope.exists()) {
-            $isotope.isotope({
+        if ($(".isotope").exists()) {
+         $isotope.isotope({
             resizable: true,
             itemSelector: $itemElement,
               masonry: {
@@ -585,7 +648,7 @@ POTENZA.revolutionSlider = function (jQuery) {
         POTENZA.searchbar(),
         POTENZA.counters(),
         POTENZA.carousel(),
-        POTENZA.priceslider(),
+        //POTENZA.priceslider(),
         POTENZA.tabs(),
         POTENZA.accordion(),
         POTENZA.featurelist(),
@@ -597,6 +660,8 @@ POTENZA.revolutionSlider = function (jQuery) {
         POTENZA.scrolltotop(),
         POTENZA.sidebarfixed(),
         POTENZA.countdownTimer();
+        POTENZA.Isotope(),
+          POTENZA.masonry();
     });
 
 })(jQuery);
