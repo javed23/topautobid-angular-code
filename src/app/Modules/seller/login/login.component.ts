@@ -38,8 +38,7 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.email, Validators.required]],
       password: [null, [Validators.required]],
-      remember_me: [null],
-      model: ['Seller']
+      remember_me: [null]     
     });
 
   }
@@ -69,14 +68,14 @@ export class LoginComponent implements OnInit {
     this.pageLoaderService.pageLoader(true);//show loader
     this.pageLoaderService.setLoaderText('Checking authorisation');//setting loader text
     
-    this.loginSubscription = this.userAuthService.checkLogin(this.loginForm.value)
+    this.loginSubscription = this.userAuthService.sellerLogin(this.loginForm.value)
       .subscribe(
         (response) => {
           this.pageLoaderService.setLoaderText('Authorised...');//setting loader text
           this.pageLoaderService.setLoaderText('Redirecting...');//setting loader text
           this.pageLoaderService.pageLoader(false);
           if (response) {
-            
+            console.log('x-auth-token:'+response.headers.get('x-auth-token'))
             //save to local storage
             localStorage.setItem('loggedinUser', JSON.stringify(response.body))
             localStorage.setItem('loggedinUserId', response.body._id)

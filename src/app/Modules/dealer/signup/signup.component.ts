@@ -134,8 +134,7 @@ constructor( private alertService:AlertService, private userAuthService:UserAuth
       state: ['', [Validators.required]],
       city: ['', [Validators.required]],
       zip: ['', [Validators.required]],
-      //agreement: ['', [Validators.required]],
-      model:['Dealer']
+      //agreement: ['', [Validators.required]],     
     });
 
     this.signUpFormStep2 = this.formBuilder.group({         
@@ -143,8 +142,7 @@ constructor( private alertService:AlertService, private userAuthService:UserAuth
       availabilitydate: ['', [Validators.required]],
       time : [this.time, Validators.required],
       timezone: ['', [Validators.required]],
-      language: ['', [Validators.required]],
-      model:['Dealer']  
+      language: ['', [Validators.required]]     
     });
 
 
@@ -157,7 +155,7 @@ constructor( private alertService:AlertService, private userAuthService:UserAuth
     isEmailUnique(control: AbstractControl): Promise<{ [key: string]: any } | null>
     | Observable<{ [key: string]: any } | null>  {    
 
-      return this.userAuthService.emailExist({ email: control.value, model: 'Seller' })
+      return this.userAuthService.dealerEmailExist({ email: control.value })
           .pipe(
             map(data => ({emailTaken: true})),
             catchError(error => of(null))
@@ -167,7 +165,7 @@ constructor( private alertService:AlertService, private userAuthService:UserAuth
   //check the unique phone number on change
     isPhoneNumberUnique(control: AbstractControl): Promise<{ [key: string]: any } | null>
       | Observable<{ [key: string]: any } | null>  {     
-      return this.userAuthService.phoneNumberExist({ phone: control.value, model: 'Seller' })
+      return this.userAuthService.dealerPhoneNumberExist({ phone: control.value })
           .pipe(
             map(data => ({phoneNumberTaken: true})),
             catchError(error => of(null))

@@ -61,8 +61,7 @@ export class ProfileComponent implements OnInit {
 
     //define the login form and its controls
     this.profileForm = this.formBuilder.group({
-      id: [localStorage.getItem('loggedinUserId')],
-      model: ['Seller'],
+      id: [localStorage.getItem('loggedinUserId')],     
       name: this.formBuilder.group({
         prefix: ['Mr.'],
         first_name: [null, Validators.compose([Validators.required])],
@@ -146,7 +145,7 @@ export class ProfileComponent implements OnInit {
   isEmailUnique(control: AbstractControl): Promise<{ [key: string]: any } | null>
     | Observable<{ [key: string]: any } | null> {
 
-    return this.userAuthService.emailExist({ id: localStorage.getItem('loggedinUserId'), email: control.value, model: 'Seller' })
+    return this.userAuthService.sellerEmailExist({ id: localStorage.getItem('loggedinUserId'), email: control.value })
       .pipe(
         map(data => ({ emailTaken: true })),
         catchError(error => of(null))
@@ -156,7 +155,7 @@ export class ProfileComponent implements OnInit {
   //check the unique phone number on change
   isPhoneNumberUnique(control: AbstractControl): Promise<{ [key: string]: any } | null>
     | Observable<{ [key: string]: any } | null> {
-    return this.userAuthService.phoneNumberExist({ id: localStorage.getItem('loggedinUserId'), phone: control.value, model: 'Seller' })
+    return this.userAuthService.sellerPhoneNumberExist({ id: localStorage.getItem('loggedinUserId'), phone: control.value })
       .pipe(
         map(data => ({ phoneNumberTaken: true })),
         catchError(error => of(null))
@@ -221,7 +220,7 @@ export class ProfileComponent implements OnInit {
     }
 
     this.pageLoaderService.pageLoader(true);
-    this.userAuthService.profile(this.profileForm.value)
+    this.userAuthService.sellerProfile(this.profileForm.value)
       .subscribe(
         (response) => {
           this.pageLoaderService.pageLoader(false);

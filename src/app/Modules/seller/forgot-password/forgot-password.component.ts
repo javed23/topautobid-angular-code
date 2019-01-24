@@ -50,7 +50,7 @@ export class ForgotPasswordComponent implements OnInit {
 
     this.pageLoaderService.pageLoader(true);
     this.pageLoaderService.setLoaderText('Checking email existance...');//setting loader text
-    this.forgotPasswordSubscription = this.userAuthService.forgotPassword(this.forgotPasswordForm.value)
+    this.forgotPasswordSubscription = this.userAuthService.sellerForgotPassword(this.forgotPasswordForm.value)
       .subscribe(
         (response) => {
           this.pageLoaderService.pageLoader(false);

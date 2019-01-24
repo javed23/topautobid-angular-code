@@ -221,7 +221,7 @@ select { border: 1px solid #232323; color: #777; cursor: pointer; display: block
 /*************************
       Background
 ***********************/
-.bg-1 { background: url(../images/bg/01.jpg); background-clip: initial; background-color: rgba(0, 0, 0, 0); background-origin: initial; background-position: center center; background-repeat: no-repeat; background-size: cover !important; position: relative; z-index: 0; background-attachment: fixed; }
+.bg-1 { /*background: url(../images/bg/01.jpg);*/ background-clip: initial; background-color: rgba(0, 0, 0, 0); background-origin: initial; background-position: center center; background-repeat: no-repeat; background-size: cover !important; position: relative; z-index: 0; background-attachment: scroll;    background: #373737; }
 .bg-2 { background: url(../images/bg/02.jpg); background-clip: initial; background-color: rgba(0, 0, 0, 0); background-origin: initial; background-position: center center; background-repeat: no-repeat; background-size: cover !important; position: relative; z-index: 0; background-attachment: fixed; }
 .bg-3 { background: url(../images/bg/03.jpg); background-clip: initial; background-color: rgba(0, 0, 0, 0); background-origin: initial; background-position: center center; background-repeat: no-repeat; background-size: cover !important; position: relative; z-index: 0; background-attachment: fixed; }
 .bg-4 { background: url(../images/bg/04.jpg); background-clip: initial; background-color: rgba(0, 0, 0, 0); background-origin: initial; background-position: center bottom; background-repeat: no-repeat; position: relative; z-index: 0; }
@@ -1076,17 +1076,21 @@ footer .copyright ul li a:hover { color: #db2d2e; }
 /*************************************
         Inner intro
 **************************************/
-.inner-intro { height: 410px; display: block; }
+.inner-intro { height: auto; display: block; padding: 25px 0;}
 .inner-intro .container { display: table; height: 100%; position: relative; }
 .inner-intro span { text-transform: capitalize; }
-.intro-title { display: table-cell; vertical-align: bottom; padding-bottom: 30px; }
+.intro-title { display: table-cell; vertical-align: bottom; padding-bottom: 00px; }
 .inner-intro .intro-title.row [class*='col-'] { padding-right: 0; padding-left: 0; }
 ul.page-breadcrumb li span { color: #fff; font-size: 14px; text-transform: capitalize; }
-ul.page-breadcrumb { padding-top: 10px; padding-bottom: 25px; }
+ul.page-breadcrumb { padding-top: 00px; padding-bottom: 0px; }
 ul.page-breadcrumb li { color: #fff; display: inline-block; list-style: none; }
 ul.page-breadcrumb li i { font-size: 14px; padding: 0 7px; }
 ul.page-breadcrumb li a { color: #fff; font-size: 14px; text-transform: capitalize; }
 ul.page-breadcrumb li a:hover { color: #db2d2e; }
+.inner-intro h1 {
+    margin: 0;
+    font-size: 30px;
+}
 
 /*************************************
           Service
@@ -1159,9 +1163,9 @@ ul.page-breadcrumb li a:hover { color: #db2d2e; }
 .login-form .login-social ul li { display: inline-block; margin: 0 3px; }
 .login-form .login-social ul li a { padding: 6px 20px; color: #db2d2e; }
 .login-form .login-social ul li a i { padding-right: 10px; }
-.login-form .login-social ul li a.fb { background: #4c70ad; color: #ffffff; }
-.login-form .login-social ul li a.twitter { background: #25b6e6; color: #ffffff; }
-.login-form .login-social ul li a.pinterest { background: #dd4b39; color: #ffffff; }
+.login-form .login-social ul li .fb { background: #4c70ad; color: #ffffff; border: 0px;}
+.login-form .login-social ul li .twitter { background: #25b6e6; color: #ffffff; border: 0px;}
+.login-form .login-social ul li .pinterest { background: #dd4b39; color: #ffffff; border: 0px;}
 
 /*************************************
           Error page 
@@ -1487,7 +1491,7 @@ ul.page-breadcrumb li a:hover { color: #db2d2e; }
 #rev_slider_7_1 .zeus.tparrows{cursor:pointer; min-width:70px; min-height:70px; position:absolute; display:block; z-index:100; border-radius:50%;   overflow:hidden; background:rgba(0,0,0,0.1)}#rev_slider_7_1 .zeus.tparrows:before{font-family:"revicons"; font-size:20px; color:rgb(255,255,255); display:block; line-height:70px; text-align:center;   z-index:2; position:relative}#rev_slider_7_1 .zeus.tparrows.tp-leftarrow:before{content:"\e824"}#rev_slider_7_1 .zeus.tparrows.tp-rightarrow:before{content:"\e825"}#rev_slider_7_1 .zeus .tp-title-wrap{background:rgba(0,0,0,0.5); width:100%; height:100%; top:0px; left:0px; position:absolute; opacity:0; transform:scale(0); -webkit-transform:scale(0);  transition:all 0.3s; -webkit-transition:all 0.3s; -moz-transition:all 0.3s;  border-radius:50%}#rev_slider_7_1 .zeus .tp-arr-imgholder{width:100%; height:100%; position:absolute; top:0px; left:0px; background-position:center center; background-size:cover; border-radius:50%; transform:translatex(-100%); -webkit-transform:translatex(-100%);  transition:all 0.3s; -webkit-transition:all 0.3s; -moz-transition:all 0.3s}#rev_slider_7_1 .zeus.tp-rightarrow .tp-arr-imgholder{transform:translatex(100%); -webkit-transform:translatex(100%)}#rev_slider_7_1 .zeus.tparrows:hover .tp-arr-imgholder{transform:translatex(0); -webkit-transform:translatex(0); opacity:1}#rev_slider_7_1 .zeus.tparrows:hover .tp-title-wrap{transform:scale(1); -webkit-transform:scale(1); opacity:1}
 /*#header logo-right*/
 #header.logo-right { z-index: 999; padding: 0px; margin: 0px; position: relative; width: 100%; }
-#header.logo-right .mega-menu .menu-logo { float: right; } 
+/*#header.logo-right .mega-menu .menu-logo { float: right; } */
 #header.logo-right .mega-menu .menu-links { float: left; }
 
 .bg-8 { background: url('../images/bg/08.png'); background-clip: initial; background-color: rgba(0, 0, 0, 0); background-origin: initial; background-position: left center; background-repeat
@@ -2050,3 +2054,4 @@ margin-left: -17px; line-height: 50px; }
 .footer-3.footer-simple .social ul li a i:hover { color: #db2d2e; background: transparent; }
 .submit-btn-disable { cursor: not-allowed; }
 app-form-validation-errors {color:red;}
+.microsoft-btn-color{background:#7bb300;border:0px;}

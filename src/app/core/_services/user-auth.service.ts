@@ -21,20 +21,38 @@ export class UserAuthService {
   checkLoggedinStatus(): Observable<any> {
     return this.loggedIn.asObservable();
   }
-  fetchUserData(postedData): Observable<any> {
+  fetchDealerData(postedData): Observable<any> {
 
     return this.httpClient
-      .post('auth/fetchUserData', postedData)
+      .post('dealer/fetchData', postedData)
+      .map((response: Response) => {
+        return response;
+      })
+
+  }
+  fetchSellerData(postedData): Observable<any> {
+
+    return this.httpClient
+      .post('seller/fetchData', postedData)
       .map((response: Response) => {
         return response;
       })
 
   }
 
-  checkLogin(postedData): Observable<any> {
+  sellerLogin(postedData): Observable<any> {
 
     return this.httpClient
-      .post('auth/login', postedData, { observe: 'response' })
+      .post('auth/seller/login', postedData, { observe: 'response' })
+      .map((response: any) => {
+        return response;
+      })
+
+  }
+  dealerLogin(postedData): Observable<any> {
+
+    return this.httpClient
+      .post('auth/dealer/login', postedData, { observe: 'response' })
       .map((response: any) => {
         return response;
       })
@@ -44,7 +62,7 @@ export class UserAuthService {
   sellerSignup(postedData): Observable<any> {
 
     return this.httpClient
-      .post('auth/sellerSignup', postedData)
+      .post('auth/seller/signup', postedData)
       .map((response: Response) => {
         return response;
       })
@@ -53,27 +71,45 @@ export class UserAuthService {
   dealerSignup(postedData): Observable<any> {
 
     return this.httpClient
-      .post('auth/dealerSignup', postedData)
+      .post('auth/dealer/signup', postedData)
       .map((response: Response) => {
         return response;
       })
 
   }
 
-  profile(postedData): Observable<any> {
+  sellerProfile(postedData): Observable<any> {
 
     return this.httpClient
-      .post('auth/profile', postedData)
+      .post('seller/profile', postedData)
       .map((response: Response) => {
         return response;
       })
 
   }
 
-  forgotPassword(postedData): Observable<any> {
+  dealerProfile(postedData): Observable<any> {
 
     return this.httpClient
-      .post('auth/forgotPassword', postedData)
+      .post('dealer/profile', postedData)
+      .map((response: Response) => {
+        return response;
+      })
+
+  }
+
+  sellerForgotPassword(postedData): Observable<any> {
+
+    return this.httpClient
+      .post('seller/forgotPassword', postedData)
+      .map((response: Response) => {
+        return response;
+      })
+  }
+  dealerForgotPassword(postedData): Observable<any> {
+
+    return this.httpClient
+      .post('dealer/forgotPassword', postedData)
       .map((response: Response) => {
         return response;
       })
@@ -87,19 +123,35 @@ export class UserAuthService {
       })
   }
 
-  emailExist(postedData): Observable<any> {
+  sellerEmailExist(postedData): Observable<any> {
 
     return this.httpClient
-      .post('auth/emailExist', postedData)
+      .post('seller/emailExist', postedData)
+      .map((response: Response) => {
+        return response;
+      })
+  }
+  dealerEmailExist(postedData): Observable<any> {
+
+    return this.httpClient
+      .post('dealer/emailExist', postedData)
       .map((response: Response) => {
         return response;
       })
   }
 
-  phoneNumberExist(postedData): Observable<any> {
+  sellerPhoneNumberExist(postedData): Observable<any> {
 
     return this.httpClient
-      .post('auth/phoneNumberExist', postedData)
+      .post('seller/phoneNumberExist', postedData)
+      .map((response: Response) => {
+        return response;
+      })
+  }
+  dealerPhoneNumberExist(postedData): Observable<any> {
+
+    return this.httpClient
+      .post('dealer/phoneNumberExist', postedData)
       .map((response: Response) => {
         return response;
       })

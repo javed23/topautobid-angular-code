@@ -30,8 +30,7 @@ export class ForgotPasswordComponent implements OnInit {
   constructor(private alertService: AlertService, private userAuthService: UserAuthService, private titleService: TitleService, private pageLoaderService: PageLoaderService, private formBuilder: FormBuilder) {
 
     this.forgotPasswordForm = this.formBuilder.group({
-      email: [null, [Validators.email, Validators.required]],
-      model: ['Dealer']
+      email: [null, [Validators.email, Validators.required]]      
     });
   }
 
@@ -50,7 +49,7 @@ export class ForgotPasswordComponent implements OnInit {
 
     this.pageLoaderService.pageLoader(true);
     this.pageLoaderService.setLoaderText('Checking email existance...');//setting loader text
-    this.forgotPasswordSubscription = this.userAuthService.forgotPassword(this.forgotPasswordForm.value)
+    this.forgotPasswordSubscription = this.userAuthService.dealerForgotPassword(this.forgotPasswordForm.value)
       .subscribe(
         (response) => {
           this.pageLoaderService.pageLoader(false);

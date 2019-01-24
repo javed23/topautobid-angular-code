@@ -38,8 +38,7 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.formBuilder.group({
       email: [null, [Validators.email, Validators.required]],
       password: [null, [Validators.required]],
-      remember_me: [null],
-      model: ['Dealer']
+      remember_me: [null]      
     });
 
   }
@@ -68,7 +67,7 @@ export class LoginComponent implements OnInit {
     }
     this.pageLoaderService.pageLoader(true);
     this.pageLoaderService.setLoaderText('Checking authorisation');//setting loader text
-    this.loginSubscription = this.userAuthService.checkLogin(this.loginForm.value)
+    this.loginSubscription = this.userAuthService.dealerLogin(this.loginForm.value)
       .subscribe(
         (response) => {
           this.pageLoaderService.setLoaderText('Authorised...');//setting loader text

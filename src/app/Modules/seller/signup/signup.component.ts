@@ -90,7 +90,7 @@ export class SignupComponent implements OnInit {
         ])
       ],
       repassword: [null, Validators.compose([Validators.required])],
-      model: ['Seller']
+      
     },
       {
         // check whether our password and confirm password match
@@ -112,7 +112,7 @@ export class SignupComponent implements OnInit {
   isEmailUnique(control: AbstractControl): Promise<{ [key: string]: any } | null>
     | Observable<{ [key: string]: any } | null> {
 
-    return this.userAuthService.emailExist({ email: control.value, model: 'Seller' })
+    return this.userAuthService.sellerEmailExist({ email: control.value })
       .pipe(
         map(data => ({ emailTaken: true })),
         catchError(error => of(null))
@@ -122,7 +122,7 @@ export class SignupComponent implements OnInit {
   //check the unique phone number on change
   isPhoneNumberUnique(control: AbstractControl): Promise<{ [key: string]: any } | null>
     | Observable<{ [key: string]: any } | null> {
-    return this.userAuthService.phoneNumberExist({ phone: control.value, model: 'Seller' })
+    return this.userAuthService.sellerPhoneNumberExist({ phone: control.value })
       .pipe(
         map(data => ({ phoneNumberTaken: true })),
         catchError(error => of(null))
