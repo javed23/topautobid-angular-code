@@ -11,6 +11,7 @@ export const environment = {
   APP_NAME: 'TopAutoBid',
   DEFAULT_PROFILE: 'assets/images/default-user.png',
   DEFAULT_COUNTRY_CODE: '+1',
+  
 
   //aws 
   AWS: {
