@@ -29,7 +29,3 @@ button.verify_BTN {
 .country_code input {
     padding-left: 60px;
 }
-
-.italic_font{
-    font-style:italic
-}

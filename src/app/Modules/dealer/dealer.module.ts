@@ -1,17 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule, HttpClient } from '@angular/common/http';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskModule } from 'ngx-mask'
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ArchwizardModule } from 'angular-archwizard';
+import { DropzoneModule, DropzoneConfigInterface,
+  DROPZONE_CONFIG } from 'ngx-dropzone-wrapper';
+
+import { NgScrollbarModule } from 'ngx-scrollbar';
 
 
 //import social login modules
-  import { SocialLoginModule, AuthServiceConfig } from "angularx-social-login";
-  import { GoogleLoginProvider, FacebookLoginProvider } from "angularx-social-login";
-  //import microsoft module
-  import { AdalService, AdalGuard, AdalInterceptor } from 'adal-angular4';
+import { SocialLoginModule } from 'angularx-social-login';
+import { AuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
+//import microsoft module
+import { AdalService, AdalGuard, AdalInterceptor } from 'adal-angular4';
 
 //import enviorment file
 import { environment } from '../../../environments/environment';
@@ -22,8 +27,8 @@ import { SharedModule } from '../../core/shared.module';
 
 //import components
 import { LoginComponent } from './login/login.component';
+import { SignupComponent } from './signup/signup.component';
 import { HomeComponent } from './home/home.component';
-import { SignupComponent } from './signup/signup.component'
 import { ProfileComponent } from './profile/profile.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
@@ -42,6 +47,15 @@ const googleLoginOptions: LoginOpt = {
  
 */
 
+const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
+  acceptedFiles: '.jpg, .png, .jpeg',
+  createImageThumbnails: true
+};
+
+export function provideConfig() {
+  return config;
+}
+
 let config = new AuthServiceConfig([
   {
     id: GoogleLoginProvider.PROVIDER_ID,
@@ -52,10 +66,6 @@ let config = new AuthServiceConfig([
     provider: new FacebookLoginProvider(environment.SOCIAL_LOGINS.FACEBOOK.FACEBOOK_APP_ID)
   }
 ]);
-
-export function provideConfig() {
-  return config;
-}
 
 
 @NgModule({
@@ -68,9 +78,11 @@ export function provideConfig() {
     ReactiveFormsModule,
     SocialLoginModule,
     SharedModule,
+    DropzoneModule,
     NgxMaskModule.forRoot(),
     NgbModule,
     ArchwizardModule,
+    NgScrollbarModule,
   ],
   providers: [
     AdalService,

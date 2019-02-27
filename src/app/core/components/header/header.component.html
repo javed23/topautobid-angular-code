@@ -1,81 +1,89 @@
-
 <!--=================================
  header -->
 
- <header id="header" class="topbar-dark logo-right">
+<header id="header" class="topbar-dark logo-right">
   <div class="topbar">
     <div class="container">
       <div class="row">
         <div class="col-lg-6 col-md-12">
           <div class="topbar-left text-lg-left text-center">
-             <ul class="list-inline">
-               <li> <i class="fa fa-envelope-o"> </i> support@website.com</li> 
-               <li> <i class="fa fa-clock-o"></i> Mon - Sat 8.00 - 18.00. Sunday CLOSED</li>
-             </ul>
+            <ul class="list-inline">
+              <li> <i class="fa fa-envelope-o"> </i> support@website.com</li>
+              <li> <i class="fa fa-clock-o"></i> Mon - Sat 8.00 - 18.00. Sunday CLOSED</li>
+            </ul>
           </div>
         </div>
         <div class="col-lg-6 col-md-12">
           <div class="topbar-right text-lg-right text-center">
-             <ul class="list-inline">
-               <li> <i class="fa fa-phone"></i> (007) 123 456 7890</li> 
-               <li><a href="#"><i class="fa fa-facebook"></i></a></li>   
-               <li><a href="#"><i class="fa fa-twitter"></i></a></li>   
-               <li><a href="#"><i class="fa fa-instagram"></i></a></li>   
-               <li><a href="#"><i class="fa fa-youtube-play"></i></a></li>   
-             </ul>
+            <ul class="list-inline">
+              <li> <i class="fa fa-phone"></i> (007) 123 456 7890</li>
+              <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+              <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+              <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+              <li><a href="#"><i class="fa fa-youtube-play"></i></a></li>
+            </ul>
           </div>
         </div>
       </div>
     </div>
   </div>
-  
+
   <!--=================================
    mega menu -->
-  
-  <div class="menu">  
+
+  <div class="menu">
     <!-- menu start -->
-     <nav id="menu" class="mega-menu">
+    <nav id="menu" class="mega-menu">
       <!-- menu list items container -->
       <section class="menu-list-items">
-       <div class="container"> 
-        <div class="row"> 
-         <div class="col-md-12"> 
-          <!-- menu logo -->
-          <ul class="menu-logo">
-              <li>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <!-- menu logo -->
+              <ul class="menu-logo">
+                <li>
                   <a href="#"><img id="logo_dark_img" src="assets/images/logo-dark.png" alt="logo"> </a>
-              </li>
-          </ul>
-          <!-- menu links -->
-          <ul class="menu-links" style="float:right;">            
-
-          
-
-            <li *ngIf="isLoggedin">
-              <a *ngIf="loggedinUserType=='Seller'" routerLink="/seller/seller-profile">Profile</a>
-              <a *ngIf="loggedinUserType=='Dealer'" routerLink="/dealer/dealer-profile">Profile</a>
-            </li>
-
-            <li *ngIf="isLoggedin"><a href="#" (click)="logout()"> Logout</a></li>
+                </li>
+              </ul>
+              <!-- menu links -->
+              <ul *ngIf="isLoggedin" class="menu-links" style="float:right;">
 
 
-          </ul>
-          <!-- menu links -->
-          
-         </div>
+
+
+
+
+
+                <li class="hoverTrigger"><a href="javascript:void(0)">
+                    <div class="profile_img">
+                      <img [src]="profileData.profile_pic"
+                        alt="" class="img-fluid">
+                    </div>
+                    {{profileData.name.first_name}} <i class="fa fa-angle-down fa-indicator"></i>
+                    <div class="mobileTriggerButton"></div>
+                  </a>
+                  <!-- drop down multilevel  -->
+                  <ul class="drop-down-multilevel right-menu effect-fade" style="transition: all 400ms ease 0s;">
+                    <li>
+                      <a *ngIf="loggedinUserType=='Seller'" routerLink="/seller/seller-profile">Profile</a>
+                      <a *ngIf="loggedinUserType=='Dealer'" routerLink="/dealer/dealer-profile">Profile</a>
+                    </li>
+                    <li *ngIf="isLoggedin"><a href="#" (click)="logout()"> Logout</a></li>
+                  </ul>
+                </li>
+
+
+              </ul>
+              <!-- menu links -->
+
+            </div>
+          </div>
         </div>
-       </div>
       </section>
-     </nav>
+    </nav>
     <!-- menu end -->
-   </div>
-  </header>
-  
-  <!--=================================
+  </div>
+</header>
+
+<!--=================================
    header -->
-
-
-
-
-
-

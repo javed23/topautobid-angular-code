@@ -6,6 +6,8 @@ import { SocialLoginModule } from 'angularx-social-login';
 import { AuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxMaskModule } from 'ngx-mask'
+import { DropzoneModule, DropzoneConfigInterface,
+  DROPZONE_CONFIG } from 'ngx-dropzone-wrapper';
 
 //import enviorment file
 import { environment } from '../../../environments/environment';
@@ -19,7 +21,10 @@ import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
-
+const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
+  acceptedFiles: '.jpg, .png, .jpeg',
+  createImageThumbnails: true
+};
 
 export function provideConfig() {
   return config;
@@ -45,12 +50,17 @@ let config = new AuthServiceConfig([
     SocialLoginModule,
     SharedModule,
     NgbModule,
+    DropzoneModule,
     NgxMaskModule.forRoot()
   ],
   providers: [
     {
       provide: AuthServiceConfig,
       useFactory: provideConfig
+    },
+    {
+      provide: DROPZONE_CONFIG,
+      useValue: DEFAULT_DROPZONE_CONFIG
     }
   ],
 })

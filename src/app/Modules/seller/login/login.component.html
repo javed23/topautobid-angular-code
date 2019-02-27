@@ -10,7 +10,7 @@
 <!--=================================
  login-form  -->
 
-<section #contentSection class="login-form page-section-ptb">
+<section class="login-form page-section-ptb">
   <div class="container">
     <div class="row">
       <div class="col-md-12">
@@ -81,3 +81,45 @@
 
 <!--=================================
  login-form  -->
+
+
+
+<!--=================================
+ login-otp-form  -->
+<!-- Modal -->
+<div class="modal fade" #otpSection id="loginOTPForm" tabindex="-1" role="dialog" aria-labelledby="loginOTPForm">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginOTPForm">Verification code has been sent.</h5>
+        <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>-->
+      </div>
+      <form [formGroup]="loginOTPForm" (ngSubmit)="onSubmitOtp()">
+        <div class="modal-body">            
+            <div class="form-group">
+              
+              <div class="form-group">
+                  <label>Verification Code* </label>
+                  <input [ngClass]="{ 'is-invalid': (loginOTPForm.controls.code.touched || otpFormsubmitted) && loginOTPForm.get('code').errors }"
+                    class="form-control" mask="000000" type="text" placeholder="Please enter the code here" formControlName="code">
+					
+				  <button  type="button" (click)="resendOTP()" class="verify_BTN"> Resend</button>	
+                  <p *ngIf="loginOTPForm.controls.code.touched || otpFormsubmitted">
+                    <app-form-validation-errors minLength=6 maxLength=6 errorPrefix="Verification Code " [errors]="loginOTPForm.get('code').errors"></app-form-validation-errors>
+                  </p>
+              </div>                           
+            </div>              
+        </div>  
+        <div class="modal-footer">            
+          <button [ngClass]="{ 'submit-btn-disable': loginOTPForm.invalid }" type="submit" class="button red">Verify </button>
+        </div>
+      </form>  
+    </div>
+  </div>
+</div>
+
+
+<!--=================================
+confirm otp-form  -->

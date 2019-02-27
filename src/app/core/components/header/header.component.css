@@ -1,0 +1,10 @@
+.profile_img {
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5px;
+    border: 2px solid #db2d2e;
+}

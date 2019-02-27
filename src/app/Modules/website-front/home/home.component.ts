@@ -34,6 +34,8 @@ export class HomeComponent implements OnInit {
     POTENZA.carousel()
     POTENZA.scrolltotop()
     POTENZA.revolutionSlider(jQuery)
+    POTENZA.Isotope(),
+    POTENZA.masonry();
     
   }
 

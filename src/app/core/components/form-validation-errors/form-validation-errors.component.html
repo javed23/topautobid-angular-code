@@ -1,8 +1,11 @@
 <ng-container *ngIf="errors && errors['required']">{{errorPrefix}} is required.<br /></ng-container>
 <ng-container *ngIf="errors && errors['notUnique']">{{errorPrefix}} is not unique.<br /></ng-container>
 <ng-container *ngIf="errors && errors['email']">Please enter a valid email.<br /></ng-container>
-<ng-container *ngIf="errors && errors['minlength']">Minimum length is 10.<br /></ng-container>
+<ng-container *ngIf="errors && errors['minlength']">Minimum length is {{minLength}}.<br /></ng-container>
+<ng-container *ngIf="errors && errors['maxlength']">Only {{maxLength}} characters allowed .<br /></ng-container>
 <ng-container *ngIf="errors && errors['hasNumber']">Must contain at least 1 number.<br /></ng-container>
+<ng-container *ngIf="errors && errors['pattern']">{{patternError}}<br /></ng-container>
+
 <ng-container *ngIf="errors && errors['hasCapitalCase']">{{errorPrefix}} must contain at least 1 Letter in Capital
     Case.<br /></ng-container>
 <ng-container *ngIf="errors && errors['hasSmallCase']">{{errorPrefix}} must contain at least 1 Letter in Small Case<br /></ng-container>
