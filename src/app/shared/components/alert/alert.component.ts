@@ -9,21 +9,22 @@ import { AlertService } from '../../_services/index';
 })
 export class AlertComponent implements OnInit {
 
-  
-  alertMsgObj:any={};  
-  subscription:Subscription;
-  constructor(private alertService:AlertService) { }
+
+  alertMsgObj: any = {};
+  alertSubscription: Subscription;
+  constructor(private alertService: AlertService) { }
 
   ngOnInit() {
-    this.subscription = this.alertService.getAlert().subscribe((alert) => { 
+    this.alertSubscription = this.alertService.getAlert().subscribe((alert) => {
       this.alertMsgObj = alert;
-      console.log('alertMsgObj:');
-      console.log(this.alertMsgObj);
-     });    
+    });
+  }
+  removeAlert() {
+    this.alertMsgObj = {}
   }
   ngOnDestroy() {
     // unsubscribe to ensure no memory leaks
-    this.subscription.unsubscribe();
+    this.alertSubscription.unsubscribe();
   }
 
 }

@@ -1,39 +1,37 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { PageNotFoundComponent } from './core/page-not-found/page-not-found.component';
+import { PageNotFoundComponent } from './core/components/page-not-found/page-not-found.component';
 
 const routes: Routes = [
+
+  { path: '', redirectTo: 'web', pathMatch: 'full' },
   {
-    path:'',
+    path: 'web',
     loadChildren: './Modules/website-front/website-front.module#WebsiteFrontModule'
   },
   {
-    path:'web',
-    loadChildren: './Modules/website-front/website-front.module#WebsiteFrontModule'
+    path: 'dealer',
+    loadChildren: './Modules/dealer/dealer.module#DealerModule'
   },
   {
-    path:'dealer',
-    loadChildren:'./Modules/dealer/dealer.module#DealerModule'
+    path: 'admin',
+    loadChildren: './Modules/admin/admin.module#AdminModule'
   },
   {
-    path:'admin',
-    loadChildren:'./Modules/admin/admin.module#AdminModule'
+    path: 'seller',
+    loadChildren: './Modules/seller/seller.module#SellerModule'
   },
   {
-    path:'seller',
-    loadChildren:'./Modules/seller/seller.module#SellerModule'
-  },
-  {
-    path:'**',
-    component:PageNotFoundComponent
+    path: '**',
+    component: PageNotFoundComponent
   }
-  
+
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes,{ useHash: true })],
-  
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
+
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

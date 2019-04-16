@@ -1,9 +1,7 @@
-
-
 <!--=================================
  breadcrumbs and inner-intro -->
 
- <app-breadcrumbs [pageTitle]="title" [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+<app-breadcrumbs [pageTitle]="title" [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
 
 <!--=================================
  breadcrumbs and inner-intro -->
@@ -16,65 +14,112 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-         <div class="section-title">
-           <span>{{ 'LOGIN.LOGIN-OPTION-TITLE'| translate:user  }}</span>
-           <h2>{{ 'LOGIN.LOGIN-PAGE-TITLE'| translate:user  }}</h2>
-           <div class="separator"></div>
-         </div>
+        <div class="section-title">
+          <span>Log in with your id or social media</span>
+          <h2>Login To Your Account</h2>
+          <div class="separator"></div>
+        </div>
       </div>
     </div>
     <div class="row justify-content-center">
-     <div class="col-lg-6 col-md-12">
-       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="col-lg-6 col-md-12">
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
           <div class="gray-form clearfix">
 
             <div class="form-group">
-             <label for="email">{{ 'LOGIN.LOGIN-USERNAME'| translate:user  }}* </label>
-               <input id="email" class="form-control" [ngClass]="{ 'is-invalid': (loginForm.controls.email.touched || submitted) && loginForm.get('email').errors }" type="text" placeholder="" formControlName="email">
-               <p *ngIf="loginForm.controls.email.touched || submitted">
-                  <app-form-validation-errors  errorPrefix="Email is" [errors]="loginForm.get('email').errors"></app-form-validation-errors>      
-                </p>
+              <label for="email">Email* </label>
+              <input id="email" class="form-control" [ngClass]="{ 'is-invalid': (loginForm.controls.email.touched || submitted) && loginForm.get('email').errors }"
+                type="text" placeholder="Enter Email" formControlName="email">
+              <p *ngIf="loginForm.controls.email.touched || submitted">
+                <app-form-validation-errors errorPrefix="Email " [errors]="loginForm.get('email').errors"></app-form-validation-errors>
+              </p>
             </div>
 
             <div class="form-group">
-             <label for="Password">{{ 'LOGIN.LOGIN-PASSWORD'| translate:user  }}* </label>
-               <input id="Password" class="form-control" type="password" placeholder="" formControlName="password"  [ngClass]="{ 'is-invalid': (loginForm.controls.password.touched || submitted) && loginForm.get('password').errors }">
-               <p *ngIf="loginForm.controls.password.touched || submitted">
-                  <app-form-validation-errors  errorPrefix="Password is" [errors]="loginForm.get('password').errors"></app-form-validation-errors>      
-                </p>
+              <label for="Password">Password* </label>
+              <input id="Password" class="form-control" type="password" placeholder="Enter Password" formControlName="password"
+                [ngClass]="{ 'is-invalid': (loginForm.controls.password.touched || submitted) && loginForm.get('password').errors }">
+              <p *ngIf="loginForm.controls.password.touched || submitted">
+                <app-form-validation-errors errorPrefix="Password " [errors]="loginForm.get('password').errors"></app-form-validation-errors>
+              </p>
 
-            </div> 
+            </div>
 
             <div class="form-group">
               <div class="remember-checkbox mb-4">
-                 <input type="checkbox" formControlName="remember_me" id="remember_me">
-                 <label for="remember_me"> {{ 'LOGIN.REMEMBER-ME'| translate:user  }}</label>
-                 <a href="#" class="float-right">{{ 'LOGIN.FORGOT-PASSWORD'| translate:user  }}</a>
-                 
+                <input type="checkbox" formControlName="remember_me" id="remember_me">
+                <label for="remember_me"> REMEMBER ME</label>
+                <a routerLink="/seller/forgot-password" class="float-right">Forgot Password?</a>
+
               </div>
-            </div>       
+            </div>
 
-            <button  type="submit" class="button red">{{ 'LOGIN.LOGIN-BUTTON'| translate:user  }} </button>
+            <button [ngClass]="{ 'submit-btn-disable': !loginForm.valid }" type="submit" class="button red">Log in
+            </button>
 
-          </div> 
+          </div>
         </form>
-        
-          <div class="login-social text-center">
-            <h5>{{ 'LOGIN.LOGIN-SOCIAL-MEDIA'| translate:user  }}</h5>
-            <ul>
-                <li>
-                  <button (click)="signInWithFB()" class="fb button" type="button"><i class="fa fa-facebook"></i> {{ 'LOGIN.FACEBOOK'| translate:user  }}</button>
-                 
+        <br />
+        <p class="link">Don't have an account? please <a routerLink="/seller/signup"> Register here</a> </p>
+        <div class="login-social text-center">
+          <h5>Login with Social media</h5>
+          <ul>
+            <li>
+              <button (click)="signInWithFB()" class="fb button" type="button"><i class="fa fa-facebook"></i> Facebook</button>
 
-                </li>
-                <li><button (click)="signInWithGoogle()" type="button" class="twitter button" ><i class="fa fa-twitter"></i> {{ 'LOGIN.GOOGLE'| translate:user  }}</button></li>
-                <li><button class="pinterest button" type="button"><i class="fa fa-windows"></i> {{ 'LOGIN.MICROSOFT'| translate:user  }}</button></li>
-            </ul>
-          </div>           
+
+            </li>
+            <li><button (click)="signInWithGoogle()" type="button" class="pinterest button"><i class="fa fa-google-plus"></i>
+                google+</button></li>
+            <li><button class="microsoft-btn-color button" type="button"><i class="fa fa-windows"></i> Microsoft</button></li>
+          </ul>
+        </div>
       </div>
-     </div>
-   </div>
+    </div>
+  </div>
 </section>
 
 <!--=================================
  login-form  -->
+
+
+
+<!--=================================
+ login-otp-form  -->
+<!-- Modal -->
+<div class="modal fade" #otpSection id="loginOTPForm" tabindex="-1" role="dialog" aria-labelledby="loginOTPForm">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginOTPForm">Verification code has been sent.</h5>
+        <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>-->
+      </div>
+      <form [formGroup]="loginOTPForm" (ngSubmit)="onSubmitOtp()">
+        <div class="modal-body">            
+            <div class="form-group">
+              
+              <div class="form-group">
+                  <label>Verification Code* </label>
+                  <input [ngClass]="{ 'is-invalid': (loginOTPForm.controls.code.touched || otpFormsubmitted) && loginOTPForm.get('code').errors }"
+                    class="form-control" mask="000000" type="text" placeholder="Please enter the code here" formControlName="code">
+					
+				  <button  type="button" (click)="resendOTP()" class="verify_BTN"> Resend</button>	
+                  <p *ngIf="loginOTPForm.controls.code.touched || otpFormsubmitted">
+                    <app-form-validation-errors minLength=6 maxLength=6 errorPrefix="Verification Code " [errors]="loginOTPForm.get('code').errors"></app-form-validation-errors>
+                  </p>
+              </div>                           
+            </div>              
+        </div>  
+        <div class="modal-footer">            
+          <button [ngClass]="{ 'submit-btn-disable': loginOTPForm.invalid }" type="submit" class="button red">Verify </button>
+        </div>
+      </form>  
+    </div>
+  </div>
+</div>
+
+
+<!--=================================
+confirm otp-form  -->
