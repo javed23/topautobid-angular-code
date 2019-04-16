@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
-  "newProjectRoot": "projects",
+  "newProjectRoot": "projects", 
   "projects": {
     "topAutoBid": {
       "root": "",
@@ -9,7 +9,7 @@
       "projectType": "application",
       "prefix": "app",
       "schematics": {},
-      "architect": {
+      "architect": {       
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
@@ -30,7 +30,11 @@
               "src/assets/css/owl-carousel/owl.carousel.css",
               "src/assets/css/magnific-popup/magnific-popup.css",
               "src/assets/revolution/css/settings.css",
+              "src/assets/css/slick/slick.css",
+              "src/assets/css/slick/slick-theme.css",
+              "src/assets/css/jquery-ui.css",
               "src/assets/css/style.css",
+              "src/assets/css/developer.css",
               "src/assets/css/responsive.css",              
               "src/styles.css",
               "src/assets/css/css-loader.css"
@@ -40,13 +44,14 @@
               "src/assets/js/popper.js",
               "src/assets/js/bootstrap.min.js",
               "src/assets/js/mega-menu/mega_menu.js",
+              "src/assets/js/jquery-ui.js",  
               "src/assets/js/jquery.appear.js",
               "src/assets/js/counter/jquery.countTo.js",
               "src/assets/js/owl-carousel/owl.carousel.min.js",
               "src/assets/js/select/jquery-select.js",
               "src/assets/js/magnific-popup/jquery.magnific-popup.min.js",
               "src/assets/revolution/js/jquery.themepunch.tools.min.js",
-
+              "src/assets/js/isotope/isotope.pkgd.min.js",
               "src/assets/revolution/js/jquery.themepunch.revolution.min.js",
               "src/assets/revolution/js/extensions/revolution.extension.actions.min.js",
               "src/assets/revolution/js/extensions/revolution.extension.carousel.min.js",
@@ -57,7 +62,9 @@
               "src/assets/revolution/js/extensions/revolution.extension.parallax.min.js",
               "src/assets/revolution/js/extensions/revolution.extension.slideanims.min.js",
               "src/assets/revolution/js/extensions/revolution.extension.video.min.js",
-              "src/assets/js/custom.js"
+              "src/assets/js/slick/slick.min.js",              
+              "src/assets/js/custom.js",
+              "src/assets/js/sticky-kit.js"
             ]
           },
           "configurations": {
@@ -88,9 +95,12 @@
           }
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular-devkit/build-angular:dev-server",         
           "options": {
-            "browserTarget": "topAutoBid:build"
+            "browserTarget": "topAutoBid:build",
+            //"host": "172.31.24.176",
+            "host": "localhost",
+            "port": 4200
           },
           "configurations": {
             "production": {

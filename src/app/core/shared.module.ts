@@ -1,36 +1,27 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
+import { ToastrModule } from 'ng6-toastr-notifications';
 
-import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
-import { FormValidationErrorsComponent } from './form-validation-errors/form-validation-errors.component';
+import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
+import { FormValidationErrorsComponent } from './components/form-validation-errors/form-validation-errors.component';
 
-export function HttpLoaderFactory(http: HttpClient) {
-    return new TranslateHttpLoader(http);
-}
+
 
 @NgModule({
     imports: [
         CommonModule,
-        RouterModule,
-        TranslateModule.forRoot({
-            loader: {
-                provide: TranslateLoader,
-                useFactory: HttpLoaderFactory,
-                deps: [HttpClient]
-            }
-          })
-     ],
+        RouterModule,  
+        ToastrModule.forRoot()     
+    ],
     declarations: [
         BreadcrumbsComponent,
-        FormValidationErrorsComponent
+        FormValidationErrorsComponent,
     ],
     exports: [
         BreadcrumbsComponent,
         FormValidationErrorsComponent
     ]
 })
-export class SharedModule {}
+export class SharedModule { }

@@ -24,6 +24,6 @@ export class CustomValidators {
       // if they don't match, set an error in our confirmPassword form control
       control.get('repassword').setErrors({ NoPassswordMatch: true });
     }
-  }  
+  }
 
 }
