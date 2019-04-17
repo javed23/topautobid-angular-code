@@ -61,31 +61,47 @@ export class AddCarComponent implements OnInit {
 
   // AddCar Form Group Wizard
   basicInfoWizard: FormGroup;
+  uploadVehicleImagesWizard: FormGroup;
   aboutVehicleWizard: FormGroup;
   vehicleConditionWizard: FormGroup;
   pickupLocationWizard: FormGroup;
   
 
   isBasicInfoSubmitted:boolean = false;
+  isVehicleImagesSubmitted:boolean = false;
   isAboutVehicleSubmitted:boolean = false;
   isVehicleConditionSubmitted:boolean = false;
   isPickupLocationSubmitted:boolean = false;
 
+  
+  
+  isBasicInfoFieldsVisible:boolean = true;  
+  isVinSelected:boolean = false;
+  isYearSelected:boolean = false;
+  isVehicleAftermarketSelected:boolean = false;
+  isVehicleOwnershipSelected:boolean = false;
+  isOtherSelected:boolean = false;
+  isVehicleConditionSelected:boolean = false;
+  
 
-  private selectNewVehicleOption: string = "Year";
   
-  isBasicInfoFields:boolean = true;  
-  showIfVINSelected:boolean = false;
-  showIfYearSelected:boolean = false;
-  showVehicleAftermarketFields:boolean = false;
-  showVehicleOwnershipFields:boolean = false;
-  showIfOtherSelectedFields:boolean = false;
-  showVehicleConditionFields:boolean = false;
-  
+
+  private selectNewVehicleOption: string = "Year";    // set Default Vehicle Radio Button Value
+  makes = [];  
+  models = [];
+  trims = [];
+  bodyStyles= [{name: "2 Door Convertible"}, {name: "2 Door Coupe"}, {name: "4 Door Sedan"}];
+  engines= [{name: "4 cylindrical"}, {name: "2 cylindrical"}];
+  transmissions= [{name: "ACURA"}]; 
+  doors= [{name: "4 doors"},{name: "2 doors"}];  
+  fuelTypes= [{name: "ACURA"}];
+  driveTypes= [{name: "ACURA"}];
+  interiorColors= [{name: "Black"}, {name: "Blue"}, {name: "Brown"}, {name: "Grey"}, {name: "Red"}, {name: "Silver"}];
+  exteriorColors= [{name: "Black"}, {name: "Blue"}, {name: "Brown"}, {name: "Grey"}, {name: "Red"}, {name: "Silver"}];
+  interiorMaterials= [{name: "ACURA"}];
+
 
   public show_dialog : boolean = false;
-
-
 
   // Declare DropZone Variables
   vehiclePic: string = '';
@@ -99,11 +115,11 @@ export class AddCarComponent implements OnInit {
 
   emails = [{ email: "email1" }, { email: "email2" }, { email: "email3" }, { email: 'email4' }]
 
-  makesArray= [{vehical_make: "ACURA"},{vehical_make: "ALLARD"},{vehical_make: "AMC"},{vehical_make: "AUDI"},{vehical_make: "Other"},{vehical_make: "CHEVROLET"},{vehical_make: "BMW"}];
-
   
 
-  currentYear: number = new Date().getFullYear();
+  currentYear: number = new Date().getFullYear();   // get Current Year
+
+
   getMakeByYearArray:any = [];
   getModelByMakeIdArray:any = [];
 
@@ -111,6 +127,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
   this.dropzoneInit()        //initalize dropzone library
   this.basicInfo();          // Initialize Baisc Info Wizard Fields 
+  this.uploadVehicleImages(); // Initialize Vehicle Images Wizard Fields
   this.aboutVehicle();       // Initialize About Vehicle Wizard Fields
   this.vehicleCondition();   // Initialize Vehicle Condition Wizard Fields
   this.pickUpLocation();     // Initialize Pickup Location Wizard Fields
@@ -122,7 +139,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   */
   private basicInfo(){
     this.basicInfoWizard = this.formBuilder.group({      
-        car_details:this.formBuilder.group({ 
+        basic_info:this.formBuilder.group({ 
           vehicle_preference: ['Year'],            
           vin_number: [null, Validators.compose([Validators.required])],
           vehicle_year: [null],
@@ -143,6 +160,22 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           vehicle_interior_material: [null, Validators.compose([Validators.required])],
           //vehicle_pictures: this.formBuilder.array([]),      
         }),    
+    });
+  }
+
+  /**
+  * Initialize Basic Info Wizard Fields.
+  */
+  private uploadVehicleImages(){
+    this.uploadVehicleImagesWizard = this.formBuilder.group({                  
+      vehicle_images: this.formBuilder.array([this.createItem()]),            
+    });
+  }
+
+  createItem(): FormGroup {
+    return this.formBuilder.group({
+      vehicle_image_category: [null],
+      vehicle_image_path: [null]
     });
   }
 
@@ -334,7 +367,21 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   } 
 
   /**
-   * get Makes and Models By Year
+   * show last 15 years list in the year dropdown
+   */
+  createYearRange(){
+    var years = [];
+    for (var i = 0; i < 15; i++) {
+      years.push({
+        label: this.currentYear - i,
+        value: this.currentYear - i
+      });
+    }
+    return years;
+  }
+
+  /**
+   * get Vehicles(Makes, Models, Trim...) By Year
    * @param year selected year from dropdown
    * @return  vehicle details
    */
@@ -353,7 +400,8 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       //case success
     (response) => {      
       
-      console.log(response);
+      //console.log(response.makes);
+      this.makes = response.makes;
 
       this.pageLoaderService.pageLoader(false);//hide page loader
       this.pageLoaderService.setLoaderText('');//setting loader text empty
@@ -367,6 +415,29 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
     });
   }
+
+  /**
+   * get Models By Make Name
+   * @param makeName selected make name from dropdown
+   * @return  models array
+   */
+  getModelsByMake(makeName){    
+    let filterArrayByMakeName = this.makes.find(x => x.name === makeName);
+    //console.log(filterArrayByMakeName);
+    this.models = filterArrayByMakeName.models;
+  }
+
+  /**
+   * get Trims array By Model Name
+   * @param makeName selected make name from dropdown
+   * @return  trim array
+   */
+  getTrimsByModel(modelName){    
+    let filterArrayByModelName = this.models.find(x => x.name === modelName);
+    //console.log(filterArrayByMakeName);
+    this.trims = filterArrayByModelName.trims;
+  }
+  
 
   checkCarFormStep2Validity() {
     this.isAboutVehicleSubmitted = true;
@@ -413,8 +484,8 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   checkCarFormStep1Validity() {      
     
 
-    const vehiclePreference = this.basicInfoWizard.controls.car_details.get('vehicle_preference');   
-    const vehicleVIN = this.basicInfoWizard.controls.car_details.get('vin_number');
+    const vehiclePreference = this.basicInfoWizard.controls.basic_info.get('vehicle_preference');   
+    const vehicleVIN = this.basicInfoWizard.controls.basic_info.get('vin_number');
 
     if(vehiclePreference.value == "Year"){      
       vehicleVIN.clearValidators();
@@ -432,14 +503,14 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
     this.isBasicInfoSubmitted = false;
 
-    const vehicleYear = this.basicInfoWizard.controls.car_details.get('vehicle_year');
-    const vehicleVIN = this.basicInfoWizard.controls.car_details.get('vin_number');
+    const vehicleYear = this.basicInfoWizard.controls.basic_info.get('vehicle_year');
+    const vehicleVIN = this.basicInfoWizard.controls.basic_info.get('vin_number');
 
       if(e == "Year"){
         
-        this.isBasicInfoFields = true;   
-        this.showIfYearSelected =true; 
-        this.showIfVINSelected = false; 
+        this.isBasicInfoFieldsVisible = true;   
+        this.isYearSelected =true; 
+        this.isVinSelected = false; 
 
         vehicleYear.setValidators([Validators.required]);
         vehicleVIN.clearValidators();
@@ -447,8 +518,8 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
         vehicleYear.updateValueAndValidity();
       }else{
 
-        this.isBasicInfoFields = false;
-        this.showIfYearSelected =false;
+        this.isBasicInfoFieldsVisible = false;
+        this.isYearSelected =false;
 
         vehicleVIN.setValidators([Validators.required]);
         vehicleYear.clearValidators();
@@ -467,63 +538,50 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       return (this.selectNewVehicleOption === name); 
   }
   
-  onEnterVINFunction(vin) {
+ /* onEnterVINFunction(vin) {
     //getVehicle Details
     this.vehicleService.getDataByVIN(vin)     
       .pipe(untilDestroyed(this))      
       .subscribe(
         (response) => {
-            this.isBasicInfoFields = true;
+            this.isBasicInfoFieldsVisible = true;
             console.log(response);
             //console.log(response.Results[0].ErrorCode.charAt(0));   
             
             if(response.Results[0].ErrorCode.charAt(0) == 1 || response.Results[0].ErrorCode.charAt(0) == 4){
               console.log('Invalid VIN');
             }else{              
-              this.showIfVINSelected = true;
+              this.isVinSelected = true;
 
               // get Vehicle Year
               const vehicleYear = response.Results[0].ModelYear;
 
-              // set all makes in dropdown
-              //this.getAllMakesByYear(vehicleYear, response.Results[0].Manufacturer);
-              //console.log(response.Results[0].Make);
-              //let result = this.makesArray.indexOf(response.Results[0].Make);
-              //console.log(this.makeExists(response.Results[0].Make));
+              
 
               // get Models by Make
               this.getAllModelsByMakeId(response.Results[0].Make);
 
-              this.basicInfoWizard.controls.car_details.get('vehicle_year').setValue(response.Results[0].ModelYear);
-              this.basicInfoWizard.controls.car_details.get('vehicle_make').setValue(response.Results[0].Make);
-              this.basicInfoWizard.controls.car_details.get('vehicle_model').setValue(response.Results[0].Model);
-              this.basicInfoWizard.controls.car_details.get('vehicle_engine').setValue(response.Results[0].EngineCylinders);
-              this.basicInfoWizard.controls.car_details.get('vehicle_transmission').setValue(response.Results[0].TransmissionStyle);
-              this.basicInfoWizard.controls.car_details.get('vehicle_trim').setValue(response.Results[0].Trim);
-              this.basicInfoWizard.controls.car_details.get('vehicle_doors').setValue(response.Results[0].Doors);
-              this.basicInfoWizard.controls.car_details.get('vehicle_body_type').setValue(response.Results[0].BodyClass);
-              this.basicInfoWizard.controls.car_details.get('vehicle_fuel_type').setValue(response.Results[0].FuelTypePrimary);
+              this.basicInfoWizard.controls.basic_info.get('vehicle_year').setValue(response.Results[0].ModelYear);
+              this.basicInfoWizard.controls.basic_info.get('vehicle_make').setValue(response.Results[0].Make);
+              this.basicInfoWizard.controls.basic_info.get('vehicle_model').setValue(response.Results[0].Model);
+              this.basicInfoWizard.controls.basic_info.get('vehicle_engine').setValue(response.Results[0].EngineCylinders);
+              this.basicInfoWizard.controls.basic_info.get('vehicle_transmission').setValue(response.Results[0].TransmissionStyle);
+              this.basicInfoWizard.controls.basic_info.get('vehicle_trim').setValue(response.Results[0].Trim);
+              this.basicInfoWizard.controls.basic_info.get('vehicle_doors').setValue(response.Results[0].Doors);
+              this.basicInfoWizard.controls.basic_info.get('vehicle_body_type').setValue(response.Results[0].BodyClass);
+              this.basicInfoWizard.controls.basic_info.get('vehicle_fuel_type').setValue(response.Results[0].FuelTypePrimary);
 
 
-              this.basicInfoWizard.controls.car_details.get('vehicle_mileage').setValue(15);
+              this.basicInfoWizard.controls.basic_info.get('vehicle_mileage').setValue(15);
             }                          
         },
         error => { 
-          this.isBasicInfoFields = false;   
+          this.isBasicInfoFieldsVisible = false;   
           console.log(error);
         });
-  }
+  } */
 
-  createYearRange(){
-    var items = [];
-    for (var i = 0; i < 25; i++) {
-      items.push({
-        label: this.currentYear - i,
-        value: this.currentYear - i
-      });
-    }
-    return items;
-  }
+  
 
   getAllMakesByYear(year,Manufacturer){
     //console.log(year);
@@ -540,30 +598,16 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
         });
   }
 
-  getAllModelsByMakeId(makeID){
-    //console.log(makeID);
-
-    this.vehicleService.getAllModelsByMakeId(makeID)     
-      .pipe(untilDestroyed(this))      
-      .subscribe(
-        (response) => {           
-            //console.log(response);   
-            this.getModelByMakeIdArray =  response.Results;                           
-        },
-        error => { 
-          console.log(error);
-        });
-  }
-
+  
   checkAfterMarketOption(event){
     const vehicleAfterMarketDescription = this.aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description');
     if ( event.target.checked ) {      
-      this.showVehicleAftermarketFields = true;
+      this.isVehicleAftermarketSelected = true;
       vehicleAfterMarketDescription.setValidators([Validators.required]);
       vehicleAfterMarketDescription.updateValueAndValidity();
       this.aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_value').setValue('ON');
     }else{
-      this.showVehicleAftermarketFields = false;
+      this.isVehicleAftermarketSelected = false;
       vehicleAfterMarketDescription.clearValidators();
       vehicleAfterMarketDescription.updateValueAndValidity();
       this.aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_value').setValue('OFF');
@@ -572,10 +616,10 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
   checkCleanTitleOption(event){   
     if ( event.target.checked ) {      
-      this.showVehicleOwnershipFields = true;      
+      this.isVehicleOwnershipSelected = true;      
       this.aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_clean_title').setValue('ON');
     }else{
-      this.showVehicleOwnershipFields = false;     
+      this.isVehicleOwnershipSelected = false;     
       this.aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_clean_title').setValue('OFF');
     }
   }
@@ -585,11 +629,11 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     const vehicleOwnershipDescription = this.aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description');
 
       if(e == "Other"){
-        this.showIfOtherSelectedFields = true;        
+        this.isOtherSelected = true;        
         vehicleOwnershipDescription.setValidators([Validators.required]);        
         vehicleOwnershipDescription.updateValueAndValidity();
       }else{
-        this.showIfOtherSelectedFields = false;        
+        this.isOtherSelected = false;        
         vehicleOwnershipDescription.clearValidators();        
         vehicleOwnershipDescription.updateValueAndValidity();
       }
@@ -600,11 +644,11 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     const vehicleConditionDescription = this.vehicleConditionWizard.controls.vehicle_condition.get('vehicle_condition_description');
 
       if(e == "reconditioning" || e == "functional" || e == "parts"){
-        this.showVehicleConditionFields = true;        
+        this.isVehicleConditionSelected = true;        
         vehicleConditionDescription.setValidators([Validators.required]);        
         vehicleConditionDescription.updateValueAndValidity();
       }else{
-        this.showVehicleConditionFields = false;        
+        this.isVehicleConditionSelected = false;        
         vehicleConditionDescription.clearValidators();        
         vehicleConditionDescription.updateValueAndValidity();
       }
@@ -619,7 +663,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   }
 
   makeExists(vehical_make) {
-    return this.makesArray.some(function(el) {
+    return this.makes.some(function(el) {
       return el.vehical_make === vehical_make;
     }); 
   }

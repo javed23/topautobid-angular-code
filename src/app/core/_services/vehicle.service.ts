@@ -60,7 +60,8 @@ export class VehicleService {
        
         return this.httpClient.post('common/fetchVehiclesByYear', year)
         .map((response: any) => {         
-            console.log(response);           
+            //console.log(response); 
+            return response;          
         })    
     }
     
