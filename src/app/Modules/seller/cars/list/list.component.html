@@ -60,6 +60,22 @@
                         <div class="text-right mb-3">
                             <a class="button red" href="#"> Create New </a>
                         </div>
+                        <div class="text-right mb-3">    
+                        <div class="filter_box text-md-right mt-md-0 mt-sm-3">
+                            <!--<a class="Filter button" href="javascript:void(0)">
+                                <i class="fa fa-bars" aria-hidden="true"></i> Filters
+                            </a>-->
+                            <div class="widget-search ml-4">
+                                <i class="fa fa-search"></i>
+                                <input type="search" class="form-control placeholder"
+                                    (input)="onSearch($event.target.value)" placeholder="Search....">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    </div>
+                    <div class="form-inline mb-3 blog-sidebar mt-3">
+                        <div class="sidebar-widget col-md-5 pl-0 mb-0">
                         <div class="tags">
 
                             <ul>
@@ -74,22 +90,12 @@
                                         (click)="onChangeListType('archived')">Archived</button></li>
                             </ul>
                         </div>
-                        <div class="filter_box text-md-right mt-md-0 mt-sm-3">
-                            <!--<a class="Filter button" href="javascript:void(0)">
-                                <i class="fa fa-bars" aria-hidden="true"></i> Filters
-                            </a>-->
-                            <div class="widget-search ml-4">
-                                <i class="fa fa-search"></i>
-                                <input type="search" class="form-control placeholder"
-                                    (input)="onSearch($event.target.value)" placeholder="Search....">
-                            </div>
-                        </div>
                     </div>
-                    <div class="form-inline d-flex justify-content-end mb-3">
 
-
-                        <div class="input-group date_filters_start pr-2">
-                            <input class="form-control" type="text" readonly (click)="startDate.toggle()" placeholder="Start date"
+                        <div class="right_sec col-md-7 text-right pr-0">
+                        
+                        <div class="input-group date_filters_start d-inline-block">
+                            <input [(ngModel)]="startDateModel"  class="form-control" (dateSelect)="onStartDateSelected($event)" type="text" (click)="startDate.toggle()" placeholder="Start date"
                                 ngbDatepicker #startDate="ngbDatepicker">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary calendar" (click)="startDate.toggle()"
@@ -97,8 +103,9 @@
                                             aria-hidden="true"></i></span></button>
                             </div>
                         </div>
-                        <div class="input-group date_filters_end">
-                            <input class="form-control" type="text" readonly (click)="endDate.toggle()" placeholder="End date"
+                     
+                        <div class="input-group date_filters_start d-inline-block">
+                            <input [(ngModel)]="endDateModel" class="form-control" type="text" (dateSelect)="onEndDateSelected($event)" (click)="endDate.toggle()" placeholder="End date"
                                 ngbDatepicker #endDate="ngbDatepicker">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary calendar" (click)="endDate.toggle()"
@@ -108,8 +115,14 @@
                         </div>
 
 
+                        <div (click)="clear()" class="clear_inputs d-inline-block">
+                            <i class="fa fa-refresh" aria-hidden="true"></i>
+                        </div>
                     </div>
 
+
+                    </div>
+            
                     <div class="sidebar-widget">
                         <div class="unordered-lists table-responsive text-center">
 
@@ -117,7 +130,7 @@
                                 [columns]="[{name:'ref'},{name:'Year'},{name:'Make'},{name:'Model'},{name:'Trim'},{name:'Listed'},{name:'Status'},{name:'Bids'}]"
                                 [sorts]="[{prop: 'ref', dir: 'desc'}]" [columnMode]="'force'" [headerHeight]="50"
                                 [loadingIndicator]="isLoading" [limit]="currentPageLimit" [footerHeight]="80"
-                                [rowHeight]="50" (sort)="onSort($event)" (page)="setPage($event,'all')">
+                                [rowHeight]="55" (sort)="onSort($event)" (page)="setPage($event,'all')">
                                 <ngx-datatable-column name="ref" [sortable]="true" [width]="200">
                                     <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
                                         #{{ row.ref }}
@@ -160,9 +173,9 @@
                                     <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
 
                                         <b>{{row.best_bid | currency:'USD':true:'2.2-2'}} </b> <span
-                                            *ngIf="row.bids.length>1">
+                                            *ngIf="row.bids.length>1" class="left_bids">
                                             <!--<button (click)="show(rowIndex, 'posted-car-bids')" class="left_bids">+{{row.bids.length}} more</button>--><button
-                                                class="left_bids">+{{row.bids.length}} more</button></span>
+                                                >+{{row.bids.length}} more</button></span>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Action" [sortable]="false" [width]="200">

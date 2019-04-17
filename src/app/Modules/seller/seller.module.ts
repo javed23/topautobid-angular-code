@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule, HttpClient } from '@angular/common/http';
 import { SocialLoginModule } from 'angularx-social-login';
 import { AuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
@@ -62,6 +62,7 @@ let config = new AuthServiceConfig([
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     SellerRoutingModule,
     SocialLoginModule,
     SharedModule,

@@ -5,6 +5,8 @@ import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { untilDestroyed } from 'ngx-take-until-destroy';// unsubscribe from observables when the  component destroyed
 import { ToastrManager } from 'ng6-toastr-notifications';//toaster class
 import {NgbDateAdapter, NgbDateStruct, NgbDateNativeAdapter} from '@ng-bootstrap/ng-bootstrap';
+import { DatePipe } from '@angular/common'
+
 //import services
 
   //modules core services
@@ -19,6 +21,7 @@ declare var jQuery: any;
 declare var $: any;
 declare var POTENZA: any;
 import * as _ from 'lodash';
+import Swal from 'sweetalert2'
 
 
 @Component({
@@ -26,6 +29,7 @@ import * as _ from 'lodash';
   templateUrl: './list.component.html',
   providers: [
     CarService,
+    DatePipe,
     {
       provide: NgbDateAdapter,
       useClass: NgbDateNativeAdapter
@@ -36,6 +40,9 @@ import * as _ from 'lodash';
 })
 
 export class ListComponent implements AfterViewInit {
+  
+  startDateModel:any;
+  endDateModel:any;
   page = new Page();
   cars = new Array<Car>()
   viewedPages:any=[];
@@ -43,7 +50,8 @@ export class ListComponent implements AfterViewInit {
   isModalOpen:boolean=false;
   isBidsModalOpen:boolean=false;
   filtersForm:FormGroup;
-
+  datesObject:any = {};
+ 
  //Defined records limit and records limit options
  currentPageLimit: number = environment.DEFAULT_RECORDS_LIMIT
  readonly pageLimitOptions = environment.DEFAULT_PAGE_LIMIT_OPTIONS
@@ -53,6 +61,7 @@ export class ListComponent implements AfterViewInit {
   readonly title: string = 'Car Listing';
   readonly breadcrumbs: any[] = [{ page: 'Home', link: '/seller/home' }, { page: 'Car Listing', link: '' }]
 
+ 
   //default pagination settings
   private _defaultPagination = {
     count: 0,
@@ -64,7 +73,7 @@ export class ListComponent implements AfterViewInit {
 
 
 
-  constructor(private commonUtilsService:CommonUtilsService, private http: HttpClient, private carService: CarService, private formBuilder: FormBuilder) {
+  constructor(private commonUtilsService:CommonUtilsService, private http: HttpClient, private carService: CarService, private formBuilder: FormBuilder, private datePipe: DatePipe) {
 
     //fetching the data with default settings
     this.setPage(this._defaultPagination,'all');
@@ -195,12 +204,63 @@ export class ListComponent implements AfterViewInit {
    * @return  void
    */
     onApplyingFilters():void {
+      //console.log('endDate:'+this.endDate.nativeElement.value);
       this.viewedPages = [];
       let values = this.filtersForm.value
       this.page.filters['bid'] = (values.bid).replace(/ /g,'').split('-');
       this.page.filters['years'] = (values.years).replace(/ /g,'').split('-');
       this.setPage(this._defaultPagination,this.page.type);   
     }
+  
+ 
+  /**
+   * Filters records when user click on 'Apply Filters' button
+   * @return  void
+   */
+  onStartDateSelected(event:any):void {
+    this.datesObject['start']  = new Date(event.year,event.month-1,event.day)    
+    this.validateDateFilters();       
+  }
+  /**
+   * Filters records when user click on 'Apply Filters' button
+   * @return  void
+   */
+  onEndDateSelected(event:any):void {    
+    this.datesObject['end']  = new Date(event.year,event.month-1,event.day)
+    this.validateDateFilters();        
+  }
+
+  /**
+  * To validate date filters
+  * @return  void
+  */
+  private validateDateFilters(){
+    if(! _.has(this.datesObject, ['start']))
+      this.commonUtilsService.onError('Please select start date');
+    else if(! _.has(this.datesObject, ['end']))
+      this.commonUtilsService.onError('Please select end date');
+    else if(_.has(this.datesObject, ['end']) && (this.datesObject['end']).getTime() <= (this.datesObject['start']).getTime()){
+      this.endDateModel = null
+      this.commonUtilsService.onError('End date should not less than start date');  
+      
+    }else{
+      this.datesObject['end'] = this.datePipe.transform(this.datesObject['end'], 'yyyy-MM-dd');
+      this.datesObject['start'] = this.datePipe.transform(this.datesObject['start'], 'yyyy-MM-dd');
+      console.log(`start:${this.datesObject['start']},end:${this.datesObject['end']}`)
+      this.page.filters['dates'] = this.datesObject;
+      this.viewedPages = [];
+      this.setPage(this._defaultPagination,this.page.type);
+    }
+  }
+  /**
+  * To clear date filters(inputs)
+  * @return  void
+  */
+  clear():void{
+    this.startDateModel = null
+    this.endDateModel = null
+    this.datesObject = {}
+  }
   /**
   * Show a popup modal
   * @param index    array index of selected car
@@ -252,7 +312,7 @@ export class ListComponent implements AfterViewInit {
           this.commonUtilsService.onError(error); 
         });
     }  
-
+    
   // This method must be present, even if empty.
     ngOnDestroy() {
       // To protect you, we'll throw an error if it doesn't exist.

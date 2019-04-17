@@ -109,13 +109,58 @@ input[type="file"] {
 .show_modal{display: block;}
 .date_filters_start{ width:15% !important;}
 .date_filters_end{ width:15% !important;}
-/* button.calendar, button.calendar:active {
-    width: 2.75rem;
-    background-image: url('/assets/images/calender_img.png') !important;
-    background-repeat: no-repeat;
-    background-size: 23px;
-    background-position: center;
-    background:#6c757d;
+.clear_inputs {
+    padding: 0 12px;
+    color: #db2d2e;
+    font-size: 21px;
+    cursor: pointer;
+    vertical-align: middle;
 }
 
-button.calendar:hover{background:#000;} */
+.listing_outer .right_sec .date_filters_start {
+    position: relative;
+    width: 227px!important;
+    margin-left: 10px;
+}
+
+.listing_outer .right_sec .date_filters_start input {
+    width: 100%!important;
+    padding: 10px 18px;
+}
+
+.listing_outer .right_sec .input-group-append {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0!important;
+}
+.listing_outer .right_sec .input-group-append {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0!important;
+    height: 100%;
+}
+
+.blog-sidebar .sidebar-widget .tags li button{
+    margin-bottom: 0!important;
+}
+
+.table-responsive .left_bids {
+    display: block;
+    text-decoration: underline;
+    background: none;
+    border: 0;
+    padding: 0;
+    line-height: 1;
+}
+.table-responsive .left_bids button {
+    background: none;
+    border: 0;
+    padding: 0;
+    text-decoration: underline;
+}
+
+.position_absolute {
+    bottom: -8px!important;
+}
