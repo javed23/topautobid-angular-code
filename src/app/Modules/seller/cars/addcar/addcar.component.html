@@ -13,6 +13,21 @@
                 <aw-wizard-step stepTitle="Basic Info" (stepEnter)="scrollToSpecificDiv($event)" [canExit]="moveDirection.bind(this, basicInfoWizard.valid)">  
                         <form [formGroup]="basicInfoWizard">
                             <div formGroupName="basic_info" class="add_car">
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                                
+                                        <label>Where is this car currently located?*</label>
+                                        <input mask="00000" type="text" class="simple_select form-control placeholder" placeholder="ZIP" formControlName="vehicle_zip" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_zip').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_zip').errors }">
+    
+                                        <p *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_zip').touched || isBasicInfoSubmitted">                      
+                                            <app-form-validation-errors minLength=2 maxLength=5 errorPrefix="Zip " patternError="Must enter valid zip code." [errors]="basicInfoWizard.controls.basic_info.get('vehicle_zip').errors"></app-form-validation-errors>   
+                                        </p>
+                                        
+    
+                                        <!--a (click)="toggleVIN()" href="javascript:void(0)">Look up vehicle by VIN or plate</a-->
+                                    </div>
+                                </div>    
+
                                 <div class="tab_container">
                                 <div class="row">
                     
@@ -110,18 +125,7 @@
                                             </p>
                                     </div>
                                     
-                                    <div class="form-group col-md-6">
-                                                
-                                        <label>Where is this car currently located?*</label>
-                                        <input mask="00000" type="text" class="simple_select form-control placeholder" placeholder="ZIP" formControlName="vehicle_zip" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_zip').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_zip').errors }">
-    
-                                        <p *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_zip').touched || isBasicInfoSubmitted">                      
-                                            <app-form-validation-errors minLength=2 maxLength=5 errorPrefix="Zip " patternError="Must enter valid zip code." [errors]="basicInfoWizard.controls.basic_info.get('vehicle_zip').errors"></app-form-validation-errors>   
-                                        </p>
-                                        
-    
-                                        <!--a (click)="toggleVIN()" href="javascript:void(0)">Look up vehicle by VIN or plate</a-->
-                                    </div>
+                                    
 
                                     <div class="form-group col-md-6">
                                         <label>Make*</label>
@@ -295,14 +299,29 @@
                             </div>    
     
                             <div class="form-group text-right">
-                                <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="basicInfoWizard.invalid || isBasicInfoSubmitted" (click)="checkCarFormStep1Validity()" type="button" awNextStep>Next Step</button>		
+                                <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="basicInfoWizard.invalid || isBasicInfoSubmitted" (click)="validateBasicInfoWizard()" type="button" awNextStep>Next Step</button>		
                             </div>
                         </form>      
                 </aw-wizard-step>    
                 <aw-wizard-step stepTitle="Vehicle Images" (stepEnter)="scrollToSpecificDiv($event)" [canExit]="moveDirection.bind(this, uploadVehicleImagesWizard.valid)">
                     <!--Upload Images Section-->
                     <form [formGroup]="uploadVehicleImagesWizard">
-                            <div formArrayName="vehicle_images" class="add_car">                
+                            <div formArrayName="vehicle_images" class="add_car">      
+                                
+                                <div class="form-group col-md-12">
+                                    <div class="form-group">
+                                        <div class="Radio_BTN">
+                                            <input type="radio" formControlName="vehicle_image_category_name"  value="Interior" id="interior">
+                                            <label for="interior">Interior</label>
+                                        </div> 
+                                    </div> 
+                                    <div class="form-group">
+                                        <div class="Radio_BTN">
+                                            <input type="radio" formControlName="vehicle_image_category_name"  value="Exterior" id="exterior">
+                                            <label for="exterior">Exterior</label>
+                                        </div> 
+                                    </div>                                      
+                                </div>
                                 <div class="form-group col-md-12">
                                     <div class="vertical-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="50%">
                                         <div class="box-title">Dropzone</div>

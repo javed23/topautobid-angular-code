@@ -36,7 +36,16 @@ declare var jQuery:any;
 declare var $:any;
 declare var POTENZA:any;
 
-
+export class vehicleImages {    
+  vehicle_image_category_name: string; 
+  vehicle_image_path: string;    
+  constructor(vehicle_image_category_name:string, vehicle_image_path:string)    
+  {    
+    this.vehicle_image_category_name = vehicle_image_category_name;  
+    this.vehicle_image_path = vehicle_image_path;   
+    
+  }    
+}
 
 
 @Component({
@@ -54,7 +63,8 @@ export class AddCarComponent implements OnInit {
   // Redirect To Add Car Wizard
   @ViewChild("contentSection") contentSection: ElementRef;
 
-
+  // Array where we are going to do CRUD operations
+  vehicleImagesArray: vehicleImages[] = new Array();
 
   public type: string = 'directive';
   
@@ -103,17 +113,16 @@ export class AddCarComponent implements OnInit {
 
   public show_dialog : boolean = false;
 
-  // Declare DropZone Variables
-  vehiclePic: string = '';
+  // Declare DropZone Variables  
   dropzoneUpload: boolean = false;
   public config:DropzoneConfigInterface;
-  vehicleImageArray:any = new Array();
+  vehicleImageArray = [];
 
   // Reset Dropzone
   @ViewChild(DropzoneComponent) componentRef?: DropzoneComponent;
   @ViewChild(DropzoneDirective) directiveRef?: DropzoneDirective;
 
-  emails = [{ email: "email1" }, { email: "email2" }, { email: "email3" }, { email: 'email4' }]
+  //emails = [{ email: "email1" }, { email: "email2" }, { email: "email3" }, { email: 'email4' }]
 
   
 
@@ -141,9 +150,9 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     this.basicInfoWizard = this.formBuilder.group({      
         basic_info:this.formBuilder.group({ 
           vehicle_preference: ['Year'],            
-          vin_number: [null, Validators.compose([Validators.required])],
+          vin_number: [null],
           vehicle_year: [null],
-          existing_vehicle: [null, Validators.compose([Validators.required])],
+          existing_vehicle: [null],
           vehicle_mileage: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{2}$')])],
           vehicle_zip: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])],
           vehicle_make: [null, Validators.compose([Validators.required])],
@@ -168,16 +177,14 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   */
   private uploadVehicleImages(){
     this.uploadVehicleImagesWizard = this.formBuilder.group({                  
-      vehicle_images: this.formBuilder.array([this.createItem()]),            
+      vehicle_images: this.formBuilder.group({
+        vehicle_image_category_name: ['interior'],
+        vehicle_image_path: [null]
+      })            
     });
   }
 
-  createItem(): FormGroup {
-    return this.formBuilder.group({
-      vehicle_image_category: [null],
-      vehicle_image_path: [null]
-    });
-  }
+  
 
   /**
   * Initialize about Vehicle Wizard Fields.
@@ -236,46 +243,20 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     });
   }
  
-  private isImageCorrupted(base64string,type){
-    console.log('base64string',base64string);
-    if(type=='png'){   
-      console.log('get filetype',type)
-      const imageData = Array.from(atob(base64string.replace('data:image/png;base64,', '')), c => c.charCodeAt(0))
-      const sequence = [0, 0, 0, 0, 73, 69, 78, 68, 174, 66, 96, 130]; // in hex: 
-      
-      //check last 12 elements of array so they contains needed values
-      for (let i = 12; i > 0; i--){
-          if (imageData[imageData.length - i] !== sequence[12-i]) {
-              return false;
-          }
-      }
-      
-      return true;
-    }
-    else if(type=='jpeg' || type=='jpg'){ 
-      console.log('get filetype',type)
-      const imageDataJpeg = Array.from(atob(base64string.replace('data:image/jpeg;base64,', '')), c => c.charCodeAt(0))
-      const imageCorrupted = ((imageDataJpeg[imageDataJpeg.length - 1] === 217) && (imageDataJpeg[imageDataJpeg.length - 2] === 255))
-      //console.log('imageCorrupted jpeg',imageCorrupted)
-      return imageCorrupted;
-     
-    }
-  }
-
   private dropzoneInit() { 
     const componentObj = this;
     this.config = {      
       clickable: true,
       paramName: "file",
-      uploadMultiple: true,
-      url: environment.API_ENDPOINT + "/api/dealer/vehicleImageUpload",
-      maxFiles: 5,
+      uploadMultiple: false,
+      url: environment.API_ENDPOINT + "/api/seller/profileImageUpload",
+      maxFiles: 2,
       autoReset: null,
       errorReset: null,
       cancelReset: null,
       acceptedFiles: '.jpg, .png, .jpeg',
       maxFilesize: 2, // MB,
-      dictDefaultMessage: 'Upload Pic',
+      dictDefaultMessage: 'Change Photo',
       previewsContainer: "#preview",
       addRemoveLinks: true,
       resizeWidth: 125,
@@ -283,25 +264,18 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       //createImageThumbnails:false,
       dictInvalidFileType: 'Only valid jpeg, jpg, png file is accepted.',
       dictFileTooBig: 'Maximum upload file size limit is 2MB',
-      dictCancelUpload: 'Delete Pic',
-      dictRemoveFile: 'Delete Pic',
       headers: {
         'Cache-Control': null,
         'X-Requested-With': null,
       },  
-      accept: function(file, done) {
-        
-        //console.log('in accept event');
+      accept: function(file, done) {        
+       
           const reader = new FileReader();
           const _this = this
-          reader.onload = function(event) {
-              
-              // event.target.result contains base64 encoded image
-              //console.log('base64',reader.result)
+          reader.onload = function(event) {             
               var base64String = reader.result      
               const fileExtension = (file.name).split('.').pop();
-              const isValidFile = componentObj.isImageCorrupted(base64String,_.toLower(fileExtension))
-              //console.log('isvalidfile',isValidFile);
+              const isValidFile = componentObj.isImageCorrupted(base64String,_.toLower(fileExtension))              
               if(!isValidFile){
                 //componentObj.toastr.errorToastr('File is corrupted or invalid.', 'Oops!');//showing error toaster 
                 done('File is corrupted or invalid.');
@@ -315,44 +289,60 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           reader.readAsDataURL(file); 
       },    
       init: function() {
-        //const vehicleImagePath = componentObj.addCarFormStep.controls['vehicle_pictures'].value
+        //const profilePath = componentObj.uploadVehicleImagesWizard.controls['profile_pic'].value
         
-        const defaultPath = environment.WEB_ENDPOINT + '/' + environment.DEFAULT_PROFILE
-        //this.vehiclePic = (vehicleImagePath) ? vehicleImagePath : defaultPath;
+        
+
+        // push values into image array
+          
+        // push values into image array
+
+        
  
         // Create the mock file:
         const mockFile = { name: "Filename", size: 12345 };
 
         // Call the default addedfile event handler
-        //this.emit("addedfile", mockFile);
+        this.emit("addedfile", mockFile);
 
         // And optionally show the thumbnail of the file:
-        //console.log('vehiclePic',this.vehiclePic)
-        //this.emit("thumbnail", mockFile, this.vehiclePic);
+        
+        this.emit("thumbnail", mockFile, this.vehicleImage);
        
-        //this.emit("complete", mockFile);
+        this.emit("complete", mockFile);
 
+        this.on('sending', function(file, xhr, formData){
+          formData.append('folder', 'Seller');
+        });
 
         this.on("totaluploadprogress",function(progress){
-          console.log('progress',progress);
+          //console.log('progress',progress);
           componentObj.pageLoaderService.pageLoader(true);//start showing page loader
           componentObj.pageLoaderService.setLoaderText('Uploading file '+progress+'%');//setting loader text
           if(progress>=100){
-            componentObj.pageLoaderService.pageLoader(false);//hide page loader
+            componentObj.pageLoaderService.pageLoader(false); //hide page loader
           }
         })
        
         this.on("success", function(file, serverResponse) {
-          // Called after the file successfully uploaded.         
+
+          componentObj.uploadVehicleImagesWizard.controls.vehicle_images.get('vehicle_image_path').setValue(serverResponse);
+          console.log(componentObj.uploadVehicleImagesWizard.value.vehicle_images)
+          // add Images to Array if succesfully uploaded.
+           this.vehicleImagesArray.push(
+            componentObj.uploadVehicleImagesWizard.value.vehicle_images
+          );   
+          console.log(this.vehicleImagesArray); 
           
-          //componentObj.addCarFormStep.controls['vehicle_pictures'].setValue(serverResponse);     
-          this.vehicleImageArray.push(serverResponse);   
+
           componentObj.zone.run(() => { 
             $(".dz-image img").attr('src', serverResponse);
           });
           this.removeFile(file);
-          componentObj.pageLoaderService.pageLoader(false);//hide page loader
+          componentObj.pageLoaderService.pageLoader(false); //hide page loader
+
         });
+
         this.on("error", function(file, serverResponse) {
           console.log('serverResponse',serverResponse)
           // Called after the file successfully uploaded.         
@@ -364,7 +354,33 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     };
 
 
-  } 
+  }
+
+  private isImageCorrupted(base64string,type){
+    //console.log('base64string',base64string);
+    if(type=='png'){   
+      //console.log('get filetype',type)
+      const imageData = Array.from(atob(base64string.replace('data:image/png;base64,', '')), c => c.charCodeAt(0))
+      const sequence = [0, 0, 0, 0, 73, 69, 78, 68, 174, 66, 96, 130]; // in hex: 
+      
+      //check last 12 elements of array so they contains needed values
+      for (let i = 12; i > 0; i--){
+          if (imageData[imageData.length - i] !== sequence[12-i]) {
+              return false;
+          }
+      }
+      
+      return true;
+    }
+    else if(type=='jpeg' || type=='jpg'){ 
+     // console.log('get filetype',type)
+      const imageDataJpeg = Array.from(atob(base64string.replace('data:image/jpeg;base64,', '')), c => c.charCodeAt(0))
+      const imageCorrupted = ((imageDataJpeg[imageDataJpeg.length - 1] === 217) && (imageDataJpeg[imageDataJpeg.length - 2] === 255))
+      //console.log('imageCorrupted jpeg',imageCorrupted)
+      return imageCorrupted;
+     
+    }
+  }
 
   /**
    * show last 15 years list in the year dropdown
@@ -422,9 +438,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    * @return  models array
    */
   getModelsByMake(makeName){    
-    let filterArrayByMakeName = this.makes.find(x => x.name === makeName);
-    //console.log(filterArrayByMakeName);
-    this.models = filterArrayByMakeName.models;
+    this.models = this.makes.find(x => x.name === makeName).models;     
   }
 
   /**
@@ -433,9 +447,27 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    * @return  trim array
    */
   getTrimsByModel(modelName){    
-    let filterArrayByModelName = this.models.find(x => x.name === modelName);
-    //console.log(filterArrayByMakeName);
-    this.trims = filterArrayByModelName.trims;
+    this.trims = this.models.find(x => x.name === modelName).trims;  
+  }
+
+  /**
+   * validate Basic Info Wizard and move to Upload Images Wizard.   
+   */
+  validateBasicInfoWizard() { 
+    /*const vehiclePreference = this.basicInfoWizard.controls.basic_info.get('vehicle_preference');   
+    const vehicleVIN = this.basicInfoWizard.controls.basic_info.get('vin_number');
+
+    if(vehiclePreference.value == "Year"){      
+      vehicleVIN.clearValidators();
+      vehicleVIN.updateValueAndValidity();
+    } */
+
+    this.isBasicInfoSubmitted = true;   
+
+    if(this.basicInfoWizard.invalid) {
+      return;
+    }
+
   }
   
 
@@ -481,23 +513,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     }
   }
     
-  checkCarFormStep1Validity() {      
-    
-
-    const vehiclePreference = this.basicInfoWizard.controls.basic_info.get('vehicle_preference');   
-    const vehicleVIN = this.basicInfoWizard.controls.basic_info.get('vin_number');
-
-    if(vehiclePreference.value == "Year"){      
-      vehicleVIN.clearValidators();
-      vehicleVIN.updateValueAndValidity();
-    }
-
-    this.isBasicInfoSubmitted = true;   
-
-    if(this.basicInfoWizard.invalid) {
-      return;
-    }
-  }
+  
 
   setVehicleRadioValue(e: string): void {  
 
