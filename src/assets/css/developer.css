@@ -164,3 +164,6 @@ input[type="file"] {
 .position_absolute {
     bottom: -8px!important;
 }
+ngb-datepicker-navigation-select select{
+    min-width: 0% !important;
+}

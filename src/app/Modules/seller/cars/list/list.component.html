@@ -115,7 +115,7 @@
                         </div>
 
 
-                        <div (click)="clear()" class="clear_inputs d-inline-block">
+                        <div (click)="clearDateFilters()" class="clear_inputs d-inline-block">
                             <i class="fa fa-refresh" aria-hidden="true"></i>
                         </div>
                     </div>
@@ -136,7 +136,7 @@
                                         #{{ row.ref }}
                                     </ng-template>
                                 </ngx-datatable-column>
-                                <ngx-datatable-column name="vin" [sortable]="true" [width]="200">
+                                <ngx-datatable-column name="vin"  [sortable]="true" [width]="200">
                                     <ng-template let-row="row" ngx-datatable-cell-template>
                                         {{ row.vin }}
                                     </ng-template>
@@ -161,10 +161,22 @@
                                         {{ row.trim }}
                                     </ng-template>
                                 </ngx-datatable-column>
+                                <ngx-datatable-column name="Body" prop="body_style" [sortable]="true">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                        {{ row.body_style }}
+                                    </ng-template>
+                                </ngx-datatable-column>
                                 <ngx-datatable-column name="Created At" prop="created_at" [sortable]="true"
                                     [width]="200">
                                     <ng-template let-row="row" ngx-datatable-cell-template>
                                         {{ row.created_at | date:'dd-MM-yyyy h:mm'}}
+                                        <!--<span class="left_time">10 Hrs 15 min left</span>-->
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+                                <ngx-datatable-column name="Status" prop="type" [sortable]="true">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                        {{ row.type | titlecase}}
                                         <!--<span class="left_time">10 Hrs 15 min left</span>-->
                                     </ng-template>
                                 </ngx-datatable-column>

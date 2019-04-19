@@ -27,7 +27,8 @@ export class Car {
     location:any;  
     bids:any;
     images:any;
-    offer_in_hand_images:any
+    offer_in_hand_images:any;
+    type:string;
 
      
 
@@ -64,5 +65,6 @@ export class Car {
         this.bids  =  object.bids;
         this.images  =  object.images;
         this.offer_in_hand_images  =  object.offer_in_hand_images
+        this.type  =  object.type
     }
 }

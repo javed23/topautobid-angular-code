@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { untilDestroyed } from 'ngx-take-until-destroy';// unsubscribe from observables when the  component destroyed
 import { ToastrManager } from 'ng6-toastr-notifications';//toaster class
-import {NgbDateAdapter, NgbDateStruct, NgbDateNativeAdapter} from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateAdapter, NgbDateStruct, NgbDateNativeAdapter } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common'
 
 //import services
@@ -17,9 +17,9 @@ import { PagedData, Car, Page } from "../../../../core/_models";
 
 import { environment } from '../../../../../environments/environment'
 
-declare var jQuery: any;
-declare var $: any;
-declare var POTENZA: any;
+declare let jQuery: any;
+declare let $: any;
+declare let POTENZA: any;
 import * as _ from 'lodash';
 import Swal from 'sweetalert2'
 
@@ -40,7 +40,7 @@ import Swal from 'sweetalert2'
 })
 
 export class ListComponent implements AfterViewInit {
-  
+  @ViewChild('myTable') table;
   startDateModel:any;
   endDateModel:any;
   page = new Page();
@@ -50,7 +50,7 @@ export class ListComponent implements AfterViewInit {
   isModalOpen:boolean=false;
   isBidsModalOpen:boolean=false;
   filtersForm:FormGroup;
-  datesObject:any = {};
+  datesFilter:any = {};
  
  //Defined records limit and records limit options
  currentPageLimit: number = environment.DEFAULT_RECORDS_LIMIT
@@ -92,8 +92,7 @@ export class ListComponent implements AfterViewInit {
       POTENZA.toggleFilters()
       POTENZA.priceslider()
       POTENZA.yearslider()
-      //POTENZA.tabs()
-
+      //POTENZA.tabs()      
     }
 
   /**
@@ -138,7 +137,7 @@ export class ListComponent implements AfterViewInit {
         this.page = pagedData.page;
         let cars = this.cars;
 
-        //if total fetched rows and totalElements(total rowsd from database) is not same
+        //if total fetched rows and totalElements(total rows from database) is not same
         if (cars.length !== pagedData.page.totalElements) {
           cars = Array.apply(null, Array(pagedData.page.totalElements));        
           cars = cars.map((x, i) => this.cars[i]);
@@ -146,6 +145,7 @@ export class ListComponent implements AfterViewInit {
         const start = this.page.pageNumber * this.page.size;  
         pagedData.data.map((x, i) => cars[i + start] = x);
         this.cars = cars;    
+        console.log('Rows',this.cars);
         this.commonUtilsService.hidePageLoader();
       //case error 
       },error => {
@@ -218,7 +218,7 @@ export class ListComponent implements AfterViewInit {
    * @return  void
    */
   onStartDateSelected(event:any):void {
-    this.datesObject['start']  = new Date(event.year,event.month-1,event.day)    
+    this.datesFilter['start']  = new Date(event.year,event.month-1,event.day)    
     this.validateDateFilters();       
   }
   /**
@@ -226,7 +226,7 @@ export class ListComponent implements AfterViewInit {
    * @return  void
    */
   onEndDateSelected(event:any):void {    
-    this.datesObject['end']  = new Date(event.year,event.month-1,event.day)
+    this.datesFilter['end']  = new Date(event.year,event.month-1,event.day)
     this.validateDateFilters();        
   }
 
@@ -235,19 +235,19 @@ export class ListComponent implements AfterViewInit {
   * @return  void
   */
   private validateDateFilters(){
-    if(! _.has(this.datesObject, ['start']))
+    if(! _.has(this.datesFilter, ['start']))
       this.commonUtilsService.onError('Please select start date');
-    else if(! _.has(this.datesObject, ['end']))
+    else if(! _.has(this.datesFilter, ['end']))
       this.commonUtilsService.onError('Please select end date');
-    else if(_.has(this.datesObject, ['end']) && (this.datesObject['end']).getTime() <= (this.datesObject['start']).getTime()){
+    else if(_.has(this.datesFilter, ['end']) && (this.datesFilter['end']).getTime() <= (this.datesFilter['start']).getTime()){
       this.endDateModel = null
       this.commonUtilsService.onError('End date should not less than start date');  
       
     }else{
-      this.datesObject['end'] = this.datePipe.transform(this.datesObject['end'], 'yyyy-MM-dd');
-      this.datesObject['start'] = this.datePipe.transform(this.datesObject['start'], 'yyyy-MM-dd');
-      console.log(`start:${this.datesObject['start']},end:${this.datesObject['end']}`)
-      this.page.filters['dates'] = this.datesObject;
+      this.datesFilter['end'] = this.datePipe.transform(this.datesFilter['end'], 'yyyy-MM-dd');
+      this.datesFilter['start'] = this.datePipe.transform(this.datesFilter['start'], 'yyyy-MM-dd');
+      console.log(`start:${this.datesFilter['start']},end:${this.datesFilter['end']}`)
+      this.page.filters['dates'] = this.datesFilter;
       this.viewedPages = [];
       this.setPage(this._defaultPagination,this.page.type);
     }
@@ -256,10 +256,10 @@ export class ListComponent implements AfterViewInit {
   * To clear date filters(inputs)
   * @return  void
   */
-  clear():void{
+  clearDateFilters():void{
     this.startDateModel = null
     this.endDateModel = null
-    this.datesObject = {}
+    this.datesFilter = {}
   }
   /**
   * Show a popup modal
