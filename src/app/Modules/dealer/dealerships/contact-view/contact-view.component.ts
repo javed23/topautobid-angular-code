@@ -1,7 +1,6 @@
 import { Component, SimpleChanges, OnInit, ViewChild, Input,  ElementRef } from '@angular/core';
+declare let $: any;
 
-
-declare var $: any;
 @Component({
   selector: 'app-contact-view',
   templateUrl: './contact-view.component.html',

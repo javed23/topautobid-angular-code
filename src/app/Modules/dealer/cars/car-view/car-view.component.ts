@@ -1,6 +1,6 @@
 import { Component, ViewChild, Input,  ElementRef } from '@angular/core';
-declare var $: any;
-declare var POTENZA: any;
+declare let $: any;
+declare let POTENZA: any;
 
 @Component({
   selector: 'app-car-view',

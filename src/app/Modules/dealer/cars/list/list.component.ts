@@ -17,9 +17,9 @@ import { PagedData, Car, Page } from "../../../../core/_models";
 
 import { environment } from '../../../../../environments/environment'
 
-declare var jQuery: any;
-declare var $: any;
-declare var POTENZA: any;
+declare let jQuery: any;
+declare let $: any;
+declare let POTENZA: any;
 import * as _ from 'lodash';
 
 @Component({

@@ -1,22 +1,29 @@
 export const environment = {
   production: true,
-  API_ENDPOINT: 'http://18.233.76.36:3000',
+  API_ENDPOINT: 'http://54.245.128.14:3000',
   //WEB_ENDPOINT: 'http://localhost:4200',
-  WEB_ENDPOINT: 'http://18.233.76.36',
+  WEB_ENDPOINT: 'http://54.245.128.14',
  
   APP_NAME: 'TopAutoBid',
   DEFAULT_PROFILE: 'assets/images/default-user.png',
   DEFAULT_COUNTRY_CODE: '+1',
-
+  DEFAULT_RECORDS_LIMIT: 10,
+  DEFAULT_PAGE_LIMIT_OPTIONS: [  
+    { value:5   },
+    { value:10  },
+    { value:25  },
+    { value:50  },
+    { value:100  },
+  ],
   //aws 
   AWS: {
-    ACCESS_KEY: 'AKIAIXSULK6NXU6H73JA',
-    SECRET_KEY: '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',
-    REGION: 'us-east-1',
-    BUCEKT_NAME: 'topautobiddev',
+    ACCESS_KEY: 'AKIAJFK6YJMR4P23VEDA',
+    SECRET_KEY: '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',
+    REGION: 'us-west-2',
+    BUCEKT_NAME: 'topautobid-dev',
     COGNITO: {
-      UserPoolId: 'us-east-1_0uo9SF8UF',
-      ClientId: '4bailkhup83i2e1ppvm98p045v'      
+      UserPoolId: 'us-west-2_psnR8GZRX',
+      ClientId: '7c90u8uf8ulr5pu8m2blkgp5m'      
     }
 
   },
@@ -65,5 +72,9 @@ export const environment = {
     PLS_WAIT_TEXT: 'Please wait...',
     VERIFICATION_FORGOT_PASSWORD:'Verification Code has been sent to your registered mobile number. Please verify your account.',
     PASSWORD_RESET_SUCCESS:'Your password has been updated successfully.',
+    FETCHING_RECORDS: 'Fetching Data...',
+    RECORD_DELETED: 'Record has been deleted successfully.',
+    DEALERSHIP_ADDED: 'Dealership has been added successfully.',
+    DELETING_RECORD: 'Deleting Record...',//new
   }
 };

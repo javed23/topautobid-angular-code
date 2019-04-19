@@ -1,5 +1,6 @@
 import { Component,SimpleChanges, ViewChild, OnInit, Input,  ElementRef } from '@angular/core';
-declare var $: any;
+declare let $: any;
+
 @Component({
   selector: 'app-dealership-view',
   templateUrl: './dealership-view.component.html',

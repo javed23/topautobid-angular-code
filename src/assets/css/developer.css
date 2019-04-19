@@ -167,3 +167,14 @@ input[type="file"] {
 ngb-datepicker-navigation-select select{
     min-width: 0% !important;
 }
+
+.datatable-row-center .datatable-header-cell:nth-child(2), .datatable-row-center .datatable-body-cell:nth-child(2) {
+    width: 180px!important;
+}
+.datatable-row-center .datatable-header-cell:nth-child(7), .datatable-row-center .datatable-body-cell:nth-child(7) {
+    width: 200px!important;
+}
+
+.datatable-row-center .datatable-header-cell:nth-child(8), .datatable-row-center .datatable-body-cell:nth-child(8) {
+    width: 150px!important;
+}

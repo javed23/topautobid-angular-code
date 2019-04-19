@@ -30,8 +30,8 @@
           <div class="sidebar-widget">
             <div class="unordered-lists table-responsive text-center">             
 
-              <ngx-datatable #myTable class="bootstrap" [rows]="rows" [sorts]="[{prop: 'created', dir: 'desc'}]"
-                [columnMode]="'force'" [headerHeight]="50" [loadingIndicator]="isLoading" [limit]="currentPageLimit"
+              <ngx-datatable #myTable class="bootstrap" [rows]="dealerships" [sorts]="[{prop: 'created', dir: 'desc'}]"
+                [columnMode]="'force'" [headerHeight]="50"  [limit]="currentPageLimit"
                 [footerHeight]="80" [rowHeight]="50" (sort)="onSort($event)" (page)="setPage($event)">
 
                 <ngx-datatable-column name="Image" [sortable]="true" [width]="200">
@@ -127,7 +127,7 @@
               </ngx-datatable>
             </div>
             <!-- number of records per page dropmenu  -->
-            <div *ngIf="rows.length>0" class="sorting-options position_absolute">
+            <div *ngIf="dealerships.length>0" class="sorting-options position_absolute">
               <div class="selected-box">
                 <div class="register-form selected-box">
 

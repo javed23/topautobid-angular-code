@@ -218,7 +218,9 @@ export class ListComponent implements AfterViewInit {
    * @return  void
    */
   onStartDateSelected(event:any):void {
-    this.datesFilter['start']  = new Date(event.year,event.month-1,event.day)    
+    this.datesFilter['start']  = new Date(event.year,event.month-1,event.day+1)    
+    //this.datesFilter['transformedStartDate']  = this.datePipe.transform(this.datesFilter['start'], 'yyyy-MM-dd');
+    this.datesFilter['transformedStartDate']  = (this.datesFilter['start']).toISOString();
     this.validateDateFilters();       
   }
   /**
@@ -226,7 +228,9 @@ export class ListComponent implements AfterViewInit {
    * @return  void
    */
   onEndDateSelected(event:any):void {    
-    this.datesFilter['end']  = new Date(event.year,event.month-1,event.day)
+    this.datesFilter['end']  = new Date(event.year,event.month-1,event.day+1)
+    //this.datesFilter['transformedEndDate']  = this.datePipe.transform(this.datesFilter['end'], 'yyyy-MM-dd');
+    this.datesFilter['transformedEndDate']  = (this.datesFilter['end']).toISOString();
     this.validateDateFilters();        
   }
 
@@ -235,17 +239,18 @@ export class ListComponent implements AfterViewInit {
   * @return  void
   */
   private validateDateFilters(){
+    console.log('dates',this.datesFilter);
     if(! _.has(this.datesFilter, ['start']))
       this.commonUtilsService.onError('Please select start date');
     else if(! _.has(this.datesFilter, ['end']))
       this.commonUtilsService.onError('Please select end date');
-    else if(_.has(this.datesFilter, ['end']) && (this.datesFilter['end']).getTime() <= (this.datesFilter['start']).getTime()){
+    else if(_.has(this.datesFilter, ['end']) && (this.datesFilter['end']).getTime() < (this.datesFilter['start']).getTime()){
       this.endDateModel = null
       this.commonUtilsService.onError('End date should not less than start date');  
       
     }else{
-      this.datesFilter['end'] = this.datePipe.transform(this.datesFilter['end'], 'yyyy-MM-dd');
-      this.datesFilter['start'] = this.datePipe.transform(this.datesFilter['start'], 'yyyy-MM-dd');
+     // this.datesFilter['end'] = this.datePipe.transform(this.datesFilter['end'], 'yyyy-MM-dd');
+      //this.datesFilter['start'] = this.datePipe.transform(this.datesFilter['start'], 'yyyy-MM-dd');
       console.log(`start:${this.datesFilter['start']},end:${this.datesFilter['end']}`)
       this.page.filters['dates'] = this.datesFilter;
       this.viewedPages = [];
@@ -257,9 +262,15 @@ export class ListComponent implements AfterViewInit {
   * @return  void
   */
   clearDateFilters():void{
-    this.startDateModel = null
-    this.endDateModel = null
-    this.datesFilter = {}
+    if(_.has(this.datesFilter, ['start']) || _.has(this.datesFilter, ['end'])){
+      this.startDateModel = null
+      this.endDateModel = null
+      this.page.filters['dates'] = this.datesFilter = {}
+      this.viewedPages = [];  
+      delete this.page.filters['dates']; 
+      this.setPage(this._defaultPagination,this.page.type);
+    }
+    
   }
   /**
   * Show a popup modal

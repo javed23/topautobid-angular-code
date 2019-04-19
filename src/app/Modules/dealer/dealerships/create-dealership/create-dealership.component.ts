@@ -24,7 +24,7 @@ import { PagedData, Dealership, Page } from "../../../../core/_models";
 import { environment } from '../../../../../environments/environment'
 
 
-declare var $: any;
+declare let $: any;
 import * as Dropzone from 'dropzone';
 import * as _ from 'lodash';
 

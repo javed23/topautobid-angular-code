@@ -1,5 +1,5 @@
 import { Component,  ViewChild, Input,  ElementRef } from '@angular/core';
-declare var $: any;
+declare let $: any;
 
 @Component({
   selector: 'app-car-bids',
