@@ -312,3 +312,67 @@ button:disabled {
     background: #afafaf;
    cursor: not-allowed;
 }
+
+.dropzone-container {
+    border: 1px dashed #ccc;
+    text-align: center;
+    padding: 100px 0;
+    width: 450px;
+    margin-top: 20px;
+    background: #f6f6f6;
+}
+
+
+.thumbnails {
+    display: block;
+    margin: 26px 0;
+}
+.thumbnail_list {
+    display: inline-block;
+    margin-right: 20px;
+    width: 150px;
+    height: 130px;;
+    position: relative;
+    margin-bottom: 20px;
+    background: #f6f6f6;
+}
+
+.thumbnail_list img{
+    width: auto;
+    height: 100%;
+    margin: auto;
+    display: block;
+    max-width: 100%;
+}
+.thumbnail_list i {
+    position: absolute;
+    background: #de3a3b;
+    top: 0;
+    right: 0;
+    margin: -8px -5px 0 0;
+    color: #fff;
+    width: 22px;
+    height: 22px;
+    text-align: center;
+    line-height: 22px;
+    border-radius: 100%;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+#preview{
+    display: none;
+}
+
+.vehicle_category > .form-group {
+    display: inline-block;
+    margin-right: 60px;
+    vertical-align: middle;
+}
+.button_Submission button {
+    margin-right: 20px;
+}
+
+select:disabled {
+    opacity: .5;
+}
