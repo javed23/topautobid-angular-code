@@ -56,7 +56,7 @@ const routes: Routes = [
     path: 'car-list', 
     component: CarsListComponent, 
     data: { title: 'Cars listing' },
-    canActivate: [DealerAuthGuardService]
+    /*canActivate: [DealerAuthGuardService]*/
   },
 
   { 

@@ -40,7 +40,8 @@
                 </div>
             </div>
         </div>
-        <button type="submit" class="button red">Apply Filters</button>        
+        <button type="submit" class="button red">Apply Filters</button>
+
     </form>
 </div>
 <!--=================================Filter End=================================-->
@@ -55,10 +56,23 @@
 
             <div class="col-md-12">
                 <div class="listing_outer blog-sidebar">
-                    <div class="sidebar-widget">
-                        <!--<div class="text-right mb-3">
-                            <a class="button red" href="#"> Create New </a>
-                        </div>-->
+                    <div class="sidebar-widget">                        
+                        <div class="text-right mb-3">    
+                        <div class="filter_box text-md-right mt-md-0 mt-sm-3">
+                            <!--<a class="Filter button" href="javascript:void(0)">
+                                <i class="fa fa-bars" aria-hidden="true"></i> Filters
+                            </a>-->
+                            <div class="widget-search ml-4">
+                                <i class="fa fa-search"></i>
+                                <input type="search" class="form-control placeholder"
+                                    (input)="onSearch($event.target.value)" placeholder="Search....">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    </div>
+                    <div class="form-inline mb-3 blog-sidebar mt-3">
+                        <div class="sidebar-widget col-md-5 pl-0 mb-0">
                         <div class="tags">
 
                             <ul>
@@ -73,32 +87,53 @@
                                         (click)="onChangeListType('archived')">Archived</button></li>
                             </ul>
                         </div>
-                        <div class="filter_box text-md-right mt-md-0 mt-sm-3">
-                            <a class="Filter button" href="javascript:void(0)"><i class="fa fa-bars"
-                                    aria-hidden="true"></i> Filters</a>
-                            <div class="widget-search ml-4">
-                                <i class="fa fa-search"></i>
-                                <input type="search" class="form-control placeholder"
-                                    (input)="onSearch($event.target.value)" placeholder="Search....">
+                    </div>
+
+                        <div class="right_sec col-md-7 text-right pr-0">
+                        
+                        <div class="input-group date_filters_start d-inline-block">
+                            <input [(ngModel)]="startDateModel"  class="form-control" (dateSelect)="onStartDateSelected($event)" type="text" (click)="startDate.toggle()" placeholder="Start date"
+                                ngbDatepicker #startDate="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary calendar" (click)="startDate.toggle()"
+                                    type="button"><span><i class="fa fa-calendar"
+                                            aria-hidden="true"></i></span></button>
+                            </div>
+                        </div>
+                     
+                        <div class="input-group date_filters_start d-inline-block">
+                            <input [(ngModel)]="endDateModel" class="form-control" type="text" (dateSelect)="onEndDateSelected($event)" (click)="endDate.toggle()" placeholder="End date"
+                                ngbDatepicker #endDate="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary calendar" (click)="endDate.toggle()"
+                                    type="button"><span><i class="fa fa-calendar"
+                                            aria-hidden="true"></i></span></button>
                             </div>
                         </div>
 
 
+                        <div (click)="clearDateFilters()" class="clear_inputs d-inline-block">
+                            <i class="fa fa-refresh" aria-hidden="true"></i>
+                        </div>
                     </div>
+
+
+                    </div>
+            
                     <div class="sidebar-widget">
                         <div class="unordered-lists table-responsive text-center">
 
-                            <ngx-datatable #myTable class="bootstrap" [rows]="cars"
+                            <ngx-datatable #listingTable class="bootstrap" [rows]="cars"
                                 [columns]="[{name:'ref'},{name:'Year'},{name:'Make'},{name:'Model'},{name:'Trim'},{name:'Listed'},{name:'Status'},{name:'Bids'}]"
                                 [sorts]="[{prop: 'ref', dir: 'desc'}]" [columnMode]="'force'" [headerHeight]="50"
                                 [limit]="currentPageLimit" [footerHeight]="80"
-                                [rowHeight]="50" (sort)="onSort($event)" (page)="setPage($event,'all')">
+                                [rowHeight]="55" (sort)="onSort($event)" (page)="setPage($event,'all')">
                                 <ngx-datatable-column name="ref" [sortable]="true" [width]="200">
                                     <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
                                         #{{ row.ref }}
                                     </ng-template>
                                 </ngx-datatable-column>
-                                <ngx-datatable-column name="vin" [sortable]="true" [width]="200">
+                                <ngx-datatable-column name="vin"  [sortable]="true" [width]="200">
                                     <ng-template let-row="row" ngx-datatable-cell-template>
                                         {{ row.vin }}
                                     </ng-template>
@@ -123,12 +158,25 @@
                                         {{ row.trim }}
                                     </ng-template>
                                 </ngx-datatable-column>
-                                <ngx-datatable-column name="Created At" [sortable]="true" [width]="200">
+                                 <!--<ngx-datatable-column name="Body" prop="body_style" [sortable]="true">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                        {{ row.body_style }}
+                                    </ng-template>
+                                </ngx-datatable-column>-->
+                                <ngx-datatable-column name="Created At" prop="created_at" [sortable]="true"
+                                    [width]="200">
                                     <ng-template let-row="row" ngx-datatable-cell-template>
                                         {{ row.created_at | date:'dd-MM-yyyy h:mm'}}
                                         <!--<span class="left_time">10 Hrs 15 min left</span>-->
                                     </ng-template>
-                                </ngx-datatable-column>                               
+                                </ngx-datatable-column>
+
+                                <ngx-datatable-column name="Status" prop="type" [sortable]="true">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                        {{ row.type | titlecase}}
+                                        <!--<span class="left_time">10 Hrs 15 min left</span>-->
+                                    </ng-template>
+                                </ngx-datatable-column>
 
                                 <ngx-datatable-column name="Bid Price" [sortable]="true" [width]="200">
                                     <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
@@ -140,18 +188,14 @@
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Action" [sortable]="false" [width]="200">
-                                        <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
-    
-                                            <span class="actions">
-                                                <button type="button" (click)="show(rowIndex)">
-                                                    <i class="fa fa-eye" aria-hidden="true"></i>
-                                                </button>
-    
-                                                <!--<button type="button" (click)="removeCar(row)">
-                                                    <i class="fa fa-trash" aria-hidden="true"></i>
-                                                </button>-->
-                                            </span>
-                                        </ng-template>
+                                    <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
+
+                                        <span class="actions">
+                                            <button type="button" (click)="show(rowIndex, 'car-view')">
+                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                            </button>                                        
+                                        </span>
+                                    </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-footer>
                                     <ng-template ngx-datatable-footer-template let-rowCount="rowCount"
@@ -168,22 +212,18 @@
                                             [pagerPreviousIcon]="'datatable-icon-prev'"
                                             [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage" [size]="pageSize"
                                             [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
-                                            (change)="table.onFooterPage($event)">
+                                            (change)="listingTable.onFooterPage($event)">
                                         </datatable-pager>
 
                                     </ng-template>
                                 </ngx-datatable-footer>
                             </ngx-datatable>
-
-
-
-
                         </div>
 
 
                         <div *ngIf="cars.length>0" class="sorting-options position_absolute">
                             <div class="selected-box">
-                                <div class="selected-box">
+                                <div class="register-form selected-box">
 
                                     <select class="selectpicker" id="per-page"
                                         (change)="onLimitChange($event.target.value)">
@@ -212,10 +252,6 @@
 blog -->
 
 
-<!--=================================
- car details  -->
-<!-- Modal -->
-<app-car-view [isOpen]="isModalOpen" [carObject]="carObject"></app-car-view>
 
-<!--=================================
-      car-details   -->
+<!-- car-details -->
+<app-car-view [isOpen]="isModalOpen" (onClose)="hide($event)" [carObject]="car"></app-car-view>

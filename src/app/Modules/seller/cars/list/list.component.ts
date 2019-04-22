@@ -1,11 +1,9 @@
 import { Component,  ViewChild, AfterViewInit, ViewEncapsulation, ElementRef } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { untilDestroyed } from 'ngx-take-until-destroy';// unsubscribe from observables when the  component destroyed
-import { ToastrManager } from 'ng6-toastr-notifications';//toaster class
 import { NgbDateAdapter, NgbDateStruct, NgbDateNativeAdapter } from '@ng-bootstrap/ng-bootstrap';
-import { DatePipe } from '@angular/common'
+
 
 //import services
 
@@ -28,19 +26,14 @@ import Swal from 'sweetalert2'
   selector: 'app-list',
   templateUrl: './list.component.html',
   providers: [
-    CarService,
-    DatePipe,
-    {
-      provide: NgbDateAdapter,
-      useClass: NgbDateNativeAdapter
-    }
+    CarService    
   ], 
   styleUrls: ['./list.component.css'],  
   encapsulation: ViewEncapsulation.None
 })
 
 export class ListComponent implements AfterViewInit {
-  @ViewChild('myTable') table;
+  @ViewChild('listingTable') listingTable;
   startDateModel:any;
   endDateModel:any;
   page = new Page();
@@ -73,7 +66,7 @@ export class ListComponent implements AfterViewInit {
 
 
 
-  constructor(private commonUtilsService:CommonUtilsService, private http: HttpClient, private carService: CarService, private formBuilder: FormBuilder, private datePipe: DatePipe) {
+  constructor(private commonUtilsService:CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder) {
 
     //fetching the data with default settings
     this.setPage(this._defaultPagination,'all');
@@ -145,7 +138,7 @@ export class ListComponent implements AfterViewInit {
         const start = this.page.pageNumber * this.page.size;  
         pagedData.data.map((x, i) => cars[i + start] = x);
         this.cars = cars;    
-        console.log('Rows',this.cars);
+        //console.log('Rows',this.cars);
         this.commonUtilsService.hidePageLoader();
       //case error 
       },error => {
@@ -214,22 +207,20 @@ export class ListComponent implements AfterViewInit {
   
  
   /**
-   * Filters records when user click on 'Apply Filters' button
+   * Check date validations and filters records when select start date filter
    * @return  void
    */
   onStartDateSelected(event:any):void {
-    this.datesFilter['start']  = new Date(event.year,event.month-1,event.day+1)    
-    //this.datesFilter['transformedStartDate']  = this.datePipe.transform(this.datesFilter['start'], 'yyyy-MM-dd');
+    this.datesFilter['start']  = new Date(event.year,event.month-1,event.day+1)       
     this.datesFilter['transformedStartDate']  = (this.datesFilter['start']).toISOString();
     this.validateDateFilters();       
   }
   /**
-   * Filters records when user click on 'Apply Filters' button
+   * Check date validations and filters records when select end date filter
    * @return  void
    */
   onEndDateSelected(event:any):void {    
     this.datesFilter['end']  = new Date(event.year,event.month-1,event.day+1)
-    //this.datesFilter['transformedEndDate']  = this.datePipe.transform(this.datesFilter['end'], 'yyyy-MM-dd');
     this.datesFilter['transformedEndDate']  = (this.datesFilter['end']).toISOString();
     this.validateDateFilters();        
   }
@@ -239,7 +230,7 @@ export class ListComponent implements AfterViewInit {
   * @return  void
   */
   private validateDateFilters(){
-    console.log('dates',this.datesFilter);
+    
     if(! _.has(this.datesFilter, ['start']))
       this.commonUtilsService.onError('Please select start date');
     else if(! _.has(this.datesFilter, ['end']))
@@ -248,10 +239,7 @@ export class ListComponent implements AfterViewInit {
       this.endDateModel = null
       this.commonUtilsService.onError('End date should not less than start date');  
       
-    }else{
-     // this.datesFilter['end'] = this.datePipe.transform(this.datesFilter['end'], 'yyyy-MM-dd');
-      //this.datesFilter['start'] = this.datePipe.transform(this.datesFilter['start'], 'yyyy-MM-dd');
-      console.log(`start:${this.datesFilter['start']},end:${this.datesFilter['end']}`)
+    }else{     
       this.page.filters['dates'] = this.datesFilter;
       this.viewedPages = [];
       this.setPage(this._defaultPagination,this.page.type);
@@ -282,6 +270,15 @@ export class ListComponent implements AfterViewInit {
       this.isBidsModalOpen = this.isModalOpen = false;
       (type=='posted-car-bids') ? this.isBidsModalOpen = true : this.isModalOpen = true  
       this.car = this.cars[index]
+    }
+
+  /**
+  * Reset modal popup to hide
+  * @param isOpened    boolean value 
+  * @return void
+  */
+    hide(isOpened:boolean):void{
+      this.isModalOpen = isOpened; //set to false which will reset modal to show on click again
     }
 
 

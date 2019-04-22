@@ -126,7 +126,7 @@
                     <div class="sidebar-widget">
                         <div class="unordered-lists table-responsive text-center">
 
-                            <ngx-datatable #myTable class="bootstrap" [rows]="cars"
+                            <ngx-datatable #listingTable class="bootstrap" [rows]="cars"
                                 [columns]="[{name:'ref'},{name:'Year'},{name:'Make'},{name:'Model'},{name:'Trim'},{name:'Listed'},{name:'Status'},{name:'Bids'}]"
                                 [sorts]="[{prop: 'ref', dir: 'desc'}]" [columnMode]="'force'" [headerHeight]="50"
                                 [limit]="currentPageLimit" [footerHeight]="80"
@@ -219,7 +219,7 @@
                                             [pagerPreviousIcon]="'datatable-icon-prev'"
                                             [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage" [size]="pageSize"
                                             [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
-                                            (change)="table.onFooterPage($event)">
+                                            (change)="listingTable.onFooterPage($event)">
                                         </datatable-pager>
 
                                     </ng-template>
@@ -261,7 +261,7 @@ blog -->
 
 
 <!-- car-details -->
-<app-car-view [isOpen]="isModalOpen" [carObject]="car"></app-car-view>
+<app-car-view [isOpen]="isModalOpen" (onClose)="hide($event)" [carObject]="car"></app-car-view>
 
 <!-- car-bids-details -->
-<app-car-bids [isOpen]="isBidsModalOpen" [carObject]="car"></app-car-bids>
+<app-car-bids [isOpen]="isBidsModalOpen" [carObject]="car"></app-car-bids>                
