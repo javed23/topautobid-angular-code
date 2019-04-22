@@ -329,21 +329,21 @@
                                 
                                         <div class="content-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="auto">
                                                                         
-                                        <div class="dropzone dropzone-container draganddrop" [dropzone]="config" [disabled]="disabled"></div>
+                                            <div class="dropzone dropzone-container draganddrop" [dropzone]="config" [disabled]="disabled"></div>
 
                                             <div id="preview"></div>
-                                            <div class="thumbnails" *ngIf="vehicleImageCategory == 'interior'">
-                                                <div class="thumbnail_list" *ngFor="let interiorImage of interiorImagesArray; let interiorIndex = index;">
-                                                    <img src="{{interiorImage}}">
-                                                    <i (click)="removeImage(interiorIndex)" class="fa fa-times" aria-hidden="true"></i>
+                                                <div class="thumbnails" *ngIf="vehicleImageCategory == 'interior'">
+                                                    <div class="thumbnail_list" *ngFor="let interiorImage of interiorImagesArray; let interiorIndex = index;">
+                                                        <img src="{{interiorImage}}">
+                                                        <i (click)="removeImage(interiorIndex)" class="fa fa-times" aria-hidden="true"></i>
+                                                    </div>
                                                 </div>
-                                             </div>
-                                             <div class="thumbnails" *ngIf="vehicleImageCategory == 'exterior'">
-                                                <div class="thumbnail_list" *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
-                                                    <img src="{{exteriorImage}}">
-                                                    <i (click)="removeImage(exteriorIndex)" class="fa fa-times" aria-hidden="true"></i>
+                                                <div class="thumbnails" *ngIf="vehicleImageCategory == 'exterior'">
+                                                    <div class="thumbnail_list" *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
+                                                        <img src="{{exteriorImage}}">
+                                                        <i (click)="removeImage(exteriorIndex)" class="fa fa-times" aria-hidden="true"></i>
+                                                    </div>
                                                 </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>   
@@ -362,7 +362,146 @@
                           
                         <!--Upload Images Section-->
 
-                </aw-wizard-step>                 
+                </aw-wizard-step>   
+                <aw-wizard-step stepTitle="About Vehicle" (stepEnter)="scrollToSpecificDiv($event)" [canExit]="moveDirection.bind(this, aboutVehicleWizard.valid)">
+                    <form [formGroup]="aboutVehicleWizard">
+                        <!--More About Vehicle Section-->
+
+                        <div class="row">
+                            <div class="form-group col-md-12">                                                
+                                <label>Vehicle has any second key*</label>
+                                <label class="switch">
+                                        <input type="checkbox" (change)="toggleVehicleSecondKey($event)" formControlName="vehicle_has_second_key">
+                                        <span class="slider round"></span>
+                                    </label>
+
+                            </div>
+                        </div>    
+                        <!--Vehicle AfterMarket Section-->
+                        <div formGroupName="vehicle_aftermarket" class="row">
+
+                                
+
+                                <div class="form-group col-md-12">                                                
+                                    <label>Vehicle has any aftermarket options*</label>
+                                    <label class="switch">
+                                            <input type="checkbox" #vehicleAftermarket formControlName="vehicle_aftermarket_value" (change)="toggleVehicleAfterMarket($event)">
+                                            <span class="slider round"></span>
+                                        </label>
+                                </div> 
+                                    
+                                <div class="form-group col-md-12" *ngIf="isVehicleAftermarketSelected">
+                                        <label>Description*</label>
+                                        <input type="text" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_aftermarket_description" [ngClass]="{ 'is-invalid': (aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').touched || isAboutVehicleSubmitted) && aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').errors }">        
+                                        
+                                        <p *ngIf="aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').touched || isAboutVehicleSubmitted">                      
+                                            <app-form-validation-errors errorPrefix="Description " [errors]="aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').errors"></app-form-validation-errors>   
+                                        </p>
+                                </div>
+
+                                <!--Upload Images Section-->
+                                
+                                <div class="form-group col-md-12" *ngIf="isVehicleAftermarketSelected">
+                                    <div class="vertical-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="50%">
+                                        <div class="box-title">Dropzone</div>
+                                
+                                        <div class="content-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="auto">
+                                                                        
+                                        <div class="dropzone dropzone-container" [dropzone]="config" [disabled]="disabled"></div>
+
+                                        <div id="preview" class="user-thumb"></div>
+                                        </div>
+                                    </div>
+                                </div>    
+                                  
+                                <!--Upload Images Section-->
+
+                                  
+                        </div>  
+                        <!--Vehicle AfterMarket Section-->
+
+                        <!--Vehicle Ownership Section-->                           
+                        <div formGroupName="vehicle_ownership" class="row"> 
+                                <div class="row">
+                                    <div class="form-group col-md-12">
+                                        <div class="title">
+                                            <h6 class="text-red">Vehicle's Ownership</h6>
+                                        </div>
+                                    </div> 
+                                </div>  
+                                <div class="row">
+                                <div class="form-group col-md-12">                                                
+                                    <label>Clean Title</label>
+                                    <label class="switch">
+                                        <input type="checkbox" #vehicleCleanTitle formControlName="vehicle_clean_title" (change)="toggleVehicleCleanTitle($event)">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                                </div>
+                                <div class="row" *ngIf="!isVehicleCleanTitleSelected">
+
+                                    <div class="form-group col-md-3">
+                                            <input type="radio" value="Salvage" formControlName="vehicle_ownership_value" (click)="checkVehicleOwnershipRadioValue('Salvage')">
+                                            <label for="Salvage">Salvage</label>
+                                    </div> 
+                                    <div class="form-group col-md-3">
+                                            <input type="radio" value="TMU" formControlName="vehicle_ownership_value" (click)="checkVehicleOwnershipRadioValue('TMU')">
+                                            <label for="TMU">TMU</label>
+                                    </div>     
+                                    <div class="form-group col-md-3">
+                                            <input type="radio" value="Lemon Law" formControlName="vehicle_ownership_value" (click)="checkVehicleOwnershipRadioValue('Lemon Law')">
+                                            <label for="Lemon Law">Lemon Law</label>
+                                    </div> 
+                                    <div class="form-group col-md-3">
+                                            <input type="radio" value="Other" formControlName="vehicle_ownership_value" (click)="checkVehicleOwnershipRadioValue('Other')">
+                                            <label for="Other">Other</label>
+                                    </div>     
+                                    
+                                </div> 
+
+                                <div class="row" *ngIf="isOtherSelected">
+                                        <div class="form-group col-md-12">
+                                                <label>Description*</label>
+                                                <textarea class="simple_select form-control placeholder" formControlName="vehicle_ownership_description" [ngClass]="{ 'is-invalid': (aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description').touched || isAboutVehicleSubmitted) && aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description').errors }"></textarea>        
+                                                
+                                                <p *ngIf="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description').touched || isAboutVehicleSubmitted">                      
+                                                    <app-form-validation-errors errorPrefix="Description " [errors]="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description').errors"></app-form-validation-errors>   
+                                                </p>
+                                        </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-12">
+                                        <label>My Pay Off*</label>
+                                        <input type="text" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_pay_off" [ngClass]="{ 'is-invalid': (aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_pay_off').touched || isAboutVehicleSubmitted) && aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_pay_off').errors }">        
+                                        
+                                        <p *ngIf="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_pay_off').touched || isAboutVehicleSubmitted">                      
+                                            <app-form-validation-errors errorPrefix="Pay Off " [errors]="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_pay_off').errors"></app-form-validation-errors>   
+                                        </p>
+                                    </div>
+                                    
+                                    <div class="form-group col-md-12">
+                                            <label>Finance Bank*</label>
+                                            <input type="text" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_finance_bank" [ngClass]="{ 'is-invalid': (aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_finance_bank').touched || isAboutVehicleSubmitted) && aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_finance_bank').errors }">        
+                                            
+                                            <p *ngIf="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_finance_bank').touched || isAboutVehicleSubmitted">                      
+                                                <app-form-validation-errors errorPrefix="Finance Bank " [errors]="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_finance_bank').errors"></app-form-validation-errors>   
+                                            </p>
+                                    </div>
+                                </div>
+                        </div>
+                         <!--Vehicle Ownership Section-->
+
+                        <!--More About Vehicle Section-->
+
+
+                        
+
+
+                        <div class="form-group text-right">
+                            <button class="button red d-inline-block width-auto" type="button" awNextStep>Next Step</button>		
+                        </div>
+                    </form>    
+                </aw-wizard-step> 
         </aw-wizard>
                 
                 

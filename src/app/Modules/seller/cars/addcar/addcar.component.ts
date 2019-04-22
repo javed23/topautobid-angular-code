@@ -78,7 +78,7 @@ export class AddCarComponent implements OnInit {
   isVinSelected:boolean = false;
   isYearSelected:boolean = false;  
   isVehicleAftermarketSelected:boolean = false;
-  isVehicleOwnershipSelected:boolean = false;
+  isVehicleCleanTitleSelected:boolean = false;
   isOtherSelected:boolean = false;
   isVehicleConditionSelected:boolean = false;
   isYearEnabled:boolean = true;
@@ -115,6 +115,9 @@ export class AddCarComponent implements OnInit {
   getMakeByYearArray:any = [];
   getModelByMakeIdArray:any = [];
   private _vehicleImage:string = '';
+  private _secondKey:string = '';
+  private _vehicleAftermarket:string = '';
+  private _cleanTitle:string = '';
 
 
 
@@ -174,15 +177,15 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   * Initialize about Vehicle Wizard Fields.
   */
   private aboutVehicle(){
-    this.aboutVehicleWizard = this.formBuilder.group({     
+    this.aboutVehicleWizard = this.formBuilder.group({  
+      vehicle_has_second_key: ['off'],   
       vehicle_aftermarket:this.formBuilder.group({    
-        vehicle_aftermarket_value: ['OFF'],
+        vehicle_aftermarket_value: ['off'],
         vehicle_aftermarket_description: [null],
         vehicle_aftermarket_pictures: this.formBuilder.array([]),
-      }),
-      vehicle_has_second_key: [null],
+      }),      
       vehicle_ownership:this.formBuilder.group({        
-        vehicle_clean_title : ['OFF'],
+        vehicle_clean_title : ['off'],
         vehicle_ownership_value : ['Salvage'],
         vehicle_ownership_description : [null],
         vehicle_finance_bank: [null, Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50)])],
@@ -373,7 +376,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   * get vehicle Image Path.
   * @return  string(vehicle image path) .
   */
- get vehicleImage(): string {
+  get vehicleImage(): string {
     return this._vehicleImage;
   }
 
@@ -382,8 +385,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   * @param $image    string(vehicle image path).
   */
   set vehicleImage($image: string) {
-    this._vehicleImage = $image;
-    //this.uploadVehicleImagesWizard.controls.vehicle_images.get('vehicle_image_path').setValue(this._vehicleImage);
+    this._vehicleImage = $image;    
   }
 
   /**
@@ -560,7 +562,120 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   }
 
   /**
-   * remove Vehicle Image
+   * check vehicle aftermarket key has switched on/off
+   * @param event object
+   * @return  string
+   */
+  toggleVehicleAfterMarket(event){   
+    let vehicleAfterMarketDescription = this.aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description');        
+    if( event.target.checked ){
+      this.isVehicleAftermarketSelected = true;
+      vehicleAfterMarketDescription.setValidators([Validators.required]);
+      vehicleAfterMarketDescription.updateValueAndValidity();
+      this.vehicleAftermarket = 'on';
+    }else{ 
+      this.isVehicleAftermarketSelected = false;
+      vehicleAfterMarketDescription.clearValidators();
+      vehicleAfterMarketDescription.updateValueAndValidity();
+      this.vehicleAftermarket = 'off';
+    }     
+  }
+
+  /**
+  * get vehicle aftermarket option value.
+  * @return  string (on/off) .
+  */
+  get vehicleAftermarket(): string {
+    return this._vehicleAftermarket;
+  }
+
+  /**
+  * set vehicle aftermarket key value.
+  * @param $vehicleAftermarket  string(on/off).
+  */
+  set vehicleAftermarket($vehicleAftermarket: string) {
+    this._vehicleAftermarket = $vehicleAftermarket;    
+  }
+
+
+  /**
+   * check vehicle second key has switched on/off
+   * @param event object
+   * @return  string
+   */
+  toggleVehicleSecondKey(event){    
+    ( event.target.checked ) ? this.secondKey = 'on' : this.secondKey = 'off';     
+  }
+
+  /**
+  * get vehicle second key option value.
+  * @return  string(on/off) .
+  */
+  get secondKey(): string {
+    return this._secondKey;
+  }
+
+  /**
+  * set vehicle second key value.
+  * @param $secondKey  string(on/off).
+  */
+  set secondKey($secondKey: string) {
+    this._secondKey = $secondKey;    
+  }
+
+  /**
+   * check vehicle clean has switched on/off
+   * @param event object
+   * @return  string
+   */
+  toggleVehicleCleanTitle(event){   
+    if ( event.target.checked ) {      
+      this.isVehicleCleanTitleSelected = true;      
+      this.cleanTitle = 'on'
+    }else{
+      this.isVehicleCleanTitleSelected = false;     
+      this.cleanTitle = 'off'
+    }
+  }
+
+  /**
+  * get vehicle clean title option value.
+  * @return  string(on/off) .
+  */
+  get cleanTitle(): string {
+    return this._cleanTitle;
+  }
+
+  /**
+  * set vehicle clean title value.
+  * @param $cleanTitle  string(on/off).
+  */
+  set cleanTitle($cleanTitle: string) {
+    this._cleanTitle = $cleanTitle;    
+  }
+
+
+  /**
+   * check vehicle ownership value
+   * @param vehicleOwnership values
+   */
+  checkVehicleOwnershipRadioValue(vehicleOwnership: string): void { 
+
+    let vehicleOwnershipDescription = this.aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description');
+      if(vehicleOwnership == "Other"){
+        this.isOtherSelected = true;        
+        vehicleOwnershipDescription.setValidators([Validators.required]);        
+        vehicleOwnershipDescription.updateValueAndValidity();
+      }else{
+        this.isOtherSelected = false;        
+        vehicleOwnershipDescription.clearValidators();        
+        vehicleOwnershipDescription.updateValueAndValidity();
+      }
+  }
+  
+
+  /**
+   * validate wizard and move to either direction. 
    * @param validityStatus boolean(form validation status)
    * @param direction boolean(wizard direction)
    * @return  boolean
