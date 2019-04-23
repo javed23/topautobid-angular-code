@@ -7,6 +7,7 @@ import { SignupComponent } from './signup/signup.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ListingComponent } from './car-listing/listing/listing.component';
 
 //cars management components
 import { ListComponent as CarsListComponent } from './cars/list/list.component';
@@ -54,6 +55,13 @@ const routes: Routes = [
     data: { title: "Seller's Cars listing" },
     /*canActivate: [SellerAuthGuardService]*/
   },
+  { 
+    path: 'car-listing', 
+    component: ListingComponent, 
+    data: { title: "Seller's Cars listing" },
+    /*canActivate: [SellerAuthGuardService]*/
+  },
+
 
 ];
 

@@ -6,6 +6,10 @@ export class Page {
     size: number = 0;
     //The total number of elements
     totalElements: number = 0;
+
+    //The total number of elements after filter
+    filteredElements: number = 0;
+
     //The total number of pages
     totalPages: number = 0;
     //The current page number

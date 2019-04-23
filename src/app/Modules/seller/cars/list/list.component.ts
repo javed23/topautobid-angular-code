@@ -33,7 +33,8 @@ import Swal from 'sweetalert2'
 })
 
 export class ListComponent implements AfterViewInit {
-  @ViewChild('listingTable') listingTable;
+  @ViewChild('listingTable') listingTable;  
+
   startDateModel:any;
   endDateModel:any;
   page = new Page();
@@ -42,7 +43,7 @@ export class ListComponent implements AfterViewInit {
   car:Car;
   isModalOpen:boolean=false;
   isBidsModalOpen:boolean=false;
-  filtersForm:FormGroup;
+  isFiltersModalOpen:boolean=false;
   datesFilter:any = {};
  
  //Defined records limit and records limit options
@@ -70,9 +71,6 @@ export class ListComponent implements AfterViewInit {
 
     //fetching the data with default settings
     this.setPage(this._defaultPagination,'all');
-
-    //calling filters form initlization method
-    this.initalizeFilterForm();
   }
   
   /**
@@ -88,16 +86,7 @@ export class ListComponent implements AfterViewInit {
       //POTENZA.tabs()      
     }
 
-  /**
-  * initializing filters form 
-  * @return void
-  */
-    private initalizeFilterForm():void {
-      this.filtersForm = this.formBuilder.group({
-        bid: ['$1 - $1000'],
-        years:['2010 - 2018']      
-      })
-    }
+  
 
   /**
    * Populate the table with new data based on the page number
@@ -192,18 +181,7 @@ export class ListComponent implements AfterViewInit {
       this.setPage(this._defaultPagination,this.page.type);    
     }
 
-  /**
-   * Filters records when user click on 'Apply Filters' button
-   * @return  void
-   */
-    onApplyingFilters():void {
-      //console.log('endDate:'+this.endDate.nativeElement.value);
-      this.viewedPages = [];
-      let values = this.filtersForm.value
-      this.page.filters['bid'] = (values.bid).replace(/ /g,'').split('-');
-      this.page.filters['years'] = (values.years).replace(/ /g,'').split('-');
-      this.setPage(this._defaultPagination,this.page.type);   
-    }
+  
   
  
   /**

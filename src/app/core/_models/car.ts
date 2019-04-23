@@ -29,6 +29,7 @@ export class Car {
     images:any;
     offer_in_hand_images:any;
     type:string;
+    miles:number;
 
      
 
@@ -66,5 +67,6 @@ export class Car {
         this.images  =  object.images;
         this.offer_in_hand_images  =  object.offer_in_hand_images
         this.type  =  object.type
+        this.miles  =  object.miles
     }
 }

@@ -30,6 +30,7 @@ export class CarService {
             page.totalElements = response.count;
             let pagedData = new PagedData<Car>();
             page.totalElements = response.count;
+            page.filteredElements = response.filteredRecords;
             page.totalPages = page.totalElements / page.size;
             let start = page.pageNumber * page.size;        
             for(let i in response.records){            

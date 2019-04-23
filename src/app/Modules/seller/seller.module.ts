@@ -9,6 +9,7 @@ import { NgxMaskModule } from 'ngx-mask'
 import { DropzoneModule, DropzoneConfigInterface, DROPZONE_CONFIG } from 'ngx-dropzone-wrapper';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { NgxPaginationModule } from 'ngx-pagination'; 
 
 //import enviorment file
 import { environment } from '../../../environments/environment';
@@ -26,6 +27,8 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { ListComponent as CarsListComponent } from './cars/list/list.component';
 import { CarViewComponent } from './cars/car-view/car-view.component';
 import { CarBidsComponent } from './cars/car-bids/car-bids.component';
+import { FiltersComponent } from './cars/filters/filters.component';
+import { ListingComponent } from './car-listing/listing/listing.component';
 
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -58,6 +61,8 @@ let config = new AuthServiceConfig([
     CarsListComponent,
     CarViewComponent,
     CarBidsComponent,
+    FiltersComponent,
+    ListingComponent,
   ],
   imports: [
     CommonModule,
@@ -70,7 +75,8 @@ let config = new AuthServiceConfig([
     DropzoneModule,
     NgxMaskModule.forRoot(),
     NgScrollbarModule,
-    NgxDatatableModule
+    NgxDatatableModule,
+    NgxPaginationModule
   ],
   providers: [
     {

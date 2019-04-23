@@ -6,46 +6,7 @@
 <!--=================================
   breadcrumbs and inner-intro -->
 
-
-<!--=================================Filter Start=================================-->
-<div class="filter_outer">
-    <i class="fa fa-times" aria-hidden="true"></i>
-    <div class="single_filter">
-        <h5>Apply Filters</h5>
-    </div>
-    <form [formGroup]="filtersForm" (ngSubmit)="onApplyingFilters()">
-        <div class="single_filter">
-            <div class="price-slide">
-                <div class="price">
-                    <label for="bids">
-                        <span><b>Bid :</b></span>
-                        <span>
-                            <input formControlName="bid" type="text" id="bids" class="bids" />
-                        </span>
-                    </label>
-                    <div id="slider-range"></div>
-                </div>
-            </div>
-        </div>
-        <div class="single_filter">
-            <div class="price-slide year-slide">
-                <div class="price">
-                    <label for="years">
-                        <span><b>Year :</b></span>
-                        <span>
-                            <input formControlName="years" type="text" class="years" />
-                        </span>
-                    </label>
-                    <div id="year-range"></div>
-                </div>
-            </div>
-        </div>
-        <button type="submit" class="button red">Apply Filters</button>
-
-    </form>
-</div>
-<!--=================================Filter End=================================-->
-
+<app-filters [isOpen]="isFiltersModalOpen" [page]="page"></app-filters>
 
 <!--=================================
  blog  -->

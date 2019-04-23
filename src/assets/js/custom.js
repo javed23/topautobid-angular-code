@@ -288,7 +288,7 @@ POTENZA.revolutionSlider = function (jQuery) {
   POTENZA.priceslider = function () {
    if($(".price-slide").exists()) {
         //$("#slider-range,#slider-range-2").slider({
-        $("#slider-range").slider({
+        $("#price-range").slider({
             range: true,
             min: 1,
             max: 1000,
