@@ -16,6 +16,15 @@ export class CommonUtilsService {
           })
     
     }
+
+    removeImageFromServer(imagePath): Observable<any> {
+      return this.httpClient
+        .post('common/removeImage', imagePath)
+        .map((response: Response) => {
+          return response;
+        })  
+    }
+
     public isImageCorrupted(base64string,type){
         console.log('base64string',base64string);
         if(type=='png'){   

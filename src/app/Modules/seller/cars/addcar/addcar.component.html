@@ -367,6 +367,7 @@
                     <form [formGroup]="aboutVehicleWizard">
                         <!--More About Vehicle Section-->
 
+                        
                         <div class="row">
                             <div class="form-group col-md-12">                                                
                                 <label>Vehicle has any second key*</label>
@@ -403,15 +404,19 @@
                                 
                                 <div class="form-group col-md-12" *ngIf="isVehicleAftermarketSelected">
                                     <div class="vertical-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="50%">
-                                        <div class="box-title">Dropzone</div>
+                                       
                                 
                                         <div class="content-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="auto">
                                                                         
-                                        <div class="dropzone dropzone-container" [dropzone]="config" [disabled]="disabled"></div>
+                                            <div class="dropzone dropzone-container" [dropzone]="vehicleAftermarketConfig" [disabled]="disabled"></div>
 
-                                        <div id="preview" class="user-thumb"></div>
                                         </div>
+
+                                        
                                     </div>
+
+
+                                    <div id="vehicleAfterMarketPreview" class="dropzone-previews"></div>
                                 </div>    
                                   
                                 <!--Upload Images Section-->

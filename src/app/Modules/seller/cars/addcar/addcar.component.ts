@@ -17,7 +17,7 @@ import { DropzoneComponent, DropzoneDirective, DropzoneConfigInterface } from 'n
 
 
 //import core services
-import { UserAuthService, TitleService, CognitoUserService, VehicleService } from '../../../../core/_services'
+import { UserAuthService, TitleService, CognitoUserService, VehicleService, CommonUtilsService } from '../../../../core/_services'
 
 //import core services
 import { CustomValidators } from '../../../../core/custom-validators';
@@ -105,6 +105,9 @@ export class AddCarComponent implements OnInit {
   // Declare DropZone Variables  
   dropzoneUpload: boolean = false;
   public config:DropzoneConfigInterface;
+  public vehicleAftermarketConfig:DropzoneConfigInterface;
+
+  
   vehicleImageArray = [];
 
   // Reset Dropzone
@@ -121,7 +124,7 @@ export class AddCarComponent implements OnInit {
 
 
 
-constructor( private zone:NgZone, private cognitoUserService:CognitoUserService, private location: Location, private alertService: AlertService, private vehicleService: VehicleService, private userAuthService: UserAuthService, private pageLoaderService: PageLoaderService, private formBuilder: FormBuilder, private titleService: TitleService, private toastr: ToastrManager, private router: Router) { 
+constructor( private zone:NgZone, private cognitoUserService:CognitoUserService, private location: Location, private alertService: AlertService, private vehicleService: VehicleService, private userAuthService: UserAuthService, private pageLoaderService: PageLoaderService, private formBuilder: FormBuilder, private titleService: TitleService, private commonUtilsService: CommonUtilsService, private toastr: ToastrManager, private router: Router) { 
 
   this.dropzoneInit()        //initalize dropzone library
   this.basicInfo();          // Initialize Baisc Info Wizard Fields 
@@ -131,7 +134,6 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   this.pickUpLocation();     // Initialize Pickup Location Wizard Fields
 }
 
-  
   /**
   * Initialize Basic Info Wizard Fields.
   */
@@ -178,14 +180,14 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   */
   private aboutVehicle(){
     this.aboutVehicleWizard = this.formBuilder.group({  
-      vehicle_has_second_key: ['off'],   
+      vehicle_has_second_key: [null],   
       vehicle_aftermarket:this.formBuilder.group({    
-        vehicle_aftermarket_value: ['off'],
+        vehicle_aftermarket_value: [null],
         vehicle_aftermarket_description: [null],
         vehicle_aftermarket_pictures: this.formBuilder.array([]),
       }),      
       vehicle_ownership:this.formBuilder.group({        
-        vehicle_clean_title : ['off'],
+        vehicle_clean_title : [null],
         vehicle_ownership_value : ['Salvage'],
         vehicle_ownership_description : [null],
         vehicle_finance_bank: [null, Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50)])],
@@ -337,7 +339,102 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       }     
     };
 
+    this.vehicleAftermarketConfig = {      
+      clickable: true,
+      paramName: "file",
+      uploadMultiple: false,
+      url: environment.API_ENDPOINT + "/api/common/imageUpload",
+      maxFiles: 10,
+      autoReset: null,
+      errorReset: null,
+      cancelReset: null,
+      acceptedFiles: '.jpg, .png, .jpeg',
+      maxFilesize: 2, // MB,
+      dictDefaultMessage: 'Click or drag images here to upload',
+      previewsContainer: "#vehicleAfterMarketPreview",
+      addRemoveLinks: true,
+      resizeWidth: 125,
+      resizeHeight: 125,
+      //createImageThumbnails:false,
+      dictInvalidFileType: 'Only valid jpeg, jpg, png file is accepted.',
+      dictFileTooBig: 'Maximum upload file size limit is 2MB',
+      dictCancelUpload: 'Delete Pic',
+      dictRemoveFile: 'Delete Pic',
+      headers: {
+        'Cache-Control': null,
+        'X-Requested-With': null,
+      },  
+      accept: function(file, done) {        
+       
+          const reader = new FileReader();
+          const _this = this
+          reader.onload = function(event) {             
+              var base64String = reader.result      
+              const fileExtension = (file.name).split('.').pop();
+              const isValidFile = componentObj.isImageCorrupted(base64String,_.toLower(fileExtension))              
+              if(!isValidFile){
+                done('File is corrupted or invalid.');
+                _this.removeFile(file);
+                return false;
+              } 
+              componentObj.pageLoaderService.pageLoader(true);//start showing page loader
+              done();             
+                       
+          };
+          reader.readAsDataURL(file); 
+      },    
+      init: function() {         
 
+        this.on('sending', function(file, xhr, formData){          
+          formData.append('folder', 'aftermarket');
+        });
+
+        this.on("totaluploadprogress",function(progress){          
+          componentObj.pageLoaderService.pageLoader(true);//start showing page loader
+          componentObj.pageLoaderService.setLoaderText('Uploading file '+progress+'%');//setting loader text
+          if(progress>=100){
+            componentObj.pageLoaderService.pageLoader(false); //hide page loader
+          }
+        })
+       
+        this.on("success", function(file, serverResponse) {            
+          componentObj.zone.run(() => { 
+            $(".dz-image img").attr('src', serverResponse);
+          });         
+          componentObj.pageLoaderService.pageLoader(false); //hide page loader
+        });
+
+        this.on("error", function(file, serverResponse) {               
+          componentObj.pageLoaderService.pageLoader(false);//hide page loader  
+          componentObj.toastr.errorToastr(serverResponse, 'Oops!');         
+        });
+
+        this.on("removedfile", function(file) {             
+          componentObj.removeImageFromServer(file.xhr.response);              
+        });
+      }     
+    };
+
+
+  }
+
+  /**
+   * remove image from server
+   * @param imagePath image url
+   */
+  removeImageFromServer(imagePath){    
+    this.pageLoaderService.pageLoader(true);//start showing page loader
+    this.commonUtilsService.removeImageFromServer(imagePath)
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        (response) => {
+          this.pageLoaderService.pageLoader(false);// hide page loader         
+          this.toastr.successToastr('Image has been removed successfully.', 'Success!');//showing success toaster        
+        },
+        error => {
+          this.pageLoaderService.pageLoader(false);// hide page loader         
+          this.toastr.errorToastr(error, 'Oops!');//showing error toaster message
+        });
   }
 
   /**
