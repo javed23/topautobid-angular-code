@@ -503,10 +503,99 @@
 
 
                         <div class="form-group text-right">
-                            <button class="button red d-inline-block width-auto" type="button" awNextStep>Next Step</button>		
+                            <div class="button_Submission">
+                                <button class="button red d-inline-block width-auto boder0 mt-4" type="button" awPreviousStep>Previous Step</button>
+                                
+                                <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="aboutVehicleWizard.invalid" (click)="validateAboutVehicleWizard()" type="button" awNextStep>Next Step</button>		
+                            </div>		
                         </div>
                     </form>    
                 </aw-wizard-step> 
+                <aw-wizard-step stepTitle="Vehicle's Condition" (stepEnter)="scrollToSpecificDiv($event)" [canExit]="moveDirection.bind(this, vehicleConditionWizard.valid)">
+                    <form [formGroup]="vehicleConditionWizard">
+                        
+                            <div class="row">
+                                    <div class="form-group col-md-12">
+                                        <div class="title">
+                                            <h5 class="text-red">Car Condition</h5>
+                                        </div>
+                                    </div>
+                            </div> 
+
+                            <div formGroupName="vehicle_condition" class="row">
+                                <div class="form-group col-md-3">
+                                        <input type="radio" value="Ready for resale without any reconditioning" (click)="checkVehicleConditionRadioValue('resale')" formControlName="vehicle_condition_value">
+                                        <label for="resale">Ready for resale without any reconditioning</label>
+                                </div> 
+                                <div class="form-group col-md-3">
+                                        <input type="radio" value="May need some reconditioning" (click)="checkVehicleConditionRadioValue('reconditioning')" formControlName="vehicle_condition_value" >
+                                        <label for="reconditioning">May need some reconditioning </label>
+                                </div> 
+
+                                <div class="form-group col-md-3">
+                                        <input type="radio" value="Needs some reconditioning but yet functional" (click)="checkVehicleConditionRadioValue('functional')" formControlName="vehicle_condition_value" >
+                                        <label for="functional">Needs some reconditioning but yet functional</label>
+                                </div> 
+                                <div class="form-group col-md-3">
+                                        <input type="radio" value="Parts only" (click)="checkVehicleConditionRadioValue('parts')" formControlName="vehicle_condition_value">
+                                        <label for="parts">Parts only</label>
+                                </div> 
+                                <div class="form-group col-md-12" *ngIf="isVehicleConditionSelected">
+                                        <label>Description*</label>
+                                        <input type="text" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_condition_description" [ngClass]="{ 'is-invalid': (vehicleConditionWizard.controls.vehicle_condition.get('vehicle_condition_description').touched || isVehicleConditionSubmitted) && vehicleConditionWizard.controls.vehicle_condition.get('vehicle_condition_description').errors }">        
+                                        
+                                        <p *ngIf="vehicleConditionWizard.controls.vehicle_condition.get('vehicle_condition_description').touched || isVehicleConditionSubmitted">                      
+                                            <app-form-validation-errors errorPrefix="Description " [errors]="vehicleConditionWizard.controls.vehicle_condition.get('vehicle_condition_description').errors"></app-form-validation-errors>   
+                                        </p>
+                                </div>
+
+                                <!--Upload Images Section-->
+                                
+                                <div class="form-group col-md-12" *ngIf="isVehicleConditionSelected">
+                                    <div class="vertical-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="50%">
+                                        <div class="box-title">Dropzone</div>
+                                
+                                        <div class="content-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="auto">
+                                                                        
+                                        <div class="dropzone dropzone-container" [dropzone]="config" [disabled]="disabled"></div>
+
+                                        
+                                        </div>
+                                    </div>
+                                </div>    
+                                  
+                                <!--Upload Images Section-->
+                            </div> 
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                                
+                                    <label>Seller Comments*</label>                               
+
+                                    <textarea class="form-control placeholder" formControlName="vehicle_comments" [ngClass]="{ 'is-invalid': (vehicleConditionWizard.controls.vehicle_comments.touched || isVehicleConditionSubmitted) && vehicleConditionWizard.controls.vehicle_comments.errors }"></textarea>
+
+                                    <p *ngIf="vehicleConditionWizard.controls.vehicle_comments.touched || isVehicleConditionSubmitted">                      
+                                        <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="Vin Number " [errors]="vehicleConditionWizard.controls.vehicle_comments.errors"></app-form-validation-errors>   
+                                    </p>
+                                    
+                                </div>
+                        
+                                <div class="form-group col-md-6">
+                                        
+                                </div>
+                    
+                            </div> 
+
+                            <div class="form-group text-right">
+                                <div class="button_Submission">
+                                    <button class="button red d-inline-block width-auto boder0 mt-4" type="button" awPreviousStep>Previous Step</button>
+                                    
+                                    <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="vehicleConditionWizard.invalid" (click)="validateVehicleConditionWizard()" type="button" awNextStep>Next Step</button>		
+                                </div>		
+                            </div>
+
+                           
+                    </form> 
+                </aw-wizard-step>  
         </aw-wizard>
                 
                 

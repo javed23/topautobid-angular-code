@@ -188,7 +188,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       }),      
       vehicle_ownership:this.formBuilder.group({        
         vehicle_clean_title : [null],
-        vehicle_ownership_value : ['Salvage'],
+        vehicle_ownership_value : [null],
         vehicle_ownership_description : [null],
         vehicle_finance_bank: [null, Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50)])],
         vehicle_pay_off: [null, Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50)])]    
@@ -204,14 +204,10 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     this.vehicleConditionWizard = this.formBuilder.group({      
       vehicle_comments: [null, Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50)])],    
       vehicle_condition:this.formBuilder.group({    
-        vehicle_condition_value: [null],
+        vehicle_condition_value: ['Ready for resale without any reconditioning'],
         vehicle_condition_description: [null],
         vehicle_condition_pictures: this.formBuilder.array([]),
-      }),
-      vehicle_offer_in_hands:this.formBuilder.group({        
-        vehicle_offer_in_hands_price : [null, Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(10)])],
-        vehicle_proof_file: this.formBuilder.array([], Validators.required),       
-      }) 
+      })
     }); 
   }
 
@@ -227,7 +223,11 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
         vehicle_city: [null, Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50)])],
         vehicle_state: [null, Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50)])],
         vehicle_zip: [null, Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50)])],
-        vehicle_selling_radius: [null, Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50)])]      
+        vehicle_selling_radius: [null, Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50)])],
+        vehicle_offer_in_hands:this.formBuilder.group({        
+          vehicle_offer_in_hands_price : [null, Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(10)])],
+          vehicle_proof_file: this.formBuilder.array([], Validators.required),       
+        })       
       })           
     });
   }
@@ -283,18 +283,6 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       },    
       init: function() {           
         
-        // Create the mock file:
-        const mockFile = { name: "Filename", size: 12345 };
-
-        // Call the default addedfile event handler
-        this.emit("addedfile", mockFile);
-
-        // And optionally show the thumbnail of the file:
-        
-        this.emit("thumbnail", mockFile, this.vehicleImage);
-       
-        this.emit("complete", mockFile);
-
         this.on('sending', function(file, xhr, formData){
           console.log(file);
           formData.append('folder', componentObj.getVehicleImageCategory());
@@ -343,7 +331,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       clickable: true,
       paramName: "file",
       uploadMultiple: false,
-      url: environment.API_ENDPOINT + "/api/common/imageUpload",
+      url: environment.API_ENDPOINT + "/api/common/imageUploadtoBucket",
       maxFiles: 10,
       autoReset: null,
       errorReset: null,
@@ -389,6 +377,10 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           formData.append('folder', 'aftermarket');
         });
 
+        this.on("maxfilesexceeded", function(file){
+            console.log("Max Image Upload Reached!");
+        });
+
         this.on("totaluploadprogress",function(progress){          
           componentObj.pageLoaderService.pageLoader(true);//start showing page loader
           componentObj.pageLoaderService.setLoaderText('Uploading file '+progress+'%');//setting loader text
@@ -397,9 +389,10 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           }
         })
        
-        this.on("success", function(file, serverResponse) {            
+        this.on("success", function(file, serverResponse) {  
           componentObj.zone.run(() => { 
-            $(".dz-image img").attr('src', serverResponse);
+            $(".dz-image img").attr('src', serverResponse.fileLocation);
+            $(".dz-remove").attr('href', serverResponse.fileKey);
           });         
           componentObj.pageLoaderService.pageLoader(false); //hide page loader
         });
@@ -409,8 +402,9 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           componentObj.toastr.errorToastr(serverResponse, 'Oops!');         
         });
 
-        this.on("removedfile", function(file) {             
-          componentObj.removeImageFromServer(file.xhr.response);              
+        this.on("removedfile", function(file) {      
+                
+         // componentObj.removeImageFromServer(file.xhr.response, 'aftermarket');              
         });
       }     
     };
@@ -421,10 +415,13 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   /**
    * remove image from server
    * @param imagePath image url
+   * @param bucket s3 bucket name
    */
-  removeImageFromServer(imagePath){    
+  removeImageFromServer(imagePath, bucket){    
     this.pageLoaderService.pageLoader(true);//start showing page loader
-    this.commonUtilsService.removeImageFromServer(imagePath)
+    const params ={ imagePath:imagePath, bucket:bucket }
+
+    this.commonUtilsService.removeImageFromServer(params)
       .pipe(untilDestroyed(this))
       .subscribe(
         (response) => {
@@ -580,13 +577,40 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   }
 
   /**
-   * validate Basic Info Wizard and move to Upload Images Wizard.   
+   * validate Vehicle Images Wizard and move to about Vehicle  Wizard.   
    */
   validateVehicleImagesWizard() { 
     
     this.isVehicleImagesSubmitted = true;   
 
     if(this.uploadVehicleImagesWizard.invalid) {
+      return;
+    }
+
+  }
+
+  /**
+   * validate About Vehicle Wizard and move to Vehicle Condition Wizard.   
+   */
+  validateAboutVehicleWizard() { 
+    
+    this.isAboutVehicleSubmitted = true;   
+
+    if(this.aboutVehicleWizard.invalid) {
+      return;
+    }
+
+  }
+
+
+  /**
+   * validate About Condition Wizard and move to Pickup Location Wizard.   
+   */
+  validateVehicleConditionWizard() { 
+    
+    this.isVehicleConditionSubmitted = true;   
+
+    if(this.vehicleConditionWizard.invalid) {
       return;
     }
 
@@ -770,6 +794,24 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       }
   }
   
+  /**
+   * check vehicle condition value
+   * @param vehicleCondition values
+   */
+  checkVehicleConditionRadioValue(vehicleCondition: string): void { 
+    let vehicleConditionDescription = this.vehicleConditionWizard.controls.vehicle_condition.get('vehicle_condition_description');
+    if(vehicleCondition == "reconditioning" || vehicleCondition == "functional" || vehicleCondition == "parts"){
+      this.isVehicleConditionSelected = true;        
+      vehicleConditionDescription.setValidators([Validators.required]);        
+      vehicleConditionDescription.updateValueAndValidity();
+    }else{
+      this.isVehicleConditionSelected = false;        
+      vehicleConditionDescription.clearValidators();        
+      vehicleConditionDescription.updateValueAndValidity();
+    }
+  }
+  
+
 
   /**
    * validate wizard and move to either direction. 

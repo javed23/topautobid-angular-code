@@ -17,9 +17,9 @@ export class CommonUtilsService {
     
     }
 
-    removeImageFromServer(imagePath): Observable<any> {
+    removeImageFromServer(params): Observable<any> {
       return this.httpClient
-        .post('common/removeImage', imagePath)
+        .post('common/removeImage', params)
         .map((response: Response) => {
           return response;
         })  
