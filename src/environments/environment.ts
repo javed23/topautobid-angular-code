@@ -11,13 +11,14 @@ export const environment = {
   APP_NAME: 'TopAutoBid',
   DEFAULT_PROFILE: 'assets/images/default-user.png',
   DEFAULT_COUNTRY_CODE: '+1',
-  DEFAULT_RECORDS_LIMIT: 10,
+  DEFAULT_RECORDS_LIMIT: 6,
+  DEFAULT_PAGES_PAGINATION: 5, //Defines the maximum number of page links to display
   DEFAULT_PAGE_LIMIT_OPTIONS: [  
-    { value:5   },
-    { value:10  },
-    { value:25  },
-    { value:50  },
-    { value:100  },
+    { value:6   },
+    { value:12  },
+    { value:24  },
+    { value:48  },
+    { value:96  },
   ],
   //aws 
   AWS: {

@@ -290,15 +290,9 @@ POTENZA.revolutionSlider = function (jQuery) {
         //$("#slider-range,#slider-range-2").slider({
         $("#price-range").slider({
             range: true,
-            min: 1,
+            min: 100,
             max: 1000,
-            values: [50, 300],
-            slide: function(event, ui) {
-              console.log('id:',this.id)
-                var min = ui.values[0],
-                    max = ui.values[1];
-                    $('#' + this.id).siblings( "label" ).find('.bids').val("$" + min + " - $" + max)                   
-            }
+            values: [100, 1000]            
         });
     }
   }
@@ -309,13 +303,7 @@ POTENZA.revolutionSlider = function (jQuery) {
              range: true,
              min: 2010,
              max: 2018,
-             values: [2010, 2018],
-             slide: function(event, ui) {
-               console.log('id:',this.id)
-                 var min = ui.values[0],
-                     max = ui.values[1];
-                     $('#' + this.id).siblings( "label" ).find('.years').val( min + "-" + max)                   
-             }
+             values: [2010, 2018]            
          });
      }
    }

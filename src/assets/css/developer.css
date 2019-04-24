@@ -178,3 +178,39 @@ ngb-datepicker-navigation-select select{
 .datatable-row-center .datatable-header-cell:nth-child(8), .datatable-row-center .datatable-body-cell:nth-child(8) {
     width: 150px!important;
 }
+.ngx-pagination .current{
+
+        padding: 8px 16px !important;
+        background: #db2d2e !important;
+        color: #fefefe;
+        cursor: default;
+        border: 1px solid #ddd;
+
+}
+
+.pagination-nav ul li a{
+    border: 1px solid #ddd !important;
+    padding: 8px 16px !important;
+}
+
+
+.ngx-pagination .disabled {
+    border: 1px solid #ddd !important;
+    padding: 8px 16px !important;
+}
+
+.ngx-pagination li{
+    margin:0 5px;
+}
+
+.ngx-pagination .pagination-next a::after, .ngx-pagination .pagination-next.disabled::after{
+    margin-left:0px !important;
+}
+.ngx-pagination .pagination-previous a::before, .ngx-pagination .pagination-previous.disabled::before{
+    margin-right:0px !important;
+}
+
+.ngx-pagination a:hover, .ngx-pagination button:hover{
+    background:#db2d2e !important;
+    color:#fff;
+}

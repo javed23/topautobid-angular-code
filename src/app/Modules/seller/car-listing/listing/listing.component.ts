@@ -23,16 +23,21 @@ export class ListingComponent implements OnInit {
   filtersForm:FormGroup;
   isGridListing:boolean=false; //set boolean value to show/hide listing (grid/list)
   viewedPages:any=[]; //array of page number which have been reviewed by user
-
+  currentPage:number =0;
   //default pagination, limit(records on per page) settings
   currentPageLimit: number = environment.DEFAULT_RECORDS_LIMIT  
+  readonly paginationLinks: number = 1//environment.DEFAULT_PAGES_PAGINATION   //Defines the maximum number of page links to display 
   readonly pageLimitOptions = environment.DEFAULT_PAGE_LIMIT_OPTIONS
   private _defaultPagination = {
     count: 0,
     limit: this.currentPageLimit,
-    offset: 0,
+    offset: 1,
     pageSize: this.currentPageLimit
   }
+
+  //year & price 
+  private _year
+  private _price
 
   //title and breadcrumbs
   readonly title: string = 'Car Listing';
@@ -57,6 +62,7 @@ export class ListingComponent implements OnInit {
     //initalize the price & year slider on view page
     POTENZA.priceslider() 
     POTENZA.yearslider()  
+    POTENZA.featurelist()
     this.onApplyingFilters()      
       
   }
@@ -67,20 +73,27 @@ export class ListingComponent implements OnInit {
 */
   private onApplyingFilters():void { 
 
-    let componentObject = this //assign the component object to use with jquery 
+    let componentRefrence = this //assign the component object to use with jquery 
     
     //when we stop price slider
     $( "#price-range" ).on( "slidestop", function( event, ui ) {        
-      componentObject.page.filters['price_range'] = [ui.values[0],ui.values[1]] 
-      componentObject.viewedPages = [];
-      componentObject.setPage(componentObject._defaultPagination,componentObject.page.type);     
+      componentRefrence.page.filters['price_range'] = [ui.values[0],ui.values[1]] 
+      componentRefrence.viewedPages = [];
+      componentRefrence.setPage(componentRefrence._defaultPagination,componentRefrence.page.type);     
     });
 
     //when we stop year slider
     $( "#year-range" ).on( "slidestop", function( event, ui ) {
-      componentObject.page.filters['year_range'] = [ui.values[0],ui.values[1]]
-      componentObject.viewedPages = [];
-      componentObject.setPage(componentObject._defaultPagination,componentObject.page.type);
+      componentRefrence.page.filters['year_range'] = [ui.values[0],ui.values[1]]
+      componentRefrence.viewedPages = [];
+      componentRefrence.setPage(componentRefrence._defaultPagination,componentRefrence.page.type);
+    });
+
+    $( "#year-range" ).on( "slide", function( event, ui ) {       
+      componentRefrence.year =    ui.values[0] + " - " + ui.values[1]         
+    });
+    $( "#price-range" ).on( "slide", function( event, ui ) {       
+      componentRefrence.price =    "$"+ui.values[0] + " - " + '$'+ui.values[1]         
     });
   
   }
@@ -89,8 +102,8 @@ export class ListingComponent implements OnInit {
 * change listing type list/grid
 * @return void
 */
-  onChangeListingType():void {
-    this.isGridListing = (this.isGridListing)?false:true
+  onChangeListingType(listingType:string):void {
+    this.isGridListing = (listingType=='list')?false:true
   }
 
 /**
@@ -129,24 +142,14 @@ export class ListingComponent implements OnInit {
     //hit api to fetch data
     this.carService.listingCars(this.page).subscribe(
 
-      //case success
+    //case success
       (pagedData) => {          
       this.ngZone.run( () => {
           this.page = pagedData.page;
           this.cars = pagedData.data
-      });
-      console.log('rows',this.cars);
-      /*
-      //if total fetched rows and totalElements(total rows from database) is not same
-      if (cars.length !== pagedData.page.totalElements) {
-        cars = Array.apply(null, Array(pagedData.page.totalElements));        
-        cars = cars.map((x, i) => this.cars[i]);
-      }    
-      const start = this.page.pageNumber * this.page.size;  
-      pagedData.data.map((x, i) => cars[i + start] = x);
-      this.cars = cars;  */ 
-      //console.log('Rows',this.cars);
+      });   
       this.commonUtilsService.hidePageLoader();
+
     //case error 
     },error => {
       this.commonUtilsService.onError(error);
@@ -166,8 +169,10 @@ export class ListingComponent implements OnInit {
     this.setPage(this._defaultPagination,this.page.type);
   }
 
-  onPageChange(event){
-    console.log(event);
+  onPageChange(pageNumber:number){
+    console.log(pageNumber);
+    this.currentPage = pageNumber
+    this.setPage({offset:pageNumber,pageSize:this.currentPageLimit}, this.page.type)
   }
 
 /**
@@ -196,5 +201,43 @@ export class ListingComponent implements OnInit {
     console.log('this.page',this.page); 
     this.setPage(this._defaultPagination,this.page.type);  
   }
+
+/**
+* get & set method of private property named year.
+* @return     Star rating selected by iser .
+*/
+ get year(): string {
+  return this._year;
+ }
+
+/**
+* set rating.
+* @param year    string(year range) which is selected by user.
+*/
+  set year(year: string) {
+    this._year = year;
+    console.log('this._year',this._year)
+    this.filtersForm.controls['years'].patchValue(this._year);  
+  }
+
+/**
+* get & set method of private property named price.
+* @return     Star rating selected by iser .
+*/
+get price(): string {
+  return this.price;
+}
+
+/**
+* set rating.
+* @param year    string(year range) which is selected by user.
+*/
+  set price(price: string) {
+    this._price = price;
+    console.log('this._price',this._price)
+    this.filtersForm.controls['amount'].patchValue(this._price);  
+  }
+
+
 
 }

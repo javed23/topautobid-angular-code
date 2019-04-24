@@ -16,8 +16,8 @@ product-listing  -->
               <h5>Advanced Search</h5>
               <ul class="list-style
             -none">
-                <li><i class="fa fa-star"> </i> Results Found <span class="float-right">({{ this.page.filteredElements}})</span></li>
-                <li><i class="fa fa-shopping-cart"> </i> Compare Vehicles <span class="float-right">({{this.page.totalElements}})</span></li>
+                <li><i class="fa fa-star"> </i> Results Found <span class="float-right">({{ page.filteredElements}})</span></li>
+                <li><i class="fa fa-shopping-cart"> </i> Compare Vehicles <span class="float-right">({{page.totalElements}})</span></li>
               </ul>
             </div>
             <div class="clearfix">
@@ -322,7 +322,7 @@ product-listing  -->
       </div>
       <div class="col-lg-9 col-md-8">
         <div class="sorting-options-main">
-          <form [formGroup]="filtersForm" (ngSubmit)="onApplyingFilters()">
+          <form [formGroup]="filtersForm">
             <div class="row">
               <div class="col-lg-4">
                 <div class="price-slide">
@@ -357,8 +357,8 @@ product-listing  -->
           <div class="row sorting-options">
             <div class="col-lg-5">
               <div class="change-view-button">
-                <button (click)="onChangeListingType()"><i class="fa fa-th"></i></button>
-                <button (click)="onChangeListingType()"><i class="fa fa-list-ul"></i></button>             
+                <button (click)="onChangeListingType('grid')"><i class="fa fa-th"></i></button>
+                <button (click)="onChangeListingType('list')"><i class="fa fa-list-ul"></i></button>             
               </div>
             </div>
             <div class="col-lg-3 text-right">
@@ -379,8 +379,7 @@ product-listing  -->
                   <option value="best_price,desc">Price: Lowest first</option>
                   <option  value="best_price,asc">Price: Highest first </option>
                   <option  value="make,desc">Product Name: A to Z </option>
-                  <option  value="make,asc">Product Name: Z to A </option>
-                  <option>In stock</option>
+                  <option  value="make,asc">Product Name: Z to A </option>                  
                 </select>
               </div>
             </div>
@@ -389,7 +388,7 @@ product-listing  -->
         <!-- Grid view -->
        
         <div *ngIf="!isGridListing" class="row">
-          <div *ngFor="let car of cars | paginate: { itemsPerPage: 2, currentPage: p }" class="col-lg-4">
+          <div *ngFor="let car of cars | paginate: { itemsPerPage: currentPageLimit, currentPage: currentPage, totalItems: page.filteredElements }" class="col-lg-4">
 
             <div class="car-item gray-bg text-center">
               <div class="car-image">
@@ -427,8 +426,8 @@ product-listing  -->
           </div>
         </div>
         <!-- Grid View-->
-      <div *ngIf="isGridListing">
-        <div *ngFor="let car of cars" class="car-grid">
+  <div *ngIf="isGridListing">
+        <div *ngFor="let car of cars | paginate: { itemsPerPage: currentPageLimit, currentPage: currentPage, totalItems: page.filteredElements }" class="car-grid">
           <div class="row">
             <div class="col-lg-4 col-md-12">
               <div class="car-item gray-bg text-center">
@@ -467,31 +466,25 @@ product-listing  -->
           </div>
         </div>
       </div>
+      
+      <div class="pagination-nav d-flex justify-content-center pagination_nav_changes">
+          <pagination-controls  
+          (pageChange)="onPageChange($event)"
+          directionLinks="true" 
+          maxSize="5"  
+          previousLabel=""
+          nextLabel="" 
+          nextLabel=""
+          screenReaderPaginationLabel="Pagination"
+          screenReaderPageLabel="page"
+          screenReaderCurrentLabel="You're on page"          
+          >
+        </pagination-controls>
 
-      <pagination-controls 
-            (pageChange)="onPageChange($event)"
-            maxSize="9"
-            directionLinks="true"
-            autoHide="true"
-            responsive="true"
-            previousLabel="Previous"
-            nextLabel="Next"
-            screenReaderPaginationLabel="Pagination"
-            screenReaderPageLabel="page"
-            screenReaderCurrentLabel="You're on page">
-      </pagination-controls>
-
-        <!--<div class="pagination-nav d-flex justify-content-center">
-          <ul class="pagination">
-            <li><a href="#">«</a></li>
-            <li class="active"><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li><a href="#">»</a></li>
-          </ul>
-        </div>-->
+          
+      
+    </div>     
+    
       </div>
     </div>
   </div>
