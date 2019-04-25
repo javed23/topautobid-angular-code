@@ -364,6 +364,8 @@ button:disabled {
     display: none;
 }
 
+.uploadImages .dz-preview{display:none;}
+
 .vehicle_category > .form-group {
     display: inline-block;
     margin-right: 60px;

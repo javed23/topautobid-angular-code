@@ -32,9 +32,9 @@ import * as AWS from 'aws-sdk/global';
 import * as S3 from 'aws-sdk/clients/s3';
 import * as Dropzone from 'dropzone';
 
-declare var jQuery:any;
-declare var $:any;
-declare var POTENZA:any;
+declare let jQuery:any;
+declare let $:any;
+declare let POTENZA:any;
 
 
 @Component({
@@ -104,17 +104,16 @@ export class AddCarComponent implements OnInit {
 
   // Declare DropZone Variables  
   dropzoneUpload: boolean = false;
-  public config:DropzoneConfigInterface;
-  public vehicleAftermarketConfig:DropzoneConfigInterface;
-
-  
+  public vehicleImagesConfiguration:DropzoneConfigInterface;
+  public vehicleAftermarketConfiguration:DropzoneConfigInterface;
+  public vehicleConditionConfiguration: DropzoneConfigInterface;  
   vehicleImageArray = [];
 
   // Reset Dropzone
   @ViewChild(DropzoneComponent) componentRef?: DropzoneComponent;
   @ViewChild(DropzoneDirective) directiveRef?: DropzoneDirective;  
 
-  currentYear: number = new Date().getFullYear();   // get Current Year
+  
   getMakeByYearArray:any = [];
   getModelByMakeIdArray:any = [];
   private _vehicleImage:string = '';
@@ -122,16 +121,27 @@ export class AddCarComponent implements OnInit {
   private _vehicleAftermarket:string = '';
   private _cleanTitle:string = '';
 
+  yearRange:any = [];
+
+  currentYear: number = new Date().getFullYear();   // get Current Year
+
 
 
 constructor( private zone:NgZone, private cognitoUserService:CognitoUserService, private location: Location, private alertService: AlertService, private vehicleService: VehicleService, private userAuthService: UserAuthService, private pageLoaderService: PageLoaderService, private formBuilder: FormBuilder, private titleService: TitleService, private commonUtilsService: CommonUtilsService, private toastr: ToastrManager, private router: Router) { 
 
-  this.dropzoneInit()        //initalize dropzone library
+  
   this.basicInfo();          // Initialize Baisc Info Wizard Fields 
   this.uploadVehicleImages(); // Initialize Vehicle Images Wizard Fields
   this.aboutVehicle();       // Initialize About Vehicle Wizard Fields
   this.vehicleCondition();   // Initialize Vehicle Condition Wizard Fields
   this.pickUpLocation();     // Initialize Pickup Location Wizard Fields
+
+  this.vehicleImagesDropzoneInit()        //initalize dropzone library
+  this.vehicleAfterMarketDropzoneInit(); //initalize dropzone library
+  this.vehicleAfterConditionDropzoneInit(); //initalize dropzone library
+
+  
+
 }
 
   /**
@@ -157,8 +167,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           vehicle_drive_type: [null, Validators.compose([Validators.required])],
           vehicle_interior_color: [null, Validators.compose([Validators.required])],
           vehicle_exterior_color: [null, Validators.compose([Validators.required])],
-          vehicle_interior_material: [null, Validators.compose([Validators.required])],
-          //vehicle_pictures: this.formBuilder.array([]),      
+          vehicle_interior_material: [null, Validators.compose([Validators.required])],                
         }),    
     });
   }
@@ -188,7 +197,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       }),      
       vehicle_ownership:this.formBuilder.group({        
         vehicle_clean_title : [null],
-        vehicle_ownership_value : [null],
+        vehicle_ownership_value : ['Salvage'],
         vehicle_ownership_description : [null],
         vehicle_finance_bank: [null, Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50)])],
         vehicle_pay_off: [null, Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50)])]    
@@ -231,108 +240,18 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       })           
     });
   }
- 
+
   /**
   * Initialize Dropzone Library(Image Upload).
   */
-  private dropzoneInit() { 
+  private vehicleAfterMarketDropzoneInit(){
     const componentObj = this;
-    this.config = {      
-      clickable: true,
-      paramName: "file",
-      uploadMultiple: false,
-      url: environment.API_ENDPOINT + "/api/common/imageUpload",
-      maxFiles: 10,
-      autoReset: null,
-      errorReset: null,
-      cancelReset: null,
-      acceptedFiles: '.jpg, .png, .jpeg',
-      maxFilesize: 2, // MB,
-      dictDefaultMessage: 'Click or drag images here to upload',
-      previewsContainer: "#preview",
-      addRemoveLinks: true,
-      resizeWidth: 125,
-      resizeHeight: 125,
-      //createImageThumbnails:false,
-      dictInvalidFileType: 'Only valid jpeg, jpg, png file is accepted.',
-      dictFileTooBig: 'Maximum upload file size limit is 2MB',
-      dictCancelUpload: 'Delete Pic',
-      dictRemoveFile: 'Delete Pic',
-      headers: {
-        'Cache-Control': null,
-        'X-Requested-With': null,
-      },  
-      accept: function(file, done) {        
-       
-          const reader = new FileReader();
-          const _this = this
-          reader.onload = function(event) {             
-              var base64String = reader.result      
-              const fileExtension = (file.name).split('.').pop();
-              const isValidFile = componentObj.isImageCorrupted(base64String,_.toLower(fileExtension))              
-              if(!isValidFile){
-                done('File is corrupted or invalid.');
-                _this.removeFile(file);
-                return false;
-              } 
-              componentObj.pageLoaderService.pageLoader(true);//start showing page loader
-              done();             
-                       
-          };
-          reader.readAsDataURL(file); 
-      },    
-      init: function() {           
-        
-        this.on('sending', function(file, xhr, formData){
-          console.log(file);
-          formData.append('folder', componentObj.getVehicleImageCategory());
-        });
-
-        this.on("totaluploadprogress",function(progress){
-          
-          componentObj.pageLoaderService.pageLoader(true);//start showing page loader
-          componentObj.pageLoaderService.setLoaderText('Uploading file '+progress+'%');//setting loader text
-          if(progress>=100){
-            componentObj.pageLoaderService.pageLoader(false); //hide page loader
-          }
-        })
-       
-        this.on("success", function(file, serverResponse) {
-
-          componentObj.vehicleImage = serverResponse;  
-          
-          if(componentObj.getVehicleImageCategory() == "interior"){
-            componentObj.interiorImagesArray.push(componentObj.vehicleImage);
-          }else{
-            componentObj.exteriorImagesArray.push(componentObj.vehicleImage);
-          }        
-          
-          
-
-          componentObj.zone.run(() => { 
-            $(".dz-image img").attr('src', serverResponse);
-          });
-          this.removeFile(file);
-          componentObj.pageLoaderService.pageLoader(false); //hide page loader
-
-        });
-
-        this.on("error", function(file, serverResponse) {
-          console.log('serverResponse',serverResponse)
-          // Called after the file successfully uploaded.         
-          componentObj.pageLoaderService.pageLoader(false);//hide page loader  
-          componentObj.toastr.errorToastr(serverResponse, 'Oops!');
-          //componentObj.toastr.errorToastr('Could not upload profile picture.', 'Oops!');//showing error toaster message
-        });
-      }     
-    };
-
-    this.vehicleAftermarketConfig = {      
+    this.vehicleAftermarketConfiguration = {      
       clickable: true,
       paramName: "file",
       uploadMultiple: false,
       url: environment.API_ENDPOINT + "/api/common/imageUploadtoBucket",
-      maxFiles: 10,
+      maxFiles: 2,
       autoReset: null,
       errorReset: null,
       cancelReset: null,
@@ -357,9 +276,9 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           const reader = new FileReader();
           const _this = this
           reader.onload = function(event) {             
-              var base64String = reader.result      
+              let base64String = reader.result      
               const fileExtension = (file.name).split('.').pop();
-              const isValidFile = componentObj.isImageCorrupted(base64String,_.toLower(fileExtension))              
+              const isValidFile = componentObj.commonUtilsService.isImageCorrupted(base64String,_.toLower(fileExtension))              
               if(!isValidFile){
                 done('File is corrupted or invalid.');
                 _this.removeFile(file);
@@ -404,24 +323,219 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
         this.on("removedfile", function(file) {      
                 
-         // componentObj.removeImageFromServer(file.xhr.response, 'aftermarket');              
+         // componentObj.removeImageFromBucket(file.xhr.response, 'aftermarket');              
         });
       }     
     };
-
-
   }
 
   /**
-   * remove image from server
+  * Initialize Dropzone Library(Image Upload).
+  */
+  private vehicleAfterConditionDropzoneInit(){
+    const componentObj = this;
+    this.vehicleConditionConfiguration = {      
+      clickable: true,
+      paramName: "file",
+      uploadMultiple: false,
+      url: environment.API_ENDPOINT + "/api/common/imageUploadtoBucket",
+      maxFiles: 2,
+      autoReset: null,
+      errorReset: null,
+      cancelReset: null,
+      acceptedFiles: '.jpg, .png, .jpeg',
+      maxFilesize: 2, // MB,
+      dictDefaultMessage: 'Click or drag images here to upload',
+      previewsContainer: "#vehicleConditionPreview",
+      addRemoveLinks: true,
+      resizeWidth: 125,
+      resizeHeight: 125,
+      //createImageThumbnails:false,
+      dictInvalidFileType: 'Only valid jpeg, jpg, png file is accepted.',
+      dictFileTooBig: 'Maximum upload file size limit is 2MB',
+      dictCancelUpload: 'Delete Pic',
+      dictRemoveFile: 'Delete Pic',
+      headers: {
+        'Cache-Control': null,
+        'X-Requested-With': null,
+      },  
+      accept: function(file, done) {        
+       
+          const reader = new FileReader();
+          const _this = this
+          reader.onload = function(event) {             
+              let base64String = reader.result      
+              const fileExtension = (file.name).split('.').pop();
+              const isValidFile = componentObj.commonUtilsService.isImageCorrupted(base64String,_.toLower(fileExtension))              
+              if(!isValidFile){
+                done('File is corrupted or invalid.');
+                _this.removeFile(file);
+                return false;
+              } 
+              componentObj.pageLoaderService.pageLoader(true);//start showing page loader
+              done();             
+                       
+          };
+          reader.readAsDataURL(file); 
+      },    
+      init: function() {         
+
+        this.on('sending', function(file, xhr, formData){          
+          formData.append('folder', 'vehicleCondition');
+        });
+
+        this.on("maxfilesexceeded", function(file){
+            console.log("Max Image Upload Reached!");
+        });
+
+        this.on("totaluploadprogress",function(progress){          
+          componentObj.pageLoaderService.pageLoader(true);//start showing page loader
+          componentObj.pageLoaderService.setLoaderText('Uploading file '+progress+'%');//setting loader text
+          if(progress>=100){
+            componentObj.pageLoaderService.pageLoader(false); //hide page loader
+          }
+        })
+       
+        this.on("success", function(file, serverResponse) {  
+          componentObj.zone.run(() => { 
+            $(".dz-image img").attr('src', serverResponse.fileLocation);
+            $(".dz-remove").attr('href', serverResponse.fileKey);
+          });         
+          componentObj.pageLoaderService.pageLoader(false); //hide page loader
+        });
+
+        this.on("error", function(file, serverResponse) {               
+          componentObj.pageLoaderService.pageLoader(false);//hide page loader  
+          componentObj.toastr.errorToastr(serverResponse, 'Oops!');         
+        });
+
+        this.on("removedfile", function(file) {      
+                
+         // componentObj.removeImageFromBucket(file.xhr.response, 'aftermarket');              
+        });
+      }     
+    };
+  }
+ 
+  /**
+  * Initialize Dropzone Library(Image Upload).
+  */
+  private vehicleImagesDropzoneInit() { 
+    const componentObj = this;
+    this.vehicleImagesConfiguration = {      
+      clickable: true,
+      paramName: "file",
+      uploadMultiple: false,
+      url: environment.API_ENDPOINT + "/api/common/imageUpload",
+      maxFiles: 20,
+      autoReset: null,
+      errorReset: null,
+      cancelReset: null,
+      acceptedFiles: '.jpg, .png, .jpeg',
+      maxFilesize: 2, // MB,
+      dictDefaultMessage: 'Click or drag images here to upload',
+     // previewsContainer: "#vehicleImagesPreview",      
+      addRemoveLinks: true,
+      resizeWidth: 125,
+      resizeHeight: 125,
+      //createImageThumbnails:false,
+      dictInvalidFileType: 'Only valid jpeg, jpg, png file is accepted.',
+      dictFileTooBig: 'Maximum upload file size limit is 2MB',
+      dictCancelUpload: 'Delete Pic',
+      dictRemoveFile: 'Delete Pic',
+      headers: {
+        'Cache-Control': null,
+        'X-Requested-With': null,
+      },  
+      accept: function(file, done) {     
+        
+        
+          //console.log(componentObj.getVehicleImageCategory());
+          if((componentObj.interiorImagesArray.length +1) >2 && componentObj.getVehicleImageCategory() == "interior"){
+              componentObj.commonUtilsService.onError('You cannot upload any more files.');
+              this.removeFile(file);
+              return false;
+          }
+
+          if((componentObj.exteriorImagesArray.length +1) >2 && componentObj.getVehicleImageCategory() == "exterior"){
+              componentObj.commonUtilsService.onError('You cannot upload any more files.');
+              this.removeFile(file);
+              return false;
+          }
+
+
+       
+          const reader = new FileReader();
+          const _this = this
+          reader.onload = function(event) {             
+              let base64String = reader.result      
+              const fileExtension = (file.name).split('.').pop();
+              const isValidFile = componentObj.commonUtilsService.isImageCorrupted(base64String,_.toLower(fileExtension))              
+              if(!isValidFile){
+                done('File is corrupted or invalid.');
+                _this.removeFile(file);
+                return false;
+              } 
+              componentObj.pageLoaderService.pageLoader(true);//start showing page loader
+              done();             
+                       
+          };
+          reader.readAsDataURL(file); 
+      },    
+      init: function() {           
+        
+        this.on('sending', function(file, xhr, formData){            
+          console.log(componentObj.interiorImagesArray.length);        
+          console.log(componentObj.exteriorImagesArray.length);        
+          formData.append('folder', componentObj.getVehicleImageCategory());         
+        });        
+
+        this.on("totaluploadprogress",function(progress){          
+          componentObj.pageLoaderService.pageLoader(true);//start showing page loader
+          componentObj.pageLoaderService.setLoaderText('Uploading file '+progress+'%');//setting loader text
+          if(progress>=100){
+            componentObj.pageLoaderService.pageLoader(false); //hide page loader
+          }
+        })
+       
+        this.on("success", function(file, serverResponse) {
+
+          componentObj.vehicleImage = serverResponse;  
+          
+          if(componentObj.getVehicleImageCategory() == "interior"){
+            componentObj.interiorImagesArray.push(componentObj.vehicleImage);
+          }else{
+            componentObj.exteriorImagesArray.push(componentObj.vehicleImage);
+          }             
+
+          componentObj.zone.run(() => { 
+            $(".dz-image img").attr('src', serverResponse);
+            $(".dz-remove").attr('href', serverResponse.fileKey);
+          });
+         // this.removeFile(file);
+          componentObj.pageLoaderService.pageLoader(false); //hide page loader
+
+        });
+
+        this.on("error", function(file, serverResponse) {                           
+          componentObj.pageLoaderService.pageLoader(false);//hide page loader  
+          componentObj.toastr.errorToastr(serverResponse, 'Oops!');
+          
+        });
+      }     
+    };  
+  }
+
+  /**
+   * remove image from AWS Bucket
    * @param imagePath image url
    * @param bucket s3 bucket name
    */
-  removeImageFromServer(imagePath, bucket){    
+  removeImageFromBucket(imagePath, bucket){    
     this.pageLoaderService.pageLoader(true);//start showing page loader
     const params ={ imagePath:imagePath, bucket:bucket }
 
-    this.commonUtilsService.removeImageFromServer(params)
+    this.commonUtilsService.removeImageFromBucket(params)
       .pipe(untilDestroyed(this))
       .subscribe(
         (response) => {
@@ -432,39 +546,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           this.pageLoaderService.pageLoader(false);// hide page loader         
           this.toastr.errorToastr(error, 'Oops!');//showing error toaster message
         });
-  }
-
-  /**
-   * check vehicle reference is selected
-   * @param base64string image base 64
-   * @param type type of image
-   * @return  boolean
-   */
-  private isImageCorrupted(base64string,type){
-    //console.log('base64string',base64string);
-    if(type=='png'){   
-      //console.log('get filetype',type)
-      const imageData = Array.from(atob(base64string.replace('data:image/png;base64,', '')), c => c.charCodeAt(0))
-      const sequence = [0, 0, 0, 0, 73, 69, 78, 68, 174, 66, 96, 130]; // in hex: 
-      
-      //check last 12 elements of array so they contains needed values
-      for (let i = 12; i > 0; i--){
-          if (imageData[imageData.length - i] !== sequence[12-i]) {
-              return false;
-          }
-      }
-      
-      return true;
-    }
-    else if(type=='jpeg' || type=='jpg'){ 
-     // console.log('get filetype',type)
-      const imageDataJpeg = Array.from(atob(base64string.replace('data:image/jpeg;base64,', '')), c => c.charCodeAt(0))
-      const imageCorrupted = ((imageDataJpeg[imageDataJpeg.length - 1] === 217) && (imageDataJpeg[imageDataJpeg.length - 2] === 255))
-      //console.log('imageCorrupted jpeg',imageCorrupted)
-      return imageCorrupted;
-     
-    }
-  }
+  }  
 
   /**
   * get vehicle Image Path.
@@ -490,26 +572,14 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     return this.uploadVehicleImagesWizard.controls.vehicle_images.get('vehicle_image_category_name').value;
   }
 
-  /** ToDo
-   * show last 2 years list in the year dropdown
-   */
-  createYearRange(){
-    var years = [];
-    for (var i = 0; i < 2; i++) {
-      years.push({
-        label: this.currentYear - i,
-        value: this.currentYear - i
-      });
-    }
-    return years;
-  }
+  
 
   /**
    * get Vehicles(Makes, Models, Trim...) By Year
    * @param year selected year from dropdown
    * @return  array(vehicle details)
    */
-  getVehiclesByYear(year){
+  getVehicleStatisticsByYear(year){
 
     if(year == ''){ this.basicInfoWizard.controls.basic_info.get('vehicle_make').disable(); return; }
 
@@ -519,7 +589,9 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     //manually create a data object which have the car unique id and seller id 
     const data ={ year:year }
     //hit api to fetch data
-    this.vehicleService.getVehiclesByYear(data).subscribe(
+    this.commonUtilsService.getVehicleStatisticsByYear(data)
+    .pipe(untilDestroyed(this))
+    .subscribe(
 
       //case success
     (response) => {      
@@ -751,7 +823,8 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    */
   toggleVehicleCleanTitle(event){   
     if ( event.target.checked ) {      
-      this.isVehicleCleanTitleSelected = true;      
+      this.isVehicleCleanTitleSelected = true; 
+      this.isOtherSelected=false;      
       this.cleanTitle = 'on'
     }else{
       this.isVehicleCleanTitleSelected = false;     
@@ -792,6 +865,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
         vehicleOwnershipDescription.clearValidators();        
         vehicleOwnershipDescription.updateValueAndValidity();
       }
+      
   }
   
   /**
@@ -836,6 +910,17 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
   ngOnInit() {  
     this.contentSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });     
+  }
+
+  ngAfterViewInit(){    
+    //this.yearRange = this.commonUtilsService.createYearRange();  
+    
+    for (let i = 0; i < 2; i++) {
+      this.yearRange.push({
+        label: this.currentYear - i,
+        value: this.currentYear - i
+      });
+    }
   }
 
   // This method must be present, even if empty.

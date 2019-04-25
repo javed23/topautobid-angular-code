@@ -50,19 +50,6 @@ export class VehicleService {
         })
     }
 
-    /**
-     * List seller's car
-     * @param year    passed year.
-     * @return        Observable<any>
-    */
-
-   public getVehiclesByYear(year): Observable<any> {    
-       
-        return this.httpClient.post('common/fetchVehiclesByYear', year)
-        .map((response: any) => {         
-            //console.log(response); 
-            return response;          
-        })    
-    }
+    
     
 }

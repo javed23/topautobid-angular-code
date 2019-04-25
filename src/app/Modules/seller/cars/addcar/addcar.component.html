@@ -78,9 +78,9 @@
                                             <h3>SELECT VEHICLE YEAR*</h3>                                                                                   
                                         <div class="input_field">    
                                             
-                                            <select #yearValue formControlName="vehicle_year" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_year').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_year').errors }" (change)="getVehiclesByYear(yearValue.value)" class="selectpicker simple_select">    
+                                            <select #yearValue formControlName="vehicle_year" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_year').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_year').errors }" (change)="getVehicleStatisticsByYear(yearValue.value)" class="selectpicker simple_select">    
                                                 <option value="">Select Year</option>
-                                                <option *ngFor="let item of createYearRange();" value="{{item.label}}">{{item.value}}</option>                                                
+                                                <option *ngFor="let item of yearRange;" value="{{item.label}}">{{item.value}}</option>                                                
                                             </select>
                                         </div>
 
@@ -115,9 +115,9 @@
                                     <div class="form-group col-md-6" *ngIf="isVinSelected">
                                         <label>Year*</label>
 
-                                        <select #yearValue formControlName="vehicle_year" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_year').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_year').errors }" class="selectpicker simple_select" (change)="getVehiclesByYear(yearValue.value)">    
+                                        <select #yearValue formControlName="vehicle_year" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_year').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_year').errors }" class="selectpicker simple_select" (change)="getVehicleStatisticsByYear(yearValue.value)">    
                                             <option value="">Select Year</option>
-                                            <option *ngFor="let year of createYearRange();" value="{{year.label}}">{{year.value}}</option>                                                
+                                            <option *ngFor="let year of yearRange;" value="{{year.label}}">{{year.value}}</option>                                                
                                         </select>
                                         <p *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_make').touched || isBasicInfoSubmitted">                      
                                             <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="Make " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_make').errors"></app-form-validation-errors>   
@@ -324,26 +324,26 @@
                                     </div> 
 
 
-                                    <div class="vertical-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="50%">
+                                    <div class="vertical-container uploadImages" fxLayout="column" fxLayoutAlign="stretch" fxFlex="50%">
                                         
                                 
                                         <div class="content-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="auto">
                                                                         
-                                            <div class="dropzone dropzone-container draganddrop" [dropzone]="config" [disabled]="disabled"></div>
+                                            <div class="dropzone dropzone-container draganddrop" [dropzone]="vehicleImagesConfiguration" [disabled]="disabled"></div>
 
-                                            <div id="preview"></div>
-                                                <div class="thumbnails" *ngIf="vehicleImageCategory == 'interior'">
-                                                    <div class="thumbnail_list" *ngFor="let interiorImage of interiorImagesArray; let interiorIndex = index;">
-                                                        <img src="{{interiorImage}}">
-                                                        <i (click)="removeImage(interiorIndex)" class="fa fa-times" aria-hidden="true"></i>
-                                                    </div>
+                                            
+                                            <div class="thumbnails" *ngIf="vehicleImageCategory == 'interior'">
+                                                <div class="thumbnail_list" *ngFor="let interiorImage of interiorImagesArray; let interiorIndex = index;">
+                                                    <img src="{{interiorImage}}">
+                                                    <i (click)="removeImage(interiorIndex)" class="fa fa-times" aria-hidden="true"></i>
                                                 </div>
-                                                <div class="thumbnails" *ngIf="vehicleImageCategory == 'exterior'">
-                                                    <div class="thumbnail_list" *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
-                                                        <img src="{{exteriorImage}}">
-                                                        <i (click)="removeImage(exteriorIndex)" class="fa fa-times" aria-hidden="true"></i>
-                                                    </div>
+                                            </div>
+                                            <div class="thumbnails" *ngIf="vehicleImageCategory == 'exterior'">
+                                                <div class="thumbnail_list" *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
+                                                    <img src="{{exteriorImage}}">
+                                                    <i (click)="removeImage(exteriorIndex)" class="fa fa-times" aria-hidden="true"></i>
                                                 </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>   
@@ -408,7 +408,7 @@
                                 
                                         <div class="content-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="auto">
                                                                         
-                                            <div class="dropzone dropzone-container" [dropzone]="vehicleAftermarketConfig" [disabled]="disabled"></div>
+                                            <div class="dropzone dropzone-container" [dropzone]="vehicleAftermarketConfiguration" [disabled]="disabled"></div>
 
                                         </div>
 
@@ -549,22 +549,29 @@
                                         </p>
                                 </div>
 
+                               
                                 <!--Upload Images Section-->
                                 
                                 <div class="form-group col-md-12" *ngIf="isVehicleConditionSelected">
                                     <div class="vertical-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="50%">
-                                        <div class="box-title">Dropzone</div>
+                                       
                                 
                                         <div class="content-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="auto">
                                                                         
-                                        <div class="dropzone dropzone-container" [dropzone]="config" [disabled]="disabled"></div>
+                                            <div class="dropzone dropzone-container" [dropzone]="vehicleConditionConfiguration" [disabled]="disabled"></div>
+
+                                        </div>
 
                                         
-                                        </div>
                                     </div>
+
+
+                                    <div id="vehicleConditionPreview" class="dropzone-previews"></div>
                                 </div>    
                                   
                                 <!--Upload Images Section-->
+
+
                             </div> 
                             <div class="row">
                                 <div class="form-group col-md-6">
