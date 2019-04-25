@@ -21,9 +21,14 @@ export class ListingComponent implements OnInit {
   page = new Page(); //object of Page type
   cars = new Array<Car>() //array of Car type 
   filtersForm:FormGroup;
-  isGridListing:boolean=false; //set boolean value to show/hide listing (grid/list)
+  isGridListing:boolean=true; //set boolean value to show/hide listing (grid/list)
   viewedPages:any=[]; //array of page number which have been reviewed by user
   currentPage:number =0;
+  yearsRange:any=[]
+  makes:any=[]
+  models:any=[]
+  trims:any=[]
+  
   //default pagination, limit(records on per page) settings
   currentPageLimit: number = environment.DEFAULT_RECORDS_LIMIT  
   readonly paginationLinks: number = 1//environment.DEFAULT_PAGES_PAGINATION   //Defines the maximum number of page links to display 
@@ -47,6 +52,7 @@ export class ListingComponent implements OnInit {
   constructor(private commonUtilsService:CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private ngZone: NgZone) {
     //fetching the data with default settings
     this.setPage(this._defaultPagination,'all');
+    this.page.filters={}
   }
 
   ngOnInit() {
@@ -58,13 +64,21 @@ export class ListingComponent implements OnInit {
 * @return void
 */
   ngAfterViewInit():void {  
-    
+    let currentYear = new Date().getFullYear();  
     //initalize the price & year slider on view page
     POTENZA.priceslider() 
     POTENZA.yearslider()  
     POTENZA.featurelist()
-    this.onApplyingFilters()      
-      
+    this.onApplyingFilters()    
+    for (var i = 0; i < 2; i++) {
+      this.yearsRange.push({
+        label: currentYear - i,
+        value: currentYear - i
+      });
+    }
+   // this.yearsRange = this.commonUtilsService.createYearRange();
+    console.log('years',typeof this.yearsRange);  
+    
   }
 
 /**
@@ -235,8 +249,66 @@ get price(): string {
   set price(price: string) {
     this._price = price;
     console.log('this._price',this._price)
-    this.filtersForm.controls['amount'].patchValue(this._price);  
+    this.filtersForm.controls['amount'].patchValue(this._price);      
   }
+
+
+
+/**
+   * get Vehicles(Makes, Models, Trim...) By Year
+   * @param year selected year from dropdown
+   * @return  array(vehicle details)
+   */
+  vehicleStatisticsByYear(option,event){
+    let yearOptions = (_.has(this.page.filters, ['year']))? this.page.filters['year']:[];   
+    let index = yearOptions.indexOf(option.value);
+    (index>=0)?_.pullAt(yearOptions, [index])  : yearOptions.push(option.value)     
+    this.page.filters['year'] = yearOptions;
+  // (event.target.checked)?yearOptions[option.value] = option.value : _.pullAt(yearOptions, [option.value])
+   console.log('yearOptions',yearOptions);
+   
+
+    //hit api to fetch data
+    this.commonUtilsService.getVehicleStatisticsByMultipleyear({ year: yearOptions}).subscribe(
+      //case success
+    (response) => { 
+      let makes = []; 
+      response.forEach(element => {        
+        (element.makes).forEach(element => {
+          makes.push(element)
+        });
+      });
+      this.makes = makes;  
+      this.viewedPages = [];
+      this.setPage(this._defaultPagination,this.page.type);     
+    //case error 
+    },error => {    
+      this.commonUtilsService.onError(error);
+    });
+  }
+
+  /**
+   * get Models By Make Name
+   * @param makeName selected make name from dropdown
+   * @return  array(models)
+   */
+  getModelsByMake(makeName){ 
+
+    this.models = this.makes.find(x => x.name === makeName).models;     
+  }
+
+  /**
+   * get Trims array By Model Name
+   * @param makeName selected make name from dropdown
+   * @return  array(trim)
+   */
+  getTrimsByModel(modelName){    
+    
+    this.trims = this.models.find(x => x.name === modelName).trims;  
+  }
+
+
+
 
 
 

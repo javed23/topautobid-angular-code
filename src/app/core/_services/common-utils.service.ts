@@ -12,6 +12,7 @@ import Swal from 'sweetalert2'
 
 @Injectable()
 export class CommonUtilsService {
+  currentYear: number = new Date().getFullYear();   // get Current Year
 
   constructor(private httpClient: HttpClient, private pageLoaderService: PageLoaderService, private toastrManager: ToastrManager,) { }
 
@@ -117,6 +118,41 @@ export class CommonUtilsService {
       this.pageLoaderService.pageLoader(false);//hide page loader
       this.toastrManager.errorToastr(message, 'Oops!');//showing error toaster message  
     }
+
+
+/** ToDo
+ * show last 2 years 
+*/
+ public createYearRange(){
+    let years = [];
+    for (var i = 0; i < 2; i++) {
+      years.push({
+        label: this.currentYear - i,
+        value: this.currentYear - i
+      });
+    }
+    console.log('typeof',typeof years);
+    return <Array<any>>years;
+  }
+
+/**
+ * Fetch make,model,year by year
+ * @param year    pass year.
+ * @return        Observable<any>
+*/
+public getVehicleStatisticsByMultipleyear(year): Observable<any> {         
+  return this.httpClient.post('common/fetchVehicleStatisticsByMultipleyear', year)
+  .map((response: any) => {         
+      //console.log(response); 
+      return response;          
+  })    
+}
+
+
+
+
+
+  
 
     
 }

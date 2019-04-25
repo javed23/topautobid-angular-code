@@ -291,8 +291,8 @@ POTENZA.revolutionSlider = function (jQuery) {
         $("#price-range").slider({
             range: true,
             min: 100,
-            max: 1000,
-            values: [100, 1000]            
+            max: 100000,
+            values: [100, 100000]            
         });
     }
   }

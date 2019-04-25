@@ -214,3 +214,19 @@ ngb-datepicker-navigation-select select{
     background:#db2d2e !important;
     color:#fff;
 }
+.change-view-button button i { background: #e0e0e0;
+    padding: 7px;
+    border-radius: 2px;
+}
+
+.disabledcls {
+    color: gray;
+    cursor: not-allowed; 
+    opacity: .65; 
+    pointer-events: none;
+}
+
+.product-listing ul li.list-group-item a.disabledcls:after {
+    cursor: not-allowed; 
+    pointer-events: none;
+}

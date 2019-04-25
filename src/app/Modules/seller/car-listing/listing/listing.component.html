@@ -30,108 +30,33 @@ product-listing  -->
                           <input type="checkbox"> All Years
                         </label>
                       </span></li>
-                    <li><span class="checkbox">
+                    <li *ngFor="let year of yearsRange;"><span class="checkbox">
                         <label>
-                          <input type="checkbox"> 2009
+                          <!--<input type="checkbox" [checked]="yearsRange.indexOf(year) >= 0" value="{{year.value}}" (change)="vehicleStatisticsByYear(year, $event)">-->
+
+                          <input type="checkbox" value="{{year.value}}" (change)="vehicleStatisticsByYear(year, $event)"> {{year.value}}
                         </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> 2010
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> 2011
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> 2012
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> 2013
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> 2014
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> 2015
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> 2016
-                        </label>
-                      </span></li>
+                      </span></li>                    
                   </ul>
                 </li>
-                <li class="list-group-item">
-                  <a href="#">Condition</a>
+                
+                <li  [attr.disabled]="makes.length<=0" [ngClass]="{disabledcls: makes.length<=0}" class="list-group-item">
+                  <a  [attr.disabled]="makes.length<=0" [ngClass]="{disabledcls: makes.length<=0}" href="#">Make</a>
                   <ul>
                     <li><span class="checkbox">
                         <label>
-                          <input type="checkbox"> All Conditions
+                          <input type="checkbox"> All Makes
                         </label>
                       </span></li>
-                    <li><span class="checkbox">
+                    <li *ngFor="let make of makes">
+                      <span class="checkbox">
                         <label>
-                          <input type="checkbox"> Brand New
+                          <input type="checkbox"> {{make.name}}
                         </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Slightly Used
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Used
-                        </label>
-                      </span></li>
+                      </span></li>                    
                   </ul>
                 </li>
-                <li class="list-group-item">
-                  <a href="#">Body</a>
-                  <ul>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> All Body Styles
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> 2dr Car
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> 4dr Car
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Convertible
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Sedan
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Sports Utility Vehicle
-                        </label>
-                      </span></li>
-                  </ul>
-                </li>
+
                 <li class="list-group-item">
                   <a href="#">Model</a>
                   <ul>
@@ -197,6 +122,133 @@ product-listing  -->
                       </span></li>
                   </ul>
                 </li>
+                
+                <li class="list-group-item">
+                  <a href="#">Trim</a>
+                  <ul>
+                    <li><span class="checkbox">
+                        <label>
+                          <input type="checkbox"> All Trims
+                        </label>
+                      </span></li>
+                    <li><span class="checkbox">
+                        <label>
+                          <input type="checkbox"> 3-Series
+                        </label>
+                      </span></li>
+                    <li><span class="checkbox">
+                        <label>
+                          <input type="checkbox"> Boxster
+                        </label>
+                      </span></li>
+                    <li><span class="checkbox">
+                        <label>
+                          <input type="checkbox"> Carrera
+                        </label>
+                      </span></li>
+                    <li><span class="checkbox">
+                        <label>
+                          <input type="checkbox"> Cayenne
+                        </label>
+                      </span></li>
+                    <li><span class="checkbox">
+                        <label>
+                          <input type="checkbox"> F-type
+                        </label>
+                      </span></li>
+                    <li><span class="checkbox">
+                        <label>
+                          <input type="checkbox"> GT-R
+                        </label>
+                      </span></li>
+                    <li><span class="checkbox">
+                        <label>
+                          <input type="checkbox"> GTS
+                        </label>
+                      </span></li>
+                    <li><span class="checkbox">
+                        <label>
+                          <input type="checkbox"> M6
+                        </label>
+                      </span></li>
+                    <li><span class="checkbox">
+                        <label>
+                          <input type="checkbox"> Macan
+                        </label>
+                      </span></li>
+                    <li><span class="checkbox">
+                        <label>
+                          <input type="checkbox"> Mazda6
+                        </label>
+                      </span></li>
+                    <li><span class="checkbox">
+                        <label>
+                          <input type="checkbox"> RLX
+                        </label>
+                      </span></li>
+                  </ul>
+                </li>
+
+                <li class="list-group-item">
+                  <a href="#">Condition</a>
+                  <ul>
+                    <li><span class="checkbox">
+                        <label>
+                          <input type="checkbox"> All Conditions
+                        </label>
+                      </span></li>
+                    <li><span class="checkbox">
+                        <label>
+                          <input type="checkbox"> Brand New
+                        </label>
+                      </span></li>
+                    <li><span class="checkbox">
+                        <label>
+                          <input type="checkbox"> Slightly Used
+                        </label>
+                      </span></li>
+                    <li><span class="checkbox">
+                        <label>
+                          <input type="checkbox"> Used
+                        </label>
+                      </span></li>
+                  </ul>
+                </li>
+                <li class="list-group-item">
+                  <a href="#">Body</a>
+                  <ul>
+                    <li><span class="checkbox">
+                        <label>
+                          <input type="checkbox"> All Body Styles
+                        </label>
+                      </span></li>
+                    <li><span class="checkbox">
+                        <label>
+                          <input type="checkbox"> 2dr Car
+                        </label>
+                      </span></li>
+                    <li><span class="checkbox">
+                        <label>
+                          <input type="checkbox"> 4dr Car
+                        </label>
+                      </span></li>
+                    <li><span class="checkbox">
+                        <label>
+                          <input type="checkbox"> Convertible
+                        </label>
+                      </span></li>
+                    <li><span class="checkbox">
+                        <label>
+                          <input type="checkbox"> Sedan
+                        </label>
+                      </span></li>
+                    <li><span class="checkbox">
+                        <label>
+                          <input type="checkbox"> Sports Utility Vehicle
+                        </label>
+                      </span></li>
+                  </ul>
+                </li>                
                 <li class="list-group-item">
                   <a href="#">Transmission</a>
                   <ul>
@@ -334,7 +386,7 @@ product-listing  -->
                 </div>
               </div>
               <div class="col-lg-4">
-                <div class="price-slide-2 year-slide">
+                <div class="price-slide year-slide">
                   <div class="price">
                     <label for="years">Year Range</label>
                     <input formControlName="years" type="text" class="years" />
@@ -357,8 +409,9 @@ product-listing  -->
           <div class="row sorting-options">
             <div class="col-lg-5">
               <div class="change-view-button">
-                <button (click)="onChangeListingType('grid')"><i class="fa fa-th"></i></button>
-                <button (click)="onChangeListingType('list')"><i class="fa fa-list-ul"></i></button>             
+         
+                <a [ngClass]="{active: isGridListing}"  title="Grid View" href="javascript:void(0)" (click)="onChangeListingType('grid')"><i class="fa fa-th"></i></a>
+                <a [ngClass]="{active: !isGridListing}" title="Listing View" href="javascript:void(0)" (click)="onChangeListingType('list')"><i class="fa fa-list-ul"></i></a>             
               </div>
             </div>
             <div class="col-lg-3 text-right">
@@ -387,7 +440,7 @@ product-listing  -->
         </div>
         <!-- Grid view -->
        
-        <div *ngIf="!isGridListing" class="row">
+        <div *ngIf="isGridListing" class="row">
           <div *ngFor="let car of cars | paginate: { itemsPerPage: currentPageLimit, currentPage: currentPage, totalItems: page.filteredElements }" class="col-lg-4">
 
             <div class="car-item gray-bg text-center">
@@ -426,7 +479,7 @@ product-listing  -->
           </div>
         </div>
         <!-- Grid View-->
-  <div *ngIf="isGridListing">
+  <div *ngIf="!isGridListing">
         <div *ngFor="let car of cars | paginate: { itemsPerPage: currentPageLimit, currentPage: currentPage, totalItems: page.filteredElements }" class="car-grid">
           <div class="row">
             <div class="col-lg-4 col-md-12">
