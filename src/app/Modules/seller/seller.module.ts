@@ -10,6 +10,8 @@ import { DropzoneModule, DropzoneConfigInterface, DROPZONE_CONFIG } from 'ngx-dr
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { ArchwizardModule } from 'angular-archwizard';
+import { CurrencyMaskModule } from "ng2-currency-mask";
+
 
 //import enviorment file
 import { environment } from '../../../environments/environment';
@@ -73,7 +75,8 @@ let config = new AuthServiceConfig([
     DropzoneModule,
     NgxMaskModule.forRoot(),
     NgScrollbarModule,
-    NgxDatatableModule
+    NgxDatatableModule,
+    CurrencyMaskModule
   ],
   providers: [
     {

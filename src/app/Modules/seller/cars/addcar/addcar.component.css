@@ -378,3 +378,88 @@ button:disabled {
 select:disabled {
     opacity: .5;
 }
+.radio_BTNS {
+    margin: 20px 0;
+}
+
+.radio_BTNS .form-group {
+    display: inline-block;
+    margin-right: 40px;
+}
+
+.radio_BTNS .form-group input, .radio_BTNS .form-group label {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1;
+    margin: 0;
+}
+
+.radio_BTNS .form-group input {
+    margin-right: 6px;
+}
+
+#vehicleAfterMarketPreview .dz-preview  ,  #vehicleConditionPreview .dz-preview,  #offerInHandsPreview .dz-preview{
+    display: inline-block;
+    vertical-align: top;
+}
+
+#vehicleAfterMarketPreview .dz-image ,  #vehicleConditionPreview .dz-image,  #offerInHandsPreview .dz-image{
+    margin-right: 20px;
+    width: 150px;
+    height: 130px;
+    position: relative;
+    margin-bottom: 20px;
+    background: #f6f6f6;
+}
+
+#vehicleAfterMarketPreview .dz-preview .dz-details  , #vehicleAfterMarketPreview .dz-preview .dz-success-mark , #vehicleAfterMarketPreview .dz-preview .dz-error-mark ,
+
+#vehicleConditionPreview .dz-preview .dz-details  , #vehicleConditionPreview .dz-preview .dz-success-mark , #vehicleConditionPreview .dz-preview .dz-error-mark , 
+
+#offerInHandsPreview .dz-preview .dz-details  , #offerInHandsPreview .dz-preview .dz-success-mark , #offerInHandsPreview .dz-preview .dz-error-mark {
+    display: none;
+}
+
+
+#vehicleAfterMarketPreview, #vehicleConditionPreview, #offerInHandsPreview {
+    margin: 20px 0;
+}
+
+#vehicleAfterMarketPreview .dz-preview, #vehicleConditionPreview .dz-preview, #offerInHandsPreview .dz-preview {
+    position: relative;
+}
+
+#vehicleAfterMarketPreview .dz-preview .dz-remove, #vehicleConditionPreview .dz-preview .dz-remove, #offerInHandsPreview .dz-preview .dz-remove {
+    position: absolute;
+    background: #de3a3b;
+    top: -10px;
+    right: 10px;
+    margin: 0 0px 0 0;
+    color: #fff;
+    width: 22px;
+    height: 22px;
+    text-align: center;
+    line-height: 22px;
+    border-radius: 100%;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.enter_price {
+    position: relative;
+}
+
+.enter_price .dropzone-container {
+    padding: 0;
+    width: auto;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border: 0;
+    margin: 0;
+}
+
+.enter_price .dropzone-container span.button {
+    padding: 10px 20px;
+    cursor: pointer;
+}

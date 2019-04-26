@@ -355,7 +355,7 @@
                             <div class="button_Submission">
                                 <button class="button red d-inline-block width-auto boder0 mt-4" type="button" awPreviousStep>Previous Step</button>
                                 
-                                <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="uploadVehicleImagesWizard.invalid || isVehicleImagesSubmitted" (click)="validateVehicleImagesWizard()" type="button" awNextStep>Next Step</button>		
+                                <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="uploadVehicleImagesWizard.invalid" (click)="validateVehicleImagesWizard()" type="button" awNextStep>Next Step</button>		
                             </div>
                         </div>
                     </form>                 
@@ -369,12 +369,12 @@
 
                         
                         <div class="row">
-                            <div class="form-group col-md-12">                                                
+                            <div class="form-group col-md-12">                                              
                                 <label>Vehicle has any second key*</label>
-                                <label class="switch">
-                                        <input type="checkbox" (change)="toggleVehicleSecondKey($event)" formControlName="vehicle_has_second_key">
-                                        <span class="slider round"></span>
-                                    </label>
+                                        <label class="switch">
+                                                <input type="checkbox" #vehicleHasSecondKey (change)="toggleVehicleSecondKey($event)" formControlName="vehicle_has_second_key">
+                                                <span class="slider round"></span>
+                                            </label>
 
                             </div>
                         </div>    
@@ -393,10 +393,10 @@
                                     
                                 <div class="form-group col-md-12" *ngIf="isVehicleAftermarketSelected">
                                         <label>Description*</label>
-                                        <input type="text" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_aftermarket_description" [ngClass]="{ 'is-invalid': (aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').touched || isAboutVehicleSubmitted) && aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').errors }">        
+                                        <textarea type="text" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_aftermarket_description" [ngClass]="{ 'is-invalid': (aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').touched || isAboutVehicleSubmitted) && aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').errors }">  </textarea>      
                                         
                                         <p *ngIf="aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').touched || isAboutVehicleSubmitted">                      
-                                            <app-form-validation-errors errorPrefix="Description " [errors]="aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').errors"></app-form-validation-errors>   
+                                            <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="Description " [errors]="aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').errors"></app-form-validation-errors>   
                                         </p>
                                 </div>
 
@@ -427,15 +427,15 @@
 
                         <!--Vehicle Ownership Section-->                           
                         <div formGroupName="vehicle_ownership" class="row"> 
-                                <div class="row">
-                                    <div class="form-group col-md-12">
+                                <div class="col-md-12">
+                                    <div class="form-group ">
                                         <div class="title">
                                             <h6 class="text-red">Vehicle's Ownership</h6>
                                         </div>
                                     </div> 
                                 </div>  
-                                <div class="row">
-                                <div class="form-group col-md-12">                                                
+                                <div class="col-md-12">
+                                <div class="form-group ">                                                
                                     <label>Clean Title</label>
                                     <label class="switch">
                                         <input type="checkbox" #vehicleCleanTitle formControlName="vehicle_clean_title" (change)="toggleVehicleCleanTitle($event)">
@@ -443,53 +443,55 @@
                                     </label>
                                 </div>
                                 </div>
-                                <div class="row" *ngIf="!isVehicleCleanTitleSelected">
-
-                                    <div class="form-group col-md-3">
+                                <div class="col-md-12" *ngIf="!isVehicleCleanTitleSelected">
+                                        <div class="radio_BTNS">
+                                    <div class="form-group">
                                             <input type="radio" value="Salvage" formControlName="vehicle_ownership_value" (click)="checkVehicleOwnershipRadioValue('Salvage')">
                                             <label for="Salvage">Salvage</label>
                                     </div> 
-                                    <div class="form-group col-md-3">
+                                    <div class="form-group">
                                             <input type="radio" value="TMU" formControlName="vehicle_ownership_value" (click)="checkVehicleOwnershipRadioValue('TMU')">
                                             <label for="TMU">TMU</label>
                                     </div>     
-                                    <div class="form-group col-md-3">
+                                    <div class="form-group">
                                             <input type="radio" value="Lemon Law" formControlName="vehicle_ownership_value" (click)="checkVehicleOwnershipRadioValue('Lemon Law')">
                                             <label for="Lemon Law">Lemon Law</label>
                                     </div> 
-                                    <div class="form-group col-md-3">
+                                    <div class="form-group">
                                             <input type="radio" value="Other" formControlName="vehicle_ownership_value" (click)="checkVehicleOwnershipRadioValue('Other')">
                                             <label for="Other">Other</label>
-                                    </div>     
+                                    </div> 
+                                </div>    
                                     
                                 </div> 
 
-                                <div class="row" *ngIf="isOtherSelected">
-                                        <div class="form-group col-md-12">
-                                                <label>Description*</label>
+                                <div class="col-md-6" *ngIf="isOtherSelected">
+                                        <div class="form-group">
+                                                <label>Explain*</label>
                                                 <textarea class="simple_select form-control placeholder" formControlName="vehicle_ownership_description" [ngClass]="{ 'is-invalid': (aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description').touched || isAboutVehicleSubmitted) && aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description').errors }"></textarea>        
                                                 
                                                 <p *ngIf="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description').touched || isAboutVehicleSubmitted">                      
-                                                    <app-form-validation-errors errorPrefix="Description " [errors]="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description').errors"></app-form-validation-errors>   
+                                                    <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="Explain " [errors]="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description').errors"></app-form-validation-errors>   
                                                 </p>
                                         </div>
                                 </div>
-                                <div class="row">
-                                    <div class="form-group col-md-12">
+                                <div class="clearfix"></div>
+                                <div class="col-md-12">
+                                    <div class="form-group ">
                                         <label>My Pay Off*</label>
-                                        <input type="text" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_pay_off" [ngClass]="{ 'is-invalid': (aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_pay_off').touched || isAboutVehicleSubmitted) && aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_pay_off').errors }">        
+                                        <input type="text" currencyMask min="1.00" max="1,000,000.00" [options]="{ allowNegative: false, align: 'left'}" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_pay_off" [ngClass]="{ 'is-invalid': (aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_pay_off').touched || isAboutVehicleSubmitted) && aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_pay_off').errors }">        
                                         
                                         <p *ngIf="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_pay_off').touched || isAboutVehicleSubmitted">                      
                                             <app-form-validation-errors errorPrefix="Pay Off " [errors]="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_pay_off').errors"></app-form-validation-errors>   
                                         </p>
                                     </div>
                                     
-                                    <div class="form-group col-md-12">
+                                    <div class="form-group">
                                             <label>Finance Bank*</label>
                                             <input type="text" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_finance_bank" [ngClass]="{ 'is-invalid': (aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_finance_bank').touched || isAboutVehicleSubmitted) && aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_finance_bank').errors }">        
                                             
                                             <p *ngIf="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_finance_bank').touched || isAboutVehicleSubmitted">                      
-                                                <app-form-validation-errors errorPrefix="Finance Bank " [errors]="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_finance_bank').errors"></app-form-validation-errors>   
+                                                <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="Finance Bank " [errors]="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_finance_bank').errors"></app-form-validation-errors>   
                                             </p>
                                     </div>
                                 </div>
@@ -522,37 +524,39 @@
                                     </div>
                             </div> 
 
-                            <div formGroupName="vehicle_condition" class="row">
-                                <div class="form-group col-md-3">
+                            <div formGroupName="vehicle_condition" class="radio_BTNS">
+                                <div class="form-group">
                                         <input type="radio" value="Ready for resale without any reconditioning" (click)="checkVehicleConditionRadioValue('resale')" formControlName="vehicle_condition_value">
                                         <label for="resale">Ready for resale without any reconditioning</label>
                                 </div> 
-                                <div class="form-group col-md-3">
+                                <div class="form-group">
                                         <input type="radio" value="May need some reconditioning" (click)="checkVehicleConditionRadioValue('reconditioning')" formControlName="vehicle_condition_value" >
                                         <label for="reconditioning">May need some reconditioning </label>
                                 </div> 
 
-                                <div class="form-group col-md-3">
+                                <div class="form-group">
                                         <input type="radio" value="Needs some reconditioning but yet functional" (click)="checkVehicleConditionRadioValue('functional')" formControlName="vehicle_condition_value" >
                                         <label for="functional">Needs some reconditioning but yet functional</label>
                                 </div> 
-                                <div class="form-group col-md-3">
+                                <div class="form-group">
                                         <input type="radio" value="Parts only" (click)="checkVehicleConditionRadioValue('parts')" formControlName="vehicle_condition_value">
                                         <label for="parts">Parts only</label>
                                 </div> 
+                                <div class="row">
                                 <div class="form-group col-md-12" *ngIf="isVehicleConditionSelected">
                                         <label>Description*</label>
                                         <input type="text" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_condition_description" [ngClass]="{ 'is-invalid': (vehicleConditionWizard.controls.vehicle_condition.get('vehicle_condition_description').touched || isVehicleConditionSubmitted) && vehicleConditionWizard.controls.vehicle_condition.get('vehicle_condition_description').errors }">        
                                         
                                         <p *ngIf="vehicleConditionWizard.controls.vehicle_condition.get('vehicle_condition_description').touched || isVehicleConditionSubmitted">                      
-                                            <app-form-validation-errors errorPrefix="Description " [errors]="vehicleConditionWizard.controls.vehicle_condition.get('vehicle_condition_description').errors"></app-form-validation-errors>   
+                                            <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="Description " [errors]="vehicleConditionWizard.controls.vehicle_condition.get('vehicle_condition_description').errors"></app-form-validation-errors>   
                                         </p>
                                 </div>
+                            </div>
 
                                
                                 <!--Upload Images Section-->
-                                
-                                <div class="form-group col-md-12" *ngIf="isVehicleConditionSelected">
+                                <div class="row">
+                                    <div class="form-group col-md-12" *ngIf="isVehicleConditionSelected">
                                     <div class="vertical-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="50%">
                                        
                                 
@@ -561,7 +565,7 @@
                                             <div class="dropzone dropzone-container" [dropzone]="vehicleConditionConfiguration" [disabled]="disabled"></div>
 
                                         </div>
-
+                                    </div>
                                         
                                     </div>
 
@@ -574,14 +578,14 @@
 
                             </div> 
                             <div class="row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-12">
                                                 
                                     <label>Seller Comments*</label>                               
 
-                                    <textarea class="form-control placeholder" formControlName="vehicle_comments" [ngClass]="{ 'is-invalid': (vehicleConditionWizard.controls.vehicle_comments.touched || isVehicleConditionSubmitted) && vehicleConditionWizard.controls.vehicle_comments.errors }"></textarea>
+                                    <textarea class="simple_select form-control placeholder" formControlName="vehicle_comments" [ngClass]="{ 'is-invalid': (vehicleConditionWizard.controls.vehicle_comments.touched || isVehicleConditionSubmitted) && vehicleConditionWizard.controls.vehicle_comments.errors }"></textarea>
 
                                     <p *ngIf="vehicleConditionWizard.controls.vehicle_comments.touched || isVehicleConditionSubmitted">                      
-                                        <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="Vin Number " [errors]="vehicleConditionWizard.controls.vehicle_comments.errors"></app-form-validation-errors>   
+                                        <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="Comment " [errors]="vehicleConditionWizard.controls.vehicle_comments.errors"></app-form-validation-errors>   
                                     </p>
                                     
                                 </div>
@@ -603,6 +607,46 @@
                            
                     </form> 
                 </aw-wizard-step>  
+                <aw-wizard-step stepTitle="Pick Up Location" (stepEnter)="scrollToSpecificDiv($event)" [canExit]="moveDirection.bind(this, pickupLocationWizard.valid)">
+                    <form [formGroup]="pickupLocationWizard">                        
+                        <div class="row">
+                            <div class="form-group col-md-12">                                                
+                                <label>Do you want the car to be picked up?*</label>
+                                <label class="switch">
+                                        <input type="checkbox" #vehicleHasToBePickedUp (change)="toggleVehiclePickedUp($event)" formControlName="vehicle_to_be_picked_up">
+                                        <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div> 
+                        <div class="row">
+                            <div class="form-group col-md-12">                                                
+                                <label>Willing to Drive?*</label>
+                                <label class="switch">
+                                        <input type="checkbox" #willingToDrive (change)="toggleWillingToDrive($event)" formControlName="willing_to_drive">
+                                        <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-12" *ngIf="isWillingToDriveSelected">
+                                <label>Miles*</label>
+                                <input mask="00" type="text" class="simple_select form-control placeholder" placeholder="How Many Miles" formControlName="willing_to_drive_how_many_miles" [ngClass]="{ 'is-invalid': (pickupLocationWizard.controls.willing_to_drive_how_many_miles.touched || isPickupLocationSubmitted) && pickupLocationWizard.controls.willing_to_drive_how_many_miles.errors }">        
+                                
+                                
+                                <p *ngIf="pickupLocationWizard.controls.willing_to_drive_how_many_miles.touched || isPickupLocationSubmitted">                      
+                                    <app-form-validation-errors minLength=2 maxLength=2 errorPrefix="Miles " [errors]="pickupLocationWizard.controls.willing_to_drive_how_many_miles.errors"></app-form-validation-errors>   
+                                </p>
+                        </div>
+
+                        <div class="form-group text-right">
+                            <div class="button_Submission">
+                                <button class="button red d-inline-block width-auto boder0 mt-4" type="button" awPreviousStep>Previous Step</button>
+                                
+                                <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="pickupLocationWizard.invalid" (click)="validatePickupLocationWizard()" type="button">Next Step</button>		
+                            </div>		
+                        </div>
+                    </form>    
+                </aw-wizard-step>
         </aw-wizard>
                 
                 
@@ -611,6 +655,49 @@
     </div>
     
 </section>
+
+
+<!--=================================
+ offer-In-hands-form  -->
+<!-- Modal -->
+<div class="modal fade" #offerInHandsSection id="offerInHandsSection" tabindex="-1" role="dialog" aria-labelledby="offerInHandsSection">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="offerInHands">Have any offer in hand?</h5>          
+        </div>
+        <form [formGroup]="offerInHands" (ngSubmit)="validateOfferInHands()">
+          <div class="modal-body">            
+             
+                
+                <div class="form-group enter_price">
+                    <label>Enter Price* </label>
+                    <input currencyMask min="1.00" max="1,000,000.00" [options]="{ allowNegative: false, align: 'left'}" class="form-control" type="text" formControlName="vehicle_offer_in_hands_price">    
+                    <div class="dropzone dropzone-container" [dropzone]="offerInHandsConfiguration" [disabled]="disabled"></div>
+                </div>                           
+              
+              
+              <!--Upload Images Section-->
+                <div class="col-md-12">           
+
+
+                    <div id="offerInHandsPreview" class="dropzone-previews"></div>
+                </div>    
+                  
+                <!--Upload Images Section-->
+          </div>  
+          <div class="modal-footer">  
+            <button class="button red d-inline-block width-auto boder0 mt-4" type="button" data-dismiss="modal" aria-label="Close">Skip</button>          
+            <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="offerInHands.invalid" type="submit">Submit </button>
+          </div>
+        </form>  
+      </div>
+    </div>
+  </div>
+  
+  
+  <!--=================================
+  offer-In-hands-form  -->
 
 
  
