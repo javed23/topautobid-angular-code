@@ -28,6 +28,19 @@ export class ListingComponent implements OnInit {
   makes:any=[]
   models:any=[]
   trims:any=[]
+  bodyStyles:any=[{name: "2 Door Convertible"}, {name: "2 Door Coupe"}, {name: "4 Door Sedan"}];  
+  transmissions:any=[{name: "Automated-Manual"}, {name: "Continuously Variable Transmission"}, {name: "Dual-Clutch Transmission"}]; 
+  interiorColors= [{name: "Black"}, {name: "Blue"}, {name: "Brown"}, {name: "Grey"}, {name: "Red"}, {name: "Silver"}];
+  exteriorColors= [{name: "Black"}, {name: "Blue"}, {name: "Brown"}, {name: "Grey"}, {name: "Red"}, {name: "Silver"}];
+  isAllBodySelected:boolean=false;
+  isAllTransmissionSelected:boolean=false;
+  isAllInteriorColorSelected:boolean=false;
+  isAllExtriorColorSelected:boolean=false;
+  isAllTrimSelected:boolean=false;
+
+  
+
+
   
   //default pagination, limit(records on per page) settings
   currentPageLimit: number = environment.DEFAULT_RECORDS_LIMIT  
@@ -51,6 +64,7 @@ export class ListingComponent implements OnInit {
 
   constructor(private commonUtilsService:CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private ngZone: NgZone) {
     //fetching the data with default settings
+    this.currentPage = 0
     this.setPage(this._defaultPagination,'all');
     this.page.filters={}
   }
@@ -93,6 +107,7 @@ export class ListingComponent implements OnInit {
     $( "#price-range" ).on( "slidestop", function( event, ui ) {        
       componentRefrence.page.filters['price_range'] = [ui.values[0],ui.values[1]] 
       componentRefrence.viewedPages = [];
+      componentRefrence.currentPage = 0
       componentRefrence.setPage(componentRefrence._defaultPagination,componentRefrence.page.type);     
     });
 
@@ -100,6 +115,7 @@ export class ListingComponent implements OnInit {
     $( "#year-range" ).on( "slidestop", function( event, ui ) {
       componentRefrence.page.filters['year_range'] = [ui.values[0],ui.values[1]]
       componentRefrence.viewedPages = [];
+      componentRefrence.currentPage = 0
       componentRefrence.setPage(componentRefrence._defaultPagination,componentRefrence.page.type);
     });
 
@@ -126,8 +142,8 @@ export class ListingComponent implements OnInit {
 */
   private initalizeFilterForm():void {
     this.filtersForm = this.formBuilder.group({
-      amount: ['$1 - $1000'],
-      years:['2010 - 2018']      
+      amount: ['$100 - $100000'],
+      years:['2010 - 2019']      
     })
   }
 
@@ -143,10 +159,10 @@ export class ListingComponent implements OnInit {
     this.page.size = page.pageSize;
 
     //Do not fetch page data if page is already clicked and paginated
-    if( _.includes(this.viewedPages, this.page.pageNumber))
+    /*if( _.includes(this.viewedPages, this.page.pageNumber))
       return;
     else    
-      this.viewedPages.push(this.page.pageNumber)
+      this.viewedPages.push(this.page.pageNumber)*/
 
     //Do not show page loader if fetching results using search
     if(!this.page.search){
@@ -177,14 +193,15 @@ export class ListingComponent implements OnInit {
  * @return  void
 */
   onSearch(searchValue : string):void {
-    console.log('hi');
+   // console.log('hi');
     this.viewedPages = [];
+    this.currentPage = 0
     this.page.search = searchValue
     this.setPage(this._defaultPagination,this.page.type);
   }
 
   onPageChange(pageNumber:number){
-    console.log(pageNumber);
+    //console.log(pageNumber);
     this.currentPage = pageNumber
     this.setPage({offset:pageNumber,pageSize:this.currentPageLimit}, this.page.type)
   }
@@ -197,6 +214,7 @@ export class ListingComponent implements OnInit {
   
   onLimitChange(limit: any): void {   
     this.viewedPages = []; 
+    this.currentPage = 0
     this.currentPageLimit = this._defaultPagination.limit = this._defaultPagination.pageSize = parseInt(limit) 
     this.setPage(this._defaultPagination,this.page.type);
   }
@@ -207,7 +225,7 @@ export class ListingComponent implements OnInit {
  * @return  void
 */
   onSort(event):void {
-    
+    this.currentPage = 0
     this.viewedPages = [];
     const sortingObject = event.target.value.split(',');    
     this.page.sortProperty = sortingObject[0]
@@ -252,24 +270,30 @@ get price(): string {
     this.filtersForm.controls['amount'].patchValue(this._price);      
   }
 
-
+/**
+ * set filters
+ * @param option value of filter
+ * @param filter name of filter
+ * @return  void
+*/
+setFilters(option,filter):void{
+  let options = (_.has(this.page.filters, [filter]))? this.page.filters[filter]:[];   
+  let index = options.indexOf(option);
+  (index>=0)?_.pullAt(options, [index])  : options.push(option)     
+  this.page.filters[filter] = options;  
+}
 
 /**
-   * get Vehicles(Makes, Models, Trim...) By Year
-   * @param year selected year from dropdown
-   * @return  array(vehicle details)
-   */
-  vehicleStatisticsByYear(option,event){
-    let yearOptions = (_.has(this.page.filters, ['year']))? this.page.filters['year']:[];   
-    let index = yearOptions.indexOf(option.value);
-    (index>=0)?_.pullAt(yearOptions, [index])  : yearOptions.push(option.value)     
-    this.page.filters['year'] = yearOptions;
-  // (event.target.checked)?yearOptions[option.value] = option.value : _.pullAt(yearOptions, [option.value])
-   console.log('yearOptions',yearOptions);
-   
+ * Filter data according to year and fetch makes also
+ * @param option value of filter
+ * @param filter name of filter
+ * @return  void
+*/
+  vehicleStatisticsByYear(option, filter):void{
+    this.setFilters(option,filter)
 
     //hit api to fetch data
-    this.commonUtilsService.getVehicleStatisticsByMultipleyear({ year: yearOptions}).subscribe(
+    this.commonUtilsService.getVehicleStatisticsByMultipleyear({ year: this.page.filters[filter]}).subscribe(
       //case success
     (response) => { 
       let makes = []; 
@@ -280,6 +304,7 @@ get price(): string {
       });
       this.makes = makes;  
       this.viewedPages = [];
+      this.currentPage = 0
       this.setPage(this._defaultPagination,this.page.type);     
     //case error 
     },error => {    
@@ -287,29 +312,140 @@ get price(): string {
     });
   }
 
-  /**
-   * get Models By Make Name
-   * @param makeName selected make name from dropdown
-   * @return  array(models)
-   */
-  getModelsByMake(makeName){ 
 
-    this.models = this.makes.find(x => x.name === makeName).models;     
+/**
+ * Filter data according to make and fetch models also
+ * @param option value of filter
+ * @param filter name of filter
+ * @return  void
+*/
+vehicleStatisticsByMake(option, filter):void{
+  this.setFilters(option,filter)  
+
+  //hit api to fetch data
+  this.commonUtilsService.getVehicleStatisticsByMultiplemake({ make: this.page.filters[filter]}).subscribe(
+    //case success
+  (response) => { 
+    let models = []; 
+    response.forEach(element => {    
+      console.log('element',element);    
+      (element.makes).forEach(element => {        
+        (element.models).forEach(element => {
+          models.push(element)
+        });
+      });
+    });
+    this.models = models;  
+    this.viewedPages = [];
+    this.currentPage = 0
+    this.setPage(this._defaultPagination,this.page.type);     
+  //case error 
+  },error => {    
+    this.commonUtilsService.onError(error);
+  });
+}
+
+
+/**
+ * Filter data accoding to make and fetch trims also
+ * @param option value of filter
+ * @param filter name of filter
+ * @return  void
+*/
+vehicleStatisticsByModel(option, filter):void{
+  this.setFilters(option,filter)
+
+  //hit api to fetch data
+  this.commonUtilsService.getVehicleStatisticsByMultiplemodel({ model: this.page.filters[filter]}).subscribe(
+    //case success
+  (response) => { 
+    let trims = []; 
+    response.forEach(element => {    
+      console.log('element',element);    
+      (element.makes).forEach(element => {        
+        (element.models).forEach(element => {
+          (element.trims).forEach(element => {
+            trims.push(element)
+          });
+        });
+      });
+    });
+    this.trims = trims;  
+    this.viewedPages = [];
+    this.currentPage = 0
+    this.setPage(this._defaultPagination,this.page.type);     
+  //case error 
+  },error => {    
+    this.commonUtilsService.onError(error);
+  });
+}
+
+/**
+ * Set all select options to uncheck and check 'All'
+ * @param filter name of filter
+ * @return  void
+*/
+
+resetAll(filter):void{
+  delete this.page.filters[filter]; 
+  console.log(this.page.filters)
+  if(filter=='interior_color'){
+    this.isAllInteriorColorSelected = true
+    this.interiorColors.forEach(element=> {
+      element['checked'] = false
+     });
   }
+  if(filter=='exterior_color'){
+    this.isAllExtriorColorSelected = true
+    this.exteriorColors.forEach(element=> {
+      element['checked'] = false
+     });
+  }
+  if(filter=='transmission'){
+    this.isAllTransmissionSelected = true
+    this.transmissions.forEach(element=> {
+      element['checked'] = false
+     });
+  }
+  if(filter=='body_style'){
+    this.isAllBodySelected = true
+    this.bodyStyles.forEach(element=> {
+      element['checked'] = false
+     });
+  }
+  if(filter=='trim'){
+    this.isAllBodySelected = true
+    this.trims.forEach(element=> {
+      element['checked'] = false
+     });
+  }
+  this.viewedPages = [];
+  this.currentPage = 0
+  this.setPage(this._defaultPagination,this.page.type); 
+}
 
-  /**
-   * get Trims array By Model Name
-   * @param makeName selected make name from dropdown
-   * @return  array(trim)
-   */
-  getTrimsByModel(modelName){    
+/**
+ * Set all select options to uncheck and fetch records accordingly
+ * @param filter name of filter
+ * @return  void
+*/
+uncheckAllFetchRecords(option, filter):void{
+  if(filter=='interior_color') this.isAllInteriorColorSelected = false   
+  
+  if(filter=='exterior_color') this.isAllExtriorColorSelected = false   
+  
+  if(filter=='transmission') this.isAllTransmissionSelected = false
     
-    this.trims = this.models.find(x => x.name === modelName).trims;  
-  }
+  if(filter=='body_style')  this.isAllBodySelected = false
 
+  if(filter=='trim')  this.isAllTrimSelected = false
+   
+  this.setFilters(option,filter)
 
-
-
+  this.viewedPages = [];
+  this.currentPage = 0
+  this.setPage(this._defaultPagination,this.page.type);  
+}
 
 
 }

@@ -224,9 +224,39 @@ ngb-datepicker-navigation-select select{
     cursor: not-allowed; 
     opacity: .65; 
     pointer-events: none;
+    
 }
 
-.product-listing ul li.list-group-item a.disabledcls:after {
-    cursor: not-allowed; 
-    pointer-events: none;
+.no_record {
+    border: 1px solid #e3e3e3;
+    padding: 20px;
+    margin-top: 20px;
+    background: #efefef;
 }
+
+.no_record p {
+    margin: 0;
+    text-align: center;
+    color: #484848;
+    font-size: 17px;
+}
+
+.my_select {
+    border: 0;
+    background: #f6f6f6;
+    color: #010001;
+}
+
+.car-item .car-image {
+    height: 175px;
+    line-height: 175px;
+    background: #fff;
+}
+
+.car-item .car-image img {
+    max-height: 100%;
+}
+input[type=search] { 	
+    font-style:italic;       
+}
+

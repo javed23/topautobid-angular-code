@@ -149,6 +149,33 @@ public getVehicleStatisticsByMultipleyear(year): Observable<any> {
 }
 
 
+/**
+ * Fetch make,model,year by year
+ * @param year    pass year.
+ * @return        Observable<any>
+*/
+public getVehicleStatisticsByMultiplemake(year): Observable<any> {         
+  return this.httpClient.post('common/fetchVehicleStatisticsByMultiplemake', year)
+  .map((response: any) => {         
+      //console.log(response); 
+      return response;          
+  })    
+}
+
+/**
+ * Fetch make,model,year by year
+ * @param year    pass year.
+ * @return        Observable<any>
+*/
+public getVehicleStatisticsByMultiplemodel(year): Observable<any> {         
+  return this.httpClient.post('common/fetchVehicleStatisticsByMultiplemodel', year)
+  .map((response: any) => {         
+      //console.log(response); 
+      return response;          
+  })    
+}
+
+
 
 
 

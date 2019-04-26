@@ -25,16 +25,16 @@ product-listing  -->
                 <li class="list-group-item">
                   <a href="#">Year</a>
                   <ul>
-                    <li><span class="checkbox">
+                    <!--<li><span class="checkbox">
                         <label>
                           <input type="checkbox"> All Years
                         </label>
-                      </span></li>
+                      </span></li>-->
                     <li *ngFor="let year of yearsRange;"><span class="checkbox">
                         <label>
                           <!--<input type="checkbox" [checked]="yearsRange.indexOf(year) >= 0" value="{{year.value}}" (change)="vehicleStatisticsByYear(year, $event)">-->
 
-                          <input type="checkbox" value="{{year.value}}" (change)="vehicleStatisticsByYear(year, $event)"> {{year.value}}
+                          <input type="checkbox"  value="{{year.value}}" (change)="vehicleStatisticsByYear(year.value,'year')"> {{year.value}}
                         </label>
                       </span></li>                    
                   </ul>
@@ -43,333 +43,125 @@ product-listing  -->
                 <li  [attr.disabled]="makes.length<=0" [ngClass]="{disabledcls: makes.length<=0}" class="list-group-item">
                   <a  [attr.disabled]="makes.length<=0" [ngClass]="{disabledcls: makes.length<=0}" href="#">Make</a>
                   <ul>
-                    <li><span class="checkbox">
+                    <!--<li><span class="checkbox">
                         <label>
                           <input type="checkbox"> All Makes
                         </label>
-                      </span></li>
+                      </span></li>-->
                     <li *ngFor="let make of makes">
                       <span class="checkbox">
                         <label>
-                          <input type="checkbox"> {{make.name}}
+                          <input type="checkbox" value="{{make.name}}" (change)="vehicleStatisticsByMake(make.name, 'make')"> {{make.name}}
                         </label>
                       </span></li>                    
                   </ul>
                 </li>
 
-                <li class="list-group-item">
-                  <a href="#">Model</a>
-                  <ul>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> All Models
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> 3-Series
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Boxster
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Carrera
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Cayenne
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> F-type
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> GT-R
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> GTS
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> M6
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Macan
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Mazda6
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> RLX
-                        </label>
-                      </span></li>
-                  </ul>
-                </li>
+                <li  [attr.disabled]="models.length<=0" [ngClass]="{disabledcls: models.length<=0}" class="list-group-item">
+                    <a  [attr.disabled]="models.length<=0" [ngClass]="{disabledcls: models.length<=0}" href="#">Model</a>
+                    <ul>
+                      <!--<li><span class="checkbox">
+                          <label>
+                            <input type="checkbox"> All Models
+                          </label>
+                        </span></li>-->
+                      <li *ngFor="let model of models">
+                        <span class="checkbox">
+                          <label>
+                            <input type="checkbox" value="{{model.name}}" (change)="vehicleStatisticsByModel(model.name,'model')"> {{model.name}}
+                          </label>
+                        </span></li>                    
+                    </ul>
+                  </li>
                 
-                <li class="list-group-item">
-                  <a href="#">Trim</a>
-                  <ul>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> All Trims
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> 3-Series
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Boxster
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Carrera
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Cayenne
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> F-type
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> GT-R
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> GTS
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> M6
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Macan
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Mazda6
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> RLX
-                        </label>
-                      </span></li>
-                  </ul>
-                </li>
+              <li  [attr.disabled]="trims.length<=0" [ngClass]="{disabledcls: trims.length<=0}" class="list-group-item">
+                <a  [attr.disabled]="trims.length<=0" [ngClass]="{disabledcls: trims.length<=0}" href="#">Trim</a>
+                <ul>
+                  <li><span class="checkbox">
+                      <label>
+                        <input type="checkbox" [checked]="isAllTrimSelected" (change)="resetAll('trim')"> All Trims
+                      </label>
+                    </span></li>
+                  <li *ngFor="let trim of trims">
+                    <span class="checkbox">
+                      <label>
+                        <input type="checkbox" [checked]="trim.checked"  value="{{trim.name}}" (change)="uncheckAllFetchRecords(trim.name, 'trim')"> {{trim.name}}
+                      </label>
+                    </span></li>                    
+                </ul>
+              </li>
 
-                <li class="list-group-item">
-                  <a href="#">Condition</a>
-                  <ul>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> All Conditions
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Brand New
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Slightly Used
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Used
-                        </label>
-                      </span></li>
-                  </ul>
-                </li>
-                <li class="list-group-item">
-                  <a href="#">Body</a>
-                  <ul>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> All Body Styles
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> 2dr Car
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> 4dr Car
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Convertible
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Sedan
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Sports Utility Vehicle
-                        </label>
-                      </span></li>
-                  </ul>
-                </li>                
-                <li class="list-group-item">
-                  <a href="#">Transmission</a>
-                  <ul>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> All Transmissions
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> 5-Speed Manual
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> 6-Speed Automatic
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> 6-Speed Manual
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> 6-Speed Semi-Auto
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> 7-Speed PDK
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> 8-Speed Automatic
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> 8-Speed Tiptronic
-                        </label>
-                      </span></li>
-                  </ul>
-                </li>
-                <li class="list-group-item">
-                  <a href="#">Exterior Color</a>
-                  <ul>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Ruby Red Metallic
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Racing Yellow
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Guards Red
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Aqua Blue Metallic
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> White
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Dark Blue Metallic
-                        </label>
-                      </span></li>
-                  </ul>
-                </li>
-                <li class="list-group-item">
-                  <a href="#">Interior Color</a>
-                  <ul>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Platinum Grey
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Agate Grey
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Marsala Red
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Alcantara Black
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Black
-                        </label>
-                      </span></li>
-                    <li><span class="checkbox">
-                        <label>
-                          <input type="checkbox"> Luxor Beige
-                        </label>
-                      </span></li>
-                  </ul>
-                </li>
+           
+              <li class="list-group-item">
+                <a  href="#">Body</a>
+                <ul>
+                  <li><span class="checkbox">
+                      <label>
+                        <input [checked]="isAllBodySelected" type="checkbox" (change)="resetAll('body_style')"> All Body Styles
+                      </label>
+                    </span></li>
+                  <li *ngFor="let bodyStyle of bodyStyles">
+                    <span class="checkbox">
+                      <label>
+                        <input type="checkbox" [checked]="bodyStyle.checked" value="{{bodyStyle.name}}" (change)="uncheckAllFetchRecords(bodyStyle.name, 'body_style')"> {{bodyStyle.name}}
+                      </label>
+                    </span></li>                    
+                </ul>
+              </li>              
+              <li  class="list-group-item">
+                <a  href="#">Transmission</a>
+                <ul>
+                  <li><span class="checkbox">
+                      <label>
+                        <input [checked]="isAllTransmissionSelected" type="checkbox" (change)="resetAll('transmission')"> All Transmissions
+                      </label>
+                    </span></li>
+                  <li *ngFor="let transmission of transmissions">
+                    <span class="checkbox">
+                      <label>
+                        <input type="checkbox" [checked]="transmission.checked" value="{{transmission.name}}" (change)="uncheckAllFetchRecords(transmission.name, 'transmission')"> {{transmission.name}}
+                      </label>
+                    </span></li>                    
+                </ul>
+              </li> 
+              <li  class="list-group-item">
+                <a  href="#">Exterior Color</a>
+                <ul>
+                  <li><span class="checkbox">
+                      <label>
+                        <input [checked]="isAllExtriorColorSelected" type="checkbox" (change)="resetAll('exterior_color')"> All Exterior Colors
+                      </label>
+                    </span></li>
+                  <li *ngFor="let exteriorColor of exteriorColors">
+                    <span class="checkbox">
+                      <label>
+                        <input type="checkbox" [checked]="exteriorColor.checked" value="{{exteriorColor.name}}" (change)="uncheckAllFetchRecords(exteriorColor.name, 'exterior_color')"> {{exteriorColor.name}}
+                      </label>
+                    </span></li>                    
+                </ul>
+              </li> 
+              <li  class="list-group-item">
+                <a href="#">Interior Color</a>
+                <ul>
+                  <li><span class="checkbox">
+                      <label>
+                        <input [checked]="isAllInteriorColorSelected" type="checkbox" (change)="resetAll('interior_color')"> All Interior Colors
+                      </label>
+                    </span></li>
+                  <li *ngFor="let interiorColor of interiorColors">
+                    <span class="checkbox">
+                      <label>
+                        <input class="interior_color" [checked]="interiorColor.checked" type="checkbox" value="{{interiorColor.name}}" (change)="uncheckAllFetchRecords(interiorColor.name, 'interior_color')"> {{interiorColor.name}}
+                      </label>
+                    </span></li>                    
+                </ul>
+              </li>
+                
+               
               </ul>
             </div>
           </div>
-          <div class="widget-banner">
-            <img class="img-fluid center-block" src="images/banner.jpg" alt="">
-          </div>
+         
         </div>
       </div>
       <div class="col-lg-9 col-md-8">
@@ -380,7 +172,7 @@ product-listing  -->
                 <div class="price-slide">
                   <div class="price">
                     <label for="bids">Price Range</label>
-                    <input formControlName="amount" type="text" id="amount" class="bids" />
+                    <input readonly formControlName="amount" type="text" id="amount" class="bids" />
                     <div id="price-range"></div>
                   </div>
                 </div>
@@ -389,7 +181,7 @@ product-listing  -->
                 <div class="price-slide year-slide">
                   <div class="price">
                     <label for="years">Year Range</label>
-                    <input formControlName="years" type="text" class="years" />
+                    <input readonly formControlName="years" type="text" class="years" />
                     <div id="year-range"></div>
                   </div>
                 </div>
@@ -400,7 +192,7 @@ product-listing  -->
                   <div class="search">
                     <i class="fa fa-search"></i>
                     <input type="search" class="form-control placeholder" (input)="onSearch($event.target.value)"
-                      placeholder="Search....">
+                      placeholder="Type Make, Model, Trim etc..">
                   </div>
                 </div>
               </div>
@@ -416,7 +208,7 @@ product-listing  -->
             </div>
             <div class="col-lg-3 text-right">
               <div class="selected-box">
-                  <select class="selectpicker" id="per-page"
+                  <select class="selectpicker my_select" id="per-page"
                   (change)="onLimitChange($event.target.value)">
                   <option *ngFor="let option of pageLimitOptions" [value]="option.value"
                       [selected]="option.value == currentPageLimit">
@@ -427,25 +219,30 @@ product-listing  -->
             </div>
             <div class="col-lg-4 text-right">
               <div class="selected-box">
-                <select (change)="onSort($event)">
+                <select (change)="onSort($event)" class="my_select">
                   <option>Sort by </option>
-                  <option value="best_price,desc">Price: Lowest first</option>
-                  <option  value="best_price,asc">Price: Highest first </option>
-                  <option  value="make,desc">Product Name: A to Z </option>
-                  <option  value="make,asc">Product Name: Z to A </option>                  
+                  <option value="offer_in_hand,asc">Price: Lowest first</option>
+                  <option  value="offer_in_hand,desc">Price: Highest first </option>
+                  <option value="year,asc">Year: Lowest first</option>
+                  <option  value="year,desc">Year: Highest first </option>
+                  <option  value="make,asc">Make: A to Z </option>
+                  <option  value="make,desc">Make: Z to A </option>                  
                 </select>
               </div>
             </div>
           </div>
         </div>
+        <div *ngIf="!cars.length" class="no_record">
+          <p>No record found</p>  
+        </div>
         <!-- Grid view -->
        
         <div *ngIf="isGridListing" class="row">
-          <div *ngFor="let car of cars | paginate: { itemsPerPage: currentPageLimit, currentPage: currentPage, totalItems: page.filteredElements }" class="col-lg-4">
+          <div *ngFor="let car of cars | paginate: { itemsPerPage: currentPageLimit, currentPage: currentPage, totalItems: page.totalElements }" class="col-lg-4">
 
             <div class="car-item gray-bg text-center">
               <div class="car-image">
-                <img class="img-fluid" src="/assets/images/car/01.jpg" alt="">
+                <img class="img-fluid" src="{{car.cover_image}}" alt="">
                 <div class="car-overlay-banner">
                   <ul>
                     <li><a href="#"><i class="fa fa-link"></i></a></li>
@@ -471,8 +268,8 @@ product-listing  -->
                 <a href="#">{{car.make}} {{car.model}}</a>
                 <div class="separator"></div>
                 <div class="price">
-                  <span class="old-price">$35,568</span>
-                  <span class="new-price">$32,698 </span>
+                  <span class="old-price">{{car.offer_in_hand | currency:'USD':true:'2.2-2'}}</span>
+                  <span class="new-price">{{car.offer_in_hand | currency:'USD':true:'2.2-2'}} </span>
                 </div>
               </div>
             </div>
@@ -480,12 +277,12 @@ product-listing  -->
         </div>
         <!-- Grid View-->
   <div *ngIf="!isGridListing">
-        <div *ngFor="let car of cars | paginate: { itemsPerPage: currentPageLimit, currentPage: currentPage, totalItems: page.filteredElements }" class="car-grid">
+        <div *ngFor="let car of cars | paginate: { itemsPerPage: currentPageLimit, currentPage: currentPage, totalItems: page.totalElements }" class="car-grid">
           <div class="row">
             <div class="col-lg-4 col-md-12">
               <div class="car-item gray-bg text-center">
                 <div class="car-image">
-                  <img class="img-fluid" src="/assets/images/car/01.jpg" alt="">
+                  <img class="img-fluid" src="{{car.cover_image}}" alt="">
                   <div class="car-overlay-banner">
                     <ul>
                       <li><a href="#"><i class="fa fa-link"></i></a></li>
@@ -503,9 +300,9 @@ product-listing  -->
                     Harum blanditiis ullam deleniti.</p>
                 </div>
                 <div class="price">
-                  <span class="old-price">$35,568</span>
-                  <span class="new-price">$32,698 </span>
-                  <a class="button red float-right" href="#">Details</a>
+                  <span class="old-price">{{car.offer_in_hand | currency:'USD':true:'2.2-2'}}</span>
+                  <span class="new-price">{{car.offer_in_hand | currency:'USD':true:'2.2-2'}} </span>
+                  <a class="button red float-right" href="javascript:void(0)">Details</a>
                 </div>
                 <div class="car-list">
                   <ul class="list-inline">
@@ -520,7 +317,7 @@ product-listing  -->
         </div>
       </div>
       
-      <div class="pagination-nav d-flex justify-content-center pagination_nav_changes">
+      <div *ngIf="cars.length>0" class="pagination-nav d-flex justify-content-center pagination_nav_changes">
           <pagination-controls  
           (pageChange)="onPageChange($event)"
           directionLinks="true" 
