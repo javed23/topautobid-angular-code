@@ -14,6 +14,7 @@ import { DropzoneComponent, DropzoneDirective, DropzoneConfigInterface } from 'n
  //shared services
  import { AlertService, PageLoaderService } from '../../../../shared/_services'
 
+ 
 
 
 //import core services
@@ -527,7 +528,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       paramName: "file",
       uploadMultiple: false,
       url: environment.API_ENDPOINT + "/api/common/imageUpload",
-      maxFiles: 20,
+      maxFiles: 6,
       autoReset: null,
       errorReset: null,
       cancelReset: null,
@@ -547,17 +548,16 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
         'Cache-Control': null,
         'X-Requested-With': null,
       },  
-      accept: function(file, done) {     
+      accept: function(file, done) {            
         
-        
-          //console.log(componentObj.getVehicleImageCategory());
-          if((componentObj.interiorImagesArray.length +1) >2 && componentObj.getVehicleImageCategory() == "interior"){
+          
+          if((componentObj.interiorImagesArray.length +1) > 3 && componentObj.getVehicleImageCategory() == "interior"){
               componentObj.commonUtilsService.onError('You cannot upload any more files.');
               this.removeFile(file);
               return false;
           }
 
-          if((componentObj.exteriorImagesArray.length +1) >2 && componentObj.getVehicleImageCategory() == "exterior"){
+          if((componentObj.exteriorImagesArray.length +1) > 3 && componentObj.getVehicleImageCategory() == "exterior"){
               componentObj.commonUtilsService.onError('You cannot upload any more files.');
               this.removeFile(file);
               return false;
@@ -584,9 +584,8 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       },    
       init: function() {           
         
-        this.on('sending', function(file, xhr, formData){            
-          console.log(componentObj.interiorImagesArray.length);        
-          console.log(componentObj.exteriorImagesArray.length);        
+        this.on('sending', function(file, xhr, formData){    
+                  
           formData.append('folder', componentObj.getVehicleImageCategory());         
         });        
 
@@ -612,10 +611,10 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
             $(".dz-image img").attr('src', serverResponse);
             $(".dz-remove").attr('href', serverResponse.fileKey);
           });
-         // this.removeFile(file);
+          this.removeFile(file);
           componentObj.pageLoaderService.pageLoader(false); //hide page loader
 
-        });
+        });       
 
         this.on("error", function(file, serverResponse) {                           
           componentObj.pageLoaderService.pageLoader(false);//hide page loader  
@@ -624,6 +623,15 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
         });
       }     
     };  
+  }
+
+  /**
+   * remove Vehicle Image
+   * @param index index of the image array
+   * @return  boolean
+   */
+  removeImage(index): void {
+    (this.vehicleImageCategory == 'interior')? _.pullAt(this.interiorImagesArray, [index]): _.pullAt(this.exteriorImagesArray, [index]);
   }
 
   /**
@@ -878,14 +886,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       return (this.setVehicleReferenceDefaultValue === name); 
   }
 
-  /**
-   * remove Vehicle Image
-   * @param index index of the image array
-   * @return  boolean
-   */
-  removeImage(index): void {
-    (this.vehicleImageCategory == 'interior')? _.pullAt(this.interiorImagesArray, [index]): _.pullAt(this.exteriorImagesArray, [index]);
-  }
+  
 
   /**
    * check vehicle aftermarket key has switched on/off
