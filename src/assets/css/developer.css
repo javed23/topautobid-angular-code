@@ -124,7 +124,7 @@ input[type="file"] {
 }
 
 .listing_outer .right_sec .date_filters_start input {
-    width: 100%!important;
+    width: 90%!important;
     padding: 10px 18px;
 }
 
@@ -259,4 +259,22 @@ ngb-datepicker-navigation-select select{
 input[type=search] { 	
     font-style:italic;       
 }
+
+.blog-sidebar .sidebar-widget .tags li button {
+    display: block;
+    color: #999999;
+    border: 1px solid #e3e3e3;
+    background: transparent;
+    padding: 5px 10px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    text-transform: capitalize;
+    cursor: pointer;
+  }
+  .blog-sidebar .sidebar-widget .tags li.active button {
+    border-color: #db2d2e;
+    background: #db2d2e;
+    color: #fff;
+  }
+  
 

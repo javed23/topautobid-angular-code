@@ -7,6 +7,9 @@
 product-listing  -->
 
 <section class="product-listing page-section-ptb">
+
+    
+
   <div class="container">
     <div class="row">
       <div class="col-lg-3 col-md-4">
@@ -196,8 +199,9 @@ product-listing  -->
                   </div>
                 </div>
               </div>
-            </div>
+            </div>            
           </form>
+          
           <div class="row sorting-options">
             <div class="col-lg-5">
               <div class="change-view-button">
@@ -231,7 +235,58 @@ product-listing  -->
               </div>
             </div>
           </div>
-        </div>
+
+              <div class="form-inline blog-sidebar listing_outer my-2">
+                  <div class="sidebar-widget col-md-4 pl-0 mb-0">
+                  <div class="tags">
+          
+                      <ul>
+                          <li [ngClass]="{ active: page.type=='all'}"> <button
+                                  (click)="onChangeListType('all')">All</button></li>
+
+                          <li [ngClass]="{ active: page.type=='active'}"><button
+                                  (click)="onChangeListType('active')">Active</button></li>
+                          <li [ngClass]="{ active: page.type=='sold'}"><button
+                                  (click)="onChangeListType('sold')">Sold</button></li>
+                          <li [ngClass]="{ active: page.type=='archived'}"><button
+                                  (click)="onChangeListType('archived')">Archived</button></li>
+                      </ul>
+                  </div>
+              </div>
+          
+                  <div class="right_sec col-md-8 text-right pr-0">
+                  
+                  <div class="input-group date_filters_start d-inline-block">
+                      <input [(ngModel)]="startDateModel"  class="form-control" (dateSelect)="onStartDateSelected($event)" type="text" (click)="startDate.toggle()" placeholder="Start date"
+                          ngbDatepicker #startDate="ngbDatepicker">
+                      <div class="input-group-append">
+                          <button class="btn btn-outline-secondary calendar" (click)="startDate.toggle()"
+                              type="button"><span><i class="fa fa-calendar"
+                                      aria-hidden="true"></i></span></button>
+                      </div>
+                  </div>
+               
+                  <div class="input-group date_filters_start d-inline-block">
+                      <input [(ngModel)]="endDateModel" class="form-control" type="text" (dateSelect)="onEndDateSelected($event)" (click)="endDate.toggle()" placeholder="End date"
+                          ngbDatepicker #endDate="ngbDatepicker">
+                      <div class="input-group-append">
+                          <button class="btn btn-outline-secondary calendar" (click)="endDate.toggle()"
+                              type="button"><span><i class="fa fa-calendar"
+                                      aria-hidden="true"></i></span></button>
+                      </div>
+                  </div>
+          
+          
+                  <div (click)="clearDateFilters()" class="clear_inputs d-inline-block">
+                      <i class="fa fa-refresh" aria-hidden="true"></i>
+                  </div>
+              </div>
+          
+          
+              </div>
+
+        </div>        
+
         <div *ngIf="!cars.length" class="no_record">
           <p>No record found</p>  
         </div>
@@ -246,7 +301,7 @@ product-listing  -->
                 <div class="car-overlay-banner">
                   <ul>
                     <li><a href="#"><i class="fa fa-link"></i></a></li>
-                    <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                    <li><a [routerLink]="" (click)="delete(car)"><i class="fa fa-trash" aria-hidden="true"></i></a></li>
                   </ul>
                 </div>
               </div>
@@ -285,8 +340,8 @@ product-listing  -->
                   <img class="img-fluid" src="{{car.cover_image}}" alt="">
                   <div class="car-overlay-banner">
                     <ul>
-                      <li><a href="#"><i class="fa fa-link"></i></a></li>
-                      <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                      <li><a href="javascript:void(0)"><i class="fa fa-link"></i></a></li>
+                      <li><a [routerLink]="" (click)="delete(row)"><i class="fa fa-trash" aria-hidden="true"></i></a></li>
                     </ul>
                   </div>
                 </div>

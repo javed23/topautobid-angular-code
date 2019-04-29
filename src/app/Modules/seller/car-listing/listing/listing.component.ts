@@ -1,5 +1,6 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgbDateAdapter, NgbDateStruct, NgbDateNativeAdapter } from '@ng-bootstrap/ng-bootstrap';
 
 //modules services, models and enviornment file
 import { TitleService, CarService, CommonUtilsService  } from '../../../../core/_services'
@@ -38,8 +39,9 @@ export class ListingComponent implements OnInit {
   isAllExtriorColorSelected:boolean=false;
   isAllTrimSelected:boolean=false;
 
-  
-
+  startDateModel:any;
+  endDateModel:any;
+  datesFilter:any = {};
 
   
   //default pagination, limit(records on per page) settings
@@ -220,6 +222,15 @@ export class ListingComponent implements OnInit {
   }
 
 /**
+ * To fetch the records according to type(All, Archive, Sold, Active)
+ * @param type type of records(All, Archive, Sold, Active)
+ * @return  void
+ */
+  onChangeListType(type):void {
+    this.viewedPages = [];
+    this.setPage(this._defaultPagination,type);
+  }
+/**
  * To sort the records
  * @param event event object which have column name and direction data
  * @return  void
@@ -236,14 +247,14 @@ export class ListingComponent implements OnInit {
 
 /**
 * get & set method of private property named year.
-* @return     Star rating selected by iser .
+* @return     year
 */
  get year(): string {
   return this._year;
  }
 
 /**
-* set rating.
+* set year.
 * @param year    string(year range) which is selected by user.
 */
   set year(year: string) {
@@ -254,15 +265,15 @@ export class ListingComponent implements OnInit {
 
 /**
 * get & set method of private property named price.
-* @return     Star rating selected by iser .
+* @return     Star price selected by user .
 */
 get price(): string {
   return this.price;
 }
 
 /**
-* set rating.
-* @param year    string(year range) which is selected by user.
+* set price.
+* @param price    string(price range) which is selected by user.
 */
   set price(price: string) {
     this._price = price;
@@ -446,6 +457,105 @@ uncheckAllFetchRecords(option, filter):void{
   this.currentPage = 0
   this.setPage(this._defaultPagination,this.page.type);  
 }
+
+
+/**
+  * Delete a car
+  * @param $item    item is car object(selected) to delete
+  * Before delete, system confirm to delete the car. If yes opted then process deleting car else no action;
+  */
+ async delete(item){
+
+  //confirm before deleting car
+  if(! await this.commonUtilsService.isDeleteConfirmed()) {
+    return;
+  }
+  
+  //manually create a data object which have the car unique id and seller id 
+  const data =  {
+    id:item._id,
+    //seller_id:localStorage.getItem('loggedinUserId')      .
+    seller_id:'5c99ee618fb7ce6cf845a53d' 
+    
+  } 
+
+  //Start process to delete car
+    this.commonUtilsService.showPageLoader();
+
+    //hit api to delete record from database
+    this.carService.deleteCar(data).subscribe(
+    
+    //case success
+    (response) => {
+      
+      let index = this.cars.indexOf(item, 0);
+      if (index > -1)    this.cars.splice(index, 1); 
+
+      this.setPage({offset:this.page.pageNumber,pageSize:this.currentPageLimit}, this.page.type)
+      this.commonUtilsService.onSuccess(environment.MESSAGES.RECORD_DELETED);          
+
+    //case error
+    },error => {
+      this.commonUtilsService.onError(error); 
+    });
+}  
+
+/**
+   * Check date validations and filters records when select start date filter
+   * @return  void
+   */
+  onStartDateSelected(event:any):void {
+    this.datesFilter['start']  = new Date(event.year,event.month-1,event.day+1)       
+    this.datesFilter['transformedStartDate']  = (this.datesFilter['start']).toISOString();
+    this.validateDateFilters();       
+  }
+  /**
+   * Check date validations and filters records when select end date filter
+   * @return  void
+   */
+  onEndDateSelected(event:any):void {    
+    this.datesFilter['end']  = new Date(event.year,event.month-1,event.day+1)
+    this.datesFilter['transformedEndDate']  = (this.datesFilter['end']).toISOString();
+    this.validateDateFilters();        
+  }
+
+  /**
+  * To validate date filters
+  * @return  void
+  */
+  private validateDateFilters(){
+    
+    if(! _.has(this.datesFilter, ['start']))
+      this.commonUtilsService.onError('Please select start date');
+    else if(! _.has(this.datesFilter, ['end']))
+      this.commonUtilsService.onError('Please select end date');
+    else if(_.has(this.datesFilter, ['end']) && (this.datesFilter['end']).getTime() < (this.datesFilter['start']).getTime()){
+      this.endDateModel = null
+      this.commonUtilsService.onError('End date should not less than start date');  
+      
+    }else{     
+      this.page.filters['dates'] = this.datesFilter;
+      this.viewedPages = [];
+      this.setPage(this._defaultPagination,this.page.type);
+    }
+  }
+
+  /**
+  * To clear date filters(inputs)
+  * @return  void
+  */
+ clearDateFilters():void{
+  if(_.has(this.datesFilter, ['start']) || _.has(this.datesFilter, ['end'])){
+    this.startDateModel = null
+    this.endDateModel = null
+    this.page.filters['dates'] = this.datesFilter = {}
+    this.viewedPages = [];  
+    delete this.page.filters['dates']; 
+    this.setPage(this._defaultPagination,this.page.type);
+  }
+  
+}
+
 
 
 }
