@@ -62,6 +62,7 @@ export class AddCarComponent implements OnInit {
   
 
   // AddCar Form Group Wizard
+  vehicleOption: FormGroup;
   basicInfoWizard: FormGroup;
   uploadVehicleImagesWizard: FormGroup;
   aboutVehicleWizard: FormGroup;
@@ -75,10 +76,13 @@ export class AddCarComponent implements OnInit {
   isAboutVehicleSubmitted:boolean = false;
   isVehicleConditionSubmitted:boolean = false;
   isPickupLocationSubmitted:boolean = false;
-
+  isVehicleOptionSubmitted:boolean = false;
   
   
   isBasicInfoFieldsVisible:boolean = true;  
+  isMoreSelected:boolean = false;
+  isVehicleOptionSelected:boolean = false;
+ 
   isVinSelected:boolean = false;
   isYearSelected:boolean = false;  
   isVehicleAftermarketSelected:boolean = false;
@@ -92,7 +96,7 @@ export class AddCarComponent implements OnInit {
 
   
 
-  private setVehicleReferenceDefaultValue: string = "Year";    // set Default Vehicle Reference Radio Button Value
+  private setVehicleReferenceDefaultValue: string = "VIN";    // set Default Vehicle Reference Radio Button Value
   makes = [];  
   models = [];
   trims = [];
@@ -137,8 +141,8 @@ export class AddCarComponent implements OnInit {
 
 constructor( private zone:NgZone, private cognitoUserService:CognitoUserService, private location: Location, private alertService: AlertService, private vehicleService: VehicleService, private userAuthService: UserAuthService, private pageLoaderService: PageLoaderService, private formBuilder: FormBuilder, private titleService: TitleService, private commonUtilsService: CommonUtilsService, private toastr: ToastrManager, private router: Router) { 
 
-  
-  this.basicInfo();          // Initialize Baisc Info Wizard Fields 
+  this.selectVehicleOption(); // Initialize Vehicle Option Fields 
+  this.basicInfo();          // Initialize Basic Info Wizard Fields 
   this.uploadVehicleImages(); // Initialize Vehicle Images Wizard Fields
   this.aboutVehicle();       // Initialize About Vehicle Wizard Fields
   this.vehicleCondition();   // Initialize Vehicle Condition Wizard Fields
@@ -156,17 +160,25 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   /**
   * Initialize Basic Info Wizard Fields.
   */
+  private selectVehicleOption(){
+    this.vehicleOption = this.formBuilder.group({
+      vin_number: [null],
+      vehicle_year: [null],
+      vehicle_year_value: [null],
+      existing_vehicle: [null],
+    });
+  }
+
+  /**
+  * Initialize Basic Info Wizard Fields.
+  */
   private basicInfo(){
     this.basicInfoWizard = this.formBuilder.group({      
-        basic_info:this.formBuilder.group({ 
-          vehicle_preference: ['Year'],            
-          vin_number: [null],
-          vehicle_year: [null, Validators.compose([Validators.required])],
-          existing_vehicle: [null],
-          vehicle_mileage: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{2}$')])],
+        basic_info:this.formBuilder.group({             
           vehicle_zip: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])],
           vehicle_make: [{value: '', disabled: true}, Validators.compose([Validators.required])],
           vehicle_model: [{value: '', disabled: true}, Validators.compose([Validators.required])],
+          vehicle_mileage: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{2}$')])],
           vehicle_body_type: [null, Validators.compose([Validators.required])],
           vehicle_trim: [{value: '', disabled: true}, Validators.compose([Validators.required])],
           vehicle_doors: [null, Validators.compose([Validators.required])],
@@ -753,9 +765,23 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   }
 
   /**
+   * validate Year Value.   
+   */
+  onSubmitYear(): void {
+    this.isVehicleOptionSubmitted = true;   
+
+    if(this.vehicleOption.invalid) {
+      this.isVehicleOptionSelected = false;
+      return;
+    }else{
+      this.isVehicleOptionSelected = true;
+    }
+  }
+
+  /**
    * validate Basic Info Wizard and move to Upload Images Wizard.   
    */
-  validateBasicInfoWizard() {    
+  validateBasicInfoWizard() : void {    
 
     this.isBasicInfoSubmitted = true;   
 
@@ -768,7 +794,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   /**
    * validate Vehicle Images Wizard and move to about Vehicle  Wizard.   
    */
-  validateVehicleImagesWizard() { 
+  validateVehicleImagesWizard() : void { 
     
     this.isVehicleImagesSubmitted = true;   
 
@@ -781,7 +807,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   /**
    * validate About Vehicle Wizard and move to Vehicle Condition Wizard.   
    */
-  validateAboutVehicleWizard() { 
+  validateAboutVehicleWizard() : void { 
     
     this.isAboutVehicleSubmitted = true;   
 
@@ -795,7 +821,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   /**
    * validate About Condition Wizard and move to Pickup Location Wizard.   
    */
-  validateVehicleConditionWizard() { 
+  validateVehicleConditionWizard() : void { 
     
     this.isVehicleConditionSubmitted = true;   
 
@@ -808,7 +834,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   /**
    * validate Pickup Location Wizard and open offer in hands Popup.   
    */
-  validatePickupLocationWizard() { 
+  validatePickupLocationWizard() : void {
     
     this.isPickupLocationSubmitted = true;   
 
@@ -828,38 +854,58 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   validateOfferInHands(){
     console.log('done');
   }
+
+  /**
+   * check vehicle year if more selected
+   * @param value if more selected 
+   */
+  setVehicleYear(value: string): void {
+    const vehicleYearValue = this.vehicleOption.controls.vehicle_year_value;
+    if(value == "more"){
+      this.isMoreSelected = true;
+      vehicleYearValue.setValidators(Validators.compose([Validators.required,Validators.min(1990), Validators.max(2018)]));
+      vehicleYearValue.updateValueAndValidity();
+    }else{
+      this.isMoreSelected = false;
+      vehicleYearValue.clearValidators();
+      vehicleYearValue.updateValueAndValidity();
+    }   
+  }
   
   /**
-   * check vehicle reference is selected
-   * @param name vehicle refrence value 
+   * check which vehicle option is selected
+   * @param value vehicle refrence value 
    */
-  setVehicleReferenceValue(name: string): void {  
+  setVehicleOptionValue(value: string): void {    
+    const vehicleYear = this.vehicleOption.controls.vehicle_year;
+    const vehicleVIN = this.vehicleOption.controls.vin_number;
+    const existingVehicle = this.vehicleOption.controls.existing_vehicle;
 
-    this.isBasicInfoSubmitted = false;
-
-    const vehicleYear = this.basicInfoWizard.controls.basic_info.get('vehicle_year');
-    const vehicleVIN = this.basicInfoWizard.controls.basic_info.get('vin_number');
-
-      if(name == "Year"){
-        
-        this.isBasicInfoFieldsVisible = true;   
-        this.isYearSelected =true; 
-        this.isVinSelected = false; 
-
-       /* vehicleYear.setValidators([Validators.required]);
+      if(value == "Year"){    
+        vehicleYear.setValidators([Validators.required]);
+        vehicleYear.updateValueAndValidity();
         vehicleVIN.clearValidators();
         vehicleVIN.updateValueAndValidity();
-        vehicleYear.updateValueAndValidity(); */
+        existingVehicle.clearValidators();
+        existingVehicle.updateValueAndValidity();
+      }
 
-      }else{
-
-        this.isBasicInfoFieldsVisible = false;
-        this.isYearSelected =false;      
-
-       /* vehicleVIN.setValidators([Validators.required]);
-        vehicleYear.clearValidators();
+      if(value == "Existing"){
+        existingVehicle.setValidators([Validators.required]);
+        existingVehicle.updateValueAndValidity();
+        vehicleVIN.clearValidators();
         vehicleVIN.updateValueAndValidity();
-        vehicleYear.updateValueAndValidity(); */
+        vehicleYear.clearValidators();
+        vehicleYear.updateValueAndValidity();
+      }
+
+      if(value == "VIN"){
+        vehicleVIN.setValidators([Validators.required]);        
+        vehicleVIN.updateValueAndValidity();
+        vehicleYear.clearValidators();
+        vehicleYear.updateValueAndValidity();
+        existingVehicle.clearValidators();
+        existingVehicle.updateValueAndValidity();
       }
 
       this.setVehicleReferenceDefaultValue = name;  
