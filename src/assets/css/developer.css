@@ -276,5 +276,11 @@ input[type=search] {
     background: #db2d2e;
     color: #fff;
   }
+  .round-filter{
+    background-color: grey;
+    padding: 2px 2px 2px 2px;
+    margin: 13px 13px 14px 15px;
+    border-radius: 20px;
+  }
   
 

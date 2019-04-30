@@ -38,11 +38,11 @@ export class ListingComponent implements OnInit {
   isAllInteriorColorSelected:boolean=false;
   isAllExtriorColorSelected:boolean=false;
   isAllTrimSelected:boolean=false;
-
+  yearFilterOption:string='';
   startDateModel:any;
   endDateModel:any;
   datesFilter:any = {};
-
+  AllFilters = []
   
   //default pagination, limit(records on per page) settings
   currentPageLimit: number = environment.DEFAULT_RECORDS_LIMIT  
@@ -82,8 +82,7 @@ export class ListingComponent implements OnInit {
   ngAfterViewInit():void {  
     let currentYear = new Date().getFullYear();  
     //initalize the price & year slider on view page
-    POTENZA.priceslider() 
-    POTENZA.yearslider()  
+      
     POTENZA.featurelist()
     this.onApplyingFilters()    
     for (var i = 0; i < 2; i++) {
@@ -144,7 +143,7 @@ export class ListingComponent implements OnInit {
 */
   private initalizeFilterForm():void {
     this.filtersForm = this.formBuilder.group({
-      amount: ['$100 - $100000'],
+      /*amount: ['$100 - $100000'],*/
       years:['2010 - 2019']      
     })
   }
@@ -292,6 +291,17 @@ setFilters(option,filter):void{
   let index = options.indexOf(option);
   (index>=0)?_.pullAt(options, [index])  : options.push(option)     
   this.page.filters[filter] = options;  
+  console.log(this.page.filters);
+}
+
+CustomizeFiltersObject() : any {
+  return Object.keys(this.page.filters);  
+}
+removeFilter(event){
+  let index = this.page.filters[event.target.dataset.key].indexOf(event.target.dataset.value);
+  _.pullAt(this.page.filters[event.target.dataset.key],[index])  
+  console.log(this.page.filters[event.target.dataset.key])
+  this.resetAll(event.target.dataset.key, event.target.dataset.value) 
 }
 
 /**
@@ -397,37 +407,75 @@ vehicleStatisticsByModel(option, filter):void{
  * @return  void
 */
 
-resetAll(filter):void{
-  delete this.page.filters[filter]; 
-  console.log(this.page.filters)
+resetAll(filter,keyName=''):void{
+  console.log('keyNameArr',keyName.length);
+  if(!keyName.length) delete this.page.filters[filter]; 
+  
   if(filter=='interior_color'){
-    this.isAllInteriorColorSelected = true
+    if(!keyName.length) this.isAllInteriorColorSelected = true
     this.interiorColors.forEach(element=> {
-      element['checked'] = false
+      if(keyName.length){
+     
+        if(element.name == keyName){
+          element['checked'] = false
+          return false;
+        }       
+      }else{
+        element['checked'] = false 
+      }
+            
      });
   }
   if(filter=='exterior_color'){
-    this.isAllExtriorColorSelected = true
+    if(!keyName.length)  this.isAllExtriorColorSelected = true
     this.exteriorColors.forEach(element=> {
-      element['checked'] = false
+      if(keyName.length){
+        if(element.name == keyName){
+          element['checked'] = false
+          return false;
+        }       
+      }else{
+        element['checked'] = false 
+      } 
      });
   }
   if(filter=='transmission'){
-    this.isAllTransmissionSelected = true
+    if(!keyName.length) this.isAllTransmissionSelected = true
     this.transmissions.forEach(element=> {
-      element['checked'] = false
+      if(keyName.length){
+        if(element.name == keyName){
+          element['checked'] = false
+          return false;
+        }       
+      }else{
+        element['checked'] = false 
+      }
      });
   }
   if(filter=='body_style'){
-    this.isAllBodySelected = true
+    if(!keyName.length) this.isAllBodySelected = true
     this.bodyStyles.forEach(element=> {
-      element['checked'] = false
+      if(keyName.length){
+        if(element.name == keyName){
+          element['checked'] = false
+          return false;
+        }       
+      }else{
+        element['checked'] = false 
+      } 
      });
   }
   if(filter=='trim'){
-    this.isAllBodySelected = true
+    if(!keyName.length) this.isAllBodySelected = true
     this.trims.forEach(element=> {
-      element['checked'] = false
+      if(keyName.length){
+        if(element.name == keyName){
+          element['checked'] = false
+          return false;
+        }       
+      }else{
+        element['checked'] = false 
+      } 
      });
   }
   this.viewedPages = [];
@@ -552,9 +600,16 @@ uncheckAllFetchRecords(option, filter):void{
     this.viewedPages = [];  
     delete this.page.filters['dates']; 
     this.setPage(this._defaultPagination,this.page.type);
-  }
+  }  
   
 }
+/**
+  * To choose the option from year dropdown from leftside filters
+  * @return  void
+*/
+  changeYear(event):void{
+    this.yearFilterOption = event.target.value    
+  }
 
 
 
