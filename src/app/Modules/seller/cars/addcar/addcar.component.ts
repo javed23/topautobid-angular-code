@@ -10,7 +10,7 @@ import {MovingDirection} from 'angular-archwizard';
 import { ToastrManager } from 'ng6-toastr-notifications';//toaster class
 import { untilDestroyed } from 'ngx-take-until-destroy';// unsubscribe from observables when the  component destroyed
 import { DropzoneComponent, DropzoneDirective, DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
-
+import { trigger, state, style, animate, transition } from '@angular/animations';
  //shared services
  import { AlertService, PageLoaderService } from '../../../../shared/_services'
 
@@ -42,7 +42,15 @@ declare let POTENZA:any;
   selector: 'app-addcar',
   templateUrl: './addcar.component.html',
   styleUrls: ['./addcar.component.css'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  animations: [
+    trigger('AnimateList', [
+      transition(':enter', [  
+        style({opacity: 0, transform: 'translateY(-75%)', offset: 1.0}),
+        animate('0.2s 600ms ease-in')
+      ])
+    ])
+   ]
 })
 export class AddCarComponent implements OnInit {
   // Offer In Hands Popup
@@ -59,6 +67,8 @@ export class AddCarComponent implements OnInit {
   vehicleImagesArray:any = [{interior: []}, {exterior: []}];
   interiorImagesArray:any = [];
   exteriorImagesArray:any = [];
+  afterMarketImagesArray:any = [];
+  getVehicleYear:string = "";
   
 
   // AddCar Form Group Wizard
@@ -127,10 +137,10 @@ export class AddCarComponent implements OnInit {
   getMakeByYearArray:any = [];
   getModelByMakeIdArray:any = [];
   private _vehicleImage:string = '';
-  private _secondKey:string = '';
-  private _vehicleAftermarket:string = '';
+  private _secondKey:string = 'off';
+  private _vehicleAftermarket:string = 'off';
   private _vehicleOwnership:string = '';
-  private _cleanTitle:string = '';
+  private _cleanTitle:string = 'off';
   private _willingToDrive:string = '';
   private _vehiclePickedUp:string = '';
   yearRange:any = [];
@@ -424,7 +434,8 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
         /*componentObj.zone.run(() => { 
           $(".dz-image img").attr('src', serverResponse.fileLocation);
           $(".dz-remove").attr('href', serverResponse.fileKey);
-        }); */        
+        }); */   
+        componentObj.afterMarketImagesArray.push(serverResponse);     
         componentObj.pageLoaderService.pageLoader(false); //hide page loader
       });
 
@@ -434,9 +445,9 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       });
 
       /*this.on("removedfile", function(file) {      
-              
-       componentObj.removeImageFromBucket(file.xhr.response, 'aftermarket');              
-      }); */
+        this.removeFile(file);  
+      // componentObj.removeImageFromBucket(file.xhr.response, 'aftermarket');              
+      });*/
     }     
   };
 }
@@ -708,8 +719,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       return;
     }
 
-    this.pageLoaderService.setLoaderText(environment.MESSAGES.FETCHING_RECORDS);//setting loader text
-    this.pageLoaderService.pageLoader(true);//show page loader
+    this.commonUtilsService.showPageLoader();
 
     //manually create a data object which have the car unique id and seller id 
     const data ={ year:year }
@@ -721,23 +731,20 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       //case success
     (response) => {      
       
-      //console.log(response.makes);
+      this.isVehicleOptionSelected = true;
       this.makes = response.makes;
       this.basicInfoWizard.controls.basic_info.get('vehicle_make').enable();
       this.basicInfoWizard.controls.basic_info.get('vehicle_model').disable(); this.models = [];
       this.basicInfoWizard.controls.basic_info.get('vehicle_trim').disable(); this.trims = [];
-      this.pageLoaderService.pageLoader(false);//hide page loader
-      this.pageLoaderService.setLoaderText('');//setting loader text empty
+      this.commonUtilsService.hidePageLoader();
     
     //case error 
     },error => {
-      
-      this.pageLoaderService.setLoaderText(environment.MESSAGES.ERROR_TEXT_LOADER);//setting loader text
-      this.pageLoaderService.pageLoader(false);//hide page loader
+      this.isVehicleOptionSelected = false;      
       this.basicInfoWizard.controls.basic_info.get('vehicle_make').disable(); this.makes = [];
       this.basicInfoWizard.controls.basic_info.get('vehicle_model').disable(); this.models = [];
       this.basicInfoWizard.controls.basic_info.get('vehicle_trim').disable(); this.trims = [];
-      this.toastr.errorToastr(error, 'Oops!');//showing error toaster message
+      this.commonUtilsService.onError(error);
 
     });
   }
@@ -765,17 +772,25 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   }
 
   /**
-   * validate Year Value.   
+   * validate Year Option.   
+   * @return  array(vehicle details)   
    */
-  onSubmitYear(): void {
+  validateYearOption(){
     this.isVehicleOptionSubmitted = true;   
 
     if(this.vehicleOption.invalid) {
       this.isVehicleOptionSelected = false;
       return;
-    }else{
-      this.isVehicleOptionSelected = true;
     }
+
+    const vehicleYear = this.vehicleOption.controls.vehicle_year;
+    if(vehicleYear.value == "more"){
+      this.getVehicleYear = this.vehicleOption.controls.vehicle_year_value.value;
+    }else{
+      this.getVehicleYear = vehicleYear.value;
+    }  
+      
+    this.getVehicleStatisticsByYear(this.getVehicleYear);
   }
 
   /**
@@ -1152,6 +1167,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     ( event.target.checked ) ? this.vehiclePickedUp = 'on' : this.vehiclePickedUp = 'off';     
   }
 
+  
   /**
   * get vehicle to be picked up value.
   * @return  string(on/off) .

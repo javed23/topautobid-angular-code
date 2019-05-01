@@ -34,7 +34,7 @@
                             </div>
                                 <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                                     <h5>Select Vehicle Year</h5>
-                                    <div class="registrationyear">
+                                    <div class="registrationyear category_Box">
                                         <!--start-->
                                         <ul>
                                             <li *ngFor="let year of yearRange;">
@@ -57,13 +57,13 @@
                                                 
                                         </ul> 
                                         <!--end--> 
-                                        <input mask="0000" *ngIf="isMoreSelected" formControlName="vehicle_year_value" type="text" data-typeahead="sellCarModelYear" class="optional hide gs_ta" placeholder="Year" autocomplete="off"  [ngClass]="{ 'is-invalid': (vehicleOption.controls.vehicle_year_value.touched || isVehicleOptionSubmitted) && vehicleOption.controls.vin_number.errors }">
+                                        <input mask="0000" *ngIf="isMoreSelected" formControlName="vehicle_year_value" type="text" data-typeahead="sellCarModelYear" class="gs_ta" placeholder="Year" autocomplete="off"  [ngClass]="{ 'is-invalid': (vehicleOption.controls.vehicle_year_value.touched || isVehicleOptionSubmitted) && vehicleOption.controls.vin_number.errors }">
                                         <p *ngIf="vehicleOption.controls.vehicle_year_value.touched || isVehicleOptionSubmitted">                      
                                                 <app-form-validation-errors errorPrefix="Year " [errors]="vehicleOption.controls.vehicle_year_value.errors"></app-form-validation-errors>   
                                             </p>
                                     </div>
                                     <br/>
-                                    <button class="grayBtn" type="button" [disabled]="vehicleOption.invalid" (click)="onSubmitYear()">Get My Car Details</button> 
+                                    <button class="grayBtn" type="button" [disabled]="vehicleOption.invalid" (click)="validateYearOption()">Get My Car Details</button> 
                                 </div>
                                 <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
                                     <h5>Select from Existing Vehicle</h5>
@@ -89,7 +89,7 @@
     </div>
 
 
-    <div class="container" *ngIf="isVehicleOptionSelected">
+    <div class="container" *ngIf="isVehicleOptionSelected" [@AnimateList]>
         <div class="row">
             <div class="col-md-12">              
                 <aw-wizard #wizard class="custom-css">    
@@ -351,29 +351,29 @@
                                 
                             <!--Upload Images Section-->
                             <div class="preview_section">
-
-                                <div class="col-md-4">
-                                    <div class="form-group ">
-                                        <div class="title">
-                                            <h6 class="text-red">Basic Info</h6>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="col-md-4">
-                                    <ul>
-                                        <li><label>Zip: </label><span>{{vehicle_zip.value}}</span></li>
-                                        <!--li><label>Year: </label><span>{{vehicle_year.value}}</span></li>
-                                        <li><label>Make: </label><span>{{vehicle_make.value}}</span></li>
-                                        <li><label>Model: </label><span>{{vehicle_model.value}}</span></li>
-                                        <li><label>Trim: </label><span>{{vehicle_trim.value}}</span></li>
-                                        <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>
-                                        <li><label>Body Style: </label><span>{{vehicle_body_type.value}}</span></li>
-                                        <li><label>Doors: </label><span>{{vehicle_doors.value}}</span></li>
-                                        <li><label>Engine: </label><span>{{vehicle_engine.value}}</span></li>
-                                        <li><label>Transmission: </label><span>{{vehicle_transmission.value}}</span></li>
-                                        <li><label>Fuel Type: </label><span>{{vehicle_fuel_type.value}}</span></li>
-                                        <li><label>?Drive Type: </label><span>{{vehicle_drive_type.value}}</span></li-->
-                                    </ul>
+                                <div class="basic_info_preview">
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <div class="title">
+                                                <h6 class="text-red">Basic Info</h6>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    <div class="col-md-4">
+                                        <ul>
+                                            <li><label>Zip: </label><span>{{vehicle_zip.value}}</span></li>
+                                            <li><label>Make: </label><span>{{vehicle_make.value}}</span></li>
+                                            <li><label>Model: </label><span>{{vehicle_model.value}}</span></li>
+                                            <li><label>Trim: </label><span>{{vehicle_trim.value}}</span></li>
+                                            <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>
+                                            <li><label>Body Style: </label><span>{{vehicle_body_type.value}}</span></li>
+                                            <li><label>Doors: </label><span>{{vehicle_doors.value}}</span></li>
+                                            <li><label>Engine: </label><span>{{vehicle_engine.value}}</span></li>
+                                            <li><label>Transmission: </label><span>{{vehicle_transmission.value}}</span></li>
+                                            <li><label>Fuel Type: </label><span>{{vehicle_fuel_type.value}}</span></li>
+                                            <li><label>Drive Type: </label><span>{{vehicle_drive_type.value}}</span></li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
 
@@ -408,7 +408,7 @@
                                             
                                         <div class="form-group col-md-12" *ngIf="isVehicleAftermarketSelected">
                                                 <label>Description*</label>
-                                                <textarea type="text" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_aftermarket_description" [ngClass]="{ 'is-invalid': (aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').touched || isAboutVehicleSubmitted) && aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').errors }">  </textarea>      
+                                                <textarea #vehicle_aftermarket_description type="text" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_aftermarket_description" [ngClass]="{ 'is-invalid': (aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').touched || isAboutVehicleSubmitted) && aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').errors }">  </textarea>      
                                                 
                                                 <p *ngIf="aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').touched || isAboutVehicleSubmitted">                      
                                                     <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="Description " [errors]="aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').errors"></app-form-validation-errors>   
@@ -526,7 +526,57 @@
                                         <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="aboutVehicleWizard.invalid" (click)="validateAboutVehicleWizard()" type="button" awNextStep>Next Step</button>		
                                     </div>		
                                 </div>
-                            </form>    
+                            </form>  
+                            
+                            <div class="preview_section">
+                                <div class="basic_info_preview">
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <div class="title">
+                                                <h6 class="text-red">Basic Info</h6>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    <div class="col-md-4">
+                                        <ul>
+                                            <li><label>Zip: </label><span>{{vehicle_zip.value}}</span></li>
+                                            <li><label>Make: </label><span>{{vehicle_make.value}}</span></li>
+                                            <li><label>Model: </label><span>{{vehicle_model.value}}</span></li>
+                                            <li><label>Trim: </label><span>{{vehicle_trim.value}}</span></li>
+                                            <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>
+                                            <li><label>Body Style: </label><span>{{vehicle_body_type.value}}</span></li>
+                                            <li><label>Doors: </label><span>{{vehicle_doors.value}}</span></li>
+                                            <li><label>Engine: </label><span>{{vehicle_engine.value}}</span></li>
+                                            <li><label>Transmission: </label><span>{{vehicle_transmission.value}}</span></li>
+                                            <li><label>Fuel Type: </label><span>{{vehicle_fuel_type.value}}</span></li>
+                                            <li><label>Drive Type: </label><span>{{vehicle_drive_type.value}}</span></li>
+                                        </ul>
+                                    </div>
+                                 </div>
+                                <div class="upload_images_preview" *ngIf="interiorImagesArray?.length > 0 || exteriorImagesArray?.length > 0">
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <div class="title">
+                                                <h6 class="text-red">Upload Images</h6>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    <div class="col-md-4">
+                                        <ul>
+                                            <li *ngFor="let interiorImage of interiorImagesArray; let interiorIndex = index;">
+                                                <img class="preview_images" src="{{interiorImage}}">       
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <ul>
+                                            <li *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
+                                                <img class="preview_images" src="{{exteriorImage}}"> 
+                                            </li>
+                                        </ul>
+                                    </div>
+                                 </div>
+                            </div>
                         </aw-wizard-step> 
                         <aw-wizard-step stepTitle="Vehicle's Condition" (stepEnter)="scrollToSpecificDiv($event)" [canExit]="moveDirection.bind(this, vehicleConditionWizard.valid)">
                             <form [formGroup]="vehicleConditionWizard">
@@ -621,6 +671,74 @@
 
                                 
                             </form> 
+
+                            <div class="preview_section">
+                                <div class="basic_info_preview">
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <div class="title">
+                                                <h6 class="text-red">Basic Info</h6>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    <div class="col-md-4">
+                                        <ul>
+                                            <li><label>Zip: </label><span>{{vehicle_zip.value}}</span></li>
+                                            <li><label>Make: </label><span>{{vehicle_make.value}}</span></li>
+                                            <li><label>Model: </label><span>{{vehicle_model.value}}</span></li>
+                                            <li><label>Trim: </label><span>{{vehicle_trim.value}}</span></li>
+                                            <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>
+                                            <li><label>Body Style: </label><span>{{vehicle_body_type.value}}</span></li>
+                                            <li><label>Doors: </label><span>{{vehicle_doors.value}}</span></li>
+                                            <li><label>Engine: </label><span>{{vehicle_engine.value}}</span></li>
+                                            <li><label>Transmission: </label><span>{{vehicle_transmission.value}}</span></li>
+                                            <li><label>Fuel Type: </label><span>{{vehicle_fuel_type.value}}</span></li>
+                                            <li><label>Drive Type: </label><span>{{vehicle_drive_type.value}}</span></li>
+                                        </ul>
+                                    </div>
+                                 </div>
+                                <div class="upload_images_preview" *ngIf="interiorImagesArray?.length > 0 || exteriorImagesArray?.length > 0">
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <div class="title">
+                                                <h6 class="text-red">Upload Images</h6>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    <div class="col-md-4">
+                                        <ul>
+                                            <li *ngFor="let interiorImage of interiorImagesArray; let interiorIndex = index;">
+                                                <img class="preview_images" src="{{interiorImage}}">       
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <ul>
+                                            <li *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
+                                                <img class="preview_images" src="{{exteriorImage}}"> 
+                                            </li>
+                                        </ul>
+                                    </div>
+                                 </div>
+
+                                 <div class="about_vehicle_preview">
+                                    <div class="col-md-4">
+                                        <div class="form-group ">
+                                            <div class="title">
+                                                <h6 class="text-red">About Vehicle</h6>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    <div class="col-md-4">
+                                        <ul>
+                                            <li><label>Vehicle has Second Key: </label><span>{{secondKey}}</span></li>                                            
+                                            <li><label>Vehicle has any aftermarket: </label><span>{{vehicleAftermarket}}</span></li>                              
+                                            <li *ngIf="vehicleAftermarket=='on'"><label>Description: </label><span>{{vehicle_aftermarket_description}}</span></li>                                            
+                                            <li *ngIf="vehicleAftermarket=='on'"><label>Description: </label><span>{{vehicle_aftermarket_description}}</span></li>                                            
+                                        </ul>
+                                    </div>
+                                 </div>
+                            </div>
                         </aw-wizard-step>  
                         <aw-wizard-step stepTitle="Pick Up Location" (stepEnter)="scrollToSpecificDiv($event)" [canExit]="moveDirection.bind(this, pickupLocationWizard.valid)">
                             <form [formGroup]="pickupLocationWizard">                        
