@@ -17,7 +17,9 @@ export class CarViewComponent{
   * component life cycle default method, runs when input value named 'isOpen' gets change
   * @return void
   */
-
+ constructor() { 
+    POTENZA.tabs();
+ }
  close() {
   this.isOpen = false
   this.onClose.emit(false);

@@ -91,9 +91,7 @@ export class ListingComponent implements OnInit {
         value: currentYear - i
       });
     }
-   // this.yearsRange = this.commonUtilsService.createYearRange();
-    console.log('years',typeof this.yearsRange);  
-    
+   // this.yearsRange = this.commonUtilsService.createYearRange();    
   }
 
 /**

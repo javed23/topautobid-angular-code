@@ -96,6 +96,10 @@ Design and Developed by: potenzaglobalsolutions.com
 @media (max-width: 1025px) {
 .quick-links .link a h6 { font-size: 13px; }
 .quick-links .link a { padding: 30px 5px }
+.right_sec .my_select {width:100px; font-size:13px;}
+
+
+.blog-sidebar .sidebar-widget .tags li button { padding:3px 10px;}
 
 
 /*************************************

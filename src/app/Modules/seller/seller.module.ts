@@ -24,11 +24,13 @@ import { ProfileComponent } from './profile/profile.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 //cars management components
-import { ListComponent as CarsListComponent } from './cars/list/list.component';
-import { CarViewComponent } from './cars/car-view/car-view.component';
+import { ListingComponent as CarsGridListComponent } from './cars/grid-list-view/listing.component';
+import { ListComponent as CarsTableComponent } from './cars/table-view/list.component';
 import { CarBidsComponent } from './cars/car-bids/car-bids.component';
 import { FiltersComponent } from './cars/filters/filters.component';
-import { ListingComponent } from './car-listing/listing/listing.component';
+import { CarViewComponent as CarDetailComponent} from './cars/car-detail-popup/car-view.component';
+import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
+
 
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -58,11 +60,12 @@ let config = new AuthServiceConfig([
     HomeComponent, 
     ProfileComponent, 
     ForgotPasswordComponent,
-    CarsListComponent,
-    CarViewComponent,
+    CarsTableComponent,
+    CarDetailComponent,
     CarBidsComponent,
     FiltersComponent,
-    ListingComponent,
+    CarsGridListComponent,
+    CarDetailPageComponent,
   ],
   imports: [
     CommonModule,

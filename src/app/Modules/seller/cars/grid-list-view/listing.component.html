@@ -6,9 +6,7 @@
 <!--=================================
 product-listing  -->
 
-<section class="product-listing page-section-ptb">
-
-    
+<section class="product-listing page-section-ptb">   
 
   <div class="container">
     <div class="row">
@@ -166,53 +164,47 @@ product-listing  -->
       <div class="col-lg-9 col-md-8">
         <div class="sorting-options-main">
 
-            <div class="row sorting-options">
-                <div class="col-lg-2">
+            <div class="row sorting-options top_sorting">
+                <div class="col-md-12 d-flex">
                   <div class="change-view-button">
-             
-                    <a [ngClass]="{active: isGridListing}"  title="Grid View" href="javascript:void(0)" (click)="onChangeListingType('grid')"><i class="fa fa-th"></i></a>
-                    <a [ngClass]="{active: !isGridListing}" title="Listing View" href="javascript:void(0)" (click)="onChangeListingType('list')"><i class="fa fa-list-ul"></i></a>             
+                     <a [ngClass]="{active: isGridListing}"  title="Grid View" href="javascript:void(0)" (click)="onChangeListingType('grid')"><i class="fa fa-th"></i></a>
+                    <a [ngClass]="{active: !isGridListing}" title="Listing View" href="javascript:void(0)" (click)="onChangeListingType('list')"><i class="fa fa-list-ul"></i></a>                      
+                    <a title="Table View" routerLink="/seller/car-dashboard" ><i class="fa fa-table"></i></a>
                   </div>
-                </div>
-                <div class="col-lg-2 text-right">
-                    <div class="selected-box">
-                        <select class="selectpicker my_select" id="per-page"
-                        (change)="onLimitChange($event.target.value)">
-                        <option *ngFor="let option of pageLimitOptions" [value]="option.value"
-                            [selected]="option.value == currentPageLimit">
-                            {{ option.value }} results
-                        </option>
-                    </select>
-                    </div>
-                  </div>
-                <div class="col-lg-4 text-right">
-                    <div class="selected-box">
-                      <select (change)="onSort($event)" class="my_select">
-                        <option>Sort by </option>
-                        <option value="offer_in_hand,asc">Price: Lowest first</option>
-                        <option  value="offer_in_hand,desc">Price: Highest first </option>
-                        <option value="year,asc">Year: Lowest first</option>
-                        <option  value="year,desc">Year: Highest first </option>
-                        <option  value="make,asc">Make: A to Z </option>
-                        <option  value="make,desc">Make: Z to A </option>                  
-                      </select>
-                    </div>
-                </div>
-                
-                <div class="col-lg-4 text-right">
+
+
+                  <div class="ml-auto text-right">
+                 
+
+
                     <div class="price-search">                 
-                      <div class="search">
-                        <i class="fa fa-search"></i>
-                        <input type="search" class="form-control placeholder" (input)="onSearch($event.target.value)"
-                          placeholder="Type Make, Model, Trim etc..">
+                        <div class="search">
+                          <i class="fa fa-search"></i>
+                          <input type="search" class="form-control placeholder" (input)="onSearch($event.target.value)"
+                            placeholder="Type Make, Model, Trim etc..">
+                        </div>
                       </div>
                     </div>
-                  </div>
+
+
+                </div>
+               
+             
+          
               </div>
               
           <!--<form [formGroup]="filtersForm">-->
             <div class="row blog-sidebar listing_outer">
-                <div class="sidebar-widget col-lg-4 pl-0 mb-0">
+                
+
+
+
+                 
+
+                
+
+              
+              <div class="sidebar-widget mb-0">
                     <div class="tags">
             
                         <ul>
@@ -228,8 +220,22 @@ product-listing  -->
                         </ul>
                     </div>
                 </div>
-                <div class="right_sec col-lg-8 text-right pr-0">
-                  
+
+
+                <div class="right_sec ml-auto">
+
+                    <div class="selected-box">
+                        <select (change)="onSort($event)" class="my_select">
+                          <option>Sort by </option>
+                          <option value="offer_in_hand,asc">Price: Lowest first</option>
+                          <option  value="offer_in_hand,desc">Price: Highest first </option>
+                          <option value="year,asc">Year: Lowest first</option>
+                          <option  value="year,desc">Year: Highest first </option>
+                          <option  value="make,asc">Make: A to Z </option>
+                          <option  value="make,desc">Make: Z to A </option>                  
+                        </select>
+                      </div>
+
                     <div class="input-group date_filters_start d-inline-block">
                         <input [(ngModel)]="startDateModel"  class="form-control" (dateSelect)="onStartDateSelected($event)" type="text" (click)="startDate.toggle()" placeholder="Start date"
                             ngbDatepicker #startDate="ngbDatepicker">
@@ -300,7 +306,7 @@ product-listing  -->
                 <img class="img-fluid" src="{{car.cover_image}}" alt="">
                 <div class="car-overlay-banner">
                   <ul>
-                    <li><a href="#"><i class="fa fa-link"></i></a></li>
+                    <li><a routerLink="/seller/car-detail/{{car._id}}"><i class="fa fa-link"></i></a></li>
                     <li><a [routerLink]="" (click)="delete(car)"><i class="fa fa-trash" aria-hidden="true"></i></a></li>
                   </ul>
                 </div>
@@ -372,7 +378,21 @@ product-listing  -->
         </div>
       </div>
       
-      <div *ngIf="cars.length>0" class="pagination-nav d-flex justify-content-center pagination_nav_changes">
+      <div class="pagination_outer d-flex">
+      Showing <div class="selected-box number_records">
+          <select class="selectpicker my_select" id="per-page"
+          (change)="onLimitChange($event.target.value)">
+          <option *ngFor="let option of pageLimitOptions" [value]="option.value"
+              [selected]="option.value == currentPageLimit">
+              {{ option.value }} 
+          </option>
+      </select>
+      </div> records on page
+  
+
+
+
+      <div *ngIf="cars.length>0" class="pagination-nav d-flex justify-content-center pagination_nav_changes ml-auto">
           <pagination-controls  
           (pageChange)="onPageChange($event)"
           directionLinks="true" 
@@ -381,14 +401,17 @@ product-listing  -->
           nextLabel="" 
           nextLabel=""
           screenReaderPaginationLabel="Pagination"
-          screenReaderPageLabel="page"
+          screenReaderPageLabel="~page"
           screenReaderCurrentLabel="You're on page"          
           >
         </pagination-controls>
 
           
       
-    </div>  
+    </div> 
+  </div>  
+
+   
        
     
       </div>

@@ -84,6 +84,19 @@ export class CarService {
         .map((response: any) => response )    
     }
 
+
+    /**
+     * Fetch car details
+     * @param carObject    car object to fetch from database.
+     * @return        Observable<any>
+    */
+   public carDetail(carIdObject): Observable<any> {
+
+    return this.httpClient.post('car/carDetail', carIdObject)
+    .map((response: any) => response )    
+}
+
+
     
 
 
