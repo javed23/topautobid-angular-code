@@ -12,7 +12,7 @@ import { untilDestroyed } from 'ngx-take-until-destroy';// unsubscribe from obse
 import { DropzoneComponent, DropzoneDirective, DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { trigger, state, style, animate, transition } from '@angular/animations';
  //shared services
- import { AlertService, PageLoaderService } from '../../../../shared/_services'
+import { AlertService, PageLoaderService } from '../../../../shared/_services'
 
  
 
@@ -68,6 +68,8 @@ export class AddCarComponent implements OnInit {
   interiorImagesArray:any = [];
   exteriorImagesArray:any = [];
   afterMarketImagesArray:any = [];
+  vehicleConditionImagesArray:any = [];
+  offerInHandsImagesArray:any = [];
   getVehicleYear:string = "";
   
 
@@ -140,6 +142,7 @@ export class AddCarComponent implements OnInit {
   private _secondKey:string = 'off';
   private _vehicleAftermarket:string = 'off';
   private _vehicleOwnership:string = '';
+  private _vehicleConditionValue:string = '';
   private _cleanTitle:string = 'off';
   private _willingToDrive:string = '';
   private _vehiclePickedUp:string = '';
@@ -345,7 +348,8 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           /*componentObj.zone.run(() => { 
             $(".dz-image img").attr('src', serverResponse.fileLocation);
             $(".dz-remove").attr('href', serverResponse.fileKey);
-          }); */        
+          }); */    
+          componentObj.offerInHandsImagesArray.push({file_path : serverResponse.fileLocation, file_name : serverResponse.fileKey});    
           componentObj.pageLoaderService.pageLoader(false); //hide page loader
         });
 
@@ -430,16 +434,13 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
         }
       })
      
-      this.on("success", function(file, serverResponse) {  
-        /*componentObj.zone.run(() => { 
-          $(".dz-image img").attr('src', serverResponse.fileLocation);
-          $(".dz-remove").attr('href', serverResponse.fileKey);
-        }); */   
+      this.on("success", function(file, serverResponse) {           
         componentObj.afterMarketImagesArray.push(serverResponse);     
         componentObj.pageLoaderService.pageLoader(false); //hide page loader
       });
 
-      this.on("error", function(file, serverResponse) {               
+      this.on("error", function(file, serverResponse) {  
+        this.removeFile(file);             
         componentObj.pageLoaderService.pageLoader(false);//hide page loader  
         componentObj.toastr.errorToastr(serverResponse, 'Oops!');         
       });
@@ -524,7 +525,8 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           /*componentObj.zone.run(() => { 
             $(".dz-image img").attr('src', serverResponse.fileLocation);
             $(".dz-remove").attr('href', serverResponse.fileKey);
-          }); */        
+          }); */  
+          componentObj.vehicleConditionImagesArray.push(serverResponse);       
           componentObj.pageLoaderService.pageLoader(false); //hide page loader
         });
 
@@ -864,6 +866,13 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   }
 
   /**
+   * show Offer In Hands Popup.   
+   */
+  showOfferInHands() : void{
+    $(this.offerInHandsSection.nativeElement).modal({backdrop: 'static', keyboard: false});
+  }
+
+  /**
    * validate offer in hands popup.   
    */
   validateOfferInHands(){
@@ -955,20 +964,20 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    * @return  string
    */
   toggleVehicleAfterMarket(event){   
-    let vehicleAfterMarketDescription = this.aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description');     
-    vehicleAfterMarketDescription.patchValue('');   
-    vehicleAfterMarketDescription.setErrors(null);   
+    let vehicleAfterMarketDescription = this.aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description');        
     if( event.target.checked ){
       this.isVehicleAftermarketSelected = true;
       vehicleAfterMarketDescription.setValidators(Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50)]));
       vehicleAfterMarketDescription.updateValueAndValidity();
+
       this.vehicleAftermarket = 'on';
     }else{ 
       this.isVehicleAftermarketSelected = false;
       vehicleAfterMarketDescription.clearValidators();
       vehicleAfterMarketDescription.updateValueAndValidity();
+
       this.vehicleAftermarket = 'off';
-    }     
+    }         
   }
 
   /**
@@ -1120,6 +1129,23 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       vehicleConditionDescription.clearValidators();        
       vehicleConditionDescription.updateValueAndValidity();
     }
+    this.vehicleConditionValue = vehicleCondition;
+  }
+
+  /**
+    * get vehicle ownership option value.
+    * @return  string .
+    */
+   get vehicleConditionValue(): string {
+    return this._vehicleConditionValue;
+  }
+
+  /**
+  * set Vehicle Ownership value.
+  * @param $vehicleConditionValue  string.
+  */
+  set vehicleConditionValue($vehicleConditionValue: string) {
+    this._vehicleConditionValue = $vehicleConditionValue;    
   }
 
 
