@@ -9,6 +9,14 @@ product-listing  -->
 <section class="product-listing page-section-ptb">   
 
   <div class="container">
+
+      <div class="row ">
+          <div class="col-md-12 d-flex"> 
+        <a href="#" class="createNew ml-auto"><i class="fa fa-plus-circle" aria-hidden="true"></i> Create New</a>
+      </div>
+      </div>
+
+
     <div class="row">
       <div class="col-lg-3 col-md-4">
         <div class="listing-sidebar">
@@ -17,8 +25,8 @@ product-listing  -->
               <h5>Advanced Search</h5>
               <ul class="list-style
             -none">
-                <li><i class="fa fa-star"> </i> Results Found <span class="float-right">({{ page.filteredElements}})</span></li>
-                <li><i class="fa fa-shopping-cart"> </i> Compare Vehicles <span class="float-right">({{page.totalElements}})</span></li>
+                <li><i class="fa fa-star"> </i> Total Results Found <span class="float-right">({{ page.filteredElements}})</span></li>
+                <li><i class="fa fa-filter"> </i> Filtered Vehicles <span class="float-right">({{page.totalElements}})</span></li>
               </ul>
             </div>
             <div class="clearfix">
@@ -74,11 +82,11 @@ product-listing  -->
               <li  [attr.disabled]="trims.length<=0" [ngClass]="{disabledcls: trims.length<=0}" class="list-group-item">
                 <a  [attr.disabled]="trims.length<=0" [ngClass]="{disabledcls: trims.length<=0}" href="#">Trim</a>
                 <ul>
-                  <li><span class="checkbox">
+                  <!--<li><span class="checkbox">
                       <label>
                         <input type="checkbox" [checked]="isAllTrimSelected" (change)="resetAll('trim')"> All Trims
                       </label>
-                    </span></li>
+                    </span></li>-->
                   <li *ngFor="let trim of trims">
                     <span class="checkbox">
                       <label>
@@ -92,11 +100,11 @@ product-listing  -->
               <li class="list-group-item">
                 <a  href="#">Body</a>
                 <ul>
-                  <li><span class="checkbox">
+                  <!--<li><span class="checkbox">
                       <label>
                         <input [checked]="isAllBodySelected" type="checkbox" (change)="resetAll('body_style')"> All Body Styles
                       </label>
-                    </span></li>
+                    </span></li>-->
                   <li *ngFor="let bodyStyle of bodyStyles">
                     <span class="checkbox">
                       <label>
@@ -108,11 +116,11 @@ product-listing  -->
               <li  class="list-group-item">
                 <a  href="#">Transmission</a>
                 <ul>
-                  <li><span class="checkbox">
+                  <!--<li><span class="checkbox">
                       <label>
                         <input [checked]="isAllTransmissionSelected" type="checkbox" (change)="resetAll('transmission')"> All Transmissions
                       </label>
-                    </span></li>
+                    </span></li> -->
                   <li *ngFor="let transmission of transmissions">
                     <span class="checkbox">
                       <label>
@@ -124,11 +132,11 @@ product-listing  -->
               <li  class="list-group-item">
                 <a  href="#">Exterior Color</a>
                 <ul>
-                  <li><span class="checkbox">
+                 <!-- <li><span class="checkbox">
                       <label>
-                        <input [checked]="isAllExtriorColorSelected" type="checkbox" (change)="resetAll('exterior_color')"> All Exterior Colors
+                        <input [checked]="isAllExtriorColorSelected" type="checkbox" (change)="uncheckAllFetchRecords('All Exterior Colors', 'exterior_color')"> All Exterior Colors
                       </label>
-                    </span></li>
+                    </span></li> -->
                   <li *ngFor="let exteriorColor of exteriorColors">
                     <span class="checkbox">
                       <label>
@@ -140,11 +148,11 @@ product-listing  -->
               <li  class="list-group-item">
                 <a href="#">Interior Color</a>
                 <ul>
-                  <li><span class="checkbox">
+                  <!--<li><span class="checkbox">
                       <label>
-                        <input [checked]="isAllInteriorColorSelected" type="checkbox" (change)="resetAll('interior_color')"> All Interior Colors
+                        <input [checked]="isAllInteriorColorSelected" type="checkbox" value="" (change)="uncheckAllFetchRecords('All Interior Colors', 'interior_color')"> All Interior Colors
                       </label>
-                    </span></li>
+                    </span></li>-->
                   <li *ngFor="let interiorColor of interiorColors">
                     <span class="checkbox">
                       <label>
@@ -162,6 +170,10 @@ product-listing  -->
         </div>
       </div>
       <div class="col-lg-9 col-md-8">
+
+
+
+
         <div class="sorting-options-main">
 
             <div class="row sorting-options top_sorting">
@@ -285,14 +297,17 @@ product-listing  -->
           
         </div>  
        
-        <div class="row">
-          <span *ngFor="let filterKey of CustomizeFiltersObject()  "> 
+        <div class="col-md-12"> 
+          <span class="filter_tags_outer" *ngFor="let filterKey of CustomizeFiltersObject()  "> 
               <span class="round-filter" *ngFor="let filter of page.filters[filterKey]">
                 {{filter}} <a  [attr.data-key]="filterKey" [attr.data-value]="filter" (click)="removeFilter($event)">&times;</a>
               </span>
               
-          </span>
+            </span>
         </div>
+
+
+
         <div *ngIf="!cars.length" class="no_record">
           <p>No record found</p>  
         </div>
@@ -306,7 +321,7 @@ product-listing  -->
                 <img class="img-fluid" src="{{car.cover_image}}" alt="">
                 <div class="car-overlay-banner">
                   <ul>
-                    <li><a routerLink="/seller/car-detail/{{car._id}}"><i class="fa fa-link"></i></a></li>
+                    <li><a routerLink="/seller/car-detail/{{car._id}}"><i class="fa fa-eye"></i></a></li>
                     <li><a [routerLink]="" (click)="delete(car)"><i class="fa fa-trash" aria-hidden="true"></i></a></li>
                   </ul>
                 </div>
@@ -315,7 +330,7 @@ product-listing  -->
                 <ul class="list-inline">
                   <li><i class="fa fa-registered"></i> {{car.year}}</li>
                   <li><i class="fa fa-cog"></i> {{car.transmission}} </li>
-                  <li><i class="fa fa-shopping-cart"></i> {{car.miles | number}} mi</li>
+                  <li><i class="fa fa-road"></i> {{car.miles | number}} mi</li>
                 </ul>
               </div>
               <div class="car-content">
@@ -379,6 +394,7 @@ product-listing  -->
       </div>
       
       <div class="pagination_outer d-flex">
+<div class="showing_records">
       Showing <div class="selected-box number_records">
           <select class="selectpicker my_select" id="per-page"
           (change)="onLimitChange($event.target.value)">
@@ -388,6 +404,7 @@ product-listing  -->
           </option>
       </select>
       </div> records on page
+      </div>
   
 
 
@@ -399,7 +416,7 @@ product-listing  -->
           maxSize="5"  
           previousLabel=""
           nextLabel="" 
-          nextLabel=""
+  
           screenReaderPaginationLabel="Pagination"
           screenReaderPageLabel="~page"
           screenReaderCurrentLabel="You're on page"          

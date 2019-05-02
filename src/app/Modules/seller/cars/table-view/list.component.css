@@ -50,7 +50,7 @@
     vertical-align: top;
  }
  .ngx-datatable.bootstrap .datatable-footer .datatable-pager ul li {
-    margin: 10px 0px;
+    margin:0px 0px;
  }
  .ngx-datatable.bootstrap .datatable-footer .datatable-pager ul li:not(.disabled).active a, 
  .ngx-datatable.bootstrap .datatable-footer .datatable-pager ul li:not(.disabled):hover a {
@@ -93,7 +93,7 @@
    text-transform: capitalize;
 }
 .ngx-datatable .datatable-footer .datatable-pager {
-   text-align: left !important;
+  /* text-align: left !important;*/
    margin-top:10px;
 }
 .ngx-datatable .datatable-header .datatable-header-cell .sort-btn{
@@ -203,4 +203,9 @@
     max-width: auto;
   }
 
+}
+
+
+.pagination_outer{
+  padding: 0px 0px 0px 0px; 
 }

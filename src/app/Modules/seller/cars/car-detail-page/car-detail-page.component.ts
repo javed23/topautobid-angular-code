@@ -15,6 +15,7 @@ declare let POTENZA: any;
 })
 export class CarDetailPageComponent implements OnInit {
   carDetail: any;
+  isImageFilterEnable:Boolean = false
 
   constructor(private location: Location, private activatedRoute: ActivatedRoute, private carService: CarService, private commonUtilsService: CommonUtilsService) {
     
@@ -37,8 +38,30 @@ export class CarDetailPageComponent implements OnInit {
     );   
   }
 
-  backToListPage() {
+  /**
+   * Function to back the control on listin page
+   * @return  void
+  */
+  backToListPage():void {
     this.location.back();
+  }
+
+
+/**
+ * Function to show/hide the image filters
+ * @return  void
+*/
+  imageFilterToggle():void{
+    this.isImageFilterEnable = (this.isImageFilterEnable)?false:true
+  }
+
+/**
+ * Function to filter image in slider
+ * @param   event object 
+ * @return  void
+*/
+  onImageFilter(event):void{
+    console.log(event.target.value)
   }
 
   ngOnInit() {

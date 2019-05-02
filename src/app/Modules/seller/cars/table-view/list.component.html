@@ -16,73 +16,117 @@
         <div class="row">
 
             <div class="col-md-12">
-                <div class="listing_outer blog-sidebar">
-                    <div class="sidebar-widget">
-                        <div class="text-right mb-3">
-                            <a class="button red" href="#"> Create New </a>
-                        </div>
-                        <div class="text-right mb-3">    
-                        <div class="filter_box text-md-right mt-md-0 mt-sm-3">
-                            <!--<a class="Filter button" href="javascript:void(0)">
-                                <i class="fa fa-bars" aria-hidden="true"></i> Filters
-                            </a>-->
-                            <div class="widget-search ml-4">
-                                <i class="fa fa-search"></i>
-                                <input type="search" class="form-control placeholder"
-                                    (input)="onSearch($event.target.value)" placeholder="Search....">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-                    </div>
-                    <div class="form-inline mb-3 blog-sidebar mt-3">
-                        <div class="sidebar-widget col-md-5 pl-0 mb-0">
-                        <div class="tags">
-
-                            <ul>
-                                <li [ngClass]="{ active: page.type=='all'}"> <button
-                                        (click)="onChangeListType('all')">All</button></li>
-
-                                <li [ngClass]="{ active: page.type=='active'}"><button
-                                        (click)="onChangeListType('active')">Active</button></li>
-                                <li [ngClass]="{ active: page.type=='sold'}"><button
-                                        (click)="onChangeListType('sold')">Sold</button></li>
-                                <li [ngClass]="{ active: page.type=='archived'}"><button
-                                        (click)="onChangeListType('archived')">Archived</button></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                        <div class="right_sec col-md-7 text-right pr-0">
-                        
-                        <div class="input-group date_filters_start d-inline-block">
-                            <input [(ngModel)]="startDateModel"  class="form-control" (dateSelect)="onStartDateSelected($event)" type="text" (click)="startDate.toggle()" placeholder="Start date"
-                                ngbDatepicker #startDate="ngbDatepicker">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary calendar" (click)="startDate.toggle()"
-                                    type="button"><span><i class="fa fa-calendar"
-                                            aria-hidden="true"></i></span></button>
-                            </div>
-                        </div>
-                     
-                        <div class="input-group date_filters_start d-inline-block">
-                            <input [(ngModel)]="endDateModel" class="form-control" type="text" (dateSelect)="onEndDateSelected($event)" (click)="endDate.toggle()" placeholder="End date"
-                                ngbDatepicker #endDate="ngbDatepicker">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary calendar" (click)="endDate.toggle()"
-                                    type="button"><span><i class="fa fa-calendar"
-                                            aria-hidden="true"></i></span></button>
-                            </div>
-                        </div>
+                <div class="blog-sidebar">
+                   
 
 
-                        <div (click)="clearDateFilters()" class="clear_inputs d-inline-block">
-                            <i class="fa fa-refresh" aria-hidden="true"></i>
-                        </div>
-                    </div>
+                    <div class="sorting-options-main">
+                        <div class="row sorting-options top_sorting">
+                                <div class="col-md-12 d-flex">
+                                  <div class="change-view-button">
+                                     <a [ngClass]="{active: isGridListing}"  title="Grid View" href="javascript:void(0)" (click)="onChangeListingType('grid')"><i class="fa fa-th"></i></a>
+                                    <a [ngClass]="{active: !isGridListing}" title="Listing View" href="javascript:void(0)" (click)="onChangeListingType('list')"><i class="fa fa-list-ul"></i></a>                      
+                                   
+                                  </div>
+                
+                
+                                  <div class="ml-auto text-right">
+                                 
+                
+                
+                                    <div class="price-search">                 
+                                        <div class="search">
+                                          <i class="fa fa-search"></i>
+                                          <input type="search" class="form-control placeholder" (input)="onSearch($event.target.value)"
+                                            placeholder="Type Make, Model, Trim etc..">
+                                        </div>
+                                      </div>
+                                    </div>
+                
+                
+                                </div>
+                               
+                             
+                          
+                              </div>
+                              
+                         
+                            <div class="row blog-sidebar listing_outer">
+                                
+                
+                
+                
+                                 
+                
+                                
+                
+                              
+                              <div class="sidebar-widget mb-0">
+                                    <div class="tags">
+                            
+                                        <ul>
+                                            <li [ngClass]="{ active: page.type=='all'}"> <button
+                                                    (click)="onChangeListType('all')">All</button></li>
+                
+                                            <li [ngClass]="{ active: page.type=='active'}"><button
+                                                    (click)="onChangeListType('active')">Active</button></li>
+                                            <li [ngClass]="{ active: page.type=='sold'}"><button
+                                                    (click)="onChangeListType('sold')">Sold</button></li>
+                                            <li [ngClass]="{ active: page.type=='archived'}"><button
+                                                    (click)="onChangeListType('archived')">Archived</button></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                
+                
+                                <div class="right_sec ml-auto">
+                
+                                    <div class="selected-box">
+                                        <select (change)="onSort($event)" class="my_select">
+                                          <option>Sort by </option>
+                                          <option value="offer_in_hand,asc">Price: Lowest first</option>
+                                          <option  value="offer_in_hand,desc">Price: Highest first </option>
+                                          <option value="year,asc">Year: Lowest first</option>
+                                          <option  value="year,desc">Year: Highest first </option>
+                                          <option  value="make,asc">Make: A to Z </option>
+                                          <option  value="make,desc">Make: Z to A </option>                  
+                                        </select>
+                                      </div>
+                
+                                    <div class="input-group date_filters_start d-inline-block">
+                                        <input [(ngModel)]="startDateModel"  class="form-control" (dateSelect)="onStartDateSelected($event)" type="text" (click)="startDate.toggle()" placeholder="Start date"
+                                            ngbDatepicker #startDate="ngbDatepicker">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary calendar" (click)="startDate.toggle()"
+                                                type="button"><span><i class="fa fa-calendar"
+                                                        aria-hidden="true"></i></span></button>
+                                        </div>
+                                    </div>
+                                 
+                                    <div class="input-group date_filters_start d-inline-block">
+                                        <input [(ngModel)]="endDateModel" class="form-control" type="text" (dateSelect)="onEndDateSelected($event)" (click)="endDate.toggle()" placeholder="End date"
+                                            ngbDatepicker #endDate="ngbDatepicker">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary calendar" (click)="endDate.toggle()"
+                                                type="button"><span><i class="fa fa-calendar"
+                                                        aria-hidden="true"></i></span></button>
+                                        </div>
+                                    </div>
+                            
+                            
+                                    <div (click)="clearDateFilters()" class="clear_inputs d-inline-block">
+                                        <i class="fa fa-refresh" aria-hidden="true"></i>
+                                    </div>
+                                </div>                           
+                            </div>            
+  
+                          
+                        </div> 
 
 
-                    </div>
+
+
+                    
             
                     <div class="sidebar-widget">
                         <div class="unordered-lists table-responsive text-center">
@@ -169,19 +213,35 @@
                                     <ng-template ngx-datatable-footer-template let-rowCount="rowCount"
                                         let-pageSize="pageSize" let-selectedCount="selectedCount" let-curPage="curPage"
                                         let-offset="offset" let-isVisible="isVisible">
-                                        <!--<div class="page-count">
-                    <span *ngIf="selectedMessage">
-                      {{selectedCount.toLocaleString()}} {{selectedMessage}} / 
-                    </span>
-                    {{rowCount.toLocaleString()}} {{totalMessage}}
-                  </div>-->
-                                        <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
-                                            [pagerRightArrowIcon]="'datatable-icon-right'"
-                                            [pagerPreviousIcon]="'datatable-icon-prev'"
-                                            [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage" [size]="pageSize"
-                                            [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
-                                            (change)="listingTable.onFooterPage($event)">
-                                        </datatable-pager>
+                                       
+                                       
+                                        <div class="pagination_outer d-flex">
+
+                                            <div class="showing_records">
+                                                Showing <div class="selected-box number_records">
+                                                    <select class="selectpicker my_select" id="per-page"
+                                                    (change)="onLimitChange($event.target.value)">
+                                                    <option *ngFor="let option of pageLimitOptions" [value]="option.value"
+                                                        [selected]="option.value == currentPageLimit">
+                                                        {{ option.value }} 
+                                                    </option>
+                                                </select>
+                                                </div> records on page
+                                            </div>
+
+                                        <div class="ml-auto">
+                                                <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+                                                [pagerRightArrowIcon]="'datatable-icon-right'"
+                                                [pagerPreviousIcon]="'datatable-icon-prev'"
+                                                [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage" [size]="pageSize"
+                                                [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
+                                                (change)="listingTable.onFooterPage($event)">
+                                            </datatable-pager>
+
+                                        </div>
+
+
+                                        </div>
 
                                     </ng-template>
                                 </ngx-datatable-footer>
@@ -189,21 +249,8 @@
                         </div>
 
 
-                        <div *ngIf="cars.length>0" class="sorting-options position_absolute">
-                            <div class="selected-box">
-                                <div class="register-form selected-box">
+                        
 
-                                    <select class="selectpicker" id="per-page"
-                                        (change)="onLimitChange($event.target.value)">
-                                        <option *ngFor="let option of pageLimitOptions" [value]="option.value"
-                                            [selected]="option.value == currentPageLimit">
-                                            {{ option.value }} results
-                                        </option>
-                                    </select>
-
-                                </div>
-                            </div>
-                        </div>
 
 
 

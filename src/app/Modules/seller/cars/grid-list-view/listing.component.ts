@@ -406,7 +406,7 @@ vehicleStatisticsByModel(option, filter):void{
 */
 
 resetAll(filter,keyName=''):void{
-  console.log('keyNameArr',keyName.length);
+  //console.log('keyNameArr',keyName.length);
   if(!keyName.length) delete this.page.filters[filter]; 
   
   if(filter=='interior_color'){

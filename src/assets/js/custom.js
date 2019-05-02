@@ -397,7 +397,7 @@ POTENZA.revolutionSlider = function (jQuery) {
             asNavFor: '.Product_nav'
           });
         $('.Product_nav').slick({
-          slidesToShow: 5,
+          slidesToShow: 4,
           slidesToScroll: 1,
           asNavFor: '.Full_view',
           dots: false,
