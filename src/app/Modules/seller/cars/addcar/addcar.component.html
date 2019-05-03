@@ -6,7 +6,7 @@
 
 
 
- <section #contentSection class=" page-section-ptb accordian_listing">
+ <section #contentSection class="  accordian_listing">
     <div class="banner_col" *ngIf="!isVehicleOptionSelected">
         <div class="banner_col_inner">
             <div class="banner_col_inner_center">
@@ -26,10 +26,10 @@
                             <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                                 <h5>Auto-fill My Vehicle Details</h5>
                                 <input type="text" #vin_number mask="A{17}" placeholder="Enter VIN or License Plate" [ngClass]="{ 'is-invalid': (vehicleOption.controls.vin_number.touched || isVehicleOptionSubmitted) && vehicleOption.controls.vin_number.errors }" formControlName="vin_number"/> 
-                                <p *ngIf="vehicleOption.controls.vin_number.touched || isVehicleConditionSubmitted">                      
+                                <p class="error_label" *ngIf="vehicleOption.controls.vin_number.touched || isVehicleConditionSubmitted">                      
                                     <app-form-validation-errors minLength=2 maxLength=17 errorPrefix="VIN " [errors]="vehicleOption.controls.vin_number.errors"></app-form-validation-errors>   
                                 </p>
-                                <br/>                                
+                                                         
                                 <button class="grayBtn" type="button" [disabled]="vin_number.value.length != 17" (click)="onSubmitVINValue(vin.value)">Get My Car Details</button>
                             </div>
                                 <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
@@ -57,25 +57,23 @@
                                                 
                                         </ul> 
                                         <!--end--> 
-                                        <input mask="0000" *ngIf="isMoreSelected" formControlName="vehicle_year_value" type="text" data-typeahead="sellCarModelYear" class="gs_ta" placeholder="Year" autocomplete="off"  [ngClass]="{ 'is-invalid': (vehicleOption.controls.vehicle_year_value.touched || isVehicleOptionSubmitted) && vehicleOption.controls.vin_number.errors }">
-                                        <p *ngIf="vehicleOption.controls.vehicle_year_value.touched || isVehicleOptionSubmitted">                      
+                                        <input mask="0000" *ngIf="isMoreSelected" formControlName="vehicle_year_value" type="text" data-typeahead="sellCarModelYear" class="gs_ta" placeholder="Year" autocomplete="off"  [ngClass]="{ 'is-invalid': (vehicleOption.controls.vehicle_year_value.touched || isVehicleOptionSubmitted) && vehicleOption.controls.vehicle_year_value.errors }">
+                                        <p class="error_label" *ngIf="(vehicleOption.controls.vehicle_year_value.touched || isVehicleOptionSubmitted) ">                      
                                                 <app-form-validation-errors errorPrefix="Year " [errors]="vehicleOption.controls.vehicle_year_value.errors"></app-form-validation-errors>   
-                                            </p>
+                                        </p>
                                     </div>
-                                    <br/>
-                                    <button class="grayBtn" type="button" [disabled]="vehicleOption.invalid" (click)="validateYearOption()">Get My Car Details</button> 
+                                   <button class="grayBtn" type="button" [disabled]="vehicleOption.invalid" (click)="validateYearOption()">Get My Car Details</button> 
                                 </div>
                                 <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
                                     <h5>Select from Existing Vehicle</h5>
                                     
-                                        <input #existing_vehicle type="text" placeholder="VIN, Make, Model" [ngClass]="{ 'is-invalid': (vehicleOption.controls.existing_vehicle.touched || isVehicleOptionSubmitted) && vehicleOption.controls.existing_vehicle.errors }" formControlName="existing_vehicle"/>          
-                                        
+                                        <input #existing_vehicle type="text" placeholder="VIN, Make, Model" [ngClass]="{ 'is-invalid': (vehicleOption.controls.existing_vehicle.touched || isVehicleOptionSubmitted) && vehicleOption.controls.existing_vehicle.errors }" formControlName="existing_vehicle"/> 
 
-                                        <p *ngIf="vehicleOption.controls.existing_vehicle.touched || isVehicleOptionSubmitted" class="">                      
+                                        <p class="error_label" *ngIf="vehicleOption.controls.existing_vehicle.touched || isVehicleOptionSubmitted">                      
                                             <app-form-validation-errors errorPrefix="Select from Existing Vehicle " [errors]="vehicleOption.controls.existing_vehicle.errors"></app-form-validation-errors>   
                                         </p>
-                                    
-                                    <br/>
+                                   
+                                   
                                     <button class="grayBtn" type="button" [disabled]="vehicleOption.invalid" (click)="onSubmitExistingVehicle(existing_vehicle.value)">Get My Car Details</button>
                                 </div>
                             </div>
@@ -89,212 +87,261 @@
     </div>
 
 
-    <div class="container" *ngIf="isVehicleOptionSelected" [@AnimateList]>
-        <div class="row">
-            <div class="col-md-12">              
-                <aw-wizard #wizard class="custom-css">    
+    <div *ngIf="isVehicleOptionSelected" [@AnimateList]>
+      
+                <aw-wizard #wizard class="step_col">    
                         <aw-wizard-step stepTitle="Basic Info" (stepEnter)="scrollToSpecificDiv($event)" [canExit]="moveDirection.bind(this, basicInfoWizard.valid)">  
-                                <form [formGroup]="basicInfoWizard">
-                                    <div formGroupName="basic_info" class="add_car">
-                                        <div class="row">
-                                            <div class="form-group col-md-6">
-                                                        
-                                                <label>Where is this car currently located?*</label>
-                                                <input #vehicle_zip mask="00000" type="text" class="simple_select form-control placeholder" placeholder="ZIP" formControlName="vehicle_zip" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_zip').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_zip').errors }">
-            
-                                                <p *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_zip').touched || isBasicInfoSubmitted">                      
-                                                    <app-form-validation-errors minLength=2 maxLength=5 errorPrefix="Zip " patternError="Must enter valid zip code." [errors]="basicInfoWizard.controls.basic_info.get('vehicle_zip').errors"></app-form-validation-errors>   
-                                                </p>
-                                            
-                                                
-            
-                                            </div>
-                                        </div> 
-                                            
-                                        
-                                    <div class="vehicle_year_dtl">
-                                        <div class="row">                                          
-                                            
-                                            
-
-                                            <div class="form-group col-md-6">
-                                                <label>Make*</label>
-                                                <select #vehicle_make (change)="getModelsByMake(vehicle_make.value)" class="simple_select selectpicker" formControlName="vehicle_make" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_make').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_make').errors }">
-                                                    <option value="">Select Make</option>
-                                                    <option *ngFor="let make of makes;" value="{{make.name}}">{{make.name}}</option>
-                                                </select>
-                                                <p *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_make').touched || isBasicInfoSubmitted">                      
-                                                    <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="Make " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_make').errors"></app-form-validation-errors>   
+                           
+                            <div class="container">
+                                <div class="steps_info">
+                                    <form [formGroup]="basicInfoWizard">
+                                        <div formGroupName="basic_info" class="add_car">
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                <h4>Vehicle Info</h4>
+                                                <div class="f_width">       
+                                                    <label>Where is this car currently located?*</label>
+                                                    <input #vehicle_zip mask="00000" type="text" class="simple_select form-control placeholder" placeholder="ZIP" formControlName="vehicle_zip" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_zip').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_zip').errors }">
+                
+                                                    <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_zip').touched || isBasicInfoSubmitted">                      
+                                                        <app-form-validation-errors minLength=2 maxLength=5 errorPrefix="Zip " patternError="Must enter valid zip code." [errors]="basicInfoWizard.controls.basic_info.get('vehicle_zip').errors"></app-form-validation-errors>   
                                                     </p>
-                                            </div>                                   
+                                                </div>
 
-                                            <div class="form-group col-md-6">
-                                                
-                                                <label>MODEL*</label>
-                                                <select class="simple_select selectpicker" #vehicle_model (change)="getTrimsByModel(vehicle_model.value)" formControlName="vehicle_model" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_model').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_model').errors }">
-                                                        <option value="">Select Model</option>
-                                                        <option *ngFor="let model of models;" value="{{model.name}}">{{model.name}}</option> 
-                                                </select>
-                                                <p *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_model').touched || isBasicInfoSubmitted">                      
-                                                        <app-form-validation-errors errorPrefix="Vehicle Model " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_model').errors"></app-form-validation-errors>   
-                                                </p>
-                                        
-                                                
-                                            </div>
 
-                                            <div class="form-group col-md-6">
-                                                            
-                                                <label>TRIM*</label>
-                                                <select class="simple_select selectpicker" #vehicle_trim formControlName="vehicle_trim" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_trim').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_trim').errors }">
+
+                                                <div class="f_width">       
+                                                       
+                                                        <label>Make*</label>
+                                                        <select #vehicle_make (change)="getModelsByMake(vehicle_make.value)" class="simple_select selectpicker" formControlName="vehicle_make" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_make').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_make').errors }">
+                                                            <option value="">Select Make</option>
+                                                            <option *ngFor="let make of makes;" value="{{make.name}}">{{make.name}}</option>
+                                                        </select>
+                                                        <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_make').touched || isBasicInfoSubmitted">                      
+                                                            <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="Make " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_make').errors"></app-form-validation-errors>   
+                                                            </p>
+                                                      
+
+
+                                                    </div>
+
+
+
+
+
+                                                <div class="f_width">       
+                                                       
+
+                                                        <label>Model*</label>
+                                                        <select class="simple_select selectpicker" #vehicle_model (change)="getTrimsByModel(vehicle_model.value)" formControlName="vehicle_model" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_model').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_model').errors }">
+                                                                <option value="">Select Model</option>
+                                                                <option *ngFor="let model of models;" value="{{model.name}}">{{model.name}}</option> 
+                                                        </select>
+                                                        <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_model').touched || isBasicInfoSubmitted">                      
+                                                                <app-form-validation-errors errorPrefix="Vehicle Model " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_model').errors"></app-form-validation-errors>   
+                                                        </p>
+
+
+                                                    </div>
+
+
+
+
+
+
+                                            <div class="f_width">       
+                                                    <label>Trim*</label>
+                                                    <select class="simple_select selectpicker" #vehicle_trim formControlName="vehicle_trim" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_trim').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_trim').errors }">
                                                     <option value="">Select Trim</option>
                                                     <option *ngFor="let trim of trims;" value="{{trim.name}}">{{trim.name}}</option> 
-                                                </select>
-                                                <p *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_trim').touched || isBasicInfoSubmitted">                      
+                                                    </select>
+                                                    <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_trim').touched || isBasicInfoSubmitted">                      
                                                     <app-form-validation-errors errorPrefix="Trim " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_trim').errors"></app-form-validation-errors>   
-                                                </p>
-                                                
-                                            </div>
-
-
-                                            
-            
-                                            <div class="form-group col-md-6">
-                                                <label>Mileage*</label>
-                                                <input mask="00" type="text" class="simple_select form-control placeholder" placeholder="Enter the Vehicle Mileage in miles" formControlName="vehicle_mileage" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_mileage').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_mileage').errors }" #vehicle_mileage>
-            
-                                                <p *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_mileage').touched || isBasicInfoSubmitted">                      
-                                                    <app-form-validation-errors minLength=2 maxLength=2 errorPrefix="Mileage " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_mileage').errors"></app-form-validation-errors>   
-                                                </p>                                       			
-                                            </div>
-
-                                            <div class="form-group col-md-6">
-                                                <label>Engine*</label>                                        
-
-                                                <select class="simple_select selectpicker" #vehicle_engine formControlName="vehicle_engine" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_engine').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_engine').errors }">
-                                                        <option value="">Select Engine</option>
-                                                        <option *ngFor="let engine of engines;" value="{{engine.name}}">{{engine.name}}</option> 
-                                                    </select> 
-
-                                                <p *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_engine').touched || isBasicInfoSubmitted">                      
-                                                    <app-form-validation-errors errorPrefix="Engine " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_engine').errors"></app-form-validation-errors>   
-                                                    </p>		
-                                            </div>
-                        
-                                        
-                            
-                                            <div class="form-group col-md-6">
-            
-                                                <label>Transmission*</label>
-                                                <select class="simple_select selectpicker" #vehicle_transmission formControlName="vehicle_transmission" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_transmission').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_transmission').errors }">
-                                                        <option value="">Select Transmission</option>
-                                                        <option *ngFor="let transmission of transmissions;" value="{{transmission.name}}">{{transmission.name}}</option> 
-                                                    </select>
-                                                <p *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_transmission').touched || isBasicInfoSubmitted">                      
-                                                    <app-form-validation-errors  errorPrefix="Transmission " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_transmission').errors"></app-form-validation-errors>   
-                                                </p>
-                                                            
-                                            </div>
-                        
-                                        
-                                            
-                                
-                                            <div class="form-group col-md-6">
-                                                <label>Doors*</label>
-                                                <select class="simple_select selectpicker" #vehicle_doors formControlName="vehicle_doors" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_doors').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_doors').errors }">
-                                                        <option value="">Select Doors</option>
-                                                        <option *ngFor="let door of doors;" value="{{door.name}}">{{door.name}}</option> 
-                                                    </select>
-                                                    <p *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_doors').touched || isBasicInfoSubmitted">                      
-                                                        <app-form-validation-errors errorPrefix="Doors " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_doors').errors"></app-form-validation-errors>   
-                                                    </p>			
-                                            </div>
-                            
-                                    
-                                            <div class="form-group col-md-6">
-                                                <label>BODY TYPE*</label>
-                                                <select class="simple_select selectpicker" #vehicle_body_type formControlName="vehicle_body_type" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_body_type').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_body_type').errors }">
-                                                        <option value="">Select Body Type</option>
-                                                        <option *ngFor="let bodyStyle of bodyStyles;" value="{{bodyStyle.name}}">{{bodyStyle.name}}</option> 
-                                                    </select>
-                                                <p *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_body_type').touched || isBasicInfoSubmitted">                      
-                                                    <app-form-validation-errors errorPrefix="Body Type " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_body_type').errors"></app-form-validation-errors>   
-                                                    </p> 
-                                            </div>
-                                    
-                                            <div class="form-group col-md-6">
-                                                            
-                                                <label>Fuel Type*</label>
-                                                <select class="simple_select selectpicker" #vehicle_fuel_type formControlName="vehicle_fuel_type" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_fuel_type').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_fuel_type').errors }">
-                                                        <option value="">Select Fuel Type</option>
-                                                        <option *ngFor="let fuelType of fuelTypes;" value="{{fuelType.name}}">{{fuelType.name}}</option> 
-                                                    </select>
-                                                <p *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_fuel_type').touched || isBasicInfoSubmitted">                      
-                                                    <app-form-validation-errors errorPrefix="Fuel Type " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_fuel_type').errors"></app-form-validation-errors>   
-                                                </p>
-                                                
-                                            </div>
-                                    
-                                            <div class="form-group col-md-6">
-                                                <label>Drive Type*</label>
-                                                <select class="simple_select selectpicker" #vehicle_drive_type formControlName="vehicle_drive_type" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_drive_type').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_drive_type').errors }">
-                                                    <option value="">Select Drive Type</option>
-                                                    <option *ngFor="let driveType of driveTypes;" value="{{driveType.name}}">{{driveType.name}}</option> 
-                                                </select>
-                                                <p *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_drive_type').touched || isBasicInfoSubmitted">                      
-                                                    <app-form-validation-errors errorPrefix="Drive Type " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_drive_type').errors"></app-form-validation-errors>   
-                                                </p>			
-                                            </div>                        
-                                        
-                                            <div class="form-group col-md-6">
-                                                            
-                                                <label>Interior Color*</label>
-                                                <select class="simple_select selectpicker" #vehicle_interior_color formControlName="vehicle_interior_color" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_interior_color').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_interior_color').errors }">
-                                                        <option value="">Select Interior Color</option>
-                                                        <option *ngFor="let interiorColor of interiorColors;" value="{{interiorColor.name}}">{{interiorColor.name}}</option> 
-                                                    </select>
-                                                    <p *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_interior_color').touched || isBasicInfoSubmitted">                      
-                                                        <app-form-validation-errors errorPrefix="Interior Color " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_interior_color').errors"></app-form-validation-errors>   
                                                     </p>
-                                                
+
                                             </div>
+
+
+
+                                            <div class="f_width">
+                                                    <label>Mileage*</label>
+                                                    <input mask="00" type="text" class="simple_select form-control placeholder" placeholder="Enter the Vehicle Mileage in miles" formControlName="vehicle_mileage" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_mileage').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_mileage').errors }" #vehicle_mileage>
+                
+                                                    <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_mileage').touched || isBasicInfoSubmitted">                      
+                                                        <app-form-validation-errors minLength=2 maxLength=2 errorPrefix="Mileage " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_mileage').errors"></app-form-validation-errors>   
+                                                    </p>                                       			
+                                                </div>
+
+
+
+
+                                                <div class="f_width">
+                                                        <label>Engine*</label>                                        
+    
+                                                        <select class="simple_select selectpicker" #vehicle_engine formControlName="vehicle_engine" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_engine').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_engine').errors }">
+                                                                <option value="">Select Engine</option>
+                                                                <option *ngFor="let engine of engines;" value="{{engine.name}}">{{engine.name}}</option> 
+                                                            </select> 
+    
+                                                        <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_engine').touched || isBasicInfoSubmitted">                      
+                                                            <app-form-validation-errors errorPrefix="Engine " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_engine').errors"></app-form-validation-errors>   
+                                                            </p>		
+                                                    </div>
+
+
+
+                                                    <div class="f_width">
+                
+                                                            <label>Transmission*</label>
+                                                            <select class="simple_select selectpicker" #vehicle_transmission formControlName="vehicle_transmission" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_transmission').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_transmission').errors }">
+                                                                    <option value="">Select Transmission</option>
+                                                                    <option *ngFor="let transmission of transmissions;" value="{{transmission.name}}">{{transmission.name}}</option> 
+                                                                </select>
+                                                            <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_transmission').touched || isBasicInfoSubmitted">                      
+                                                                <app-form-validation-errors  errorPrefix="Transmission " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_transmission').errors"></app-form-validation-errors>   
+                                                            </p>
+                                                                        
+                                                        </div>
                                     
-                                            <div class="form-group col-md-6">
-                                                <label>Exterior Color*</label>
-                                                <select class="simple_select selectpicker" #vehicle_exterior_color formControlName="vehicle_exterior_color" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_exterior_color').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_exterior_color').errors }">
-                                                        <option value="">Select Exterior Color</option>
-                                                        <option *ngFor="let exteriorColor of exteriorColors;" value="{{exteriorColor.name}}">{{exteriorColor.name}}</option> 
-                                                </select>
-                                                <p *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_exterior_color').touched || isBasicInfoSubmitted">                      
-                                                    <app-form-validation-errors errorPrefix="Exterior Color " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_exterior_color').errors"></app-form-validation-errors>   
-                                                </p>			
-                                            </div>                        
+                                                    
+                                                        
+                                            
+                                                        <div class="f_width">
+                                                            <label>Doors*</label>
+                                                            <select class="simple_select selectpicker" #vehicle_doors formControlName="vehicle_doors" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_doors').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_doors').errors }">
+                                                                    <option value="">Select Doors</option>
+                                                                    <option *ngFor="let door of doors;" value="{{door.name}}">{{door.name}}</option> 
+                                                                </select>
+                                                                <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_doors').touched || isBasicInfoSubmitted">                      
+                                                                    <app-form-validation-errors errorPrefix="Doors " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_doors').errors"></app-form-validation-errors>   
+                                                                </p>			
+                                                        </div>
                                         
-                                            <div class="form-group col-md-6">
-                                                            
-                                                <label>Interior Material*</label>
-                                                <select class="simple_select selectpicker" #vehicle_interior_material formControlName="vehicle_interior_material" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_interior_material').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_interior_material').errors }">
-                                                        <option value="">Select Interior Material</option>
-                                                        <option *ngFor="let interiorMaterial of interiorMaterials;" value="{{interiorMaterial.name}}">{{interiorMaterial.name}}</option> 
-                                                </select>
-                                                    <p *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_interior_material').touched || isBasicInfoSubmitted">                      
-                                                        <app-form-validation-errors errorPrefix="Interior Material " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_interior_material').errors"></app-form-validation-errors>   
-                                                    </p>
                                                 
-                                            </div>
-                                    
+                                                        <div class="f_width">
+                                                            <label>Body Type*</label>
+                                                            <select class="simple_select selectpicker" #vehicle_body_type formControlName="vehicle_body_type" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_body_type').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_body_type').errors }">
+                                                                    <option value="">Select Body Type</option>
+                                                                    <option *ngFor="let bodyStyle of bodyStyles;" value="{{bodyStyle.name}}">{{bodyStyle.name}}</option> 
+                                                                </select>
+                                                            <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_body_type').touched || isBasicInfoSubmitted">                      
+                                                                <app-form-validation-errors errorPrefix="Body Type " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_body_type').errors"></app-form-validation-errors>   
+                                                                </p> 
+                                                        </div>
+                                                
+                                                        <div class="f_width">
+                                                                        
+                                                            <label>Fuel Type*</label>
+                                                            <select class="simple_select selectpicker" #vehicle_fuel_type formControlName="vehicle_fuel_type" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_fuel_type').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_fuel_type').errors }">
+                                                                    <option value="">Select Fuel Type</option>
+                                                                    <option *ngFor="let fuelType of fuelTypes;" value="{{fuelType.name}}">{{fuelType.name}}</option> 
+                                                                </select>
+                                                            <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_fuel_type').touched || isBasicInfoSubmitted">                      
+                                                                <app-form-validation-errors errorPrefix="Fuel Type " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_fuel_type').errors"></app-form-validation-errors>   
+                                                            </p>
+                                                            
+                                                        </div>
+                                                
+                                                        <div class="f_width">
+                                                            <label>Drive Type*</label>
+                                                            <select class="simple_select selectpicker" #vehicle_drive_type formControlName="vehicle_drive_type" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_drive_type').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_drive_type').errors }">
+                                                                <option value="">Select Drive Type</option>
+                                                                <option *ngFor="let driveType of driveTypes;" value="{{driveType.name}}">{{driveType.name}}</option> 
+                                                            </select>
+                                                            <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_drive_type').touched || isBasicInfoSubmitted">                      
+                                                                <app-form-validation-errors errorPrefix="Drive Type " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_drive_type').errors"></app-form-validation-errors>   
+                                                            </p>			
+                                                        </div>                        
+                                                    
+                                                        <div class="f_width">
+                                                                        
+                                                            <label>Interior Color*</label>
+                                                            <select class="simple_select selectpicker" #vehicle_interior_color formControlName="vehicle_interior_color" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_interior_color').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_interior_color').errors }">
+                                                                    <option value="">Select Interior Color</option>
+                                                                    <option *ngFor="let interiorColor of interiorColors;" value="{{interiorColor.name}}">{{interiorColor.name}}</option> 
+                                                                </select>
+                                                                <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_interior_color').touched || isBasicInfoSubmitted">                      
+                                                                    <app-form-validation-errors errorPrefix="Interior Color " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_interior_color').errors"></app-form-validation-errors>   
+                                                                </p>
+                                                            
+                                                        </div>
+                                                
+                                                        <div class="f_width">
+                                                            <label>Exterior Color*</label>
+                                                            <select class="simple_select selectpicker" #vehicle_exterior_color formControlName="vehicle_exterior_color" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_exterior_color').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_exterior_color').errors }">
+                                                                    <option value="">Select Exterior Color</option>
+                                                                    <option *ngFor="let exteriorColor of exteriorColors;" value="{{exteriorColor.name}}">{{exteriorColor.name}}</option> 
+                                                            </select>
+                                                            <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_exterior_color').touched || isBasicInfoSubmitted">                      
+                                                                <app-form-validation-errors errorPrefix="Exterior Color " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_exterior_color').errors"></app-form-validation-errors>   
+                                                            </p>			
+                                                        </div>                        
+                                                    
+                                                        <div class="f_width">
+                                                                        
+                                                            <label>Interior Material*</label>
+                                                            <select class="simple_select selectpicker" #vehicle_interior_material formControlName="vehicle_interior_material" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_interior_material').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_interior_material').errors }">
+                                                                    <option value="">Select Interior Material</option>
+                                                                    <option *ngFor="let interiorMaterial of interiorMaterials;" value="{{interiorMaterial.name}}">{{interiorMaterial.name}}</option> 
+                                                            </select>
+                                                                <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_interior_material').touched || isBasicInfoSubmitted">                      
+                                                                    <app-form-validation-errors errorPrefix="Interior Material " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_interior_material').errors"></app-form-validation-errors>   
+                                                                </p>
+                                                            
+                                                        </div>
+
+
+
+
+
+
+
+
+                                                
+                                                    
+                
+                                                </div>
+
+
+                                                <div class="form-group col-md-6 text-center">
+                                                 <h4>Here is your vehicle</h4>                                           
+                                                    <div class="vehicle_thumb_outer">
+                                                        <div class="vehicle_thumb"><img src="assets/images/car_thumb.png" alt=""></div>
+                                                        <span class="vehicle_name">Mercedes 2019</span>
+
+                                                    </div>
+
+                                                    <div class="vehicle_thumb_outer">
+                                                            <div class="vehicle_thumb"><img src="assets/images/mercedes_logo.png" alt=""></div>
+                                                            
+    
+                                                        </div>
+
+
+                                                </div>
+
+
+
+
+
+
+                                            </div> 
+                                                
+                                      
+                                                                
+                                        </div>    
+                
+                                        <div class="form-group text-right">
+                                            <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="basicInfoWizard.invalid" (click)="validateBasicInfoWizard()" type="button" awNextStep>Next Step</button>		
                                         </div>
-                                    </div>
-                                                            
-                                    </div>    
-            
-                                    <div class="form-group text-right">
-                                        <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="basicInfoWizard.invalid" (click)="validateBasicInfoWizard()" type="button" awNextStep>Next Step</button>		
-                                    </div>
-                                </form>      
+                                    </form>    
+                                </div>  
+                            </div>  
                         </aw-wizard-step>    
                         <aw-wizard-step stepTitle="Vehicle Images" (stepEnter)="scrollToSpecificDiv($event)" [canExit]="moveDirection.bind(this, uploadVehicleImagesWizard.valid)">
                             <!--Upload Images Section-->
                             <form [formGroup]="uploadVehicleImagesWizard">
+                                    <div class="container">      
                                 <div formArrayName="vehicle_images" class="add_car">      
                                     
                                     
@@ -302,14 +349,14 @@
                                         <div class="vehicle_category">
                                             <div class="form-group">
                                                 <div class="Radio_BTN">
-                                                    <input type="radio" (click)="checkVehicleImageCatgeory('interior')" formControlName="vehicle_image_category_name"  value="interior" id="interior">
+                                                    <input type="radio" (click)="checkVehicleImageCatgeory('Interior')" formControlName="vehicle_image_category_name"  value="Interior" id="Interior">
                                                     <label for="interior">Interior</label>
                                                 </div> 
                                             </div> 
                                             <div class="form-group">
                                                 <div class="Radio_BTN">
-                                                    <input type="radio" (click)="checkVehicleImageCatgeory('exterior')" formControlName="vehicle_image_category_name"  value="exterior" id="exterior">
-                                                    <label for="exterior">Exterior</label>
+                                                    <input type="radio" (click)="checkVehicleImageCatgeory('Exterior')" formControlName="vehicle_image_category_name"  value="Exterior" id="Exterior">
+                                                    <label for="Exterior">Exterior</label>
                                                 </div> 
                                             </div> 
                                         </div> 
@@ -320,18 +367,20 @@
                                     
                                             <div class="content-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="auto">
                                                                             
-                                                <div class="dropzone dropzone-container draganddrop" [dropzone]="vehicleImagesConfiguration" [disabled]="disabled"></div>
+                                                <div class="dropzone dropzone-container draganddrop custom_dragger" [dropzone]="vehicleImagesConfiguration" [disabled]="disabled">
+                                                    <div class="drag_box"><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i><p>Drag/Drop Images here to upload</p><span>OR</span><button class="button red d-inline-block width-auto boder0 mt-4" type="button">Click Here to Upload</button></div>
+                                                </div>
 
                                                 
-                                                <div class="thumbnails" *ngIf="vehicleImageCategory == 'interior'">
+                                                <div class="thumbnails" *ngIf="vehicleImageCategory == 'Interior'">
                                                     <div class="thumbnail_list" *ngFor="let interiorImage of interiorImagesArray; let interiorIndex = index;">
-                                                        <img src="{{interiorImage}}">
+                                                        <img src="{{interiorImage.file_path}}">
                                                         <i (click)="removeImage(interiorIndex)" class="fa fa-times" aria-hidden="true"></i>
                                                     </div>
                                                 </div>
-                                                <div class="thumbnails" *ngIf="vehicleImageCategory == 'exterior'">
+                                                <div class="thumbnails" *ngIf="vehicleImageCategory == 'Exterior'">
                                                     <div class="thumbnail_list" *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
-                                                        <img src="{{exteriorImage}}">
+                                                        <img src="{{exteriorImage.file_path}}">
                                                         <i (click)="removeImage(exteriorIndex)" class="fa fa-times" aria-hidden="true"></i>
                                                     </div>
                                                 </div>
@@ -347,6 +396,7 @@
                                         <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="uploadVehicleImagesWizard.invalid" (click)="validateVehicleImagesWizard()" type="button" awNextStep>Next Step</button>		
                                     </div>
                                 </div>
+                            </div>
                             </form>                 
                                 
                             <!--Upload Images Section-->
@@ -418,12 +468,20 @@
                                         <!--Upload Images Section-->
                                         
                                         <div class="form-group col-md-12" *ngIf="isVehicleAftermarketSelected">
-                                            <div class="vertical-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="50%">
+                                            <div class="vertical-container uploadImages" fxLayout="column" fxLayoutAlign="stretch" fxFlex="50%">
                                             
                                         
                                                 <div class="content-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="auto">
                                                                                 
                                                     <div class="dropzone dropzone-container" [dropzone]="vehicleAftermarketConfiguration" [disabled]="disabled"></div>
+
+
+                                                    <div class="thumbnails" *ngIf="afterMarketImagesArray?.length > 0">
+                                                        <div class="thumbnail_list" *ngFor="let afterMarketImage of afterMarketImagesArray; let afterMarketImageIndex = index;">
+                                                            <img src="{{afterMarketImage.file_path}}">
+                                                            <i (click)="removeImage(afterMarketImageIndex)" class="fa fa-times" aria-hidden="true"></i>
+                                                        </div>
+                                                    </div>
 
                                                 </div>
 
@@ -431,7 +489,6 @@
                                             </div>
 
 
-                                            <div id="vehicleAfterMarketPreview" class="dropzone-previews"></div>
                                         </div>    
                                         
                                         <!--Upload Images Section-->
@@ -564,14 +621,14 @@
                                     <div class="col-md-4">
                                         <ul>
                                             <li *ngFor="let interiorImage of interiorImagesArray; let interiorIndex = index;">
-                                                <img class="preview_images" src="{{interiorImage}}">       
+                                                <img class="preview_images" src="{{interiorImage.file_path}}">       
                                             </li>
                                         </ul>
                                     </div>
                                     <div class="col-md-4">
                                         <ul>
                                             <li *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
-                                                <img class="preview_images" src="{{exteriorImage}}"> 
+                                                <img class="preview_images" src="{{exteriorImage.file_path}}"> 
                                             </li>
                                         </ul>
                                     </div>
@@ -623,20 +680,26 @@
                                         <!--Upload Images Section-->
                                         <div class="row">
                                             <div class="form-group col-md-12" *ngIf="isVehicleConditionSelected">
-                                            <div class="vertical-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="50%">
+                                            <div class="vertical-container uploadImages" fxLayout="column" fxLayoutAlign="stretch" fxFlex="50%">
                                             
                                         
                                                 <div class="content-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="auto">
                                                                                 
                                                     <div class="dropzone dropzone-container" [dropzone]="vehicleConditionConfiguration" [disabled]="disabled"></div>
 
+
+                                                    <div class="thumbnails" *ngIf="vehicleConditionImagesArray?.length > 0">
+                                                        <div class="thumbnail_list" *ngFor="let vehicleConditionImage of vehicleConditionImagesArray; let vehicleConditionImageIndex = index;">
+                                                            <img src="{{vehicleConditionImage.file_path}}">
+                                                            <i (click)="removeImage(vehicleConditionImageIndex)" class="fa fa-times" aria-hidden="true"></i>
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                             </div>
                                                 
                                             </div>
 
-
-                                            <div id="vehicleConditionPreview" class="dropzone-previews"></div>
                                         </div>    
                                         
                                         <!--Upload Images Section-->
@@ -709,14 +772,14 @@
                                     <div class="col-md-4">
                                         <ul>
                                             <li *ngFor="let interiorImage of interiorImagesArray; let interiorIndex = index;">
-                                                <img class="preview_images" src="{{interiorImage}}">       
+                                                <img class="preview_images" src="{{interiorImage.file_path}}">       
                                             </li>
                                         </ul>
                                     </div>
                                     <div class="col-md-4">
                                         <ul>
                                             <li *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
-                                                <img class="preview_images" src="{{exteriorImage}}"> 
+                                                <img class="preview_images" src="{{exteriorImage.file_path}}"> 
                                             </li>
                                         </ul>
                                     </div>
@@ -738,7 +801,7 @@
                                             <li *ngIf="vehicleAftermarket=='on' && afterMarketImagesArray?.length > 0"><label>Images: </label>
                                                 <ul>
                                                     <li *ngFor="let afterMarketImage of afterMarketImagesArray; let aftermarketIndex = index;">
-                                                        <img class="preview_images" src="{{afterMarketImage}}"> 
+                                                        <img class="preview_images" src="{{afterMarketImage.file_path}}"> 
                                                     </li>
                                                 </ul>
                                             </li>     
@@ -828,14 +891,14 @@
                                     <div class="col-md-4">
                                         <ul>
                                             <li *ngFor="let interiorImage of interiorImagesArray; let interiorIndex = index;">
-                                                <img class="preview_images" src="{{interiorImage}}">       
+                                                <img class="preview_images" src="{{interiorImage.file_path}}">       
                                             </li>
                                         </ul>
                                     </div>
                                     <div class="col-md-4">
                                         <ul>
                                             <li *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
-                                                <img class="preview_images" src="{{exteriorImage}}"> 
+                                                <img class="preview_images" src="{{exteriorImage.file_path}}"> 
                                             </li>
                                         </ul>
                                     </div>
@@ -856,7 +919,7 @@
                                             <li *ngIf="vehicleAftermarket=='on'"><label>Images: </label>
                                                 <ul>
                                                     <li *ngFor="let afterMarketImage of afterMarketImagesArray; let aftermarketIndex = index;">
-                                                        <img class="preview_images" src="{{afterMarketImage}}"> 
+                                                        <img class="preview_images" src="{{afterMarketImage.file_path}}"> 
                                                     </li>
                                                 </ul>
                                             </li>     
@@ -883,7 +946,7 @@
                                             <li *ngIf="vehicleConditionValue == 'reconditioning' || vehicleConditionValue == 'functional' || vehicleConditionValue == 'parts'"><label>Images: </label>
                                                 <ul>
                                                     <li *ngFor="let vehicleConditionImage of vehicleConditionImagesArray; let vehicleConditionIndex = index;">
-                                                        <img class="preview_images" src="{{vehicleConditionImage}}"> 
+                                                        <img class="preview_images" src="{{vehicleConditionImage.file_path}}"> 
                                                     </li>
                                                 </ul>
                                             </li>
@@ -894,7 +957,7 @@
                                 </div>
                             </div>
                         </aw-wizard-step>
-                        <aw-wizard-step stepTitle="" (stepEnter)="scrollToSpecificDiv($event)">
+                        <aw-wizard-step stepTitle="Preview" (stepEnter)="scrollToSpecificDiv($event)">
                             <div class="summary_page">
 
                                 <div class="container">
@@ -946,12 +1009,12 @@
                                                     <div class="galler_box">
                                                         <div class="thumb" *ngFor="let interiorImage of interiorImagesArray; let interiorIndex = index;">
                                                             <a href="javascript:void(0)">
-                                                                <img src="{{interiorImage}}" alt="" class="img-fluid">
+                                                                <img src="{{interiorImage.file_path}}" alt="" class="img-fluid">
                                                             </a>
                                                         </div>
                                                         <div class="thumb" *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
                                                             <a href="javascript:void(0)">
-                                                                <img src="{{exteriorImage}}" alt="" class="img-fluid">
+                                                                <img src="{{exteriorImage.file_path}}" alt="" class="img-fluid">
                                                             </a>
                                                         </div>                                                        
                                                     </div>
@@ -983,7 +1046,7 @@
                                                                     <span *ngIf="afterMarketImagesArray?.length > 0" class="relative_images">
                                                                         <span *ngFor="let afterMarketImage of afterMarketImagesArray; let aftermarketIndex = index;" class="img_box">
                                                                             <a href="javascript:void(0)">
-                                                                                <img src="{{afterMarketImage}}" alt="" class="img-fluid">
+                                                                                <img src="{{afterMarketImage.file_path}}" alt="" class="img-fluid">
                                                                             </a>
                                                                         </span>
                                                                     </span>
@@ -1106,8 +1169,8 @@
                             </div>
                         </aw-wizard-step>
                 </aw-wizard>                     
-            </div>
-        </div>
+          
+       
     </div>
     
 </section>
@@ -1128,7 +1191,7 @@
                 
                 <div class="form-group enter_price">
                     <label>Enter Price* </label>
-                    <input #offerInHands type="text" currencyMask min="1.00" max="1,000,000.00" [options]="{ allowNegative: false, align: 'left'}" class="form-control" formControlName="vehicle_offer_in_hands_price">   
+                    <input #offerInHandsPrice type="text" currencyMask min="1.00" max="1,000,000.00" [options]="{ allowNegative: false, align: 'left'}" class="form-control" formControlName="vehicle_offer_in_hands_price">   
 
                     <div class="dropzone dropzone-container" [dropzone]="offerInHandsConfiguration" [disabled]="disabled"></div>
                 </div>                           
@@ -1136,7 +1199,12 @@
               
               <!--Upload Images Section-->
                 <div class="col-md-12"> 
-                    <div id="offerInHandsPreview" class="dropzone-previews"></div>
+                    <div class="thumbnails" *ngIf="offerInHandsImagesArray?.length > 0">
+                        <div class="thumbnail_list" *ngFor="let offerInHandsImage of offerInHandsImagesArray; let offerInHandsImageIndex = index;">
+                            <img src="{{offerInHandsImage.file_path}}">
+                            <i (click)="removeImage(offerInHandsImageIndex)" class="fa fa-times" aria-hidden="true"></i>
+                        </div>
+                    </div>
                 </div>    
                   
                 <!--Upload Images Section-->

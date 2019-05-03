@@ -46,8 +46,8 @@ declare let POTENZA:any;
   animations: [
     trigger('AnimateList', [
       transition(':enter', [  
-        style({opacity: 0, transform: 'translateY(-75%)', offset: 1.0}),
-        animate('0.2s 600ms ease-in')
+        style({opacity: 0, transform: 'translateX(75%)', offset: 1.0}),
+        animate('1s 500ms ease')
       ])
     ])
    ]
@@ -57,14 +57,14 @@ export class AddCarComponent implements OnInit {
   @ViewChild("offerInHandsSection") offerInHandsSection: ElementRef;
 
   // Define Page Title and Breadcrumbs
-  title:string = 'New Car';
-  breadcrumbs:any = [{page:'Home',link:''},{page:'New Car',link:''}]
+  title:string = 'New Car Listing';
+  breadcrumbs:any = [{page:'Home',link:''},{page:'New Car Listing',link:''}]
 
   // Smooth Scroll To Add Car Form Wizard
   @ViewChild("contentSection") contentSection: ElementRef;
 
   // Array where we are going to do CRUD operations
-  vehicleImagesArray:any = [{interior: []}, {exterior: []}];
+  vehicleImagesArray:any = [{Interior: []}, {Exterior: []}];
   interiorImagesArray:any = [];
   exteriorImagesArray:any = [];
   afterMarketImagesArray:any = [];
@@ -104,7 +104,7 @@ export class AddCarComponent implements OnInit {
   isVehicleConditionSelected:boolean = false;
   isYearEnabled:boolean = true;
 
-  vehicleImageCategory:string = "interior";
+  vehicleImageCategory:string = "Interior";
 
   
 
@@ -192,16 +192,16 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           vehicle_make: [{value: '', disabled: true}, Validators.compose([Validators.required])],
           vehicle_model: [{value: '', disabled: true}, Validators.compose([Validators.required])],
           vehicle_mileage: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{2}$')])],
-          vehicle_body_type: [null, Validators.compose([Validators.required])],
+          vehicle_body_type: ['', Validators.compose([Validators.required])],
           vehicle_trim: [{value: '', disabled: true}, Validators.compose([Validators.required])],
-          vehicle_doors: [null, Validators.compose([Validators.required])],
-          vehicle_engine: [null, Validators.compose([Validators.required])],
-          vehicle_transmission: [null, Validators.compose([Validators.required])],
-          vehicle_fuel_type: [null, Validators.compose([Validators.required])],
-          vehicle_drive_type: [null, Validators.compose([Validators.required])],
-          vehicle_interior_color: [null, Validators.compose([Validators.required])],
-          vehicle_exterior_color: [null, Validators.compose([Validators.required])],
-          vehicle_interior_material: [null, Validators.compose([Validators.required])],                
+          vehicle_doors: ['', Validators.compose([Validators.required])],
+          vehicle_engine: ['', Validators.compose([Validators.required])],
+          vehicle_transmission: ['', Validators.compose([Validators.required])],
+          vehicle_fuel_type: ['', Validators.compose([Validators.required])],
+          vehicle_drive_type: ['', Validators.compose([Validators.required])],
+          vehicle_interior_color: ['', Validators.compose([Validators.required])],
+          vehicle_exterior_color: ['', Validators.compose([Validators.required])],
+          vehicle_interior_material: ['', Validators.compose([Validators.required])],                
         }),    
     });
   }
@@ -212,7 +212,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   private uploadVehicleImages(){
     this.uploadVehicleImagesWizard = this.formBuilder.group({                  
       vehicle_images: this.formBuilder.group({
-        vehicle_image_category_name: ['interior'],
+        vehicle_image_category_name: ['Interior'],
         vehicle_image_path: [null]
       })            
     });
@@ -289,10 +289,10 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       autoReset: null,
       errorReset: null,
       cancelReset: null,
-      acceptedFiles: '.jpg, .png, .jpeg',
+      acceptedFiles: '.jpg, .png, .jpeg, .pdf',
       maxFilesize: 2, // MB,
       dictDefaultMessage: '<span class="button red">Upload Proof</span>',
-      previewsContainer: "#offerInHandsPreview",
+      //previewsContainer: "#offerInHandsPreview",
       addRemoveLinks: true,
       resizeWidth: 125,
       resizeHeight: 125,
@@ -306,7 +306,14 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
         'X-Requested-With': null,
       },  
       accept: function(file, done) {        
-        this.removeAllFiles( true );
+          this.removeAllFiles( true );
+
+          if((componentObj.offerInHandsImagesArray.length +1) > 1){
+              componentObj.commonUtilsService.onError('You cannot upload any more files.');
+              this.removeFile(file);
+              return false;
+          }
+
           const reader = new FileReader();
           const _this = this
           reader.onload = function(event) {             
@@ -331,10 +338,10 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           formData.append('folder', 'OfferInHands');
         });
 
-        this.on("maxfilesexceeded", function(file){
+        /* this.on("maxfilesexceeded", function(file){
             console.log("Max Image Upload Reached!");
             this.removeFile(file);
-        });
+        }); */
 
         this.on("totaluploadprogress",function(progress){          
           componentObj.pageLoaderService.pageLoader(true);//start showing page loader
@@ -345,23 +352,25 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
         })
        
         this.on("success", function(file, serverResponse) {  
-          /*componentObj.zone.run(() => { 
-            $(".dz-image img").attr('src', serverResponse.fileLocation);
+          componentObj.offerInHandsImagesArray.push({file_path : serverResponse.fileLocation, file_name : serverResponse.fileKey});  
+          
+          
+          componentObj.zone.run(() => { 
+            $(".dz-image img").attr('src', serverResponse);
             $(".dz-remove").attr('href', serverResponse.fileKey);
-          }); */    
-          componentObj.offerInHandsImagesArray.push({file_path : serverResponse.fileLocation, file_name : serverResponse.fileKey});    
+          });
+
+          this.removeFile(file);
+
           componentObj.pageLoaderService.pageLoader(false); //hide page loader
         });
 
-        this.on("error", function(file, serverResponse) {               
+        this.on("error", function(file, serverResponse) { 
+          this.removeFile(file);              
           componentObj.pageLoaderService.pageLoader(false);//hide page loader  
           componentObj.toastr.errorToastr(serverResponse, 'Oops!');         
         });
 
-        /*this.on("removedfile", function(file) {      
-                
-         componentObj.removeImageFromBucket(file.xhr.response, 'aftermarket');              
-        }); */
       }     
     };
   }
@@ -376,14 +385,14 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     paramName: "file",
     uploadMultiple: false,
     url: environment.API_ENDPOINT + "/api/common/imageUploadtoBucket",
-    maxFiles: 2,
+    maxFiles: 10,
     autoReset: null,
     errorReset: null,
     cancelReset: null,
     acceptedFiles: '.jpg, .png, .jpeg',
     maxFilesize: 2, // MB,
     dictDefaultMessage: 'Click or drag images here to upload',
-    previewsContainer: "#vehicleAfterMarketPreview",
+    //previewsContainer: "#vehicleAfterMarketPreview",
     addRemoveLinks: true,
     resizeWidth: 125,
     resizeHeight: 125,
@@ -396,7 +405,14 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       'Cache-Control': null,
       'X-Requested-With': null,
     },  
-    accept: function(file, done) {        
+    accept: function(file, done) { 
+      
+      
+        if((componentObj.afterMarketImagesArray.length +1) > 10){
+            componentObj.commonUtilsService.onError('You cannot upload any more files.');
+            this.removeFile(file);
+            return false;
+        }
      
         const reader = new FileReader();
         const _this = this
@@ -421,10 +437,10 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
         formData.append('folder', 'Aftermarket');
       });
 
-      this.on("maxfilesexceeded", function(file){
+      /* this.on("maxfilesexceeded", function(file){
           console.log("Max Image Upload Reached!");
           this.removeFile(file);
-      });
+      }); */
 
       this.on("totaluploadprogress",function(progress){          
         componentObj.pageLoaderService.pageLoader(true);//start showing page loader
@@ -435,7 +451,14 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       })
      
       this.on("success", function(file, serverResponse) {           
-        componentObj.afterMarketImagesArray.push(serverResponse);     
+        componentObj.afterMarketImagesArray.push({file_path : serverResponse.fileLocation, file_name : serverResponse.fileKey});  
+        
+        componentObj.zone.run(() => { 
+          $(".dz-image img").attr('src', serverResponse);
+          $(".dz-remove").attr('href', serverResponse.fileKey);
+        });
+        this.removeFile(file);
+        
         componentObj.pageLoaderService.pageLoader(false); //hide page loader
       });
 
@@ -463,14 +486,14 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       paramName: "file",
       uploadMultiple: false,
       url: environment.API_ENDPOINT + "/api/common/imageUploadtoBucket",
-      maxFiles: 2,
+      maxFiles: 10,
       autoReset: null,
       errorReset: null,
       cancelReset: null,
       acceptedFiles: '.jpg, .png, .jpeg',
       maxFilesize: 2, // MB,
       dictDefaultMessage: 'Click or drag images here to upload',
-      previewsContainer: "#vehicleConditionPreview",
+      //previewsContainer: "#vehicleConditionPreview",
       addRemoveLinks: true,
       resizeWidth: 125,
       resizeHeight: 125,
@@ -483,7 +506,13 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
         'Cache-Control': null,
         'X-Requested-With': null,
       },  
-      accept: function(file, done) {        
+      accept: function(file, done) {  
+        
+          if((componentObj.vehicleConditionImagesArray.length +1) > 10){
+              componentObj.commonUtilsService.onError('You cannot upload any more files.');
+              this.removeFile(file);
+              return false;
+          }
        
           const reader = new FileReader();
           const _this = this
@@ -508,10 +537,10 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           formData.append('folder', 'Condition');
         });
 
-        this.on("maxfilesexceeded", function(file){
+        /* this.on("maxfilesexceeded", function(file){
             console.log("Max Image Upload Reached!");
             this.removeFile(file);
-        });
+        }); */
 
         this.on("totaluploadprogress",function(progress){          
           componentObj.pageLoaderService.pageLoader(true);//start showing page loader
@@ -521,22 +550,26 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           }
         })
        
-        this.on("success", function(file, serverResponse) {  
-          /*componentObj.zone.run(() => { 
-            $(".dz-image img").attr('src', serverResponse.fileLocation);
+        this.on("success", function(file, serverResponse) { 
+
+          componentObj.vehicleConditionImagesArray.push({file_path : serverResponse.fileLocation, file_name : serverResponse.fileKey});
+
+          componentObj.zone.run(() => { 
+            $(".dz-image img").attr('src', serverResponse);
             $(".dz-remove").attr('href', serverResponse.fileKey);
-          }); */  
-          componentObj.vehicleConditionImagesArray.push(serverResponse);       
+          });
+          this.removeFile(file); 
+                 
           componentObj.pageLoaderService.pageLoader(false); //hide page loader
         });
 
-        this.on("error", function(file, serverResponse) {               
+        this.on("error", function(file, serverResponse) {  
+          this.removeFile(file);             
           componentObj.pageLoaderService.pageLoader(false);//hide page loader  
           componentObj.toastr.errorToastr(serverResponse, 'Oops!');         
         });
 
-        /*this.on("removedfile", function(file) {      
-                
+        /*this.on("removedfile", function(file) {                 
          // componentObj.removeImageFromBucket(file.xhr.response, 'aftermarket');              
         }); */
       }     
@@ -576,13 +609,13 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       accept: function(file, done) {            
         
           
-          if((componentObj.interiorImagesArray.length +1) > 3 && componentObj.getVehicleImageCategory() == "interior"){
+          if((componentObj.interiorImagesArray.length +1) > 3 && componentObj.getVehicleImageCategory() == "Interior"){
               componentObj.commonUtilsService.onError('You cannot upload any more files.');
               this.removeFile(file);
               return false;
           }
 
-          if((componentObj.exteriorImagesArray.length +1) > 3 && componentObj.getVehicleImageCategory() == "exterior"){
+          if((componentObj.exteriorImagesArray.length +1) > 3 && componentObj.getVehicleImageCategory() == "Exterior"){
               componentObj.commonUtilsService.onError('You cannot upload any more files.');
               this.removeFile(file);
               return false;
@@ -624,12 +657,12 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
        
         this.on("success", function(file, serverResponse) {
 
-          componentObj.vehicleImage = serverResponse;  
+          componentObj.vehicleImage = serverResponse.fileLocation;  
           
-          if(componentObj.getVehicleImageCategory() == "interior"){
-            componentObj.interiorImagesArray.push(componentObj.vehicleImage);
+          if(componentObj.getVehicleImageCategory() == "Interior"){
+            componentObj.interiorImagesArray.push({file_path : serverResponse.fileLocation, file_name : serverResponse.fileKey});
           }else{
-            componentObj.exteriorImagesArray.push(componentObj.vehicleImage);
+            componentObj.exteriorImagesArray.push({file_path : serverResponse.fileLocation, file_name : serverResponse.fileKey});
           }             
 
           componentObj.zone.run(() => { 
@@ -643,8 +676,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
         this.on("error", function(file, serverResponse) {                           
           componentObj.pageLoaderService.pageLoader(false);//hide page loader  
-          componentObj.toastr.errorToastr(serverResponse, 'Oops!');
-          
+          componentObj.toastr.errorToastr(serverResponse, 'Oops!');          
         });
       }     
     };  
@@ -656,7 +688,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    * @return  boolean
    */
   removeImage(index): void {
-    (this.vehicleImageCategory == 'interior')? _.pullAt(this.interiorImagesArray, [index]): _.pullAt(this.exteriorImagesArray, [index]);
+    (this.vehicleImageCategory == 'Interior')? _.pullAt(this.interiorImagesArray, [index]): _.pullAt(this.exteriorImagesArray, [index]);
   }
 
   /**
@@ -758,7 +790,12 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    */
   getModelsByMake(makeName){ 
 
-    (makeName == "")?this.basicInfoWizard.controls.basic_info.get('vehicle_model').disable():this.basicInfoWizard.controls.basic_info.get('vehicle_model').enable();  
+    if(makeName == ""){ 
+      this.basicInfoWizard.controls.basic_info.get('vehicle_model').disable();
+      return;
+    }else{ 
+      this.basicInfoWizard.controls.basic_info.get('vehicle_model').enable(); 
+    }   
 
     this.models = this.makes.find(x => x.name === makeName).models;     
   }
@@ -769,7 +806,12 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    * @return  array(trim)
    */
   getTrimsByModel(modelName){    
-    (modelName == "")?this.basicInfoWizard.controls.basic_info.get('vehicle_trim').disable():this.basicInfoWizard.controls.basic_info.get('vehicle_trim').enable();
+    if(modelName == ""){
+      this.basicInfoWizard.controls.basic_info.get('vehicle_trim').disable()
+      return;
+    }else{
+      this.basicInfoWizard.controls.basic_info.get('vehicle_trim').enable();
+    }
     this.trims = this.models.find(x => x.name === modelName).trims;  
   }
 
@@ -887,7 +929,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     const vehicleYearValue = this.vehicleOption.controls.vehicle_year_value;
     if(value == "more"){
       this.isMoreSelected = true;
-      vehicleYearValue.setValidators(Validators.compose([Validators.required,Validators.min(1990), Validators.max(2018)]));
+      vehicleYearValue.setValidators(Validators.compose([Validators.required,Validators.min(2018), Validators.max(2019)]));
       vehicleYearValue.updateValueAndValidity();
     }else{
       this.isMoreSelected = false;
