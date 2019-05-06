@@ -344,21 +344,25 @@
                                     <div class="container">      
                                 <div formArrayName="vehicle_images" class="add_car">      
                                     
-                                    
+                                    <div class="row">
                                     <div class="form-group col-md-8">
                                         <div class="vehicle_category">
-                                            <div class="form-group">
-                                                <div class="Radio_BTN">
-                                                    <input type="radio" (click)="checkVehicleImageCatgeory('Interior')" formControlName="vehicle_image_category_name"  value="Interior" id="Interior">
-                                                    <label for="interior">Interior</label>
-                                                </div> 
-                                            </div> 
-                                            <div class="form-group">
-                                                <div class="Radio_BTN">
+
+
+
+                                    <div class="select_type_tab category_Box">
+                                        <ul>
+                                            <li >
+                                                <input type="radio" (click)="checkVehicleImageCatgeory('Interior')" formControlName="vehicle_image_category_name"  value="Interior" id="Interior">
+                                                <label for="Interior">Interior</label>
+                                            </li> 
+                                            <li>
                                                     <input type="radio" (click)="checkVehicleImageCatgeory('Exterior')" formControlName="vehicle_image_category_name"  value="Exterior" id="Exterior">
                                                     <label for="Exterior">Exterior</label>
-                                                </div> 
-                                            </div> 
+                                            </li> 
+                                        </ul>
+                                    </div>
+
                                         </div> 
 
 
@@ -368,7 +372,7 @@
                                             <div class="content-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="auto">
                                                                             
                                                 <div class="dropzone dropzone-container draganddrop custom_dragger" [dropzone]="vehicleImagesConfiguration" [disabled]="disabled">
-                                                    <div class="drag_box"><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i><p>Drag/Drop Images here to upload</p><span>OR</span><button class="button red d-inline-block width-auto boder0 mt-4" type="button">Click Here to Upload</button></div>
+                                                    <div class="drag_box"><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i><p>Drag/Drop Images here to upload</p><span>OR</span><button class="button red d-inline-block width-auto boder0 mt-4" type="button">Click to Upload</button></div>
                                                 </div>
 
                                                 
@@ -386,254 +390,268 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>   
-                                </div>
-                                <div class="col-md-8">
+                                   
                                                             
-                                    <div class="button_Submission">
-                                        <button class="button red d-inline-block width-auto boder0 mt-4" type="button" awPreviousStep>Previous Step</button>
-                                        
-                                        <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="uploadVehicleImagesWizard.invalid" (click)="validateVehicleImagesWizard()" type="button" awNextStep>Next Step</button>		
+                                                <div class="button_Submission text-center">
+                                                    <button class="button red d-inline-block width-auto boder0 mt-4" type="button" awPreviousStep>Previous Step</button>
+                                                    
+                                                    <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="uploadVehicleImagesWizard.invalid" (click)="validateVehicleImagesWizard()" type="button" awNextStep>Next Step</button>		
+                                                
+                                            </div>
+                                    </div>   
+                                    <div class="col-md-4">
+                                                <div class="basic_info_preview">
+                                                        
+                                                            <div class="right_col_head">
+                                                                <h5>Progress Preview</h5>
+                                                            </div>
+                                                        
+                                                        <div class="details_inner">
+                                                            <h6>Your Vehicle info</h6>
+                                                        <ul>
+                                                            <li><label>Zip: </label><span>{{vehicle_zip.value}}</span></li>
+                                                            <li><label>Make: </label><span>{{vehicle_make.value}}</span></li>
+                                                            <li><label>Model: </label><span>{{vehicle_model.value}}</span></li>
+                                                            <li><label>Trim: </label><span>{{vehicle_trim.value}}</span></li>
+                                                            <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>
+                                                            <li><label>Body Style: </label><span>{{vehicle_body_type.value}}</span></li>
+                                                            <li><label>Doors: </label><span>{{vehicle_doors.value}}</span></li>
+                                                            <li><label>Engine: </label><span>{{vehicle_engine.value}}</span></li>
+                                                            <li><label>Transmission: </label><span>{{vehicle_transmission.value}}</span></li>
+                                                            <li><label>Fuel Type: </label><span>{{vehicle_fuel_type.value}}</span></li>
+                                                            <li><label>Drive Type: </label><span>{{vehicle_drive_type.value}}</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                        </div> 
+                                   
                                     </div>
                                 </div>
+                                
                             </div>
                             </form>                 
                                 
                             <!--Upload Images Section-->
-                            <div class="preview_section">
-                                <div class="basic_info_preview">
-                                    <div class="col-md-4">
-                                        <div class="form-group ">
-                                            <div class="title">
-                                                <h6 class="text-red">Basic Info</h6>
-                                            </div>
-                                        </div> 
-                                    </div>
-                                    <div class="col-md-4">
-                                        <ul>
-                                            <li><label>Zip: </label><span>{{vehicle_zip.value}}</span></li>
-                                            <li><label>Make: </label><span>{{vehicle_make.value}}</span></li>
-                                            <li><label>Model: </label><span>{{vehicle_model.value}}</span></li>
-                                            <li><label>Trim: </label><span>{{vehicle_trim.value}}</span></li>
-                                            <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>
-                                            <li><label>Body Style: </label><span>{{vehicle_body_type.value}}</span></li>
-                                            <li><label>Doors: </label><span>{{vehicle_doors.value}}</span></li>
-                                            <li><label>Engine: </label><span>{{vehicle_engine.value}}</span></li>
-                                            <li><label>Transmission: </label><span>{{vehicle_transmission.value}}</span></li>
-                                            <li><label>Fuel Type: </label><span>{{vehicle_fuel_type.value}}</span></li>
-                                            <li><label>Drive Type: </label><span>{{vehicle_drive_type.value}}</span></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
 
                         </aw-wizard-step>   
                         <aw-wizard-step stepTitle="About Vehicle" (stepEnter)="scrollToSpecificDiv($event)" [canExit]="moveDirection.bind(this, aboutVehicleWizard.valid)">
-                            <form [formGroup]="aboutVehicleWizard">
+                            
                                 <!--More About Vehicle Section-->
 
-                                
+                                <div class="container"> 
+                                    <div class="steps_outer">  
                                 <div class="row">
-                                    <div class="form-group col-md-12">                                              
-                                        <label>Vehicle has any second key*</label>
+                                    
+                                    <div class="col-md-8">
+                                        <form [formGroup]="aboutVehicleWizard">
+                                            <div class="head_section">
+                                                <h2 class="underline_heading">More About Your Vehicle</h2>
+                                                <div class="switch_outer">
+                                                <span>Vehicle has any second key*</span>
                                                 <label class="switch">
                                                         <input type="checkbox" #vehicleHasSecondKey (change)="toggleVehicleSecondKey($event)" formControlName="vehicle_has_second_key">
                                                         <span class="slider round"></span>
-                                                    </label>
-
-                                    </div>
-                                </div>    
-                                <!--Vehicle AfterMarket Section-->
-                                <div formGroupName="vehicle_aftermarket" class="row">
-
-                                        
-
-                                        <div class="form-group col-md-12">                                                
-                                            <label>Vehicle has any aftermarket options*</label>
-                                            <label class="switch">
-                                                    <input type="checkbox" formControlName="vehicle_aftermarket_value" (change)="toggleVehicleAfterMarket($event)">
-                                                    <span class="slider round"></span>
                                                 </label>
-                                        </div> 
-                                            
-                                        <div class="form-group col-md-12" *ngIf="isVehicleAftermarketSelected">
-                                                <label>Description*</label>
-                                                <input type="text" class="simple_select form-control placeholder" formControlName="vehicle_aftermarket_description" [ngClass]="{ 'is-invalid': (aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').touched || isAboutVehicleSubmitted) && aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').errors }" #vehicle_aftermarket_description>      
-                                                
-                                                <p *ngIf="aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').touched || isAboutVehicleSubmitted">                      
-                                                    <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="Description " [errors]="aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').errors"></app-form-validation-errors>   
-                                                </p>
-                                        </div>
+                                            </div>
+                                            </div>
 
-                                        <!--Upload Images Section-->
-                                        
-                                        <div class="form-group col-md-12" *ngIf="isVehicleAftermarketSelected">
-                                            <div class="vertical-container uploadImages" fxLayout="column" fxLayoutAlign="stretch" fxFlex="50%">
-                                            
-                                        
-                                                <div class="content-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="auto">
-                                                                                
-                                                    <div class="dropzone dropzone-container" [dropzone]="vehicleAftermarketConfiguration" [disabled]="disabled"></div>
+                                            <!--Vehicle AfterMarket Section-->
+                                            <div class="collapsable_box">
+                                                <div formGroupName="vehicle_aftermarket" class="row">
+
+                                                    <div class="col-md-12">      
+                                                        <div class="text-center collapsable_head">
+                                                            <div class="switch_outer">                                                
+                                                                <span>Vehicle has any aftermarket options*</span>
+                                                                <label class="switch">
+                                                                <input type="checkbox" formControlName="vehicle_aftermarket_value" (change)="toggleVehicleAfterMarket($event)">
+                                                                <span class="slider round"></span>
+                                                                </label>
+                                                            </div> 
+                                                        </div>
+                                                        <div class="collapsable_body" [hidden]="!isVehicleAftermarketSelected">
+                                                            <div class="collapsable_body_inner">   
+                                                                <div class="form-group">
+                                                                        <label>Description*</label>
+                                                                        <textarea rows="4" class="simple_select form-control placeholder" formControlName="vehicle_aftermarket_description" [ngClass]="{ 'is-invalid': (aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').touched || isAboutVehicleSubmitted) && aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').errors }" #vehicle_aftermarket_description></textarea>  
+                                                                        
+                                                                        <p *ngIf="aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').touched || isAboutVehicleSubmitted">                      
+                                                                            <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="Description " [errors]="aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').errors"></app-form-validation-errors>   
+                                                                        </p>
+                                                                </div>
+
+                                                                <!--Upload Images Section-->
+                                                                
+                                                                <div class="form-group">
+                                                                    <div class="vertical-container uploadImages" fxLayout="column" fxLayoutAlign="stretch" fxFlex="50%">
+                                                                    
+                                                                
+                                                                        <div class="content-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="auto">
+                                                                                                        
+                                                                            <div class="dropzone dropzone-container draganddrop custom_dragger" [dropzone]="vehicleAftermarketConfiguration" [disabled]="disabled">
+
+                                                                                    <div class="drag_box"><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i><p class="ng-tns-c5-0">Drag/Drop Images here to upload</p><span class="ng-tns-c5-0">OR</span><button class="button red d-inline-block width-auto boder0 mt-4" type="button">Click to Upload</button></div>
+                                                                            </div>
 
 
-                                                    <div class="thumbnails" *ngIf="afterMarketImagesArray?.length > 0">
-                                                        <div class="thumbnail_list" *ngFor="let afterMarketImage of afterMarketImagesArray; let afterMarketImageIndex = index;">
-                                                            <img src="{{afterMarketImage.file_path}}">
-                                                            <i (click)="removeImage(afterMarketImageIndex)" class="fa fa-times" aria-hidden="true"></i>
+                                                                            <div class="thumbnails" *ngIf="afterMarketImagesArray?.length > 0">
+                                                                                <div class="thumbnail_list" *ngFor="let afterMarketImage of afterMarketImagesArray; let afterMarketImageIndex = index;">
+                                                                                    <img src="{{afterMarketImage.file_path}}">
+                                                                                    <i (click)="removeImage(afterMarketImageIndex)" class="fa fa-times" aria-hidden="true"></i>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                        
+                                                                    </div>
+
+
+
+
+
+
+
+
+
+
+                                                                </div>    
+                                                                
+                                                                <!--Upload Images Section-->
                                                         </div>
                                                     </div>
-
-                                                </div>
-
-                                                
+                                                    </div> 
+                                               </div> 
                                             </div>
+                                             
+                                            <!--Vehicle AfterMarket Section-->
 
+                                            <!--Vehicle Ownership Section-->                           
+                                            <div formGroupName="vehicle_ownership" class="row"> 
+                                                    <div class="col-md-12">
 
-                                        </div>    
-                                        
-                                        <!--Upload Images Section-->
+                                                            <div class="head_section">
+                                                                <h2 class="underline_heading">Vehicle's Ownership</h2>
+                                                                <div class="switch_outer">
+                                                                        <span>Clean Title</span>
+                                                                        <label class="switch">
+                                                                            <input type="checkbox" #vehicleCleanTitle formControlName="vehicle_clean_title" (change)="toggleVehicleCleanTitle($event)">
+                                                                            <span class="slider round"></span>
+                                                                        </label>
+                                                                </div>
+                                                            </div>
 
-                                        
-                                </div>  
-                                <!--Vehicle AfterMarket Section-->
-
-                                <!--Vehicle Ownership Section-->                           
-                                <div formGroupName="vehicle_ownership" class="row"> 
-                                        <div class="col-md-12">
-                                            <div class="form-group ">
-                                                <div class="title">
-                                                    <h6 class="text-red">Vehicle's Ownership</h6>
-                                                </div>
-                                            </div> 
-                                        </div>  
-                                        <div class="col-md-12">
-                                        <div class="form-group ">                                                
-                                            <label>Clean Title</label>
-                                            <label class="switch">
-                                                <input type="checkbox" #vehicleCleanTitle formControlName="vehicle_clean_title" (change)="toggleVehicleCleanTitle($event)">
-                                                <span class="slider round"></span>
-                                            </label>
-                                        </div>
-                                        </div>
-                                        <div class="col-md-12" *ngIf="!isVehicleCleanTitleSelected">
-                                                <div class="radio_BTNS">
-                                            <div class="form-group">
-                                                    <input type="radio" value="Salvage" formControlName="vehicle_ownership_value" (click)="checkVehicleOwnershipRadioValue('Salvage')">
-                                                    <label for="Salvage">Salvage</label>
-                                            </div> 
-                                            <div class="form-group">
-                                                    <input type="radio" value="TMU" formControlName="vehicle_ownership_value" (click)="checkVehicleOwnershipRadioValue('TMU')">
-                                                    <label for="TMU">TMU</label>
-                                            </div>     
-                                            <div class="form-group">
-                                                    <input type="radio" value="Lemon Law" formControlName="vehicle_ownership_value" (click)="checkVehicleOwnershipRadioValue('Lemon Law')">
-                                                    <label for="Lemon Law">Lemon Law</label>
-                                            </div> 
-                                            <div class="form-group">
-                                                    <input type="radio" value="Other" formControlName="vehicle_ownership_value" (click)="checkVehicleOwnershipRadioValue('Other')">
-                                                    <label for="Other">Other</label>
-                                            </div> 
-                                        </div>    
-                                            
-                                        </div> 
-
-                                        <div class="col-md-6" *ngIf="isOtherSelected">
-                                                <div class="form-group">
-                                                        <label>Explain*</label>
-                                                        <textarea class="simple_select form-control placeholder" formControlName="vehicle_ownership_description" [ngClass]="{ 'is-invalid': (aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description').touched || isAboutVehicleSubmitted) && aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description').errors }" #vehicle_ownership_description></textarea>        
                                                         
-                                                        <p *ngIf="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description').touched || isAboutVehicleSubmitted">                      
-                                                            <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="Explain " [errors]="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description').errors"></app-form-validation-errors>   
-                                                        </p>
-                                                </div>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                        <div class="col-md-12">
-                                            <div class="form-group ">
-                                                <label>My Pay Off*</label>
-                                                <input #vehicle_pay_off type="text" currencyMask min="1.00" max="1,000,000.00" [options]="{ allowNegative: false, align: 'left'}" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_pay_off" [ngClass]="{ 'is-invalid': (aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_pay_off').touched || isAboutVehicleSubmitted) && aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_pay_off').errors }">        
-                                                
-                                                <p *ngIf="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_pay_off').touched || isAboutVehicleSubmitted">                      
-                                                    <app-form-validation-errors errorPrefix="Pay Off " [errors]="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_pay_off').errors"></app-form-validation-errors>   
-                                                </p>
+                                                    </div>  
+                                                   
+                                                    <div class="col-md-12" *ngIf="!isVehicleCleanTitleSelected">
+                                                         <ol class="ownership_btns">
+                                                            <li>
+                                                                <div class="Radio_BTN">
+                                                                    <input id="Salvage" type="radio" value="Salvage" formControlName="vehicle_ownership_value" (click)="checkVehicleOwnershipRadioValue('Salvage')">
+                                                                    <label for="Salvage">Salvage</label>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div class="Radio_BTN">
+                                                                    <input id="TMU" type="radio" value="TMU" formControlName="vehicle_ownership_value" (click)="checkVehicleOwnershipRadioValue('TMU')">
+                                                                    <label for="TMU">TMU</label>
+                                                                </div>    
+                                                            </li>
+                                                            <li>
+                                                                <div class="Radio_BTN">
+                                                                     <input id="Lemon" type="radio" value="Lemon Law" formControlName="vehicle_ownership_value" (click)="checkVehicleOwnershipRadioValue('Lemon Law')">
+                                                                    <label for="Lemon">Lemon Law</label>
+                                                                </div>    
+                                                            </li>
+                                                            <li>
+                                                                <div class="Radio_BTN">
+                                                                    <input id="Other" type="radio" value="Other" formControlName="vehicle_ownership_value" (click)="checkVehicleOwnershipRadioValue('Other')">
+                                                                    <label for="Other">Other</label>
+                                                                </div>    
+
+                                                            </li>
+                                                        </ol>
+                                                        
+                                                       
+                                                        
+                                                    </div> 
+
+                                                    <div class="col-md-12" [hidden]="!isOtherSelected">
+                                                            <div class="form-group">
+                                                                    <label>Explain*</label>
+                                                                    <textarea class="simple_select form-control placeholder" formControlName="vehicle_ownership_description" [ngClass]="{ 'is-invalid': (aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description').touched || isAboutVehicleSubmitted) && aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description').errors }" #vehicle_ownership_description></textarea>        
+                                                                    
+                                                                    <p *ngIf="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description').touched || isAboutVehicleSubmitted">                      
+                                                                        <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="Explain " [errors]="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description').errors"></app-form-validation-errors>   
+                                                                    </p>
+                                                            </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                    <div class="col-md-12">
+                                                        <div class="form-group ">
+                                                            <label>My Pay Off*</label>
+                                                            <input #vehicle_pay_off type="text" currencyMask min="1.00" max="1,000,000.00" [options]="{ allowNegative: false, align: 'left'}" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_pay_off" [ngClass]="{ 'is-invalid': (aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_pay_off').touched || isAboutVehicleSubmitted) && aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_pay_off').errors }">        
+                                                            
+                                                            <p *ngIf="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_pay_off').touched || isAboutVehicleSubmitted">                      
+                                                                <app-form-validation-errors errorPrefix="Pay Off " [errors]="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_pay_off').errors"></app-form-validation-errors>   
+                                                            </p>
+                                                        </div>
+                                                        
+                                                        <div class="form-group">
+                                                                <label>Finance Bank*</label>
+                                                                <input #vehicle_finance_bank type="text" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_finance_bank" [ngClass]="{ 'is-invalid': (aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_finance_bank').touched || isAboutVehicleSubmitted) && aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_finance_bank').errors }">        
+                                                                
+                                                                <p *ngIf="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_finance_bank').touched || isAboutVehicleSubmitted">                      
+                                                                    <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="Finance Bank " [errors]="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_finance_bank').errors"></app-form-validation-errors>   
+                                                                </p>
+                                                        </div>
+                                                    </div>
                                             </div>
-                                            
-                                            <div class="form-group">
-                                                    <label>Finance Bank*</label>
-                                                    <input #vehicle_finance_bank type="text" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_finance_bank" [ngClass]="{ 'is-invalid': (aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_finance_bank').touched || isAboutVehicleSubmitted) && aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_finance_bank').errors }">        
+                                            <!--Vehicle Ownership Section-->
+
+                                            <!--More About Vehicle Section-->
+
+                                            <div class="form-group text-center">
+                                                <div class="button_Submission">
+                                                    <button class="button red d-inline-block width-auto boder0 mt-4" type="button" awPreviousStep>Previous Step</button>
                                                     
-                                                    <p *ngIf="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_finance_bank').touched || isAboutVehicleSubmitted">                      
-                                                        <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="Finance Bank " [errors]="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_finance_bank').errors"></app-form-validation-errors>   
-                                                    </p>
+                                                    <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="aboutVehicleWizard.invalid" (click)="validateAboutVehicleWizard()" type="button" awNextStep>Next Step</button>		
+                                                </div>		
                                             </div>
-                                        </div>
-                                </div>
-                                <!--Vehicle Ownership Section-->
 
-                                <!--More About Vehicle Section-->
-
-
-                                
-
-
-                                <div class="form-group text-right">
-                                    <div class="button_Submission">
-                                        <button class="button red d-inline-block width-auto boder0 mt-4" type="button" awPreviousStep>Previous Step</button>
-                                        
-                                        <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="aboutVehicleWizard.invalid" (click)="validateAboutVehicleWizard()" type="button" awNextStep>Next Step</button>		
-                                    </div>		
-                                </div>
-                            </form>  
-                            
-                            <div class="preview_section">
-                                <div class="basic_info_preview">
+                                        </form>
+                                    </div>
+                                     
                                     <div class="col-md-4">
-                                        <div class="form-group ">
-                                            <div class="title">
-                                                <h6 class="text-red">Basic Info</h6>
+                                            <div class="basic_info_preview">
+                                                    
+                                                        <div class="right_col_head">
+                                                            <h5>Progress Preview</h5>
+                                                        </div>
+                                                    
+                                                    <div class="details_inner">
+                                                        <h6>Your Vehicle info</h6>
+                                                    <ul>
+                                                        <li><label>Zip: </label><span>{{vehicle_zip.value}}</span></li>
+                                                        <li><label>Make: </label><span>{{vehicle_make.value}}</span></li>
+                                                        <li><label>Model: </label><span>{{vehicle_model.value}}</span></li>
+                                                        <li><label>Trim: </label><span>{{vehicle_trim.value}}</span></li>
+                                                        <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>
+                                                        <li><label>Body Style: </label><span>{{vehicle_body_type.value}}</span></li>
+                                                        <li><label>Doors: </label><span>{{vehicle_doors.value}}</span></li>
+                                                        <li><label>Engine: </label><span>{{vehicle_engine.value}}</span></li>
+                                                        <li><label>Transmission: </label><span>{{vehicle_transmission.value}}</span></li>
+                                                        <li><label>Fuel Type: </label><span>{{vehicle_fuel_type.value}}</span></li>
+                                                        <li><label>Drive Type: </label><span>{{vehicle_drive_type.value}}</span></li>
+                                                    </ul>
+                                                </div>
                                             </div>
-                                        </div> 
                                     </div>
-                                    <div class="col-md-4">
-                                        <ul>
-                                            <li><label>Zip: </label><span>{{vehicle_zip.value}}</span></li>
-                                            <li><label>Make: </label><span>{{vehicle_make.value}}</span></li>
-                                            <li><label>Model: </label><span>{{vehicle_model.value}}</span></li>
-                                            <li><label>Trim: </label><span>{{vehicle_trim.value}}</span></li>
-                                            <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>
-                                            <li><label>Body Style: </label><span>{{vehicle_body_type.value}}</span></li>
-                                            <li><label>Doors: </label><span>{{vehicle_doors.value}}</span></li>
-                                            <li><label>Engine: </label><span>{{vehicle_engine.value}}</span></li>
-                                            <li><label>Transmission: </label><span>{{vehicle_transmission.value}}</span></li>
-                                            <li><label>Fuel Type: </label><span>{{vehicle_fuel_type.value}}</span></li>
-                                            <li><label>Drive Type: </label><span>{{vehicle_drive_type.value}}</span></li>
-                                        </ul>
-                                    </div>
-                                 </div>
-                                <div class="upload_images_preview" *ngIf="interiorImagesArray?.length > 0 || exteriorImagesArray?.length > 0">
-                                    <div class="col-md-4">
-                                        <div class="form-group ">
-                                            <div class="title">
-                                                <h6 class="text-red">Upload Images</h6>
-                                            </div>
-                                        </div> 
-                                    </div>
-                                    <div class="col-md-4">
-                                        <ul>
-                                            <li *ngFor="let interiorImage of interiorImagesArray; let interiorIndex = index;">
-                                                <img class="preview_images" src="{{interiorImage.file_path}}">       
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <ul>
-                                            <li *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
-                                                <img class="preview_images" src="{{exteriorImage.file_path}}"> 
-                                            </li>
-                                        </ul>
-                                    </div>
-                                 </div>
-                            </div>
+                                    
+                                </div> 
+                            </div> 
+                            </div>  
                         </aw-wizard-step> 
                         <aw-wizard-step stepTitle="Vehicle's Condition" (stepEnter)="scrollToSpecificDiv($event)" [canExit]="moveDirection.bind(this, vehicleConditionWizard.valid)">
                             <form [formGroup]="vehicleConditionWizard">
@@ -665,7 +683,7 @@
                                                 <label for="parts">Parts only</label>
                                         </div> 
                                         <div class="row">
-                                        <div class="form-group col-md-12" *ngIf="isVehicleConditionSelected">
+                                        <div class="form-group col-md-12" [hidden]="!isVehicleConditionSelected">
                                                 <label>Description*</label>
 
                                                 <textarea #vehicle_condition_description class="simple_select form-control placeholder" formControlName="vehicle_condition_description" [ngClass]="{ 'is-invalid': (vehicleConditionWizard.controls.vehicle_condition.get('vehicle_condition_description').touched || isVehicleConditionSubmitted) && vehicleConditionWizard.controls.vehicle_condition.get('vehicle_condition_description').errors }"></textarea>
@@ -679,7 +697,7 @@
                                     
                                         <!--Upload Images Section-->
                                         <div class="row">
-                                            <div class="form-group col-md-12" *ngIf="isVehicleConditionSelected">
+                                            <div class="form-group col-md-12" [hidden]="!isVehicleConditionSelected">
                                             <div class="vertical-container uploadImages" fxLayout="column" fxLayoutAlign="stretch" fxFlex="50%">
                                             
                                         
@@ -836,7 +854,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group col-md-12" *ngIf="isWillingToDriveSelected">
+                                <div class="form-group col-md-12" [hidden]="!isWillingToDriveSelected">
                                         <label>Miles*</label>
                                         <input mask="00" type="text" class="simple_select form-control placeholder" placeholder="How Many Miles" formControlName="willing_to_drive_how_many_miles" [ngClass]="{ 'is-invalid': (pickupLocationWizard.controls.willing_to_drive_how_many_miles.touched || isPickupLocationSubmitted) && pickupLocationWizard.controls.willing_to_drive_how_many_miles.errors }">        
                                         

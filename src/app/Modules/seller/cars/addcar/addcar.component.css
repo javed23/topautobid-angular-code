@@ -59,25 +59,25 @@ button.verify_BTN {
 .slider:before {
     position: absolute;
     content: "";
-    height: 20px;
-    width: 20px;
-    left: 0px;
-    bottom: 0px;
+    height: 18px;
+    width: 18px;
+    left: 1px;
+    bottom: auto;
     background-color: white;
-    -webkit-transition: .4s;
     transition: .4s;
+    top: 1px;
 }
 
 input:checked + .slider {
-    background-color: #db2d2e;
+    background-color: #46ab55;
 }
 
 
 
 input:checked + .slider:before {
-    -webkit-transform: translateX(20px);
-    -ms-transform: translateX(20px);
-    transform: translateX(20px);
+    -webkit-transform: translateX(23px);
+    -ms-transform: translateX(23px);
+    transform: translateX(23px);
 }
 
 /* Rounded sliders */
@@ -197,6 +197,7 @@ button:disabled {
 
 .custom_dragger.draganddrop {
     position: relative;
+    cursor: pointer;
 }
 
 .custom_dragger.draganddrop .dz-message {
@@ -529,7 +530,7 @@ i.fa-caret-down {position: absolute;font-size: 18px;right:5%;top: 30%;color: #BA
 p.error_label {padding-bottom: 0px;margin-bottom: 10px;}
 p.error_label app-form-validation-errors {max-width:400px;margin: 0px auto;color: red;display:block;text-align: left;}
 .step_col .horizontal ul.steps-indicator li div a {text-transform: capitalize;font-weight: 500;}
-.step_col .steps-indicator {border-bottom:1px solid #E8E8E8;display: inline-block;width: 100%;padding: 60px 0px 50px 0px !important;}
+.step_col .steps-indicator {border-bottom:1px solid #E8E8E8;display: inline-block;width: 100%;padding: 60px 0px 50px 0px !important;    margin-bottom: 30px!important;}
 .step_col .horizontal.small ul.steps-indicator li:after {position: absolute;top: -16px;left: calc(50% - 7px);width:16px;height: 16px;content: '';text-align: center;vertical-align: middle;line-height: 14px;-webkit-transition: .25s;transition: .25s;border-radius: 50%;background: #fff;border: 1px solid #868d9c;display: block;}
 .step_col .horizontal.small ul.steps-indicator li.current:after {background: #fff;border: 2px solid #db2d2e;}
 .step_col .horizontal.small ul.steps-indicator li.current div a {color:red;}
@@ -541,6 +542,151 @@ p.error_msg {border:0px; padding:0px; position: absolute; left:0px;}
 .inner-intro {padding:10px 0px;}
 .category_Box ul li input:checked + label > span {color:#fff;}
 #header.topbar-dark .topbar {background: #8E8E8E !important; padding:5px 0px;}
+/*-----------------*/
+.right_col_head {font-size:20px; text-transform:uppercase; position:relative; font-weight:500;margin-bottom:30px;}
+.right_col_head:before {content:""; position: absolute; left:0px; right:0px; top:12px; border-top:1px solid red;}
+.right_col_head h5 {display:inline-block;background: #fff;padding: 0px 15px 0px 0px; letter-spacing: 0.8px; margin: 0px;position: relative;z-index: 1; font-size: 14px;}
+/*-----------------*/
+.details_inner {background: #f2f2f2;padding:15px 20px;margin:0px;}
+.details_inner h6 {font-size:13px; font-weight:600; letter-spacing:0.8px;}
+.details_inner ul li {width:100%; border-bottom:1px solid #e8e8e8;}
+.details_inner ul li label {width:auto; font-size:12px; margin:0px; padding:0px; font-weight:600;}
+.details_inner ul li span {width:auto; font-size:12px;}
+.details_inner ul li:last-child {border-bottom:0px;}
+/*-----------------*/
+.select_type_tab ul li label {
+    border-radius: 25px;
+    background: #eaeaea;
+    color: #777777;
+    font-size: 12px;
+    text-transform: capitalize;
+    min-width: 120px;
+    padding: 4px !important;
+    display: inline-block;
+}
+.select_type_tab.category_Box ul li {width:auto;}
+.select_type_tab  ul li.active {background: #db2d2e;}
+
+.select_type_tab.category_Box ul li input:checked + label {
+    background: #db2d2e;
+    color: #fff;
+}
+
+.basic_info_preview {
+    margin-top: 10px;
+    padding-left: 40px;
+    margin-bottom: 40px;
+}
+
+.steps_outer .head_section {
+    text-align: center;
+}
+
+.underline_heading {
+    display: inline-block;
+    padding: 0;
+    letter-spacing: 0.8px;
+    margin: 0px;
+    position: relative;
+    z-index: 1;
+    font-size: 14px;
+    color: #363636;
+    text-transform: uppercase;
+}
+
+.underline_heading:after {
+    content: "";
+    width: 60%;
+    height: 1px;
+    background: #db2d2e;
+    display: block;
+    margin: auto;
+}
+
+.switch_outer {
+    margin: 15px 0;
+}
+
+.switch_outer > span{
+    margin-right: 8px;
+}
+
+.switch_outer .switch{
+    margin: 0;
+    vertical-align: middle;
+}
+
+.switch{
+    width: 43px;
+}
+
+.collapsable_head {
+    background: #eceaeb;
+}
+
+.collapsable_head .switch_outer {
+    margin: 0;
+}
+.switch_outer {
+    margin: 0;
+    padding: 15px 0;
+    color: #413e3e;
+}
+
+.collapsable_box {
+    border: 1px solid #e7e7e7;
+    margin-bottom: 30px;
+    margin-top: 15px;
+}
+.collapsable_body .collapsable_body_inner {
+    background: #f4f4f4;
+    padding: 20px 40px;
+}
+
+.switch_outer span {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+.collapsable_body .collapsable_body_inner .simple_select {
+    background: #f6f6f6;
+    border-color: #ccc;
+    resize: none;
+}
+
+.ownership_btns {
+    margin: 20px 0 10px auto;
+    width: 75%;
+}
+.ownership_btns  .Radio_BTN label{
+    padding-bottom: 0;
+}
+
+.ownership_btns .Radio_BTN {
+    position: relative;
+    padding-left: 24px;
+}
+
+.ownership_btns li {
+    display: inline-block;
+    width: 50%;
+    vertical-align: top;
+}
+
+.ownership_btns .Radio_BTN label:before{
+    width: 12px;
+    height: 12px;
+    margin-top: 5px;
+}
+.ownership_btns .Radio_BTN label{
+    font-size: 13px;
+}
+
+.steps_outer .simple_select {
+    border-color: #e9e9e9;
+}
+
 
 
 /*-----Please do not include any other css at the bottom of responsive css-------*/
@@ -557,6 +703,9 @@ p.error_msg {border:0px; padding:0px; position: absolute; left:0px;}
     .nav-pills .nav-item a {display: table-cell; vertical-align: middle;}
     .registrationyear {font-size:0px;}
     .category_Box ul li {margin: 0 3px 7px 3px;width: calc(20% - 6px);}
+    .basic_info_preview{
+        padding-left: 0;
+    }
 }
 
 @media screen and (max-width:768px) {
@@ -595,6 +744,17 @@ p.error_msg {border:0px; padding:0px; position: absolute; left:0px;}
     .vehicle_thumb {width:100%;}
     .step_col aw-wizard-navigation-bar {width:100%; overflow-x: scroll;}
     .step_col ul {width:800px !important;}
+    .details_inner ul ,.select_type_tab ul {
+        width: 100%!important;
+    }
+    .ownership_btns {
+        width: 80%!important;
+    }
+
+    .collapsable_body .collapsable_body_inner{
+        padding:20px;
+    }
+
 }
     
 
