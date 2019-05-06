@@ -1,6 +1,6 @@
-import { Component, ViewChild, Output, Input,  EventEmitter, ElementRef } from '@angular/core';
-declare let $: any;
-declare let POTENZA: any;
+import { Component, ViewChild, Input,  ElementRef } from '@angular/core';
+declare var $: any;
+declare var POTENZA: any;
 
 @Component({
   selector: 'app-car-view',
@@ -16,6 +16,7 @@ export class CarViewComponent{
   * component life cycle default method, runs when input value named 'isOpen' gets change
   * @return void
   */
+
   ngOnChanges():void {
 
     if(this.isOpen){

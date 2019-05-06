@@ -18,7 +18,7 @@
             <div class="row justify-content-center">
 
               <div class="col-lg-8 col-md-8">
-                <form [formGroup]="newLegalContactForm">
+                <form [formGroup]="newLegalContactForm" (ngSubmit)="onSubmit()">
                   <div class="user-thumb-col">
                     <div id="legalContactPreview" class="user-thumb"></div>
                     <!--<p>Size of image: Upto 2 MB</p>
@@ -79,7 +79,7 @@
                             class="fa fa-plus " aria-hidden="true"></i></span> </label>
                       <div formArrayName="emails">
                         <div
-                          *ngFor="let emailObj of newLegalContactForm.get('emails')['controls']; let i = index;let first = first;">
+                          *ngFor="let emailObj of newLegalContactForm.get('emails').controls; let i = index;let first = first;">
                           <div [formGroupName]="i">
                             <div class="relative"> <span class="right-icon right-icon2">
                                 <i *ngIf="!first" (click)="removeEmail(i)" class="fa fa-minus"
@@ -112,7 +112,7 @@
                             aria-hidden="true"></i></span> </label>
                       <div formArrayName="faxs">
                         <div
-                          *ngFor="let fax of newLegalContactForm.get('faxs')['controls']; let i = index;let first = first;">
+                          *ngFor="let fax of newLegalContactForm.get('faxs').controls; let i = index;let first = first;">
                           <div [formGroupName]="i">
                             <div class="relative"> <span class="right-icon right-icon2">
                                 <i *ngIf="!first" (click)="removeFax(i)" class="fa fa-minus"
@@ -148,7 +148,7 @@
 
                       <div formArrayName="phones">
                         <div
-                          *ngFor="let phoneObj of newLegalContactForm.get('phones')['controls']; let i = index;let first = first;">
+                          *ngFor="let phoneObj of newLegalContactForm.get('phones').controls; let i = index;let first = first;">
                           <div [formGroupName]="i">
                             <div class="relative"> <span class="right-icon right-icon2">
                                 <i *ngIf="!first" (click)="removePhone(i)" class="fa fa-minus"
