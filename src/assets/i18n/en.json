@@ -4,19 +4,19 @@
     "NOT-UNIQUE": "is not unique!",
     "ALREADY-EXIST": "already exists!",
     "EMAIL": "Please enter a valid email!",
-    "MIN-LENGTH": "Must be at least 8 characters!",    
+    "MIN-LENGTH": "Must be at least 10 characters!",    
     "HAS-NUMBER": "Must contain at least 1 number!",
     "HAS-CAPITAL-CASE": "Must contain at least 1 in Capital Case!",
     "HAS-SMALL-CASE": "Must contain at least 1 Letter in Small Case!",
     "HAS-SPECIAL-CHARACTERS": "Must contain at least 1 Special Character!",
-    "NO-PASSWORD-MATCH": "Password do not match!",
+    "NO-PASSWORD-MATCH": "Passwords do not match!",
     "EMAIL-TAKEN": "Email already exist!",
     "EMAIL-NOT-EXIST": "Email do not exist in our system!",
-    "VALID-PHONE": "Enter Valid phone number!",
+    "VALID-PHONE": "Phone number is not valid!",
     "DEFAULT-PHONE-MAX-SELECTED": "Must be max 1 selected!",
     "DEFAULT-PHONE-NOT-SELECTED": "Please select default mobile number!",
     "DEFAULT-EMAIL-MAX-SELECTED": "Must be max 1 selected!",
-    "DEFAULT-EMAIL-NOT-SELECTED": "Please select default email"
+    "DEFAULT-EMAIL-NOT-SELECTED": "Please select default email!"
   },
 
   "TOP-NAVIGATION": {

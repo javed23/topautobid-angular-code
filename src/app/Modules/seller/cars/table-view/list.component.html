@@ -1,0 +1,275 @@
+<!--=================================
+ breadcrumbs and inner-intro -->
+
+<app-breadcrumbs [pageTitle]="title" [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+
+<!--=================================
+  breadcrumbs and inner-intro -->
+
+<app-filters [isOpen]="isFiltersModalOpen" [page]="page"></app-filters>
+
+<!--=================================
+ blog  -->
+
+<section class="blog page-section-ptb pad-b-30">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="blog-sidebar">
+                   
+
+
+                    <div class="sorting-options-main">
+                        <div class="row sorting-options top_sorting">
+                                <div class="col-md-12 d-flex">
+                                  <div class="change-view-button">
+                                     <a [ngClass]="{active: isGridListing}"  title="Grid View" href="javascript:void(0)" (click)="onChangeListingType('grid')"><i class="fa fa-th"></i></a>
+                                    <a [ngClass]="{active: !isGridListing}" title="Listing View" href="javascript:void(0)" (click)="onChangeListingType('list')"><i class="fa fa-list-ul"></i></a>                      
+                                   
+                                  </div>
+                
+                
+                                  <div class="ml-auto text-right">
+                                 
+                
+                
+                                    <div class="price-search">                 
+                                        <div class="search">
+                                          <i class="fa fa-search"></i>
+                                          <input type="search" class="form-control placeholder" (input)="onSearch($event.target.value)"
+                                            placeholder="Type Make, Model, Trim etc..">
+                                        </div>
+                                      </div>
+                                    </div>
+                
+                
+                                </div>
+                               
+                             
+                          
+                              </div>
+                              
+                         
+                            <div class="row blog-sidebar listing_outer">
+                                
+                
+                
+                
+                                 
+                
+                                
+                
+                              
+                              <div class="sidebar-widget mb-0">
+                                    <div class="tags">
+                            
+                                        <ul>
+                                            <li [ngClass]="{ active: page.type=='all'}"> <button
+                                                    (click)="onChangeListType('all')">All</button></li>
+                
+                                            <li [ngClass]="{ active: page.type=='active'}"><button
+                                                    (click)="onChangeListType('active')">Active</button></li>
+                                            <li [ngClass]="{ active: page.type=='sold'}"><button
+                                                    (click)="onChangeListType('sold')">Sold</button></li>
+                                            <li [ngClass]="{ active: page.type=='archived'}"><button
+                                                    (click)="onChangeListType('archived')">Archived</button></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                
+                
+                                <div class="right_sec ml-auto">
+                
+                                    <div class="selected-box">
+                                        <select (change)="onSort($event)" class="my_select">
+                                          <option>Sort by </option>
+                                          <option value="offer_in_hand,asc">Price: Lowest first</option>
+                                          <option  value="offer_in_hand,desc">Price: Highest first </option>
+                                          <option value="year,asc">Year: Lowest first</option>
+                                          <option  value="year,desc">Year: Highest first </option>
+                                          <option  value="make,asc">Make: A to Z </option>
+                                          <option  value="make,desc">Make: Z to A </option>                  
+                                        </select>
+                                      </div>
+                
+                                    <div class="input-group date_filters_start d-inline-block">
+                                        <input [(ngModel)]="startDateModel"  class="form-control" (dateSelect)="onStartDateSelected($event)" type="text" (click)="startDate.toggle()" placeholder="Start date"
+                                            ngbDatepicker #startDate="ngbDatepicker">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary calendar" (click)="startDate.toggle()"
+                                                type="button"><span><i class="fa fa-calendar"
+                                                        aria-hidden="true"></i></span></button>
+                                        </div>
+                                    </div>
+                                 
+                                    <div class="input-group date_filters_start d-inline-block">
+                                        <input [(ngModel)]="endDateModel" class="form-control" type="text" (dateSelect)="onEndDateSelected($event)" (click)="endDate.toggle()" placeholder="End date"
+                                            ngbDatepicker #endDate="ngbDatepicker">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary calendar" (click)="endDate.toggle()"
+                                                type="button"><span><i class="fa fa-calendar"
+                                                        aria-hidden="true"></i></span></button>
+                                        </div>
+                                    </div>
+                            
+                            
+                                    <div (click)="clearDateFilters()" class="clear_inputs d-inline-block">
+                                        <i class="fa fa-refresh" aria-hidden="true"></i>
+                                    </div>
+                                </div>                           
+                            </div>            
+  
+                          
+                        </div> 
+
+
+
+
+                    
+            
+                    <div class="sidebar-widget">
+                        <div class="unordered-lists table-responsive text-center">
+
+                            <ngx-datatable #listingTable class="bootstrap" [rows]="cars"
+                                [columns]="[{name:'ref'},{name:'Year'},{name:'Make'},{name:'Model'},{name:'Trim'},{name:'Listed'},{name:'Status'},{name:'Bids'}]"
+                                [sorts]="[{prop: 'ref', dir: 'desc'}]" [columnMode]="'force'" [headerHeight]="50"
+                                [limit]="currentPageLimit" [footerHeight]="80"
+                                [rowHeight]="55" (sort)="onSort($event)" (page)="setPage($event,'all')">
+                                <ngx-datatable-column name="ref" [sortable]="true" [width]="200">
+                                    <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
+                                        #{{ row.ref }}
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="vin"  [sortable]="true" [width]="200">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                        {{ row.vin }}
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="year" [sortable]="true" [width]="200">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                        {{ row.year }}
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="make" [sortable]="true" [width]="200">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                        {{ row.make }}
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="model" [sortable]="true" [width]="200">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                        {{ row.model }}
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="trim" [sortable]="true" [width]="200">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                        {{ row.trim }}
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                 <!--<ngx-datatable-column name="Body" prop="body_style" [sortable]="true">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                        {{ row.body_style }}
+                                    </ng-template>
+                                </ngx-datatable-column>-->
+                                <ngx-datatable-column name="Created At" prop="created_at" [sortable]="true"
+                                    [width]="200">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                        {{ row.created_at | date:'dd-MM-yyyy h:mm'}}
+                                        <!--<span class="left_time">10 Hrs 15 min left</span>-->
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+                                <ngx-datatable-column name="Status" prop="type" [sortable]="true">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                        {{ row.type | titlecase}}
+                                        <!--<span class="left_time">10 Hrs 15 min left</span>-->
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+                                <ngx-datatable-column name="bids" [sortable]="true" [width]="200">
+                                    <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
+
+                                        <b>{{row.best_bid | currency:'USD':true:'2.2-2'}} </b> <span
+                                            *ngIf="row.bids.length>1" class="left_bids">
+                                            <!--<button (click)="show(rowIndex, 'posted-car-bids')" class="left_bids">+{{row.bids.length}} more</button>--><button
+                                                >+{{row.bids.length}} more</button></span>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Action" [sortable]="false" [width]="200">
+                                    <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
+
+                                        <span class="actions">
+                                            <button type="button" (click)="show(rowIndex, 'car-view')">
+                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                            </button>
+
+                                            <button type="button" (click)="delete(row)">
+                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-footer>
+                                    <ng-template ngx-datatable-footer-template let-rowCount="rowCount"
+                                        let-pageSize="pageSize" let-selectedCount="selectedCount" let-curPage="curPage"
+                                        let-offset="offset" let-isVisible="isVisible">
+                                       
+                                       
+                                        <div class="pagination_outer d-flex">
+
+                                            <div class="showing_records">
+                                                Showing <div class="selected-box number_records">
+                                                    <select class="selectpicker my_select" id="per-page"
+                                                    (change)="onLimitChange($event.target.value)">
+                                                    <option *ngFor="let option of pageLimitOptions" [value]="option.value"
+                                                        [selected]="option.value == currentPageLimit">
+                                                        {{ option.value }} 
+                                                    </option>
+                                                </select>
+                                                </div> records on page
+                                            </div>
+
+                                        <div class="ml-auto">
+                                                <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+                                                [pagerRightArrowIcon]="'datatable-icon-right'"
+                                                [pagerPreviousIcon]="'datatable-icon-prev'"
+                                                [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage" [size]="pageSize"
+                                                [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
+                                                (change)="listingTable.onFooterPage($event)">
+                                            </datatable-pager>
+
+                                        </div>
+
+
+                                        </div>
+
+                                    </ng-template>
+                                </ngx-datatable-footer>
+                            </ngx-datatable>
+                        </div>
+
+
+                        
+
+
+
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!--=================================
+blog -->
+
+
+
+<!-- car-details -->
+<app-car-view [isOpen]="isModalOpen" (onClose)="hide($event)" [carObject]="car"></app-car-view>
+
+<!-- car-bids-details -->
+<app-car-bids [isOpen]="isBidsModalOpen" [carObject]="car"></app-car-bids>                
