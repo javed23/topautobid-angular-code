@@ -8,9 +8,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ArchwizardModule } from 'angular-archwizard';
 import { DropzoneModule, DropzoneConfigInterface,
   DROPZONE_CONFIG } from 'ngx-dropzone-wrapper';
-
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { NgxPaginationModule } from 'ngx-pagination'; 
 
 //import social login modules
 import { SocialLoginModule } from 'angularx-social-login';
@@ -37,11 +37,12 @@ import { ListComponent as CarsListComponent } from './cars/list/list.component';
 import { CarViewComponent } from './cars/car-view/car-view.component';
 
 //dealerships management components
-import { ListComponent as DealershipsListComponent } from './dealerships/list/list.component';
+import { ListComponent as DealershipsListComponent } from './dealerships/table-view/list.component';
 import { ContactViewComponent } from './dealerships/contact-view/contact-view.component';
 import { DealershipViewComponent } from './dealerships/dealership-view/dealership-view.component';
 import { CreateDealershipComponent } from './dealerships/create-dealership/create-dealership.component';
 import { CreateContactComponent } from './dealerships/create-contact/create-contact.component';
+import { GridListViewComponent } from './dealerships/grid-list-view/grid-list-view.component';
 
 
 //facebook, google authentication configuration
@@ -91,7 +92,8 @@ let config = new AuthServiceConfig([
     ContactViewComponent,
     DealershipViewComponent,
     CreateDealershipComponent,
-    CreateContactComponent    
+    CreateContactComponent,
+    GridListViewComponent    
   ],
   imports: [
     CommonModule,
@@ -106,7 +108,8 @@ let config = new AuthServiceConfig([
     NgbModule,
     ArchwizardModule,
     NgScrollbarModule,
-    NgxDatatableModule
+    NgxDatatableModule,
+    NgxPaginationModule
   ],
   providers: [
     AdalService,

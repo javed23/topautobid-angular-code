@@ -7,6 +7,7 @@ import { TitleService, CarService, CommonUtilsService } from '../../../../core/_
 
 declare let $: any;
 declare let POTENZA: any;
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-car-detail-page',
@@ -16,6 +17,11 @@ declare let POTENZA: any;
 export class CarDetailPageComponent implements OnInit {
   carDetail: any;
   isImageFilterEnable:Boolean = false
+  selectedCategories: any= []
+  allCategoryCars:any = []
+
+  title: string = 'Car Detail';
+  breadcrumbs: any[] = [{ page: 'Home', link: '' }, { page: "Car's Listing", link: '/seller/car-listing' }, { page: 'Car Detail', link: '' }]
 
   constructor(private location: Location, private activatedRoute: ActivatedRoute, private carService: CarService, private commonUtilsService: CommonUtilsService) {
     
@@ -27,15 +33,18 @@ export class CarDetailPageComponent implements OnInit {
       //case success
       (response) => {
         this.carDetail = response
+        this.allCategoryCars = this.carDetail.car_images
         this.commonUtilsService.hidePageLoader();
         setTimeout(function () {
-          POTENZA.slickslider()
+          POTENZA.slicksliderRecent()
         }, 500);
         //case error 
       }, error => {
         this.commonUtilsService.onError(error);
       }
-    );   
+    );  
+    
+    
   }
 
   /**
@@ -51,8 +60,10 @@ export class CarDetailPageComponent implements OnInit {
  * Function to show/hide the image filters
  * @return  void
 */
-  imageFilterToggle():void{
+  imageFilterToggle():void{ 
+
     this.isImageFilterEnable = (this.isImageFilterEnable)?false:true
+    
   }
 
 /**
@@ -60,12 +71,32 @@ export class CarDetailPageComponent implements OnInit {
  * @param   event object 
  * @return  void
 */
-  onImageFilter(event):void{
-    console.log(event.target.value)
+  onImageFilter(event):void{   
+    (event.target.checked)?this.selectedCategories.push(event.target.value):_.pullAt(this.selectedCategories,this.selectedCategories.indexOf(event.target.value))
+  
+    if(this.selectedCategories.length)
+      this.allCategoryCars = this.carDetail.car_images.filter((l) => _.includes(this.selectedCategories,l.category) ).map((l) => l);
+    else
+      this.allCategoryCars = this.carDetail.car_images
+
+ 
+      this.destorySliderReinit()
+
+  }
+/**
+ * Private function to destroy anf re-initalize slick slider 
+ * @return  void
+*/
+  private destorySliderReinit():void{
+    $(".slider-for").slick('destroy');      
+      $(".slider-nav").slick('destroy');
+      setTimeout(function () {
+        POTENZA.slicksliderRecent()
+        }, 500);
   }
 
   ngOnInit() {
-    POTENZA.tabs();   
-    
+    POTENZA.tabs();
+    POTENZA.carousel();     
   } 
 }

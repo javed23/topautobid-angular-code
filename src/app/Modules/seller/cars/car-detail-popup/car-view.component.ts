@@ -1,6 +1,13 @@
-import { Component, ViewChild, Output, Input,  EventEmitter, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from "@angular/router";
+import {Location} from '@angular/common';
+
+//modules services, models and enviornment file
+import { TitleService, CarService, CommonUtilsService } from '../../../../core/_services'
+
 declare let $: any;
 declare let POTENZA: any;
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-car-view',
@@ -8,39 +15,89 @@ declare let POTENZA: any;
   styleUrls: ['./car-view.component.css']
 })
 export class CarViewComponent{
-  @Input() carObject:any
-  @Input() isOpen: any;
-  @Output() onClose: EventEmitter<any> = new EventEmitter<any>();
-  @ViewChild('carViewSection') carViewSection :ElementRef;
+  carDetail: any;
+  isImageFilterEnable:Boolean = false
+  selectedCategories: any= []
+  allCategoryCars:any = []
+
+  title: string = 'Car Detail';
+  breadcrumbs: any[] = [{ page: 'Home', link: '' }, { page: "Dashboard", link: '/seller/car-dashboard' }, { page: 'Car Detail', link: '' }]
+
+  constructor(private location: Location, private activatedRoute: ActivatedRoute, private carService: CarService, private commonUtilsService: CommonUtilsService) {
+    
+    this.commonUtilsService.showPageLoader();
+
+    //hit api to fetch data
+    this.carService.carDetail({ id: this.activatedRoute.snapshot.params._id }).subscribe(
+
+      //case success
+      (response) => {
+        this.carDetail = response
+        this.allCategoryCars = this.carDetail.car_images
+        this.commonUtilsService.hidePageLoader();
+        setTimeout(function () {
+          POTENZA.slicksliderRecent()
+        }, 500);
+        //case error 
+      }, error => {
+        this.commonUtilsService.onError(error);
+      }
+    );  
+    
+    
+  }
 
   /**
-  * component life cycle default method, runs when input value named 'isOpen' gets change
-  * @return void
+   * Function to back the control on listin page
+   * @return  void
   */
- constructor() { 
-    POTENZA.tabs();
- }
- close() {
-  this.isOpen = false
-  this.onClose.emit(false);
-  console.log('isOpen',this.isOpen);
- }
+  backToListPage():void {
+    this.location.back();
+  }
 
-  ngOnChanges():void {  
 
-    if(this.isOpen){
-      this.isOpen = false
-      //to show the modal popup
-      $(this.carViewSection.nativeElement).modal('show'); 
+/**
+ * Function to show/hide the image filters
+ * @return  void
+*/
+  imageFilterToggle():void{ 
 
-      //call image slider to load images dynamically
-      setTimeout(function () {
-        POTENZA.slickslider()
-      }, 500);
+    this.isImageFilterEnable = (this.isImageFilterEnable)?false:true
+    
+  }
 
-    }
-      
+/**
+ * Function to filter image in slider
+ * @param   event object 
+ * @return  void
+*/
+  onImageFilter(event):void{   
+    (event.target.checked)?this.selectedCategories.push(event.target.value):_.pullAt(this.selectedCategories,this.selectedCategories.indexOf(event.target.value))
+  
+    if(this.selectedCategories.length)
+      this.allCategoryCars = this.carDetail.car_images.filter((l) => _.includes(this.selectedCategories,l.category) ).map((l) => l);
+    else
+      this.allCategoryCars = this.carDetail.car_images
+
+ 
+      this.destorySliderReinit()
 
   }
+/**
+ * Private function to destroy anf re-initalize slick slider 
+ * @return  void
+*/
+  private destorySliderReinit():void{
+    $(".slider-for").slick('destroy');      
+      $(".slider-nav").slick('destroy');
+      setTimeout(function () {
+        POTENZA.slicksliderRecent()
+        }, 500);
+  }
+
+  ngOnInit() {
+    POTENZA.tabs();
+    POTENZA.carousel();     
+  } 
 
 }

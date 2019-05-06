@@ -3,8 +3,8 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { NgbDateAdapter, NgbDateStruct, NgbDateNativeAdapter } from '@ng-bootstrap/ng-bootstrap';
 
 //modules services, models and enviornment file
-import { TitleService, CarService, CommonUtilsService  } from '../../../../core/_services'
-import { PagedData, Car, Page } from "../../../../core/_models";
+import { TitleService, DealershipService, CommonUtilsService  } from '../../../../core/_services'
+import { PagedData, Dealership, Page } from "../../../../core/_models";
 import { environment } from '../../../../../environments/environment'
 
 
@@ -13,14 +13,16 @@ declare let $: any;
 declare let POTENZA: any;
 import * as _ from 'lodash';
 
+
 @Component({
-  selector: 'app-listing',
-  templateUrl: './listing.component.html',
-  styleUrls: ['./listing.component.css'],
+  selector: 'app-grid-list-view',
+  templateUrl: './grid-list-view.component.html',
+  styleUrls: ['./grid-list-view.component.css']
 })
-export class ListingComponent implements OnInit {
+export class GridListViewComponent implements OnInit {
+
   page = new Page(); //object of Page type
-  cars = new Array<Car>() //array of Car type 
+  dealerships = new Array<Dealership>() //array of Dealership type 
   filtersForm:FormGroup;
   isGridListing:boolean=true; //set boolean value to show/hide listing (grid/list)
   viewedPages:any=[]; //array of page number which have been reviewed by user
@@ -60,21 +62,18 @@ export class ListingComponent implements OnInit {
   private _price
 
   //title and breadcrumbs
-  readonly title: string = 'Car Listing';
-  readonly breadcrumbs: any[] = [{ page: 'Home', link: '/seller/home' }, { page: 'Car Listing', link: '' }]
+  readonly title: string = 'Dealership Listing';
+  readonly breadcrumbs: any[] = [{ page: 'Home', link: '/dealer/home' }, { page: 'Dealership Listing', link: '' }]
 
 
-  constructor(private commonUtilsService:CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private ngZone: NgZone) {
+  constructor(private commonUtilsService:CommonUtilsService, private dealershipService: DealershipService, private formBuilder: FormBuilder, private ngZone: NgZone) {
     //fetching the data with default settings
     this.currentPage = 0
     this.setPage(this._defaultPagination,'all');
     this.page.filters={}
   }
 
-  ngOnInit() {
-     //calling filters form initlization method
-     this.initalizeFilterForm();
-  }
+  ngOnInit() { }
 /**
 * component life cycle default method, runs after view page initlization
 * @return void
@@ -83,8 +82,7 @@ export class ListingComponent implements OnInit {
     let currentYear = new Date().getFullYear();  
     //initalize the price & year slider on view page
       
-    POTENZA.featurelist()
-    this.onApplyingFilters()    
+    POTENZA.featurelist() 
     for (var i = 0; i < 2; i++) {
       this.yearsRange.push({
         label: currentYear - i,
@@ -94,38 +92,7 @@ export class ListingComponent implements OnInit {
    // this.yearsRange = this.commonUtilsService.createYearRange();    
   }
 
-/**
-* Filters records when user click on 'Apply Filters' button
-* @return  void
-*/
-  private onApplyingFilters():void { 
 
-    let componentRefrence = this //assign the component object to use with jquery 
-    
-    //when we stop price slider
-    $( "#price-range" ).on( "slidestop", function( event, ui ) {        
-      componentRefrence.page.filters['price_range'] = [ui.values[0],ui.values[1]] 
-      componentRefrence.viewedPages = [];
-      componentRefrence.currentPage = 0
-      componentRefrence.setPage(componentRefrence._defaultPagination,componentRefrence.page.type);     
-    });
-
-    //when we stop year slider
-    $( "#year-range" ).on( "slidestop", function( event, ui ) {
-      componentRefrence.page.filters['year_range'] = [ui.values[0],ui.values[1]]
-      componentRefrence.viewedPages = [];
-      componentRefrence.currentPage = 0
-      componentRefrence.setPage(componentRefrence._defaultPagination,componentRefrence.page.type);
-    });
-
-    $( "#year-range" ).on( "slide", function( event, ui ) {       
-      componentRefrence.year =    ui.values[0] + " - " + ui.values[1]         
-    });
-    $( "#price-range" ).on( "slide", function( event, ui ) {       
-      componentRefrence.price =    "$"+ui.values[0] + " - " + '$'+ui.values[1]         
-    });
-  
-  }
 
 /**
 * change listing type list/grid
@@ -135,16 +102,7 @@ export class ListingComponent implements OnInit {
     this.isGridListing = (listingType=='list')?false:true
   }
 
-/**
-* initializing filters form 
-* @return void
-*/
-  private initalizeFilterForm():void {
-    this.filtersForm = this.formBuilder.group({
-      /*amount: ['$100 - $100000'],*/
-      years:['2010 - 2019']      
-    })
-  }
+
 
 /**
  * Populate the table with new data based on the page number
@@ -169,13 +127,13 @@ export class ListingComponent implements OnInit {
     }
     
     //hit api to fetch data
-    this.carService.listingCars(this.page).subscribe(
+    this.dealershipService.listingDealerships(this.page).subscribe(
 
     //case success
       (pagedData) => {          
       this.ngZone.run( () => {
           this.page = pagedData.page;
-          this.cars = pagedData.data
+          this.dealerships = pagedData.data
       });   
       this.commonUtilsService.hidePageLoader();
 
@@ -574,25 +532,24 @@ uncheckAllFetchRecords(option, filter):void{
     return;
   }
   
-  //manually create a data object which have the car unique id and seller id 
-  const data =  {
-    id:item._id,
-    //seller_id:localStorage.getItem('loggedinUserId')      .
-    seller_id:'5c99ee618fb7ce6cf845a53d' 
-    
-  } 
+ 
+  const data = { 
+    id:item._id, 
+    //dealer_id:[localStorage.getItem('loggedinUserId')]
+    dealer_id:"5ca1e88f9dac60394419c0bc"
+  }
 
   //Start process to delete car
     this.commonUtilsService.showPageLoader();
 
     //hit api to delete record from database
-    this.carService.deleteCar(data).subscribe(
+    this.dealershipService.removeDealership(data).subscribe(
     
     //case success
     (response) => {
       
-      let index = this.cars.indexOf(item, 0);
-      if (index > -1)    this.cars.splice(index, 1); 
+      let index = this.dealerships.indexOf(item, 0);
+      if (index > -1)    this.dealerships.splice(index, 1); 
 
       this.setPage({offset:this.page.pageNumber,pageSize:this.currentPageLimit}, this.page.type)
       this.commonUtilsService.onSuccess(environment.MESSAGES.RECORD_DELETED);          
@@ -665,7 +622,5 @@ uncheckAllFetchRecords(option, filter):void{
   changeYear(event):void{
     this.yearFilterOption = event.target.value    
   }
-
-
 
 }

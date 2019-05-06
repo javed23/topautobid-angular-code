@@ -350,6 +350,78 @@ border-width:7px;
 margin-left: -7px;
 }
 
-.createNew {color:#5d5d5d; margin-bottom: 15px;}
+.createNew {color:#5d5d5d; margin-bottom: 10px;}
 .showing_records {color:#5d5d5d;}
 
+ngb-rating {
+    color: #db2d2e;
+    font-size: 18px;
+    line-height: 1;
+}
+.rating-number{ display:block;line-height: 1;}
+
+
+.row_detail_inner {
+    padding: 9px 15px;
+    position: relative;
+    background: #f2f3f2;
+    text-align: left;
+    margin-top: 20px;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.row_detail_inner > .row {
+    padding: 8px 15px;
+}
+
+
+.datatable-row-detail {
+    height: auto!important;
+}
+
+.row_detail_inner:after {
+    content: "";
+    width: 0px;
+    height: 0px;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #f2f2f2;
+    position: absolute;
+    bottom: 100%;
+    left: 20px;
+}
+
+.row_detail .head {
+    font-weight: 600;
+    margin-right: 0;
+}
+
+.row_detail span {
+    width: 50%;
+    display: inline-block;
+    word-break: break-all;
+}
+
+.datatable-icon-right , .datatable-icon-down {
+    font-weight: bold;
+    font-size: 19px;
+    line-height: 1;
+}
+
+.actions button:hover {
+    color: #db2d2e;
+}
+
+.actions button {
+    color: #323232;
+}
+.my_select {  
+    color: #656565 !important
+}
+.car-details-page .details-block ul li {
+    display: block;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e3e3e3;
+    margin-bottom: 10px;
+}

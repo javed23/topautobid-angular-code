@@ -31,6 +31,7 @@ export class Car {
     type:string;
     miles:number;
     cover_image:string;
+    car_images:any;
 
      
 
@@ -70,5 +71,6 @@ export class Car {
         this.type  =  object.type
         this.miles  =  object.miles
         this.cover_image = object.cover_image;
+        this.car_images = object.car_images;
     }
 }

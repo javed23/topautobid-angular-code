@@ -12,7 +12,7 @@ product-listing  -->
 
       <div class="row ">
           <div class="col-md-12 d-flex"> 
-        <a href="#" class="createNew ml-auto"><i class="fa fa-plus-circle" aria-hidden="true"></i> Create New</a>
+        <a routerLink="/seller/addcar" class="createNew ml-auto"><i class="fa fa-plus-circle" aria-hidden="true"></i> Create New</a>
       </div>
       </div>
 
@@ -26,7 +26,7 @@ product-listing  -->
               <ul class="list-style
             -none">
                 <li><i class="fa fa-star"> </i> Total Results Found <span class="float-right">({{ page.filteredElements}})</span></li>
-                <li><i class="fa fa-filter"> </i> Filtered Vehicles <span class="float-right">({{page.totalElements}})</span></li>
+                <li><i class="fa fa-filter"> </i> Filtered Results <span class="float-right">({{page.totalElements}})</span></li>
               </ul>
             </div>
             <div class="clearfix">
@@ -39,7 +39,7 @@ product-listing  -->
                         <label>
                           <!--<input type="checkbox" [checked]="yearsRange.indexOf(year) >= 0" value="{{year.value}}" (change)="vehicleStatisticsByYear(year, $event)">-->
 
-                          <input type="checkbox"  value="{{year.value}}" (change)="vehicleStatisticsByYear(year.value,'year')"> {{year.value}}
+                          <input type="checkbox"  [checked]="year.checked" value="{{year.value}}" (change)="vehicleStatisticsByYear(year.value,'year')"> {{year.value}}
                         </label>
                       </span></li> 
                   </ul>  
@@ -56,7 +56,7 @@ product-listing  -->
                     <li *ngFor="let make of makes">
                       <span class="checkbox">
                         <label>
-                          <input type="checkbox" value="{{make.name}}" (change)="vehicleStatisticsByMake(make.name, 'make')"> {{make.name}}
+                          <input type="checkbox" [checked]="make.checked" value="{{make.name}}" (change)="vehicleStatisticsByMake(make.name, 'make')"> {{make.name}}
                         </label>
                       </span></li>                    
                   </ul>
@@ -73,7 +73,7 @@ product-listing  -->
                       <li *ngFor="let model of models">
                         <span class="checkbox">
                           <label>
-                            <input type="checkbox" value="{{model.name}}" (change)="vehicleStatisticsByModel(model.name,'model')"> {{model.name}}
+                            <input type="checkbox" [checked]="model.checked" value="{{model.name}}" (change)="vehicleStatisticsByModel(model.name,'model')"> {{model.name}}
                           </label>
                         </span></li>                    
                     </ul>
@@ -269,7 +269,7 @@ product-listing  -->
                     </div>
             
             
-                    <div (click)="clearDateFilters()" class="clear_inputs d-inline-block">
+                    <div (click)="clearDateFilters()" data-toggle="tooltip" title="Reset Date Filter" class="clear_inputs d-inline-block">
                         <i class="fa fa-refresh" aria-hidden="true"></i>
                     </div>
                 </div>
