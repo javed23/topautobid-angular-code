@@ -10,6 +10,9 @@ import { DropzoneModule, DropzoneConfigInterface, DROPZONE_CONFIG } from 'ngx-dr
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxPaginationModule } from 'ngx-pagination'; 
+import { ArchwizardModule } from 'angular-archwizard';
+import { CurrencyMaskModule } from "ng2-currency-mask";
+
 
 //import enviorment file
 import { environment } from '../../../environments/environment';
@@ -28,6 +31,7 @@ import { ListingComponent as CarsGridListComponent } from './cars/grid-list-view
 import { ListComponent as CarsTableComponent } from './cars/table-view/list.component';
 import { CarBidsComponent } from './cars/car-bids/car-bids.component';
 import { FiltersComponent } from './cars/filters/filters.component';
+import { AddCarComponent } from './cars/addcar/addcar.component';
 import { CarViewComponent as CarDetailComponent} from './cars/car-detail-popup/car-view.component';
 import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
 
@@ -66,6 +70,7 @@ let config = new AuthServiceConfig([
     FiltersComponent,
     CarsGridListComponent,
     CarDetailPageComponent,
+    AddCarComponent
   ],
   imports: [
     CommonModule,
@@ -79,7 +84,9 @@ let config = new AuthServiceConfig([
     NgxMaskModule.forRoot(),
     NgScrollbarModule,
     NgxDatatableModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    CurrencyMaskModule,
+    ArchwizardModule
   ],
   providers: [
     {

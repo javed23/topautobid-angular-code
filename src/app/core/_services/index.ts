@@ -6,3 +6,4 @@ export * from './cognito-user.service';
 export * from './car.service';
 export * from './dealership.service';
 export * from './common-utils.service';
+export * from './vehicle.service';

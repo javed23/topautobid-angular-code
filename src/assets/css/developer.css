@@ -344,7 +344,7 @@ pointer-events: none;
 }
 
 .filter_dropdown-menu ul:after {
-border-color:#fff);
+border-color:#fff;
 border-bottom-color: #fff;
 border-width:7px;
 margin-left: -7px;

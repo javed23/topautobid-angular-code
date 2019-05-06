@@ -13,6 +13,7 @@ import { ListingComponent as CarsGridListComponent } from './cars/grid-list-view
 import { ListComponent as CarsTableComponent } from './cars/table-view/list.component';
 import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
 import { CarViewComponent as CarDetailComponent} from './cars/car-detail-popup/car-view.component';
+import { AddCarComponent } from './cars/addcar/addcar.component';
 
 //importing guards
 import { SellerAuthGuardService } from '../../core/guards/seller-auth-guard.service';
@@ -74,9 +75,13 @@ const routes: Routes = [
     component: CarDetailComponent, 
     data: { title: "Car Details" },
     /*canActivate: [SellerAuthGuardService]*/
-  },
-  
+  }, 
 
+  {
+    path: 'addcar',
+    component: AddCarComponent,
+    data: { title: 'Seller AddCar' }
+  }
 
 ];
 
