@@ -72,6 +72,7 @@ let config = new AuthServiceConfig([
     CarDetailPageComponent,
     AddCarComponent
   ],
+  
   imports: [
     CommonModule,
     ReactiveFormsModule,

@@ -114,6 +114,7 @@ export class ListComponent implements AfterViewInit {
 
       //Do not show page loader if fetching results using search
       if(!this.page.search){
+
         this.commonUtilsService.showPageLoader();
       }
       
@@ -133,8 +134,7 @@ export class ListComponent implements AfterViewInit {
         }    
         const start = this.page.pageNumber * this.page.size;  
         pagedData.data.map((x, i) => cars[i + start] = x);
-        this.cars = cars;    
-        console.log('Rows',this.cars);
+        this.cars = cars;          
         this.commonUtilsService.hidePageLoader();
       //case error 
       },error => {
