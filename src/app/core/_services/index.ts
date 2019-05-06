@@ -7,3 +7,4 @@ export * from './car.service';
 export * from './dealership.service';
 export * from './common-utils.service';
 export * from './vehicle.service';
+export * from './dealer.service';

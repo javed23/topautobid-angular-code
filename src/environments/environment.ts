@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  API_ENDPOINT: 'http://54.245.128.14:3000',
+  // API_ENDPOINT: 'http://54.245.128.14:3000',
+  API_ENDPOINT: 'http://localhost:3000',
   //WEB_ENDPOINT: 'http://localhost:4200',
   WEB_ENDPOINT: 'http://54.245.128.14',
  

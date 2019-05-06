@@ -24,7 +24,7 @@ import { PageLoaderComponent } from './shared/components/page-loader/page-loader
 import { AlertService, PageLoaderService } from './shared/_services'
 
 //import core services
-import { UserAuthService, TitleService, CommonUtilsService, CarService } from './core/_services';
+import { UserAuthService, TitleService, CommonUtilsService, CarService,DealerService } from './core/_services';
 
 //import shared module
 import { SharedModule } from './core/shared.module';

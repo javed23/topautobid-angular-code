@@ -7,7 +7,7 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
-
+import { PurchasesListComponent } from './purchases/purchases-list/purchases-list.component';
 //cars management components
 import { ListComponent as CarsListComponent } from './cars/list/list.component';
 
@@ -64,6 +64,11 @@ const routes: Routes = [
     component: DealershipsListComponent, 
     data: { title: 'Dealerships listing' },
     canActivate: [DealerAuthGuardService]
+  },
+  { 
+    path: 'purchases', 
+    component: PurchasesListComponent,
+    data: { title: 'My Purchases' },
   }
 ];
 
