@@ -147,6 +147,7 @@ export class AddCarComponent implements OnInit {
   private _willingToDrive:string = '';
   private _vehiclePickedUp:string = '';
   yearRange:any = [];
+  colors:any = [];
 
   currentYear: number = new Date().getFullYear();   // get Current Year
 
@@ -1280,6 +1281,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
   ngAfterViewInit(){    
     //this.yearRange = this.commonUtilsService.createYearRange();  
+    this.colors = [{label:'Black',value:'#000000'},{label:'Orange',value:'#6e6e6e'},{label:'Black',value:'#5e5e5e'},{label:'Black',value:'#7d7d7d'},{label:'Black',value:'#9d9d9d'},{label:'Black',value:'#3d3d3d'},{label:'Black',value:'#3d6d3d'},{label:'Black',value:'#6d6d6d'}];
     
     for (let i = 0; i < 2; i++) {
       this.yearRange.push({
