@@ -28,9 +28,8 @@
                     <div class="sorting-options-main">
                         <div class="row sorting-options top_sorting">
                                 <div class="col-md-12 d-flex">
-                                  <div class="change-view-button">
-                                     <a title="Back to car's listing" routerLink="/seller/car-listing"><i class="datatable-icon-left" aria-hidden="true"></i></a>                      
-                                   
+                                  <div class="change-view-button">                                     
+                                     <a class="active" title="Back to Grid View" routerLink="/seller/car-listing"><i class="fa fa-th"></i></a>
                                   </div>
                 
                 
@@ -63,7 +62,7 @@
                                  
                 
                                 
-                
+                                    <div class="col-md-12 d-flex">
                               
                               <div class="sidebar-widget mb-0">
                                     <div class="tags">
@@ -124,7 +123,9 @@
                                         <i class="fa fa-refresh" aria-hidden="true"></i>
                                     </div>
                                 </div>                           
-                            </div>            
+                            </div>   
+                            
+                        </div>   
   
                           
                         </div> 
@@ -271,7 +272,7 @@
                                             <!--<button type="button" (click)="show(rowIndex, 'car-view')">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </button>-->
-                                            <a routerLink="/seller/car-dashboard-detail/{{row._id}}"><i class="fa fa-eye"></i></a>
+                                            <a routerLink="/seller/car-detail/{{row._id}}/dashboard"><i class="fa fa-eye"></i></a>
 
                                             <button type="button" (click)="delete(row)">
                                                 <i class="fa fa-trash" aria-hidden="true"></i>

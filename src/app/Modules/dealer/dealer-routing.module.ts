@@ -8,12 +8,9 @@ import { SignupComponent } from './signup/signup.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
-//cars management components
-import { ListComponent as CarsListComponent } from './cars/list/list.component';
 
 //dealerships management components
 import { ListComponent as DealershipsListComponent } from './dealerships/table-view/list.component';
-import { GridListViewComponent } from './dealerships/grid-list-view/grid-list-view.component';
 
 //importing guards
 import { DealerAuthGuardService } from '../../core/guards/dealer-auth-guard.service'
@@ -53,22 +50,11 @@ const routes: Routes = [
     data: { title: 'Dealer Profile' },
     canActivate: [DealerAuthGuardService]
   },
-  { 
-    path: 'car-list', 
-    component: CarsListComponent, 
-    data: { title: 'Cars listing' },
-    /*canActivate: [DealerAuthGuardService]*/
-  },
 
   { 
-    path: 'dealership-dashboard', 
+    path: 'dealership-listing', 
     component: DealershipsListComponent, 
     data: { title: 'Dealerships listing' }
-  },
-  { 
-    path: 'dealership-listing', 
-    component: GridListViewComponent, 
-    data: { title: 'Dealerships Dashboard' }
   }
 ];
 

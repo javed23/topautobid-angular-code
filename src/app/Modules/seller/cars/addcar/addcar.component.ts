@@ -82,7 +82,7 @@ export class AddCarComponent implements OnInit {
   pickupLocationWizard: FormGroup;
   offerInHands: FormGroup;
   
-
+  disabled:boolean = false;
   isBasicInfoSubmitted:boolean = false;
   isVehicleImagesSubmitted:boolean = false;
   isAboutVehicleSubmitted:boolean = false;

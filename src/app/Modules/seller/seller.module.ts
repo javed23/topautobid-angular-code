@@ -32,7 +32,6 @@ import { ListComponent as CarsTableComponent } from './cars/table-view/list.comp
 import { CarBidsComponent } from './cars/car-bids/car-bids.component';
 import { FiltersComponent } from './cars/filters/filters.component';
 import { AddCarComponent } from './cars/addcar/addcar.component';
-import { CarViewComponent as CarDetailComponent} from './cars/car-detail-popup/car-view.component';
 import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
 
 
@@ -65,7 +64,6 @@ let config = new AuthServiceConfig([
     ProfileComponent, 
     ForgotPasswordComponent,
     CarsTableComponent,
-    CarDetailComponent,
     CarBidsComponent,
     FiltersComponent,
     CarsGridListComponent,

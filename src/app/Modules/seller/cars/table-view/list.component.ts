@@ -54,7 +54,7 @@ export class ListComponent implements AfterViewInit {
 
   //title and breadcrumbs
   readonly title: string = 'Dashboard';
-  readonly breadcrumbs: any[] = [{ page: 'Home', link: '/seller/home' },{ page: "Car's Listing", link: '/seller/car-listing' }, { page: "Dashboard", link: '' }]
+  readonly breadcrumbs: any[] = [{ page: 'Home', link: '/seller/home' },{ page: "Car Listing", link: '/seller/car-listing' }, { page: "Dashboard", link: '' }]
 
  
   //default pagination settings
@@ -134,7 +134,8 @@ export class ListComponent implements AfterViewInit {
         }    
         const start = this.page.pageNumber * this.page.size;  
         pagedData.data.map((x, i) => cars[i + start] = x);
-        this.cars = cars;          
+        this.cars = cars;        
+        console.log('Rows',this.cars);  
         this.commonUtilsService.hidePageLoader();
       //case error 
       },error => {

@@ -32,9 +32,6 @@ import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
-//cars management components
-import { ListComponent as CarsListComponent } from './cars/list/list.component';
-import { CarViewComponent } from './cars/car-view/car-view.component';
 
 //dealerships management components
 import { ListComponent as DealershipsListComponent } from './dealerships/table-view/list.component';
@@ -42,8 +39,6 @@ import { ContactViewComponent } from './dealerships/contact-view/contact-view.co
 import { DealershipViewComponent } from './dealerships/dealership-view/dealership-view.component';
 import { CreateDealershipComponent } from './dealerships/create-dealership/create-dealership.component';
 import { CreateContactComponent } from './dealerships/create-contact/create-contact.component';
-import { GridListViewComponent } from './dealerships/grid-list-view/grid-list-view.component';
-
 
 //facebook, google authentication configuration
 /*const fbLoginOptions: LoginOpt = {
@@ -85,15 +80,12 @@ let config = new AuthServiceConfig([
     HomeComponent,
     SignupComponent, 
     ProfileComponent, 
-    ForgotPasswordComponent,
-    CarsListComponent,
-    CarViewComponent,
+    ForgotPasswordComponent,   
     DealershipsListComponent,
     ContactViewComponent,
     DealershipViewComponent,
     CreateDealershipComponent,
-    CreateContactComponent,
-    GridListViewComponent    
+    CreateContactComponent
   ],
   imports: [
     CommonModule,

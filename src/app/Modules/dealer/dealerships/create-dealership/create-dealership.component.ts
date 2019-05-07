@@ -213,7 +213,7 @@ export class CreateDealershipComponent implements OnInit {
       state: ['', Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50),Validators.pattern('^[a-zA-Z ]*$')])],
       zip: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])], 
       profile_pic: [null],
-      
+      _id:[null],
       dealer_id: [localStorage.getItem('loggedinUserId')],
     });
   }
@@ -254,13 +254,47 @@ export class CreateDealershipComponent implements OnInit {
   }
 
   // update content of newely added dealership
-  updateNewDealership() { 
+  onUpdateExistingDealership() { 
     
 
     if(this.newDealershipForm.invalid) {
       return;
     } 
-    this.dealershipsItems[this.updatedItem] = this.newDealershipForm.value;   
+    this.dealershipsItems[this.updatedItem] = this.newDealershipForm.value;  
+    console.log('dealershipsItems',this.dealershipsItems[this.updatedItem]);
+    if(this.dealershipsItems.length == 0){
+      this.submitted = true;
+      return;
+    }else{
+      console.log('this.dealershipsItems',this.dealershipsItems);
+      //saving the seller at aws user pool
+      this.dealershipService.newDealership(this.dealershipsItems)     
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        (response) => {  
+          //this.viewedpages = [];
+          this.resetForm();
+          this.dealershipsItems = [];         
+          //this.isLoading = false;
+          
+          $(this.contentSection.nativeElement).modal('hide');
+          this.pageLoaderService.pageLoader(false);//show page loader
+          this.pageLoaderService.setLoaderText('');//setting loader text            
+          this.toastr.successToastr(environment.MESSAGES.DEALERSHIP_UPDATED, 'Success!'); //showing success toaster 
+          this.pageLoaderService.refreshPage(true)            
+          
+        },error => {
+
+          this.pageLoaderService.setLoaderText(environment.MESSAGES.ERROR_TEXT_LOADER);//setting loader text
+          this.pageLoaderService.pageLoader(false);//hide page loader
+          this.toastr.errorToastr(error, 'Oops!');//showing error toaster message
+
+        });
+
+        //console.log('dealerships',this.newDealershipForm.value)
+         
+    }
+
     this.IsForUpdate = false;
     this.resetForm(); 
   } 
@@ -294,8 +328,9 @@ export class CreateDealershipComponent implements OnInit {
           
           $(this.contentSection.nativeElement).modal('hide');
           this.pageLoaderService.pageLoader(false);//show page loader
-          this.pageLoaderService.setLoaderText('');//setting loader text                    
+          this.pageLoaderService.setLoaderText('');//setting loader text  
           this.toastr.successToastr(environment.MESSAGES.DEALERSHIP_ADDED, 'Success!'); //showing success toaster 
+          
           this.pageLoaderService.refreshPage(true)  
           //this.setPage(this.defaultPagination);
           

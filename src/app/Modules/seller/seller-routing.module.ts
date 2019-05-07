@@ -12,7 +12,6 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { ListingComponent as CarsGridListComponent } from './cars/grid-list-view/listing.component';
 import { ListComponent as CarsTableComponent } from './cars/table-view/list.component';
 import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
-import { CarViewComponent as CarDetailComponent} from './cars/car-detail-popup/car-view.component';
 import { AddCarComponent } from './cars/addcar/addcar.component';
 
 //importing guards
@@ -65,14 +64,14 @@ const routes: Routes = [
     /*canActivate: [SellerAuthGuardService]*/
   },
   { 
-    path: 'car-detail/:_id', 
+    path: 'car-detail/:_id/:type', 
     component: CarDetailPageComponent, 
     data: { title: "Car Details" },
     /*canActivate: [SellerAuthGuardService]*/
   },
   { 
-    path: 'car-dashboard-detail/:_id', 
-    component: CarDetailComponent, 
+    path: 'car-detail/:_id', 
+    component: CarDetailPageComponent, 
     data: { title: "Car Details" },
     /*canActivate: [SellerAuthGuardService]*/
   }, 

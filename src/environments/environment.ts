@@ -80,6 +80,7 @@ export const environment = {
     FETCHING_RECORDS: 'Fetching Data...',
     RECORD_DELETED: 'Record has been deleted successfully.',
     DEALERSHIP_ADDED: 'Dealership has been added successfully.',
+    DEALERSHIP_UPDATED: 'Dealership has been updated successfully.',
     DELETING_RECORD: 'Deleting Record...',//new
   }
 };

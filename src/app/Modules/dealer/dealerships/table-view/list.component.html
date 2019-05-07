@@ -13,26 +13,76 @@
 
 <section class="blog page-section-ptb pad-b-30">
   <div class="container">
+    <div class="row ">
+      <div class="col-md-12 d-flex">
+        <a href="javascript:void(0)" (click)="show(1,'createDealership')" class="createNew ml-auto"><i
+            class="fa fa-plus-circle" aria-hidden="true"></i> Create New</a>
+      </div>
+    </div>
     <div class="row">
       <div class="col-md-12">
         <div class="listing_outer blog-sidebar">
-          <div class="sidebar-widget">
-            
-            <div class="text-md-right mt-md-0 mt-sm-3">
-                <button class="button red" (click)="show(1,'createDealership')"> New Dealership </button>
-              <div class="widget-search ml-4">
-                <i class="fa fa-search"></i>
-                <input type="search" class="form-control placeholder" (input)="onSearch($event.target.value)"
-                  placeholder="Search....">
+          <div class="sorting-options-main">
+         
+
+            <div class="row blog-sidebar listing_outer">
+                <div class="col-md-12 d-flex">
+              <div class="product-listing">
+                <div class="price-search">
+                    <div class="search">
+                      <i class="fa fa-search"></i>
+                      <input type="search" class="form-control placeholder" (input)="onSearch($event.target.value)"
+                        placeholder="Type Name, Number, State, City  etc..">
+                    </div>
+                  </div>
+            </div>
+
+
+              <div class="right_sec ml-auto">
+
+                <div class="input-group date_filters_start d-inline-block">
+                  <input [(ngModel)]="startDateModel" class="form-control" (dateSelect)="onStartDateSelected($event)"
+                    type="text" (click)="startDate.toggle()" placeholder="Start date" ngbDatepicker
+                    #startDate="ngbDatepicker">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary calendar" (click)="startDate.toggle()"
+                      type="button"><span><i class="fa fa-calendar" aria-hidden="true"></i></span></button>
+                  </div>
+                </div>
+
+                <div class="input-group date_filters_start d-inline-block">
+                  <input [(ngModel)]="endDateModel" class="form-control" type="text"
+                    (dateSelect)="onEndDateSelected($event)" (click)="endDate.toggle()" placeholder="End date"
+                    ngbDatepicker #endDate="ngbDatepicker">
+
+
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary calendar" (click)="endDate.toggle()" type="button"><span><i
+                          class="fa fa-calendar" aria-hidden="true"></i></span></button>
+                  </div>
+                </div>
+
+
+                <div data-toggle="tooltip" title="Reset Date Filter" (click)="clearDateFilters()"
+                  class="clear_inputs d-inline-block">
+                  <i class="fa fa-refresh" aria-hidden="true"></i>
+                </div>
               </div>
             </div>
+            </div>
+
+
           </div>
+
+
+
+
           <div class="sidebar-widget">
-            <div class="unordered-lists table-responsive text-center">             
+            <div class="unordered-lists table-responsive text-center">
 
               <ngx-datatable #myTable class="bootstrap" [rows]="dealerships" [sorts]="[{prop: 'created', dir: 'desc'}]"
-                [columnMode]="'force'" [headerHeight]="50"  [limit]="currentPageLimit"
-                [footerHeight]="80" [rowHeight]="50" (sort)="onSort($event)" (page)="setPage($event)">
+                [columnMode]="'force'" [headerHeight]="50" [limit]="currentPageLimit" [footerHeight]="80"
+                [rowHeight]="50" (sort)="onSort($event)" (page)="setPage($event)">
 
                 <ngx-datatable-column name="Image" [sortable]="true" [width]="200">
                   <ng-template let-row="row" ngx-datatable-cell-template>
@@ -44,9 +94,9 @@
                 </ngx-datatable-column>
 
                 <ngx-datatable-column name="Name" [sortable]="true" [width]="200" prop="legalcoroporationname">
-                    <ng-template let-row="row" ngx-datatable-cell-template>
-                      {{ row.legalcoroporationname }}
-                    </ng-template>
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row.legalcoroporationname }}
+                  </ng-template>
                 </ngx-datatable-column>
 
 
@@ -55,7 +105,8 @@
                     {{ row.dealershipnumber }}
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Legal Contacts" prop="row.legal_contacts?.name.first_name" [sortable]="true" [width]="200">
+                <ngx-datatable-column name="Legal Contacts" prop="row.legal_contacts?.name.first_name" [sortable]="true"
+                  [width]="200">
                   <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
                     <span *ngFor="let contact of row?.legal_contacts"><b *ngIf="contact.default_legal_contact">
                         {{contact.name.first_name}}</b> </span>
@@ -69,7 +120,7 @@
                     {{ row.city }}
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="state"  [sortable]="true" [width]="200">
+                <ngx-datatable-column name="state" [sortable]="true" [width]="200">
                   <ng-template let-row="row" ngx-datatable-cell-template>
                     {{ row.state }}
                   </ng-template>
@@ -111,11 +162,11 @@
                     let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset"
                     let-isVisible="isVisible">
                     <div class="page-count">
-                    <span *ngIf="selectedMessage">
-                      {{selectedCount.toLocaleString()}} {{selectedMessage}} / 
-                    </span>
-                    {{rowCount.toLocaleString()}} {{totalMessage}}
-                  </div>
+                      <span *ngIf="selectedMessage">
+                        {{selectedCount.toLocaleString()}} {{selectedMessage}} /
+                      </span>
+                      {{rowCount.toLocaleString()}} {{totalMessage}}
+                    </div>
                     <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
                       [pagerRightArrowIcon]="'datatable-icon-right'" [pagerPreviousIcon]="'datatable-icon-prev'"
                       [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage" [size]="pageSize" [count]="rowCount"
@@ -157,9 +208,9 @@
 <app-contact-view [isOpen]="isModalOpened" [dealershipObject]="dealershipObject"></app-contact-view>
 
 <!-- Add new dealership  -->
-<app-create-dealership [dealershipsItems]="dealershipsItems" [updateExistingDealership]="updateExistingDealership" [isOpen]="isCreateDealershipModalOpened"></app-create-dealership>
+<app-create-dealership [dealershipsItems]="dealershipsItems" [updateExistingDealership]="updateExistingDealership"
+  [isOpen]="isCreateDealershipModalOpened"></app-create-dealership>
 
 <!-- Add new-legal-contact -->
-<app-create-contact [dealershipId]="dealershipId" [legalContactItems]="legalContactItems" [isOpen]="isCreateContactModalOpened"></app-create-contact>
-
-
+<app-create-contact [dealershipId]="dealershipId" [legalContactItems]="legalContactItems"
+  [isOpen]="isCreateContactModalOpened"></app-create-contact>

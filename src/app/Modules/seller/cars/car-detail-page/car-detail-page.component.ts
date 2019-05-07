@@ -21,12 +21,16 @@ export class CarDetailPageComponent implements OnInit {
   allCategoryCars:any = []
 
   title: string = 'Car Detail';
-  breadcrumbs: any[] = [{ page: 'Home', link: '' }, { page: "Car's Listing", link: '/seller/car-listing' }, { page: 'Car Detail', link: '' }]
+  breadcrumbs: any[] = [{ page: 'Home', link: '' }, { page: "Car Listing", link: '/seller/car-listing' }, { page: 'Car Detail', link: '' }]
 
   constructor(private location: Location, private activatedRoute: ActivatedRoute, private carService: CarService, private commonUtilsService: CommonUtilsService) {
     
     this.commonUtilsService.showPageLoader();
 
+    if('type' in this.activatedRoute.snapshot.params){
+      console.log('breadcrumbs');
+      this.breadcrumbs = [{ page: 'Home', link: '' }, { page: "Dashboard", link: '/seller/car-dashboard' }, { page: 'Car Detail', link: '' }]
+    }
     //hit api to fetch data
     this.carService.carDetail({ id: this.activatedRoute.snapshot.params._id }).subscribe(
 

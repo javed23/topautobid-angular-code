@@ -38,6 +38,10 @@ import * as _ from 'lodash';
   encapsulation: ViewEncapsulation.None
 })
 export class ListComponent implements OnInit, AfterViewInit {
+
+  startDateModel:any;
+  endDateModel:any;
+  datesFilter:any = {};  
   @ViewChild('myTable') table; 
   page = new Page();
 
@@ -155,7 +159,7 @@ export class ListComponent implements OnInit, AfterViewInit {
       this.pageLoaderService.pageLoader(true);//show page loader
     }
     
-    this.dealershipService.listingDealerships(this.page).subscribe(
+    this.dealershipService.listingDealershipOnDatable(this.page).subscribe(
       (pagedData) => {
       
       this.page = pagedData.page;
@@ -303,6 +307,61 @@ export class ListComponent implements OnInit, AfterViewInit {
     }
      
   }  
+
+  /**
+   * Check date validations and filters records when select start date filter
+   * @return  void
+   */
+  onStartDateSelected(event:any):void {
+    this.datesFilter['start']  = new Date(event.year,event.month-1,event.day+1)       
+    this.datesFilter['transformedStartDate']  = (this.datesFilter['start']).toISOString();
+    this.validateDateFilters();       
+  }
+  /**
+   * Check date validations and filters records when select end date filter
+   * @return  void
+   */
+  onEndDateSelected(event:any):void {    
+    this.datesFilter['end']  = new Date(event.year,event.month-1,event.day+1)
+    this.datesFilter['transformedEndDate']  = (this.datesFilter['end']).toISOString();
+    this.validateDateFilters();        
+  }
+
+  /**
+  * To validate date filters
+  * @return  void
+  */
+  private validateDateFilters(){
+    
+    if(! _.has(this.datesFilter, ['start']))
+      this.commonUtilsService.onError('Please select start date');
+    else if(! _.has(this.datesFilter, ['end']))
+      this.commonUtilsService.onError('Please select end date');
+    else if(_.has(this.datesFilter, ['end']) && (this.datesFilter['end']).getTime() < (this.datesFilter['start']).getTime()){
+      this.endDateModel = null
+      this.commonUtilsService.onError('End date should not less than start date');  
+      
+    }else{     
+      this.page.filters['dates'] = this.datesFilter;
+      this.viewedPages = [];
+      this.setPage(this.defaultPagination);
+    }
+  }
+  /**
+  * To clear date filters(inputs)
+  * @return  void
+  */
+  clearDateFilters():void{
+    if(_.has(this.datesFilter, ['start']) || _.has(this.datesFilter, ['end'])){
+      this.startDateModel = null
+      this.endDateModel = null
+      this.page.filters['dates'] = this.datesFilter = {}
+      this.viewedPages = [];  
+      delete this.page.filters['dates']; 
+      this.setPage(this.defaultPagination);
+    }
+    
+  }
 
   // This method must be present, even if empty.
   ngOnDestroy() {
