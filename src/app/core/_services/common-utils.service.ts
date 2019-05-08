@@ -154,7 +154,7 @@ export class CommonUtilsService {
   public getVehicleStatisticsByYear(year): Observable<any> {         
     return this.httpClient.post('common/fetchVehicleStatisticsByYear', year)
     .map((response: any) => {         
-        //console.log(response); 
+        console.log(response); 
         return response;          
     })    
   }

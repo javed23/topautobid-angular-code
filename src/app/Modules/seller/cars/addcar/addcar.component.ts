@@ -151,6 +151,9 @@ export class AddCarComponent implements OnInit {
 
   currentYear: number = new Date().getFullYear();   // get Current Year
 
+  minYear: number = 2000;
+  maxYear: number = this.currentYear;
+
 
 
 constructor( private zone:NgZone, private cognitoUserService:CognitoUserService, private location: Location, private alertService: AlertService, private vehicleService: VehicleService, private userAuthService: UserAuthService, private pageLoaderService: PageLoaderService, private formBuilder: FormBuilder, private titleService: TitleService, private commonUtilsService: CommonUtilsService, private toastr: ToastrManager, private router: Router) { 
@@ -295,8 +298,8 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       dictDefaultMessage: '<span class="button red">Upload Proof</span>',
       //previewsContainer: "#offerInHandsPreview",
       addRemoveLinks: true,
-      resizeWidth: 125,
-      resizeHeight: 125,
+      //resizeWidth: 125,
+      //resizeHeight: 125,
       //createImageThumbnails:false,
       dictInvalidFileType: 'Only valid jpeg, jpg, png file is accepted.',
       dictFileTooBig: 'Maximum upload file size limit is 2MB',
@@ -353,12 +356,10 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
         })
        
         this.on("success", function(file, serverResponse) {  
-          componentObj.offerInHandsImagesArray.push({file_path : serverResponse.fileLocation, file_name : serverResponse.fileKey});  
           
           
           componentObj.zone.run(() => { 
-            $(".dz-image img").attr('src', serverResponse);
-            $(".dz-remove").attr('href', serverResponse.fileKey);
+            componentObj.offerInHandsImagesArray.push({file_path : serverResponse.fileLocation, file_name : serverResponse.fileKey, file_key : serverResponse.fileName, file_category : 'offer_in_hands'});
           });
 
           this.removeFile(file);
@@ -395,8 +396,8 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     dictDefaultMessage: 'Click or drag images here to upload',
     //previewsContainer: "#vehicleAfterMarketPreview",
     addRemoveLinks: true,
-    resizeWidth: 125,
-    resizeHeight: 125,
+    //resizeWidth: 125,
+    //resizeHeight: 125,
     //createImageThumbnails:false,
     dictInvalidFileType: 'Only valid jpeg, jpg, png file is accepted.',
     dictFileTooBig: 'Maximum upload file size limit is 2MB',
@@ -452,11 +453,10 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       })
      
       this.on("success", function(file, serverResponse) {           
-        componentObj.afterMarketImagesArray.push({file_path : serverResponse.fileLocation, file_name : serverResponse.fileKey});  
+         
         
         componentObj.zone.run(() => { 
-          $(".dz-image img").attr('src', serverResponse);
-          $(".dz-remove").attr('href', serverResponse.fileKey);
+          componentObj.afterMarketImagesArray.push({file_path : serverResponse.fileLocation, file_name : serverResponse.fileKey, file_key : serverResponse.fileName, file_category : 'aftermarket'}); 
         });
         this.removeFile(file);
         
@@ -496,8 +496,8 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       dictDefaultMessage: 'Click or drag images here to upload',
       //previewsContainer: "#vehicleConditionPreview",
       addRemoveLinks: true,
-      resizeWidth: 125,
-      resizeHeight: 125,
+      //resizeWidth: 125,
+      //resizeHeight: 125,
       //createImageThumbnails:false,
       dictInvalidFileType: 'Only valid jpeg, jpg, png file is accepted.',
       dictFileTooBig: 'Maximum upload file size limit is 2MB',
@@ -553,11 +553,10 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
        
         this.on("success", function(file, serverResponse) { 
 
-          componentObj.vehicleConditionImagesArray.push({file_path : serverResponse.fileLocation, file_name : serverResponse.fileKey});
+          
 
           componentObj.zone.run(() => { 
-            $(".dz-image img").attr('src', serverResponse);
-            $(".dz-remove").attr('href', serverResponse.fileKey);
+            componentObj.vehicleConditionImagesArray.push({file_path : serverResponse.fileLocation, file_key : serverResponse.fileKey, file_name : serverResponse.fileName, file_category : 'condition'});
           });
           this.removeFile(file); 
                  
@@ -586,8 +585,8 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       clickable: true,
       paramName: "file",
       uploadMultiple: false,
-      url: environment.API_ENDPOINT + "/api/common/imageUpload",
-      maxFiles: 6,
+      url: environment.API_ENDPOINT + "/api/common/imageUploadtoBucket",
+      maxFiles: 20,
       autoReset: null,
       errorReset: null,
       cancelReset: null,
@@ -596,8 +595,8 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       dictDefaultMessage: 'Click or drag images here to upload',
      // previewsContainer: "#vehicleImagesPreview",      
       addRemoveLinks: true,
-      resizeWidth: 125,
-      resizeHeight: 125,
+      //resizeWidth: 125,
+      //resizeHeight: 125,
       //createImageThumbnails:false,
       dictInvalidFileType: 'Only valid jpeg, jpg, png file is accepted.',
       dictFileTooBig: 'Maximum upload file size limit is 2MB',
@@ -610,13 +609,13 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       accept: function(file, done) {            
         
           
-          if((componentObj.interiorImagesArray.length +1) > 3 && componentObj.getVehicleImageCategory() == "Interior"){
+          if((componentObj.interiorImagesArray.length +1) > 10 && componentObj.getVehicleImageCategory() == "Interior"){
               componentObj.commonUtilsService.onError('You cannot upload any more files.');
               this.removeFile(file);
               return false;
           }
 
-          if((componentObj.exteriorImagesArray.length +1) > 3 && componentObj.getVehicleImageCategory() == "Exterior"){
+          if((componentObj.exteriorImagesArray.length +1) > 10 && componentObj.getVehicleImageCategory() == "Exterior"){
               componentObj.commonUtilsService.onError('You cannot upload any more files.');
               this.removeFile(file);
               return false;
@@ -658,18 +657,17 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
        
         this.on("success", function(file, serverResponse) {
 
-          componentObj.vehicleImage = serverResponse.fileLocation;  
+          componentObj.vehicleImage = serverResponse.fileLocation; 
           
-          if(componentObj.getVehicleImageCategory() == "Interior"){
-            componentObj.interiorImagesArray.push({file_path : serverResponse.fileLocation, file_name : serverResponse.fileKey});
-          }else{
-            componentObj.exteriorImagesArray.push({file_path : serverResponse.fileLocation, file_name : serverResponse.fileKey});
-          }             
-
           componentObj.zone.run(() => { 
-            $(".dz-image img").attr('src', serverResponse);
-            $(".dz-remove").attr('href', serverResponse.fileKey);
+            if(componentObj.getVehicleImageCategory() == "Interior"){
+              componentObj.interiorImagesArray.push({file_path : serverResponse.fileLocation, file_key : serverResponse.fileKey, file_name : serverResponse.fileName, file_category : componentObj.getVehicleImageCategory().toLowerCase()});
+            }else{
+              componentObj.exteriorImagesArray.push({file_path : serverResponse.fileLocation, file_key : serverResponse.fileKey, file_name : serverResponse.fileName, file_category : componentObj.getVehicleImageCategory().toLowerCase()});
+            }
           });
+
+          //console.log(componentObj.interiorImagesArray);
           this.removeFile(file);
           componentObj.pageLoaderService.pageLoader(false); //hide page loader
 
@@ -688,8 +686,13 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    * @param index index of the image array
    * @return  boolean
    */
-  removeImage(index): void {
-    (this.vehicleImageCategory == 'Interior')? _.pullAt(this.interiorImagesArray, [index]): _.pullAt(this.exteriorImagesArray, [index]);
+  removeImage(index, file_category): void {
+    
+    if(file_category == 'interior'){ _.pullAt(this.interiorImagesArray, [index]); }
+    if(file_category == 'exterior'){ _.pullAt(this.exteriorImagesArray, [index]); }
+    if(file_category == 'condition'){ _.pullAt(this.vehicleConditionImagesArray, [index]); }
+    if(file_category == 'aftermarket'){ _.pullAt(this.afterMarketImagesArray, [index]); }
+    if(file_category == 'offer_in_hands'){ _.pullAt(this.offerInHandsImagesArray, [index]); }    
   }
 
   /**
@@ -738,51 +741,8 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     return this.uploadVehicleImagesWizard.controls.vehicle_images.get('vehicle_image_category_name').value;
   }
 
+
   
-
-  /**
-   * get Vehicles(Makes, Models, Trim...) By Year
-   * @param year selected year from dropdown
-   * @return  array(vehicle details)
-   */
-  getVehicleStatisticsByYear(year){
-
-    if(year == ''){ 
-      this.basicInfoWizard.controls.basic_info.get('vehicle_make').disable(); this.makes = [];
-      this.basicInfoWizard.controls.basic_info.get('vehicle_model').disable(); this.models = [];
-      this.basicInfoWizard.controls.basic_info.get('vehicle_trim').disable(); this.trims = [];
-      return;
-    }
-
-    this.commonUtilsService.showPageLoader();
-
-    //manually create a data object which have the car unique id and seller id 
-    const data ={ year:year }
-    //hit api to fetch data
-    this.commonUtilsService.getVehicleStatisticsByYear(data)
-    .pipe(untilDestroyed(this))
-    .subscribe(
-
-      //case success
-    (response) => {      
-      
-      this.isVehicleOptionSelected = true;
-      this.makes = response.makes;
-      this.basicInfoWizard.controls.basic_info.get('vehicle_make').enable();
-      this.basicInfoWizard.controls.basic_info.get('vehicle_model').disable(); this.models = [];
-      this.basicInfoWizard.controls.basic_info.get('vehicle_trim').disable(); this.trims = [];
-      this.commonUtilsService.hidePageLoader();
-    
-    //case error 
-    },error => {
-      this.isVehicleOptionSelected = false;      
-      this.basicInfoWizard.controls.basic_info.get('vehicle_make').disable(); this.makes = [];
-      this.basicInfoWizard.controls.basic_info.get('vehicle_model').disable(); this.models = [];
-      this.basicInfoWizard.controls.basic_info.get('vehicle_trim').disable(); this.trims = [];
-      this.commonUtilsService.onError(error);
-
-    });
-  }
 
   /**
    * get Models By Make Name
@@ -836,6 +796,67 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     }  
       
     this.getVehicleStatisticsByYear(this.getVehicleYear);
+  }
+
+  /**
+   * get Vehicles(Makes, Models, Trim...) By Year
+   * @param year selected year from dropdown
+   * @return  array(vehicle details)
+   */
+  getVehicleStatisticsByYear(year){
+
+    let vehicleMakeControl = this.basicInfoWizard.controls.basic_info.get('vehicle_make');
+    let vehicleModelControl = this.basicInfoWizard.controls.basic_info.get('vehicle_model');
+    let vehicleTrimControl = this.basicInfoWizard.controls.basic_info.get('vehicle_trim');
+
+    if(year == ''){ 
+      vehicleMakeControl.disable(); this.makes = [];
+      vehicleModelControl.disable(); this.models = [];
+      vehicleTrimControl.disable(); this.trims = [];
+      return;
+    }
+
+    this.commonUtilsService.showPageLoader();
+
+    //manually create a data object which have the car unique id and seller id 
+    const data = { year:year }
+
+    //hit api to fetch data
+    this.commonUtilsService.getVehicleStatisticsByYear(data)
+    .pipe(untilDestroyed(this))
+    .subscribe(
+
+      //case success
+    (response) => {      
+      
+      if(response == null){
+        
+        this.isVehicleOptionSelected = false;
+        this.commonUtilsService.onError(environment.MESSAGES.NO_RECORDS_FOUND);
+
+      }else{
+        this.isVehicleOptionSelected = true;
+        this.makes = response.makes;
+        vehicleMakeControl.enable();
+        vehicleModelControl.disable(); this.models = [];
+        vehicleTrimControl.disable(); this.trims = [];
+      } 
+
+      this.commonUtilsService.hidePageLoader();
+    
+    //case error 
+    },error => {
+
+      this.isVehicleOptionSelected = false;  
+
+      vehicleMakeControl.disable(); this.makes = [];
+      vehicleModelControl.disable(); this.models = [];
+      vehicleTrimControl.disable(); this.trims = [];
+
+      this.commonUtilsService.hidePageLoader();
+      this.commonUtilsService.onError(error);
+
+    });
   }
 
   /**
@@ -930,7 +951,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     const vehicleYearValue = this.vehicleOption.controls.vehicle_year_value;
     if(value == "more"){
       this.isMoreSelected = true;
-      vehicleYearValue.setValidators(Validators.compose([Validators.required,Validators.min(2018), Validators.max(2019)]));
+      vehicleYearValue.setValidators(Validators.compose([Validators.required,Validators.min(this.minYear), Validators.max(this.maxYear)]));
       vehicleYearValue.updateValueAndValidity();
     }else{
       this.isMoreSelected = false;
@@ -1252,6 +1273,13 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   set vehiclePickedUp($vehiclePickedUp: string) {
     this._vehiclePickedUp = $vehiclePickedUp;  
     //this.pickupLocationWizard.controls['vehicle_to_be_picked_up'].patchValue(this._vehiclePickedUp);  
+  }
+
+  /**
+   * save Car in DB  
+   */
+  onSubmitAddCar(): void {
+    //console.log(this.basicInfoWizard)
   }
 
   /**

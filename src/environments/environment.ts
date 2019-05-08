@@ -79,7 +79,11 @@ export const environment = {
     FETCHING_RECORDS: 'Fetching Data...',
     RECORD_DELETED: 'Record has been deleted successfully.',
     DEALERSHIP_ADDED: 'Dealership has been added successfully.',
-    DELETING_RECORD: 'Deleting Record...',//new
+    DELETING_RECORD: 'Deleting Record...',
+
+    // Added By Bhavnish
+    NO_RECORDS_FOUND: 'No Records Found.',
+    
   }
 };
 
