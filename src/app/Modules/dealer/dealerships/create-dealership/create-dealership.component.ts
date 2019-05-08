@@ -150,7 +150,7 @@ export class CreateDealershipComponent implements OnInit {
         this.profilePic = (profilePath) ? profilePath : defaultPath;
   
         // Create the mock file:
-        const mockFile = { name: "Filename", size: 12345 };
+        const mockFile = {  };
   
         // Call the default addedfile event handler
         this.emit("addedfile", mockFile);
@@ -160,23 +160,15 @@ export class CreateDealershipComponent implements OnInit {
        
         this.emit("complete", mockFile);
   
-  
-        this.on("totaluploadprogress",function(progress){ 
-          console.log('totaluploadprogress')
-          componentObj.pageLoaderService.pageLoader(true);//start showing page loader
-          componentObj.pageLoaderService.setLoaderText('Uploading file '+progress+'%');//setting loader text
-          if(progress>=100){
-            componentObj.pageLoaderService.pageLoader(false);//hide page loader
-          }
-        })
-        this.on('sending', function(file, xhr, formData){
-          console.log('sending')
+    
+      
+        this.on('sending', function(file, xhr, formData){         
           formData.append('folder', 'Dealership');
         });
        
         this.on("success", function(file, serverResponse) {
           console.log('success')
-          this.removeFile(file);
+         
           // Called after the file successfully uploaded.         
           
           componentObj.newDealershipForm.controls['profile_pic'].setValue(serverResponse);    
@@ -189,15 +181,20 @@ export class CreateDealershipComponent implements OnInit {
             $(".dz-image img").attr('class', 'img-fluid');
             $(".dz-image img").attr('src', serverResponse);
           });
-          
+          this.removeFile(file); 
           componentObj.pageLoaderService.pageLoader(false);//hide page loader
         });
         this.on("error", function(file, serverResponse) {
           console.log('error')
+          this.removeFile(file);
           // Called after the file successfully uploaded.         
           componentObj.pageLoaderService.pageLoader(false);
           componentObj.toastr.errorToastr(serverResponse, 'Oops!');        
         });
+        this.on("complete", function(file, serverResponse) {
+         // this.removeFile(file);      
+        });
+        
       }     
     };
   }
@@ -214,7 +211,9 @@ export class CreateDealershipComponent implements OnInit {
       zip: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])], 
       profile_pic: [null],
       _id:[null],
-      dealer_id: [localStorage.getItem('loggedinUserId')],
+      //dealer_id: [localStorage.getItem('loggedinUserId')],
+      dealer_id: "5ca1e88f9dac60394419c0bc"
+      
     });
   }
   // push new dealership item 
@@ -224,7 +223,8 @@ export class CreateDealershipComponent implements OnInit {
       this.submitted = true;
       return;
     }   
-    this.newDealershipForm.get('dealer_id').setValue(localStorage.getItem('loggedinUserId'))
+    //this.newDealershipForm.get('dealer_id').setValue(localStorage.getItem('loggedinUserId'))
+    this.newDealershipForm.get('dealer_id').setValue('5ca1e88f9dac60394419c0bc')
     console.log('form',this.newDealershipForm.value);
     this.dealershipsItems.push(
       this.newDealershipForm.value
@@ -244,13 +244,7 @@ export class CreateDealershipComponent implements OnInit {
       let dealerProfilePic = (this.dealershipsItems[index]['profile_pic'])?this.dealershipsItems[index]['profile_pic']:environment.WEB_ENDPOINT + '/' + environment.DEFAULT_PROFILE;
       $(".dz-image img").attr('src', dealerProfilePic);
     });
-    this.newDealershipForm.patchValue(this.dealershipsItems[index]) //binding the dealership datat   
-
-    /*Object.keys(this.newDealershipForm.controls).forEach(key => {      
-      this.newDealershipForm.get(key).setValue(this.dealershipsItems[index][key])
-    });*/
-    
-    
+    this.newDealershipForm.patchValue(this.dealershipsItems[index])        
   }
 
   // update content of newely added dealership
@@ -260,15 +254,11 @@ export class CreateDealershipComponent implements OnInit {
     if(this.newDealershipForm.invalid) {
       return;
     } 
-    this.dealershipsItems[this.updatedItem] = this.newDealershipForm.value;  
-    console.log('dealershipsItems',this.dealershipsItems[this.updatedItem]);
-    if(this.dealershipsItems.length == 0){
-      this.submitted = true;
-      return;
-    }else{
-      console.log('this.dealershipsItems',this.dealershipsItems);
-      //saving the seller at aws user pool
-      this.dealershipService.newDealership(this.dealershipsItems)     
+  
+    
+    
+      console.log('dealershipsItems',this.newDealershipForm.value);
+      this.dealershipService.newDealership([this.newDealershipForm.value])     
       .pipe(untilDestroyed(this))
       .subscribe(
         (response) => {  
@@ -293,7 +283,7 @@ export class CreateDealershipComponent implements OnInit {
 
         //console.log('dealerships',this.newDealershipForm.value)
          
-    }
+    
 
     this.IsForUpdate = false;
     this.resetForm(); 

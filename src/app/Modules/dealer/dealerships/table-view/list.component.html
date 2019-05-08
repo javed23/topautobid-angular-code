@@ -80,11 +80,94 @@
           <div class="sidebar-widget">
             <div class="unordered-lists table-responsive text-center">
 
-              <ngx-datatable #myTable class="bootstrap" [rows]="dealerships" [sorts]="[{prop: 'created', dir: 'desc'}]"
+              <ngx-datatable #listingTable class="bootstrap" [rows]="dealerships" [sorts]="[{prop: 'created', dir: 'desc'}]"
                 [columnMode]="'force'" [headerHeight]="50" [limit]="currentPageLimit" [footerHeight]="80"
                 [rowHeight]="50" (sort)="onSort($event)" (page)="setPage($event)">
 
-                <ngx-datatable-column name="Image" [sortable]="true" [width]="200">
+
+                <ngx-datatable-row-detail [rowHeight]="100" #myDetailRow (toggle)="onDetailToggle($event)">
+                    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                        
+                        <div class="row_detail col-md-12" *ngIf="! row?.legal_contacts.length">
+                            <div class="row_detail_inner" >
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        Default legal contact not attached.
+                                    </div>
+                                  
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row_detail col-md-12" *ngIf="row?.legal_contacts.length">
+                            
+                            <div class="row_detail_inner" *ngFor="let contact of row?.legal_contacts"> 
+                                                                   
+                            <div class="row" *ngIf="contact.default_legal_contact">
+                                <div class="col-md-3">
+                                    <span class="head">Title:</span>
+                                    <span class="value">{{contact.title}}</span> 
+                                </div>
+                                <div class="col-md-3">
+                                        <span class="head">Prefix:</span>
+                                        <span class="value"> {{contact.name.prefix}}</span> 
+                                </div>
+                                <div class="col-md-3">
+                                        <span class="head">First Name:</span>
+                                        <span class="value">{{contact.name.first_name}}</span> 
+                                </div>
+                                <div class="col-md-3">
+                                        <span class="head">Last Name:</span>
+                                        <span class="value">{{contact.name.last_name}}</span> 
+                                </div>
+                                
+                            </div>
+                            <div class="row" *ngIf="contact.default_legal_contact">
+                                    <div class="col-md-3">
+                                            <span class="head">State:</span>
+                                            <span class="value">{{contact.state}}</span> 
+                                    </div>
+                                    <div class="col-md-3">
+                                            <span class="head">City:</span>
+                                            <span class="value">{{contact.city}}</span> 
+                                    </div>
+                                    <div class="col-md-3">
+                                            <span class="head">Zipcode:</span>
+                                            <span class="value">{{contact.zipcode}}</span> 
+                                    </div>
+                                    <div class="col-md-3">
+                                            <span class="head">Address Line 1:</span>
+                                            <span class="value">{{contact.address_1}}</span> 
+                                    </div>
+                                </div>
+                        </div>
+                        </div>
+                    
+                    
+                    
+                    </ng-template>
+                    </ngx-datatable-row-detail>
+
+
+
+                    <ngx-datatable-column
+                    [width]="50"
+                    [resizeable]="false"
+                    [sortable]="false"
+                    [draggable]="false"
+                    [canAutoResize]="false">
+                    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                        <a
+                        href="javascript:void(0)"
+                        [class.datatable-icon-right]="!expanded"
+                        [class.datatable-icon-down]="expanded"
+                        title="Default Legal Contact"
+                        (click)="toggleExpandRow(row)">
+                        </a>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Image" [sortable]="false" [width]="200">
                   <ng-template let-row="row" ngx-datatable-cell-template>
                     <span class="avtar" *ngIf="row.profile_pic"><img title="Dealership Avatar" class="img-fluid"
                         src="{{row.profile_pic}}"></span>
@@ -105,7 +188,7 @@
                     {{ row.dealershipnumber }}
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Legal Contacts" prop="row.legal_contacts?.name.first_name" [sortable]="true"
+                <!--<ngx-datatable-column name="Legal Contacts" prop="row.legal_contacts?.name.first_name" [sortable]="true"
                   [width]="200">
                   <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
                     <span *ngFor="let contact of row?.legal_contacts"><b *ngIf="contact.default_legal_contact">
@@ -114,7 +197,7 @@
                         title="View Legal Contacts" (click)="show(rowIndex, 'viewLegalContacts')"
                         class="left_bids  badge badge-danger">{{row?.legal_contacts?.length}}</button></span>
                   </ng-template>
-                </ngx-datatable-column>
+                </ngx-datatable-column>-->
                 <ngx-datatable-column name="city" [sortable]="true" [width]="200">
                   <ng-template let-row="row" ngx-datatable-cell-template>
                     {{ row.city }}
@@ -158,40 +241,43 @@
                 </ngx-datatable-column>
 
                 <ngx-datatable-footer>
-                  <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
-                    let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset"
-                    let-isVisible="isVisible">
-                    <div class="page-count">
-                      <span *ngIf="selectedMessage">
-                        {{selectedCount.toLocaleString()}} {{selectedMessage}} /
-                      </span>
-                      {{rowCount.toLocaleString()}} {{totalMessage}}
-                    </div>
-                    <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
-                      [pagerRightArrowIcon]="'datatable-icon-right'" [pagerPreviousIcon]="'datatable-icon-prev'"
-                      [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage" [size]="pageSize" [count]="rowCount"
-                      [hidden]="!((rowCount / pageSize) > 1)" (change)="table.onFooterPage($event)">
-                    </datatable-pager>
+                    <ng-template ngx-datatable-footer-template let-rowCount="rowCount"
+                        let-pageSize="pageSize" let-selectedCount="selectedCount" let-curPage="curPage"
+                        let-offset="offset" let-isVisible="isVisible">
+                       
+                       
+                        <div class="pagination_outer d-flex">
 
-                  </ng-template>
+                            <div *ngIf="dealerships.length>0" class="showing_records">
+                                Showing <div class="selected-box number_records">
+                                    <select class="selectpicker my_select" id="per-page"
+                                    (change)="onLimitChange($event.target.value)">
+                                    <option *ngFor="let option of pageLimitOptions" [value]="option.value"
+                                        [selected]="option.value == currentPageLimit">
+                                        {{ option.value }} 
+                                    </option>
+                                </select>
+                                </div> records on page
+                            </div>
+
+                        <div class="ml-auto">
+                                <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+                                [pagerRightArrowIcon]="'datatable-icon-right'"
+                                [pagerPreviousIcon]="'datatable-icon-prev'"
+                                [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage" [size]="pageSize"
+                                [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
+                                (change)="listingTable.onFooterPage($event)">
+                            </datatable-pager>
+
+                        </div>
+
+
+                        </div>
+
+                    </ng-template>
                 </ngx-datatable-footer>
               </ngx-datatable>
-            </div>
-            <!-- number of records per page dropmenu  -->
-            <div *ngIf="dealerships.length>0" class="sorting-options position_absolute">
-              <div class="selected-box">
-                <div class="register-form selected-box">
-
-                  <select class="selectpicker" id="per-page" (change)="onLimitChange($event.target.value)">
-                    <option *ngFor="let option of pageLimitOptions" [value]="option.value"
-                      [selected]="option.value == currentPageLimit">
-                      {{ option.value }} results
-                    </option>
-                  </select>
-
-                </div>
-              </div>
-            </div>
+            </div>    
 
           </div>
         </div>
@@ -202,15 +288,15 @@
 
 
 <!-- dealership details  -->
-<app-dealership-view [isOpen]="isDealershipModalOpened" [dealershipObject]="dealershipObject"></app-dealership-view>
+<app-dealership-view (onClose)="hide($event)" [isOpen]="isDealershipModalOpened" [dealershipObject]="dealershipObject"></app-dealership-view>
 
 <!-- legal-contacts-listing -->
-<app-contact-view [isOpen]="isModalOpened" [dealershipObject]="dealershipObject"></app-contact-view>
+<app-contact-view (onClose)="hide($event)" [isOpen]="isModalOpened" [dealershipObject]="dealershipObject"></app-contact-view>
 
 <!-- Add new dealership  -->
 <app-create-dealership [dealershipsItems]="dealershipsItems" [updateExistingDealership]="updateExistingDealership"
   [isOpen]="isCreateDealershipModalOpened"></app-create-dealership>
 
 <!-- Add new-legal-contact -->
-<app-create-contact [dealershipId]="dealershipId" [legalContactItems]="legalContactItems"
+<app-create-contact (onClose)="hide($event)" [dealershipId]="dealershipId" [legalContactItems]="legalContactItems"
   [isOpen]="isCreateContactModalOpened"></app-create-contact>

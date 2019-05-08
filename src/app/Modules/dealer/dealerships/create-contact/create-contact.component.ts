@@ -1,4 +1,4 @@
-import { Component,  SimpleChanges, OnInit, ViewChild, AfterViewInit, ViewEncapsulation, ElementRef, Input, NgZone } from '@angular/core';
+import { Component,  SimpleChanges, OnInit, Output, EventEmitter, ViewChild, AfterViewInit, ViewEncapsulation, ElementRef, Input, NgZone } from '@angular/core';
 import { AbstractControl, FormGroup, FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { of, Observable } from 'rxjs';
 import { Router, ActivatedRoute } from "@angular/router";
@@ -39,7 +39,7 @@ export class CreateContactComponent implements OnInit {
   @Input() isOpen: any;  
   @Input() legalContactItems: any;  
   @Input() dealershipId: any;  
-  
+  @Output() onClose: EventEmitter<any> = new EventEmitter<any>();
   
   @ViewChild('contentSection') contentSection :ElementRef;
   updatedLegalContactItem:any='';
@@ -87,6 +87,11 @@ export class CreateContactComponent implements OnInit {
       
 
   }
+
+  close() {
+    this.isOpen = false
+    this.onClose.emit(false);    
+  } 
 
   ngOnInit() {
    
@@ -155,7 +160,7 @@ export class CreateContactComponent implements OnInit {
         this.profilePic = (profilePath) ? profilePath : defaultPath;
   
         // Create the mock file:
-        const mockFile = { name: "Filename", size: 12345 };
+        const mockFile = { };
   
         // Call the default addedfile event handler
         this.emit("addedfile", mockFile);
@@ -231,8 +236,36 @@ export class CreateContactComponent implements OnInit {
   private resetForm(){   
     this.zone.run(() => { 
       $(".dz-image img").attr('src', environment.WEB_ENDPOINT + '/' + environment.DEFAULT_PROFILE);
-    }); 
-    this.newLegalContactForm.reset();     
+      /*this.data = {
+        phones: [
+          {
+            phone: "",
+            default_phone: false,
+            country_code:environment.DEFAULT_COUNTRY_CODE
+          }
+        ],
+        emails: [
+          {
+            email: "",
+            default_email: false
+          }
+        ],
+        faxs: [
+          {
+            number: "",
+            default_fax: false
+          }
+        ]
+      } */    
+    });
+    
+    this.newLegalContactForm.reset(); 
+    /*this.initalizeNewLegalContactForm();  
+    this.setPhones();
+    this.setEmails();
+    this.setFaxs()*/
+    
+    
    
   }
 
@@ -431,9 +464,10 @@ editNewLegalContact(index) {
   this.zone.run(() => { 
     let profilePic = (this.legalContactItems[index]['profile_pic'])?this.legalContactItems[index]['profile_pic']:environment.WEB_ENDPOINT + '/' + environment.DEFAULT_PROFILE;
     $(".dz-image img").attr('src', profilePic);
+    this.newLegalContactForm.patchValue(this.legalContactItems[index]) //binding the dealership datat 
   });
-  this.newLegalContactForm.patchValue(this.legalContactItems[index]) //binding the dealership datat   
-
+    
+  console.log('newLegalContactForm',this.newLegalContactForm.value);
   /*Object.keys(this.newDealershipForm.controls).forEach(key => {      
     this.newDealershipForm.get(key).setValue(this.dealershipsItems[index][key])
   });*/

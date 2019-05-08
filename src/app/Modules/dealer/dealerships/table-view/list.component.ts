@@ -42,7 +42,7 @@ export class ListComponent implements OnInit, AfterViewInit {
   startDateModel:any;
   endDateModel:any;
   datesFilter:any = {};  
-  @ViewChild('myTable') table; 
+  @ViewChild('listingTable') listingTable; 
   page = new Page();
 
   // default modal status
@@ -73,10 +73,10 @@ export class ListComponent implements OnInit, AfterViewInit {
   }
   
   //title and breadcrumbs
-  readonly title: string = 'Dealerships Listing';
-  readonly breadcrumbs: any[] = [{ page: 'Home', link: '/dealer/home' }, { page: 'Dealerships Listing', link: '' }]
+  readonly title: string = 'Dealership Listing';
+  readonly breadcrumbs: any[] = [{ page: 'Home', link: '/dealer/home' }, { page: 'Dealership Listing', link: '' }]
    
-  constructor(private http: HttpClient, private titleService:TitleService,private commonUtilsService:CommonUtilsService, private dealershipService: DealershipService, private pageLoaderService: PageLoaderService, private toastr: ToastrManager, private formBuilder: FormBuilder, private zone: NgZone) {
+  constructor(private http: HttpClient, private titleService:TitleService,private commonUtilsService:CommonUtilsService, private dealershipService: DealershipService, private pageLoaderService: PageLoaderService, private toastr: ToastrManager, private formBuilder: FormBuilder, private ngZone: NgZone) {
     this.pageLoaderService.shouldPageLoad.subscribe((SholdPageRefresh: boolean) => {
       console.log('SholdPageRefresh',SholdPageRefresh);
       if(SholdPageRefresh){
@@ -124,7 +124,7 @@ export class ListComponent implements OnInit, AfterViewInit {
     POTENZA.tabs()
     
     
-    this.table.bodyComponent.updatePage = function(direction: string): void {
+    this.listingTable.bodyComponent.updatePage = function(direction: string): void {
       let offset = this.indexes.first / this.pageSize;
       console.log('offset',offset);
       if (direction === 'up') {
@@ -149,10 +149,10 @@ export class ListComponent implements OnInit, AfterViewInit {
     this.page.pageNumber = pageInfo.offset;
     this.page.size = pageInfo.pageSize;
     //console.log('viewedPages',this.viewedPages);
-    if( _.includes(this.viewedPages, this.page.pageNumber))
+    /*if( _.includes(this.viewedPages, this.page.pageNumber))
       return;
     else    
-      this.viewedPages.push(this.page.pageNumber)
+      this.viewedPages.push(this.page.pageNumber)*/
 
     if(!this.page.search){
       this.pageLoaderService.setLoaderText(environment.MESSAGES.FETCHING_RECORDS);//setting loader text
@@ -232,34 +232,35 @@ export class ListComponent implements OnInit, AfterViewInit {
      * Remove/delete a dealership
      * @param  item array index     
   */ 
-  delete(item){
-    if(! confirm("Are you sure to delete this record ?")) {
+ async delete(item){
+    //confirm before deleting car
+    if(! await this.commonUtilsService.isDeleteConfirmed()) {
       return;
     }
     //console.log(item)
     //console.log('id',item._id)
-    let data = { id:item._id, dealer_id:[localStorage.getItem('loggedinUserId')], }
+   // let data = { id:item._id, dealer_id:[localStorage.getItem('loggedinUserId')], }
+   let data = { id:item._id, dealer_id:"5ca1e88f9dac60394419c0bc" }
+   
     this.dealershipService.removeDealership(data).subscribe(
       (response) => {
       
         var index = this.dealerships.indexOf(item, 0);
           if (index > -1)
-          {
-              this.dealerships.splice(index, 1);              
-              //console.log(this.dealerships);     
+          {            
+              
+              this.ngZone.run( () => {
+                this.dealerships.splice(index, 1);  
+                this.dealerships = this.dealerships; 
+              });             
+             // this.setPage(this.defaultPagination);             
                    
           }
       
-      this.pageLoaderService.pageLoader(false);//show page loader
-      this.pageLoaderService.setLoaderText('');//setting loader text
-      this.toastr.successToastr(environment.MESSAGES.RECORD_DELETED, 'Success!'); //showing success toaster 
+      this.commonUtilsService.onSuccess(environment.MESSAGES.RECORD_DELETED); 
 
-    },error => {
-
-      this.pageLoaderService.setLoaderText(environment.MESSAGES.ERROR_TEXT_LOADER);//setting loader text
-      this.pageLoaderService.pageLoader(false);//hide page loader
-      this.toastr.errorToastr(error, 'Oops!');//showing error toaster message
-
+    },error => {      
+      this.commonUtilsService.onError(error); 
     });
   }  
 
@@ -287,7 +288,7 @@ export class ListComponent implements OnInit, AfterViewInit {
     (type=='editDealership')?this.updateExistingDealership = true:this.updateExistingDealership = false;
 
     this.dealershipsItems = []
-
+  
     if(type=='editDealership'){
       this.dealershipsItems.push(
         this.dealerships[index]
@@ -299,7 +300,7 @@ export class ListComponent implements OnInit, AfterViewInit {
       this.isDealershipModalOpened = true;
       this.dealershipObject = this.dealerships[index]
     }
-
+    console.log('this.isDealershipModalOpened',this.isDealershipModalOpened);
     // when view Legal Contacts modal is called
     if(type=='viewLegalContacts'){
       this.isModalOpened = true;
@@ -361,6 +362,26 @@ export class ListComponent implements OnInit, AfterViewInit {
       this.setPage(this.defaultPagination);
     }
     
+  }
+
+  /**
+  * Reset modal popup to hide
+  * @param isOpened    boolean value 
+  * @return void
+  */
+ hide(isOpened:boolean):void{
+  this.isDealershipModalOpened = this.isModalOpened = this.isCreateContactModalOpened = isOpened; //set to false which will reset modal to show on click again
+   
+ }
+
+
+  toggleExpandRow(row) {
+    console.log('Toggled Expand Row!', row);
+    this.listingTable.rowDetail.toggleExpandRow(row);
+  }
+
+  onDetailToggle(event) {
+    console.log('Detail Toggled', event);
   }
 
   // This method must be present, even if empty.

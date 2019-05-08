@@ -1,4 +1,4 @@
-import { Component,SimpleChanges, ViewChild, OnInit, Input,  ElementRef } from '@angular/core';
+import { Component,SimpleChanges, ViewChild, Output, EventEmitter, OnInit, Input,  ElementRef } from '@angular/core';
 declare let $: any;
 
 @Component({
@@ -9,6 +9,7 @@ declare let $: any;
 export class DealershipViewComponent implements OnInit {
   @Input() isOpen: any;
   @Input() dealershipObject: any;
+  @Output() onClose: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild('contentSection') contentSection :ElementRef;
 
   constructor() { }
@@ -16,6 +17,10 @@ export class DealershipViewComponent implements OnInit {
   ngOnInit() {
   }
 
+  close() {
+    this.isOpen = false
+    this.onClose.emit(false);    
+  }
   ngOnChanges(changes: SimpleChanges) {
 
     if(this.isOpen)

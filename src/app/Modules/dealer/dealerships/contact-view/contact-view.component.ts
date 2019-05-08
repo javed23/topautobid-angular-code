@@ -1,4 +1,4 @@
-import { Component, SimpleChanges, OnInit, ViewChild, Input,  ElementRef } from '@angular/core';
+import { Component, SimpleChanges, OnInit, Output, EventEmitter, ViewChild, Input,  ElementRef } from '@angular/core';
 declare let $: any;
 
 @Component({
@@ -10,6 +10,7 @@ export class ContactViewComponent implements OnInit {
 
   @Input() isOpen: any;
   @Input() dealershipObject: any;
+  @Output() onClose: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild('legalContactsSection') legalContactsSection :ElementRef;
   constructor() { }
 
@@ -18,6 +19,10 @@ export class ContactViewComponent implements OnInit {
     if(this.isOpen)
       $(this.legalContactsSection.nativeElement).modal('show'); 
 
+  }
+  close() {
+    this.isOpen = false
+    this.onClose.emit(false);    
   }
   ngOnInit() {
     
