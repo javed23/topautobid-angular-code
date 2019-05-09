@@ -9,7 +9,7 @@ import { AlertService, PageLoaderService } from '../../../../shared/_services'
 //import DealerService 
 import { TitleService, DealerService } from '../../../../core/_services';
 //import models
-import { Page } from "../../../../core/_models";
+import { Page,Purchase } from "../../../../core/_models";
 @Component({
   selector: 'app-purchases-list',
   templateUrl: './purchases-list.component.html',
@@ -21,17 +21,42 @@ import { Page } from "../../../../core/_models";
 export class PurchasesListComponent implements OnInit {
   @ViewChild('myTable') table;
   page = new Page();
+  purchases = new Array<Purchase>()
+  coulumns= [{name:'Name'},{name:'Gender'},{name:'Company'}];
 
   //title and breadcrumbs
   readonly title: string = 'Dealer My Purchases Listing';
-  readonly breadcrumbs: any[] = [{ page: 'Home', link: '/dealer/home' }, { page: 'Dealer My Purchases Listing', link: '' }]
+  readonly breadcrumbs: any[] = [{ page: 'Home', link: '/dealer/home' }, { page: 'Dealer My Purchases Listing', link: '' }];
 
-  constructor(private dealerService: DealerService, private titleService: TitleService, private pageLoaderService: PageLoaderService, private toastr: ToastrManager) { }
+  constructor(private dealerService: DealerService, private titleService: TitleService, private pageLoaderService: PageLoaderService, private toastr: ToastrManager) {
+
+    this.page.pageNumber = 0;
+    this.page.size = 20;
+   }
 
   ngOnInit() {
     this.getPurchasesList();
+    this.setPage({ offset: 0 });
   }
 
+/**
+   * Populate the table with new data based on the page number
+   * @param page The page to select
+   */
+  setPage(pageInfo){
+    this.page.pageNumber = pageInfo.offset;
+    this.dealerService.getPurchaseList(this.page).subscribe(pagedData => {
+      this.page = pagedData.page;
+      this.purchases = pagedData.data;
+    });
+  }
+
+
+
+
+
+
+  
   /**
    * get all the delaer purchases list
    */
@@ -40,6 +65,13 @@ export class PurchasesListComponent implements OnInit {
      console.log('the response from the server is ',JSON.stringify(res))
    })
   }
+
+
+
+
+
+
+
 
 
   /**

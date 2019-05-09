@@ -21,6 +21,28 @@
                 </div>
               </div>
             </div>
+
+            <div class="sidebar-widget">
+              <div class="unordered-lists table-responsive text-center">
+
+                  <ngx-datatable
+                  class="material"
+                  [rows]="purchases"
+                  [columns]="columns"
+                  [columnMode]="'force'"
+                  [headerHeight]="50"
+                  [footerHeight]="50"
+                  [rowHeight]="'auto'"
+                  [externalPaging]="true"
+                  [count]="page.totalElements"
+                  [offset]="page.pageNumber"
+                  [limit]="page.size"
+                  (page)='setPage($event)'>
+                </ngx-datatable>
+
+
+                </div>
+                </div>
             
 
 
