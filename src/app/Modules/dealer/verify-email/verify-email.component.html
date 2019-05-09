@@ -1,0 +1,114 @@
+<!--=================================
+ breadcrumbs and inner-intro -->
+
+ <app-breadcrumbs [pageTitle]="title" [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+
+ <!--=================================
+  breadcrumbs and inner-intro -->
+ 
+ 
+ 
+ <!--=================================
+  register-form  -->
+ <section  class="register-form page-section-ptb">
+   <div class="container">
+     <div class="row justify-content-center">
+       <div class="col-md-10">
+         <div class="section-title">
+           <!-- <span>Welcome to </span> -->
+           <h4 *ngIf="!alreadyVerified" class="verify-text">your your account has been successfully verified!
+            <span class="verify_image"><img src="../../../../assets/images//verify.png"/></span>
+           </h4>
+           <h4 *ngIf="alreadyVerified" class="verify-text">your account is already verified! 
+             <span class="verify_image"><img src="../../../../assets/images//verify.png"/></span>
+           </h4>
+           
+           <div class="separator">
+            <p class="login-link"> <a routerLink="/seller/login" class="red">login</a></p>
+           </div>
+         </div>
+       </div>
+     </div>
+    <!-- ask for multifactor verification -->
+    <div class="row justify-content-center" *ngIf="!user?.is_multifactor_authorized">
+      <div class="col-lg-8 col-md-12">
+        
+              <div class="gray-form">
+                  <div class="form-group">
+                      <div class="remember-checkbox mb-4">
+                        <input type="checkbox"  [(ngModel)]="ismultifactorVerification" id="remember_me">
+                        <label for="remember_me">Do you want multifactor verification</label>
+                      </div>
+                    </div>
+                 </div>
+         </div>
+    </div>
+    <!-- end of multifactor verification -->
+
+
+
+     <div  *ngIf="ismultifactorVerification" class="row justify-content-center">
+       <div class="col-lg-8 col-md-12">
+           <div class="gray-form" >
+             <div class="form-group col-md-6">
+                <label>Select your multifactor verification method*</label>
+                <div class="col-sm-6 col-md-6">
+                    <label class="radio-inline">
+                         <input name="multifactor-verification" [(ngModel)]="multifactorOption" value="phone" type="radio" />Phone
+                     </label>
+                </div>
+                <div class="col-sm-6 col-md-6">
+                     <label class="radio-inline">
+                          <input name="multifactor-verification" [(ngModel)]="multifactorOption" value="email" type="radio" />Email
+                     </label>
+                 </div>
+             </div>
+           
+           </div>
+           <div class="row">
+            <div class="form-group col-md-6">
+              <button  type="submit" class="button red" (click)="onSubmit()">Submit </button>
+              </div>
+          </div>
+       </div>
+     </div>
+
+     
+   </div>
+ </section>
+ 
+ <!-- =================================
+  signup-otp-form  -->
+ <!-- Modal -->
+ <div class="modal fade" #otpSection id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+     <div class="modal-dialog" role="document">
+       <div class="modal-content">
+         <div class="modal-header">
+           <h5 class="modal-title" id="exampleModalLabel">Verification code has been sent. </h5>
+         </div>
+         <form [formGroup]="otpVerificationForm" (ngSubmit)="onSubmitOtp()">
+           <div class="modal-body">            
+               <div class="form-group">
+                 
+                 <div class="form-group">
+                     <label>Verification Code* </label>
+                     <input [ngClass]="{ 'is-invalid': (otpVerificationForm.controls.ConfirmationCode.touched || otpFormsubmitted) && otpVerificationForm.get('ConfirmationCode').errors }"
+                       class="form-control" mask="000000" type="text" placeholder="Please enter the code here" formControlName="ConfirmationCode">
+                       <button  type="button" (click)="resendOTP()" class="verify_BTN"> Resend</button>
+                     <p *ngIf="otpVerificationForm.controls.ConfirmationCode.touched || otpFormsubmitted">
+                       <app-form-validation-errors minLength=6 maxLength=6 errorPrefix="Verification Code " [errors]="otpVerificationForm.get('ConfirmationCode').errors"></app-form-validation-errors>
+                     </p>
+                 </div>                           
+               </div>              
+           </div>  
+           <div class="modal-footer">            
+             <button [ngClass]="{ 'submit-btn-disable': otpVerificationForm.invalid }" type="submit" class="button red">Verify </button>
+           </div>
+         </form>  
+       </div>
+     </div>
+   </div>
+ 
+ 
+  <!--=================================
+  confirm otp-form  -->

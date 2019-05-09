@@ -7,6 +7,7 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { VerifyEmailComponent } from './verify-email/verify-email.component';
 
 //cars management components
 import { ListComponent as CarsListComponent } from './cars/list/list.component';
@@ -39,6 +40,11 @@ const routes: Routes = [
     path: 'forgot-password',
     component: ForgotPasswordComponent,
     data: { title: 'Dealer Forgot Pasword' }
+  },
+  {
+    path: 'verify-email/:token',
+    component: VerifyEmailComponent,
+    data: { title: 'Dealer Verify Email' }
   },
   {
     path: 'home',

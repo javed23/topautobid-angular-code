@@ -13,7 +13,7 @@ import { ListingComponent as CarsGridListComponent } from './cars/grid-list-view
 import { ListComponent as CarsTableComponent } from './cars/table-view/list.component';
 import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
 import { AddCarComponent } from './cars/addcar/addcar.component';
-
+import { VerifyEmailComponent } from './verify-email/verify-email.component';
 //importing guards
 import { SellerAuthGuardService } from '../../core/guards/seller-auth-guard.service';
 
@@ -33,6 +33,11 @@ const routes: Routes = [
     path: 'signup',
     component: SignupComponent,
     data: { title: 'Seller Signup' }
+  },
+  {
+    path: 'verify-email/:token',
+    component: VerifyEmailComponent,
+    data: { title: 'Seller Email Verify' }
   },
   {
     path: 'forgot-password',

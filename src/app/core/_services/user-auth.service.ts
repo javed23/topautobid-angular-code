@@ -68,6 +68,43 @@ export class UserAuthService {
       })
 
   }
+  verifyDealerEmail(postedData): Observable<any> {
+
+    return this.httpClient
+      .post('auth/dealer/verifyEmail', postedData)
+      .map((response:any) => {
+        return response;
+      })
+
+  }
+
+  verifyEmail(postedData): Observable<any> {
+
+    return this.httpClient
+      .post('auth/seller/verifyEmail', postedData)
+      .map((response:any) => {
+        return response;
+      })
+
+  }
+  setMFA(postedData): Observable<any> {
+
+    return this.httpClient
+      .post('auth/seller/setMFA', postedData)
+      .map((response:any) => {
+        return response;
+      })
+
+  }
+  setDealerMFA(postedData): Observable<any> {
+
+    return this.httpClient
+      .post('auth/dealer/setMFA', postedData)
+      .map((response:any) => {
+        return response;
+      })
+
+  }
   sellerProfile(postedData): Observable<any> {
 
     return this.httpClient

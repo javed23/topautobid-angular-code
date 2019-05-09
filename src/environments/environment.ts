@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  API_ENDPOINT: 'http://54.245.128.14:3000',
+  // API_ENDPOINT: 'http://54.245.128.14:3000',
+  API_ENDPOINT: 'http://localhost:3000',
   //WEB_ENDPOINT: 'http://localhost:4200',
   WEB_ENDPOINT: 'http://54.245.128.14',
  
@@ -22,8 +23,8 @@ export const environment = {
   ],
   //aws 
   AWS: {
-    ACCESS_KEY: 'AKIAJFK6YJMR4P23VEDA',
-    SECRET_KEY: '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',
+    ACCESS_KEY: 'AKIAUGU7PKGK2DTCJVPA',
+    SECRET_KEY: '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',
     REGION: 'us-west-2',
     BUCEKT_NAME: 'topautobid-dev',
     COGNITO: {

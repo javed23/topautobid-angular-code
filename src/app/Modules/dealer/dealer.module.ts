@@ -42,6 +42,7 @@ import { ContactViewComponent } from './dealerships/contact-view/contact-view.co
 import { DealershipViewComponent } from './dealerships/dealership-view/dealership-view.component';
 import { CreateDealershipComponent } from './dealerships/create-dealership/create-dealership.component';
 import { CreateContactComponent } from './dealerships/create-contact/create-contact.component';
+import { VerifyEmailComponent } from './verify-email/verify-email.component';
 
 
 //facebook, google authentication configuration
@@ -91,7 +92,8 @@ let config = new AuthServiceConfig([
     ContactViewComponent,
     DealershipViewComponent,
     CreateDealershipComponent,
-    CreateContactComponent    
+    CreateContactComponent,
+    VerifyEmailComponent    
   ],
   imports: [
     CommonModule,
