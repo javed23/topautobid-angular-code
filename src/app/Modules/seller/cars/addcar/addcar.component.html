@@ -165,7 +165,7 @@
 
                                             <div class="f_width">
                                                     <label>Mileage*</label>
-                                                    <input mask="00" type="text" class="simple_select form-control placeholder" placeholder="Enter the Vehicle Mileage in miles" formControlName="vehicle_mileage" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_mileage').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_mileage').errors }" #vehicle_mileage>
+                                                    <input mask="000000" type="text" class="simple_select form-control placeholder" placeholder="Enter the Vehicle Mileage in miles" formControlName="vehicle_mileage" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_mileage').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_mileage').errors }" #vehicle_mileage>
                 
                                                     <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_mileage').touched || isBasicInfoSubmitted">                      
                                                         <app-form-validation-errors minLength=2 maxLength=6 errorPrefix="Mileage " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_mileage').errors"></app-form-validation-errors>   
@@ -260,10 +260,10 @@
                                                                     <!--start-->
                                                                     <ul>
                                                                         <li *ngFor="let color of colors;">
-                                                                            <input formControlName="vehicle_interior_color"  type="radio" value="{{color.value}}" id="vehicle_interior_color_{{color.value}}">
+                                                                            <input formControlName="vehicle_interior_color"  type="radio" value="{{color.label}}" id="vehicle_interior_color_{{color.value}}">
                                                                             <label [ngStyle]="{'background': color.value}" for="vehicle_interior_color_{{color.value}}">
                                                                                 <span class="category category_name {{color.value}}">
-                                                                                        {{color.value}}
+                                                                                        {{color.label}}
                                                                                 </span>
                                                                             </label>
                                                                         </li> 
@@ -284,10 +284,10 @@
                                                                 <label>Exterior Color*</label>
                                                                 <ul>
                                                                     <li *ngFor="let color of colors;">
-                                                                        <input formControlName="vehicle_exterior_color"  type="radio" value="{{color.value}}" id="vehicle_exterior_color_{{color.value}}">
+                                                                        <input formControlName="vehicle_exterior_color"  type="radio" value="{{color.label}}" id="vehicle_exterior_color_{{color.value}}">
                                                                         <label [ngStyle]="{'background': color.value}" for="vehicle_exterior_color_{{color.value}}">
                                                                             <span class="category category_name {{color.value}}">
-                                                                                    {{color.value}}
+                                                                                    {{color.label}}
                                                                             </span>
                                                                         </label>
                                                                     </li> 
@@ -362,94 +362,94 @@
                         <aw-wizard-step stepTitle="Vehicle Images" (stepEnter)="scrollToSpecificDiv($event)" [canExit]="moveDirection.bind(this, uploadVehicleImagesWizard.valid)">
                             <!--Upload Images Section-->
                             <form [formGroup]="uploadVehicleImagesWizard">
-                                    <div class="container">      
-                                <div formArrayName="vehicle_images" class="add_car">      
-                                    
-                                    <div class="row">
-                                    <div class="form-group col-md-8">
-                                        <div class="vehicle_category">
+                                <div class="container">      
+                                    <div  class="add_car">      
+                                        
+                                        <div class="row">
+                                        <div class="form-group col-md-8">
+                                            <div class="vehicle_category">
 
 
 
-                                    <div class="select_type_tab category_Box">
-                                        <ul>
-                                            <li >
-                                                <input type="radio" (click)="checkVehicleImageCatgeory('Interior')" formControlName="vehicle_image_category_name"  value="Interior" id="Interior">
-                                                <label for="Interior">Interior</label>
-                                            </li> 
-                                            <li>
-                                                    <input type="radio" (click)="checkVehicleImageCatgeory('Exterior')" formControlName="vehicle_image_category_name"  value="Exterior" id="Exterior">
-                                                    <label for="Exterior">Exterior</label>
-                                            </li> 
-                                        </ul>
-                                    </div>
-
-                                        </div> 
-
-
-                                        <div class="vertical-container uploadImages" fxLayout="column" fxLayoutAlign="stretch" fxFlex="50%">
-                                            
-                                    
-                                            <div class="content-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="auto">
-                                                                            
-                                                <div class="dropzone dropzone-container draganddrop custom_dragger" [dropzone]="vehicleImagesConfiguration" [disabled]="disabled">
-                                                    <div class="drag_box"><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i><p>Drag/Drop Images here to upload</p><span>OR</span><button class="button red d-inline-block width-auto boder0 mt-4" type="button">Click to Upload</button></div>
+                                                <div class="select_type_tab category_Box">
+                                                    <ul>
+                                                        <li >
+                                                            <input type="radio" (click)="checkVehicleImageCatgeory('Interior')" formControlName="vehicle_image_category_name"  value="Interior" id="Interior">
+                                                            <label for="Interior">Interior</label>
+                                                        </li> 
+                                                        <li>
+                                                                <input type="radio" (click)="checkVehicleImageCatgeory('Exterior')" formControlName="vehicle_image_category_name"  value="Exterior" id="Exterior">
+                                                                <label for="Exterior">Exterior</label>
+                                                        </li> 
+                                                    </ul>
                                                 </div>
 
-                                                
-                                                <div class="thumbnails" *ngIf="vehicleImageCategory == 'Interior'">
-                                                    <div class="thumbnail_list" *ngFor="let interiorImage of interiorImagesArray; let interiorIndex = index;">
-                                                        <img src="{{interiorImage.file_path}}">
-                                                        <i (click)="removeImage(interiorIndex, 'interior')" class="fa fa-times" aria-hidden="true"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="thumbnails" *ngIf="vehicleImageCategory == 'Exterior'">
-                                                    <div class="thumbnail_list" *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
-                                                        <img src="{{exteriorImage.file_path}}">
-                                                        <i (click)="removeImage(exteriorIndex, 'exterior')" class="fa fa-times" aria-hidden="true"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                   
-                                                            
-                                                <div class="button_Submission text-center">
-                                                    <button class="button red d-inline-block width-auto boder0 mt-4" type="button" awPreviousStep>Previous Step</button>
+                                            </div> 
+
+                                            <div formArrayName="vehicle_images">
+                                                <div class="vertical-container uploadImages" fxLayout="column" fxLayoutAlign="stretch" fxFlex="50%">
                                                     
-                                                    <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="uploadVehicleImagesWizard.invalid" (click)="validateVehicleImagesWizard()" type="button" awNextStep>Next Step</button>		
-                                                
-                                            </div>
-                                    </div>   
-                                    <div class="col-md-4">
-                                                <div class="main_preview">
+                                            
+                                                    <div class="content-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="auto">
+                                                                                    
+                                                        <div class="dropzone dropzone-container draganddrop custom_dragger" [dropzone]="vehicleImagesConfiguration" [disabled]="disabled">
+                                                            <div class="drag_box"><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i><p>Drag/Drop Images here to upload</p><span>OR</span><button class="button red d-inline-block width-auto boder0 mt-4" type="button">Click to Upload</button></div>
+                                                        </div>
+
                                                         
-                                                            <div class="right_col_head">
-                                                                <h5>Progress Preview</h5>
+                                                        <div class="thumbnails" *ngIf="vehicleImageCategory == 'Interior'">
+                                                            <div class="thumbnail_list" *ngFor="let interiorImage of interiorImagesArray; let interiorIndex = index;">
+                                                                <img src="{{interiorImage.file_path}}">
+                                                                <i (click)="removeImage(interiorIndex, 'interior')" class="fa fa-times" aria-hidden="true"></i>
                                                             </div>
-                                                        
-                                                        <div class="details_inner">
-                                                            <h6>Your Vehicle info</h6>
-                                                        <ul>
-                                                            <li><label>Zip: </label><span>{{vehicle_zip.value}}</span></li>
-                                                            <li><label>Make: </label><span>{{vehicle_make.value}}</span></li>
-                                                            <li><label>Model: </label><span>{{vehicle_model.value}}</span></li>
-                                                            <li><label>Trim: </label><span>{{vehicle_trim.value}}</span></li>
-                                                            <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>
-                                                            <li><label>Body Style: </label><span>{{vehicle_body_type.value}}</span></li>
-                                                            <li><label>Doors: </label><span>{{vehicle_doors.value}}</span></li>
-                                                            <li><label>Engine: </label><span>{{vehicle_engine.value}}</span></li>
-                                                            <li><label>Transmission: </label><span>{{vehicle_transmission.value}}</span></li>
-                                                            <li><label>Fuel Type: </label><span>{{vehicle_fuel_type.value}}</span></li>
-                                                            <li><label>Drive Type: </label><span>{{vehicle_drive_type.value}}</span></li>
-                                                        </ul>
+                                                        </div>
+                                                        <div class="thumbnails" *ngIf="vehicleImageCategory == 'Exterior'">
+                                                            <div class="thumbnail_list" *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
+                                                                <img src="{{exteriorImage.file_path}}">
+                                                                <i (click)="removeImage(exteriorIndex, 'exterior')" class="fa fa-times" aria-hidden="true"></i>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                        </div> 
-                                   
+                                            </div>
+                                                                
+                                            <div class="button_Submission text-center">
+                                                <button class="button red d-inline-block width-auto boder0 mt-4" type="button" awPreviousStep>Previous Step</button>
+                                                
+                                                <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="uploadVehicleImagesWizard.invalid" (click)="validateVehicleImagesWizard()" type="button" awNextStep>Next Step</button>		
+                                                
+                                            </div>
+                                        </div>   
+                                        <div class="col-md-4">
+                                                    <div class="main_preview">
+                                                            
+                                                                <div class="right_col_head">
+                                                                    <h5>Progress Preview</h5>
+                                                                </div>
+                                                            
+                                                            <div class="details_inner">
+                                                                <h6>Your Vehicle info</h6>
+                                                            <ul>
+                                                                <li><label>Zip: </label><span>{{vehicle_zip.value}}</span></li>
+                                                                <li><label>Make: </label><span>{{vehicle_make.value}}</span></li>
+                                                                <li><label>Model: </label><span>{{vehicle_model.value}}</span></li>
+                                                                <li><label>Trim: </label><span>{{vehicle_trim.value}}</span></li>
+                                                                <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>
+                                                                <li><label>Body Style: </label><span>{{vehicle_body_type.value}}</span></li>
+                                                                <li><label>Doors: </label><span>{{vehicle_doors.value}}</span></li>
+                                                                <li><label>Engine: </label><span>{{vehicle_engine.value}}</span></li>
+                                                                <li><label>Transmission: </label><span>{{vehicle_transmission.value}}</span></li>
+                                                                <li><label>Fuel Type: </label><span>{{vehicle_fuel_type.value}}</span></li>
+                                                                <li><label>Drive Type: </label><span>{{vehicle_drive_type.value}}</span></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                            </div> 
+                                    
+                                        </div>
                                     </div>
+                                    
                                 </div>
-                                
-                            </div>
                             </form>                 
                                 
                             <!--Upload Images Section-->
@@ -478,18 +478,25 @@
 
                                             <!--Vehicle AfterMarket Section-->
                                             <div class="collapsable_box">
-                                                <div formGroupName="vehicle_aftermarket" class="row">
 
-                                                    <div class="col-md-12">      
+                                                <div  class="row">
+                                                    <div class="col-md-12">
                                                         <div class="text-center collapsable_head">
                                                             <div class="switch_outer">                                                
                                                                 <span>Vehicle has any aftermarket options*</span>
                                                                 <label class="switch">
-                                                                <input type="checkbox" formControlName="vehicle_aftermarket_value" (change)="toggleVehicleAfterMarket($event)">
+                                                                <input type="checkbox" formControlName="is_vehicle_aftermarket" (change)="toggleVehicleAfterMarket($event)">
                                                                 <span class="slider round"></span>
                                                                 </label>
                                                             </div> 
                                                         </div>
+                                                    </div>
+                                                </div>
+
+                                                <div formGroupName="vehicle_aftermarket" class="row">
+
+                                                    <div class="col-md-12">      
+                                                        
                                                         <div class="collapsable_body" [hidden]="!isVehicleAftermarketSelected">
                                                             <div class="collapsable_body_inner">   
                                                                 <div class="form-group">
@@ -514,12 +521,11 @@
                                                                                     <div class="drag_box"><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i><p class="ng-tns-c5-0">Drag/Drop Images here to upload</p><span class="ng-tns-c5-0">OR</span><button class="button red d-inline-block width-auto boder0 mt-4" type="button">Click to Upload</button></div>
                                                                             </div>
 
-
-                                                                            <div class="thumbnails" *ngIf="afterMarketImagesArray?.length > 0">
-                                                                                <div class="thumbnail_list" *ngFor="let afterMarketImage of afterMarketImagesArray; let afterMarketImageIndex = index;">
-                                                                                    <img src="{{afterMarketImage.file_path}}">
-                                                                                    <i (click)="removeImage(afterMarketImageIndex, 'aftermarket')" class="fa fa-times" aria-hidden="true"></i>
-                                                                                </div>
+                                                                            
+                                                                            <div class="thumbnails" *ngIf="checkObjectLength(afterMarketImagesArray) > 0">
+                                                                                    <div class="thumbnail_list" *ngFor="let afterMarketImage of afterMarketImagesArray.value | keyvalue; let afterMarketImageIndex = index;">             <img src="{{afterMarketImage.value.file_path}}">
+                                                                                             <i (click)="removeImage(afterMarketImageIndex.key, 'aftermarket')" class="fa fa-times" aria-hidden="true"></i>
+                                                                                    </div>
                                                                             </div>
 
                                                                         </div>
@@ -754,12 +760,12 @@
                                                                                             </div>
                                         
                                         
-                                                                                            <div class="thumbnails" *ngIf="vehicleConditionImagesArray?.length > 0">
+                                                                                            <!--div class="thumbnails" *ngIf="vehicleConditionImagesArray?.length > 0">
                                                                                                 <div class="thumbnail_list" *ngFor="let vehicleConditionImage of vehicleConditionImagesArray; let vehicleConditionImageIndex = index;">
                                                                                                     <img src="{{vehicleConditionImage.file_path}}">
                                                                                                     <i (click)="removeImage(vehicleConditionImageIndex, 'condition')" class="fa fa-times" aria-hidden="true"></i>
                                                                                                 </div>
-                                                                                            </div>
+                                                                                            </div-->
                                         
                                                                                         </div>
                                                                                 </div>
@@ -854,7 +860,7 @@
                                                                             <li><label>Vehicle has Second Key: </label><span>{{secondKey}}</span></li>                                            
                                                                             <li><label>Vehicle has any aftermarket: </label><span>{{vehicleAftermarket}}</span></li>                              
                                                                             <li *ngIf="vehicleAftermarket=='on'"><label>Description: </label><span>{{vehicle_aftermarket_description?.value}}</span></li>                                    
-                                                                            <li *ngIf="vehicleAftermarket=='on' && afterMarketImagesArray?.length > 0"><label>Images: </label>
+                                                                            <!--li *ngIf="vehicleAftermarket=='on' && afterMarketImagesArray.value?.length > 0"><label>Images: </label>
                                                                                 <div class="category_images">
                                                                                 <ul>
                                                                                     <li *ngFor="let afterMarketImage of afterMarketImagesArray; let aftermarketIndex = index;">
@@ -862,7 +868,7 @@
                                                                                     </li>
                                                                                 </ul>
                                                                                 </div>
-                                                                            </li>     
+                                                                            </li-->     
                                                                             <li><label>Clean Title: </label><span>{{cleanTitle}}</span></li> 
                                                                             <li *ngIf="cleanTitle=='off'"><span>{{vehicleOwnership}}</span></li>              
                                                                             <li *ngIf="vehicleOwnership=='Other'"><label>Explain: </label><span>{{vehicle_ownership_description?.value}}</span></li>  
@@ -981,7 +987,7 @@
                                                                 <li><label>Vehicle has Second Key: </label><span>{{secondKey}}</span></li>                                            
                                                                 <li><label>Vehicle has any aftermarket: </label><span>{{vehicleAftermarket}}</span></li>                              
                                                                 <li *ngIf="vehicleAftermarket=='on'"><label>Description: </label><span>{{vehicle_aftermarket_description?.value}}</span></li>                                    
-                                                                <li *ngIf="vehicleAftermarket=='on' && afterMarketImagesArray?.length > 0"><label>Images: </label>
+                                                                <!--li *ngIf="vehicleAftermarket=='on' && afterMarketImagesArray.value?.length > 0"><label>Images: </label>
                                                                     <div class="category_images">
                                                                     <ul>
                                                                         <li *ngFor="let afterMarketImage of afterMarketImagesArray; let aftermarketIndex = index;">
@@ -989,7 +995,7 @@
                                                                         </li>
                                                                     </ul>
                                                                     </div>
-                                                                </li>     
+                                                                </li-->     
                                                                 <li><label>Clean Title: </label><span>{{cleanTitle}}</span></li> 
                                                                 <li *ngIf="cleanTitle=='off'"><span>{{vehicleOwnership}}</span></li>              
                                                                 <li *ngIf="vehicleOwnership=='Other'"><label>Explain: </label><span>{{vehicle_ownership_description?.value}}</span></li>  
@@ -1002,7 +1008,7 @@
                                                         <ul>
                                                             <li><label>Car Condition: </label><span>{{vehicle_condition_value.value}}</span></li>
                                                             <li *ngIf="vehicleConditionValue == 'reconditioning' || vehicleConditionValue == 'functional' || vehicleConditionValue == 'parts'"><label>Description: </label><span>{{vehicle_condition_description?.value}}</span></li>                                    
-                                                            <li *ngIf="vehicleConditionValue == 'reconditioning' || vehicleConditionValue == 'functional' || vehicleConditionValue == 'parts'"><label>Images: </label>
+                                                            <!--li *ngIf="vehicleConditionValue == 'reconditioning' || vehicleConditionValue == 'functional' || vehicleConditionValue == 'parts'"><label>Images: </label>
                                                                 <div class="category_images">
                                                                 <ul>
                                                                     <li *ngFor="let vehicleConditionImage of vehicleConditionImagesArray; let vehicleConditionIndex = index;">
@@ -1010,7 +1016,7 @@
                                                                     </li>
                                                                 </ul>
                                                                 </div>
-                                                            </li>
+                                                            </li -->
                                                             <li><label>Seller Comments: </label><span>{{vehicle_comments.value}}</span></li>
                                                             
                                                         </ul>
@@ -1030,7 +1036,7 @@
                                         <div class="modal-header justify-content-center">
                                                 <h2 class="underline_heading">Seller Comments</h2>         
                                         </div>
-                                        <form [formGroup]="offerInHands" (ngSubmit)="validateOfferInHands()">
+                                        <form [formGroup]="offerInHands">
                                         <div class="modal-body">            
                                             
                                                 
@@ -1041,22 +1047,22 @@
                                                     <div class="dropzone dropzone-container" [dropzone]="offerInHandsConfiguration" [disabled]="disabled"></div>
                                                 </div>                           
                                             
-                                            
+                                                {{offerInHandsImagesArray.value | json}}
                                             <!--Upload Images Section-->
                                                 <div class="col-md-12"> 
-                                                    <div class="thumbnails" *ngIf="offerInHandsImagesArray?.length > 0">
+                                                    <!--div class="thumbnails" *ngIf="offerInHandsImagesArray?.length > 0">
                                                         <div class="thumbnail_list" *ngFor="let offerInHandsImage of offerInHandsImagesArray; let offerInHandsImageIndex = index;">
                                                             <img src="{{offerInHandsImage.file_path}}">
                                                             <i (click)="removeImage(offerInHandsImageIndex, 'offer_in_hands')" class="fa fa-times" aria-hidden="true"></i>
                                                         </div>
-                                                    </div>
+                                                    </div-->
                                                 </div>    
                                                 
                                                 <!--Upload Images Section-->
                                         </div>  
                                         <div class="modal-footer justify-content-center">  
                                             <button class="button red d-inline-block width-auto boder0 " type="button" data-dismiss="modal" aria-label="Close" awNextStep>Skip</button>          
-                                            <button class="button red d-inline-block width-auto boder0 " [disabled]="offerInHands.invalid" type="submit" awNextStep>Submit </button>
+                                            <button class="button red d-inline-block width-auto boder0 " aria-label="Close" [disabled]="offerInHands.invalid" type="submit" awNextStep>Submit </button>
                                         </div>
                                         </form>  
                                     </div>
@@ -1160,13 +1166,13 @@
                                                                     <h6>Description:</h6>
                                                                     <p>{{vehicle_aftermarket_description?.value}}</p>
                                                                     <h6>Images :</h6>
-                                                                    <span *ngIf="afterMarketImagesArray?.length > 0" class="relative_images">
+                                                                    <!--span *ngIf="afterMarketImagesArray.value?.length > 0" class="relative_images">
                                                                         <span *ngFor="let afterMarketImage of afterMarketImagesArray; let aftermarketIndex = index;" class="img_box">
                                                                             <a href="javascript:void(0)">
                                                                                 <img src="{{afterMarketImage.file_path}}" alt="" class="img-fluid">
                                                                             </a>
                                                                         </span>
-                                                                    </span>
+                                                                    </span-->
                                                                 </span>
                                                             </span>
                                                         </li>
@@ -1199,13 +1205,13 @@
                                                                     <h6>Description:</h6>
                                                                     <p>{{vehicle_condition_description?.value}}</p>
                                                                     <h6>Images :</h6>
-                                                                    <span *ngIf="vehicleConditionImagesArray?.length > 0" class="relative_images">
+                                                                    <!--span *ngIf="vehicleConditionImagesArray?.length > 0" class="relative_images">
                                                                         <span *ngFor="let vehicleConditionImage of vehicleConditionImagesArray; let vehicleConditionIndex = index;" class="img_box">
                                                                             <a href="javascript:void(0)">
                                                                                 <img src="{{vehicleConditionImage}}" alt="" class="img-fluid">
                                                                             </a>
                                                                         </span>                                             
-                                                                    </span>
+                                                                    </span -->
                                                                 </span>
                                                             </span>
                                                         </li>
@@ -1257,7 +1263,7 @@
                                                             <span class="label">Price :</span> <span class="value">
                                                                 {{offerInHands?.value}}
                                                             </span>
-                                                            <span  *ngIf="offerInHandsImagesArray?.length > 0" class="inner_box pb-3">
+                                                            <!--span  *ngIf="offerInHandsImagesArray?.length > 0" class="inner_box pb-3">
                                                                 <span class="box_outer">
                                                                     <ol>
                                                                         <li><span class="">Proof :</span>
@@ -1269,7 +1275,7 @@
                                                                         </li>
                                                                     </ol>
                                                                 </span>
-                                                            </span>
+                                                            </span -->
                                                         </li>
                                                     </ul>
                                                 </div>
