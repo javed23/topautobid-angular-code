@@ -55,6 +55,7 @@ export class ListComponent implements OnInit, AfterViewInit {
   viewedPages:any=[];
   dealershipObject:Dealership;
   dealershipId:any='';
+  dealershipItemIndex:any;
   filtersForm:FormGroup;
   updateExistingDealership:boolean = false;
   dealershipsItems:any = []
@@ -177,6 +178,7 @@ export class ListComponent implements OnInit, AfterViewInit {
       // set dealerships to our new dealerships
       pagedData.data.map((x, i) => dealerships[i + start] = x);
       this.dealerships = dealerships;
+      this.dealerships = [...this.dealerships];
       console.log('this.dealerships',this.dealerships);
    
       this.pageLoaderService.pageLoader(false);//show page loader
@@ -232,6 +234,8 @@ export class ListComponent implements OnInit, AfterViewInit {
      * Remove/delete a dealership
      * @param  item array index     
   */ 
+
+  
  async delete(item){
     //confirm before deleting car
     if(! await this.commonUtilsService.isDeleteConfirmed()) {
@@ -251,7 +255,7 @@ export class ListComponent implements OnInit, AfterViewInit {
               
               this.ngZone.run( () => {
                 this.dealerships.splice(index, 1);  
-                this.dealerships = this.dealerships; 
+                this.dealerships = [...this.dealerships]
               });             
              // this.setPage(this.defaultPagination);             
                    
@@ -281,7 +285,7 @@ export class ListComponent implements OnInit, AfterViewInit {
   * Before delete, system confirm to delete the car. If yes opted then process deleting car else no action;
   */
   show(index, type):void {
-
+    this.dealershipItemIndex = index;
     // when add/view Dealership modal is called
     (type=='createDealership' || type=='editDealership')?this.isCreateDealershipModalOpened = true:this.isCreateDealershipModalOpened = false;
 
@@ -372,6 +376,13 @@ export class ListComponent implements OnInit, AfterViewInit {
  hide(isOpened:boolean):void{
   this.isDealershipModalOpened = this.isModalOpened = this.isCreateContactModalOpened = isOpened; //set to false which will reset modal to show on click again
    
+ }
+ updateDealershipListing(updatedObject){
+   console.log('updatedObject',updatedObject);
+  let createdAt = this.dealerships[updatedObject.index]['created_at']
+  this.dealerships[updatedObject.index] = updatedObject.value
+  this.dealerships[updatedObject.index]['created_at'] =createdAt
+  this.dealerships = [...this.dealerships]
  }
 
 

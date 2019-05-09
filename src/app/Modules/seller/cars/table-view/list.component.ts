@@ -134,7 +134,8 @@ export class ListComponent implements AfterViewInit {
         }    
         const start = this.page.pageNumber * this.page.size;  
         pagedData.data.map((x, i) => cars[i + start] = x);
-        this.cars = cars;        
+        this.cars = cars;
+        this.cars = [...this.cars];        
         console.log('Rows',this.cars);  
         this.commonUtilsService.hidePageLoader();
       //case error 

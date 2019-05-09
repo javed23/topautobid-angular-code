@@ -66,7 +66,8 @@ export class CreateContactComponent implements OnInit {
     faxs: [
       {
         number: "",
-        default_fax: false
+        default_fax: false,
+        country_code:environment.DEFAULT_COUNTRY_CODE
       }
     ]
   }
@@ -82,9 +83,8 @@ export class CreateContactComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
 
     if(this.isOpen){     
-      $(this.contentSection.nativeElement).modal('show'); 
-    }
-      
+      $(this.contentSection.nativeElement).modal({backdrop: 'static', keyboard: false, show: true}); 
+    }     
 
   }
 
@@ -259,7 +259,8 @@ export class CreateContactComponent implements OnInit {
       } */    
     });
     
-    this.newLegalContactForm.reset(); 
+   // this.newLegalContactForm.reset(); 
+    //this.newLegalContactForm.reset({title:'',city:''}); 
     /*this.initalizeNewLegalContactForm();  
     this.setPhones();
     this.setEmails();
@@ -401,19 +402,24 @@ private setFaxs() {
       number: [null, Validators.compose([
         Validators.required,
         // check whether the entered password has a special character
-        CustomValidators.patternValidator(         
-          /^\+?[0-9]{6,}$/,
+        CustomValidators.patternValidator(
+          /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/,
           {
             validFax: true
           }
         ),
       ])
       ],      
-      default: [false],      
+      default: [false],
+      country_code:[environment.DEFAULT_COUNTRY_CODE]      
     })
     )
   })
 }
+
+
+
+
 
 
 cloneFax() {
@@ -423,15 +429,16 @@ cloneFax() {
       number: [null, Validators.compose([
         Validators.required,
         // check whether the entered password has a special character
-        CustomValidators.patternValidator(         
-          /^\+?[0-9]{6,}$/,
+        CustomValidators.patternValidator(
+          /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/,
           {
             validFax: true
           }
         ),
       ])
       ],
-      default: [false]     
+      default: [false],
+      country_code:[environment.DEFAULT_COUNTRY_CODE]     
       
     })
   )

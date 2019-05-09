@@ -8,13 +8,15 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      
       <div class="modal-body">
         <div class="row">
           <div class="col-md-12 text-center">
+          
             <div class="upload-profile-photo">
               <img *ngIf="dealershipObject?.profile_pic" title="Dealership Avatar" class="img-fluid"
                 src="{{dealershipObject?.profile_pic}}">
-              <img *ngIf="dealershipObject?.profile_pic" title="Default Dealership Avatar" class="img-fluid"
+              <img *ngIf="! dealershipObject?.profile_pic" title="Default Dealership Avatar" class="img-fluid"
                 src="/assets/images/default-user.png">
 
             </div>
@@ -55,13 +57,13 @@
           <div class="Car_details row mt-1">
             <div class="col-md-4">
               <ul class="">
-                <li><strong>Address Line 1 -</strong>{{dealershipObject?.mainaddressline1}}</li>
+                <li><strong>Address Line 1 -</strong> {{dealershipObject?.mainaddressline1}}</li>
               </ul>
             </div>
 
             <div class="col-md-4">
               <ul class="">
-                <li><strong>Address Line 2 -</strong>{{dealershipObject?.mainaddressline2}}</li>
+                <li><strong>Address Line 2 -</strong> {{dealershipObject?.mainaddressline2}}</li>
               </ul>
             </div>
 

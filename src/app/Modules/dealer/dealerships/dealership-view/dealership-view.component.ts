@@ -24,7 +24,7 @@ export class DealershipViewComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
 
     if(this.isOpen)
-      $(this.contentSection.nativeElement).modal('show'); 
+      $(this.contentSection.nativeElement).modal({backdrop: 'static', keyboard: false, show: true}); 
 
   }
 

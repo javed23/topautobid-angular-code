@@ -16,7 +16,6 @@ product-listing  -->
       </div>
       </div>
 
-
     <div class="row">
       <div class="col-lg-3 col-md-4">
         <div class="listing-sidebar">
@@ -45,9 +44,9 @@ product-listing  -->
                   </ul>  
                 </li>
                 
-                <li  [attr.disabled]="makes.length<=0" [ngClass]="{disabledcls: makes.length<=0}" class="list-group-item">
-                  <a  [attr.disabled]="makes.length<=0" [ngClass]="{disabledcls: makes.length<=0}" href="#">Make</a>
-                  <ul>
+                <li   [attr.disabled]="makes.length<=0 || page.filters?.year?.length<=0" [ngClass]="{disabledcls: makes.length<=0 || page.filters?.year?.length<=0}" class="list-group-item">
+                  <a  [attr.disabled]="makes.length<=0 || page.filters?.year?.length<=0" [ngClass]="{disabledcls: makes.length<=0 || page.filters?.year?.length<=0}" href="#">Make</a>
+                  <ul id="makeFilter">
                     <!--<li><span class="checkbox">
                         <label>
                           <input type="checkbox"> All Makes
@@ -62,9 +61,9 @@ product-listing  -->
                   </ul>
                 </li>
 
-                <li  [attr.disabled]="models.length<=0" [ngClass]="{disabledcls: models.length<=0}" class="list-group-item">
-                    <a  [attr.disabled]="models.length<=0" [ngClass]="{disabledcls: models.length<=0}" href="#">Model</a>
-                    <ul>
+                <li   [attr.disabled]="models.length<=0 || page.filters?.make?.length<=0" [ngClass]="{disabledcls: models.length<=0 || page.filters?.make?.length<=0}" class="list-group-item">
+                    <a  [attr.disabled]="models.length<=0 || page.filters?.make?.length<=0" [ngClass]="{disabledcls: models.length<=0 || page.filters?.make?.length<=0}" href="#">Model</a>
+                    <ul id="modelFilter">
                       <!--<li><span class="checkbox">
                           <label>
                             <input type="checkbox"> All Models
@@ -79,9 +78,9 @@ product-listing  -->
                     </ul>
                   </li>
                 
-              <li  [attr.disabled]="trims.length<=0" [ngClass]="{disabledcls: trims.length<=0}" class="list-group-item">
-                <a  [attr.disabled]="trims.length<=0" [ngClass]="{disabledcls: trims.length<=0}" href="#">Trim</a>
-                <ul>
+              <li [attr.disabled]="trims.length<=0 || page.filters?.model?.length<=0" [ngClass]="{disabledcls: trims.length<=0 || page.filters?.model?.length<=0}" class="list-group-item">
+                <a  [attr.disabled]="trims.length<=0 || page.filters?.model?.length<=0" [ngClass]="{disabledcls: trims.length<=0 || page.filters?.model?.length<=0}" href="#">Trim</a>
+                <ul id="trimFilter">
                   <!--<li><span class="checkbox">
                       <label>
                         <input type="checkbox" [checked]="isAllTrimSelected" (change)="resetAll('trim')"> All Trims
@@ -238,7 +237,7 @@ product-listing  -->
 
                     <div class="selected-box">
                         <select (change)="onSort($event)" class="my_select">
-                          <option>Sort by </option>
+                          <option value="">Sort by </option>
                           <option value="offer_in_hand,asc">Price: Lowest first</option>
                           <option  value="offer_in_hand,desc">Price: Highest first </option>
                           <option value="year,asc">Year: Lowest first</option>
@@ -360,9 +359,13 @@ product-listing  -->
                 <div class="car-image">
                   <img class="img-fluid" src="{{car.cover_image}}" alt="">
                   <div class="car-overlay-banner">
+                      
+
                     <ul>
-                      <li><a href="javascript:void(0)"><i class="fa fa-link"></i></a></li>
-                      <li><a [routerLink]="" (click)="delete(row)"><i class="fa fa-trash" aria-hidden="true"></i></a></li>
+
+                      
+                        <li><a routerLink="/seller/car-detail/{{car._id}}"><i class="fa fa-eye"></i></a></li>
+                        <li><a [routerLink]="" (click)="delete(car)"><i class="fa fa-trash" aria-hidden="true"></i></a></li>
                     </ul>
                   </div>
                 </div>
@@ -378,7 +381,7 @@ product-listing  -->
                 <div class="price">
                   <span class="old-price">{{car.offer_in_hand | currency:'USD':true:'2.2-2'}}</span>
                   <span class="new-price">{{car.offer_in_hand | currency:'USD':true:'2.2-2'}} </span>
-                  <a class="button red float-right" href="javascript:void(0)">Details</a>
+                  <a class="button red float-right" routerLink="/seller/car-detail/{{car._id}}">Details</a>
                 </div>
                 <div class="car-list">
                   <ul class="list-inline">

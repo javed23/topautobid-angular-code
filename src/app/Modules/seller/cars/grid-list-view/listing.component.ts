@@ -233,11 +233,16 @@ export class ListingComponent implements OnInit {
  * @return  void
 */
   onSort(event):void {
+    if(event.target.value){
+      const sortingObject = event.target.value.split(',');    
+      this.page.sortProperty = sortingObject[0]
+      this.page.sortDirection = sortingObject[1] 
+    }else{
+      this.page.sortProperty = 'desc'
+      this.page.sortDirection = 'created_at'
+    }
     this.currentPage = 0
-    this.viewedPages = [];
-    const sortingObject = event.target.value.split(',');    
-    this.page.sortProperty = sortingObject[0]
-    this.page.sortDirection = sortingObject[1] 
+    this.viewedPages = [];    
     console.log('this.page',this.page); 
     this.setPage(this._defaultPagination,this.page.type);  
   }
@@ -289,6 +294,24 @@ setFilters(option,filter):void{
   let index = options.indexOf(option);
   (index>=0)?_.pullAt(options, [index])  : options.push(option)     
   this.page.filters[filter] = options;  
+  console.log('filter',filter);
+  console.log('filters',this.page.filters)
+  if(filter=='year' && _.has(this.page.filters,['year']) && !this.page.filters['year'].length){
+    delete this.page.filters['make']; 
+    delete this.page.filters['model']; 
+    delete this.page.filters['trim']; 
+    $('#makeFilter, #modelFilter, #trimFilter').slideUp()
+  }
+  if(filter=='make' && _.has(this.page.filters,['make']) && !this.page.filters['make'].length){
+    delete this.page.filters['model']; 
+    delete this.page.filters['trim']; 
+    $('#modelFilter, #trimFilter').slideUp()
+  }
+  if(filter=='model' && _.has(this.page.filters,['model']) && !this.page.filters['model'].length){
+    delete this.page.filters['trim']; 
+    $('#trimFilter').slideUp()
+  }
+
   console.log(this.page.filters);
 }
 
@@ -372,6 +395,7 @@ vehicleStatisticsByMake(option, filter):void{
     this.commonUtilsService.onError(error);
   });
 }
+
 
 
 /**
@@ -489,6 +513,13 @@ resetAll(filter,keyName=''):void{
 
   if(filter=='year'){
    // if(!keyName.length) this.isAllBodySelected = true
+   if(! this.page.filters['year'].length || !this.page.filters['make'].length || !this.page.filters['model'].length){
+      delete this.page.filters['make']; 
+      delete this.page.filters['model']; 
+      delete this.page.filters['trim']; 
+      $('#makeFilter, #modelFilter, #trimFilter').slideUp()
+   }
+  
     this.yearsRange.forEach(element=> {
       if(keyName.length){
         console.log('element.name',element);
@@ -505,6 +536,11 @@ resetAll(filter,keyName=''):void{
   }
 
   if(filter=='make'){
+    if(! this.page.filters['year'].length || !this.page.filters['make'].length || !this.page.filters['model'].length){  
+      delete this.page.filters['model']; 
+      delete this.page.filters['trim']; 
+      $('#makeFilter, #modelFilter, #trimFilter').slideUp()
+    }
     //if(!keyName.length) this.isAllBodySelected = true
     this.makes.forEach(element=> {
       if(keyName.length){
@@ -519,6 +555,10 @@ resetAll(filter,keyName=''):void{
   }
 
   if(filter=='model'){
+    if(! this.page.filters['year'].length || !this.page.filters['make'].length || !this.page.filters['model'].length){     
+      delete this.page.filters['trim']; 
+      $('#makeFilter, #modelFilter, #trimFilter').slideUp()
+    }
     //if(!keyName.length) this.isAllBodySelected = true
     this.models.forEach(element=> {
       if(keyName.length){
@@ -665,6 +705,8 @@ uncheckAllFetchRecords(option, filter):void{
   changeYear(event):void{
     this.yearFilterOption = event.target.value    
   }
+
+ 
 
 
 

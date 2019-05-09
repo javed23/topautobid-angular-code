@@ -133,7 +133,7 @@
                                     </div>
                                     <div class="col-md-3">
                                             <span class="head">Zipcode:</span>
-                                            <span class="value">{{contact.zipcode}}</span> 
+                                            <span class="value">{{contact.zip}}</span> 
                                     </div>
                                     <div class="col-md-3">
                                             <span class="head">Address Line 1:</span>
@@ -294,7 +294,7 @@
 <app-contact-view (onClose)="hide($event)" [isOpen]="isModalOpened" [dealershipObject]="dealershipObject"></app-contact-view>
 
 <!-- Add new dealership  -->
-<app-create-dealership [dealershipsItems]="dealershipsItems" [updateExistingDealership]="updateExistingDealership"
+<app-create-dealership (onUpdateDealership)="updateDealershipListing($event)" [dealershipItemIndex]="dealershipItemIndex" [dealershipsItems]="dealershipsItems" [updateExistingDealership]="updateExistingDealership"
   [isOpen]="isCreateDealershipModalOpened"></app-create-dealership>
 
 <!-- Add new-legal-contact -->

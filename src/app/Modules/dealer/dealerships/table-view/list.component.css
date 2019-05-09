@@ -203,3 +203,6 @@ color: #323232;
 .actions a:hover{
 color: #db2d2e;
 }
+.button{
+  cursor:pointer;
+}

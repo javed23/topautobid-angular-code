@@ -18,8 +18,8 @@ export const environment = {
   ],
   //aws 
   AWS: {
-    ACCESS_KEY: 'AKIAJFK6YJMR4P23VEDA',
-    SECRET_KEY: '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',
+    ACCESS_KEY: 'AKIAUGU7PKGK2DTCJVPA',
+    SECRET_KEY: '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',
     REGION: 'us-west-2',
     BUCEKT_NAME: 'topautobid-dev',
     COGNITO: {
@@ -76,6 +76,7 @@ export const environment = {
     FETCHING_RECORDS: 'Fetching Data...',
     RECORD_DELETED: 'Record has been deleted successfully.',
     DEALERSHIP_ADDED: 'Dealership has been added successfully.',
+    DEALERSHIP_UPDATED: 'Dealership has been updated successfully.',
     DELETING_RECORD: 'Deleting Record...',//new
   }
 };

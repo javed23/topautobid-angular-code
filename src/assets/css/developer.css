@@ -409,6 +409,8 @@ ngb-rating {
     border-bottom: 1px solid #e3e3e3 !important;
     margin-bottom: 10px;
 }
+.swal2-container {z-index: 999999999 !important;}
+.swal2-container.swal2-center.swal2-fade.swal2-shown {z-index: 9999999999 !important;}
 
 
 

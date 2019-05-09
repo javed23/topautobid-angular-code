@@ -1,4 +1,4 @@
-import { Component,  SimpleChanges, OnInit, ViewChild, AfterViewInit, ViewEncapsulation, ElementRef, Input, NgZone } from '@angular/core';
+import { Component,  SimpleChanges, OnInit, Output, EventEmitter, ViewChild, AfterViewInit, ViewEncapsulation, ElementRef, Input, NgZone } from '@angular/core';
 import { AbstractControl, FormGroup, FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { of, Observable } from 'rxjs';
 import { Router, ActivatedRoute } from "@angular/router";
@@ -37,7 +37,10 @@ import * as _ from 'lodash';
 export class CreateDealershipComponent implements OnInit {
   @Input() isOpen: any;  
   @Input() updateExistingDealership: boolean;   
-  @Input() dealershipsItems: any;   
+  @Input() dealershipsItems: any;  
+  @Input() dealershipItemIndex:any;
+  @Output() onUpdateDealership: EventEmitter<any> = new EventEmitter<any>();
+
   @ViewChild('contentSection') contentSection :ElementRef;
 
   updatedItem:any='';
@@ -64,7 +67,7 @@ export class CreateDealershipComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
 
     if(this.isOpen)    
-      $(this.contentSection.nativeElement).modal('show');       
+      $(this.contentSection.nativeElement).modal({backdrop: 'static', keyboard: false, show: true});       
       
     
 
@@ -258,6 +261,9 @@ export class CreateDealershipComponent implements OnInit {
     
     
       console.log('dealershipsItems',this.newDealershipForm.value);
+      this.onUpdateDealership.emit({index:this.dealershipItemIndex, value:this.newDealershipForm.value });  
+      this.dealershipsItems[this.dealershipItemIndex] = this.newDealershipForm.value;
+      console.log('this.dealershipsItems',this.dealershipsItems);
       this.dealershipService.newDealership([this.newDealershipForm.value])     
       .pipe(untilDestroyed(this))
       .subscribe(
@@ -267,17 +273,13 @@ export class CreateDealershipComponent implements OnInit {
           this.dealershipsItems = [];         
           //this.isLoading = false;
           
-          $(this.contentSection.nativeElement).modal('hide');
-          this.pageLoaderService.pageLoader(false);//show page loader
-          this.pageLoaderService.setLoaderText('');//setting loader text            
-          this.toastr.successToastr(environment.MESSAGES.DEALERSHIP_UPDATED, 'Success!'); //showing success toaster 
+          $(this.contentSection.nativeElement).modal('hide');   
+          this.commonUtilsService.onSuccess(environment.MESSAGES.DEALERSHIP_UPDATED);           
           this.pageLoaderService.refreshPage(true)            
           
         },error => {
 
-          this.pageLoaderService.setLoaderText(environment.MESSAGES.ERROR_TEXT_LOADER);//setting loader text
-          this.pageLoaderService.pageLoader(false);//hide page loader
-          this.toastr.errorToastr(error, 'Oops!');//showing error toaster message
+          this.commonUtilsService.onError(error); 
 
         });
 
@@ -290,8 +292,9 @@ export class CreateDealershipComponent implements OnInit {
   } 
 
   // To delete specific dealership  
-  deleteNewDealership(index) {  
-    if(! confirm("Are you sure to delete this record ?")) {
+  async deleteNewDealership(index) {  
+     //confirm before deleting car
+    if(! await this.commonUtilsService.isDeleteConfirmed()) {
       return;
     }
     var pulled = _.pullAt(this.dealershipsItems, [index]);
@@ -317,19 +320,13 @@ export class CreateDealershipComponent implements OnInit {
           //this.isLoading = false;
           
           $(this.contentSection.nativeElement).modal('hide');
-          this.pageLoaderService.pageLoader(false);//show page loader
-          this.pageLoaderService.setLoaderText('');//setting loader text  
-          this.toastr.successToastr(environment.MESSAGES.DEALERSHIP_ADDED, 'Success!'); //showing success toaster 
-          
+          this.commonUtilsService.onSuccess(environment.MESSAGES.DEALERSHIP_ADDED);         
           this.pageLoaderService.refreshPage(true)  
           //this.setPage(this.defaultPagination);
           
           
         },error => {
-
-          this.pageLoaderService.setLoaderText(environment.MESSAGES.ERROR_TEXT_LOADER);//setting loader text
-          this.pageLoaderService.pageLoader(false);//hide page loader
-          this.toastr.errorToastr(error, 'Oops!');//showing error toaster message
+          this.commonUtilsService.onError(error); 
 
         });
 
