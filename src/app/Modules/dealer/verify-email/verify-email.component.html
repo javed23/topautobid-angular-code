@@ -12,68 +12,49 @@
   register-form  -->
  <section  class="register-form page-section-ptb">
    <div class="container">
-     <div class="row justify-content-center">
-       <div class="col-md-10">
-         <div class="section-title">
-           <!-- <span>Welcome to </span> -->
-           <h4 *ngIf="!alreadyVerified" class="verify-text">your your account has been successfully verified!
-            <span class="verify_image"><img src="../../../../assets/images//verify.png"/></span>
-           </h4>
-           <h4 *ngIf="alreadyVerified" class="verify-text">your account is already verified! 
-             <span class="verify_image"><img src="../../../../assets/images//verify.png"/></span>
-           </h4>
-           
-           <div class="separator">
-            <p class="login-link"> <a routerLink="/seller/login" class="red">login</a></p>
-           </div>
-         </div>
-       </div>
-     </div>
-    <!-- ask for multifactor verification -->
-    <div class="row justify-content-center" *ngIf="!user?.is_multifactor_authorized">
-      <div class="col-lg-8 col-md-12">
-        
-              <div class="gray-form">
-                  <div class="form-group">
-                      <div class="remember-checkbox mb-4">
-                        <input type="checkbox"  [(ngModel)]="ismultifactorVerification" id="remember_me">
-                        <label for="remember_me">Do you want multifactor verification</label>
-                      </div>
-                    </div>
-                 </div>
-         </div>
-    </div>
-    <!-- end of multifactor verification -->
-
-
-
-     <div  *ngIf="ismultifactorVerification" class="row justify-content-center">
-       <div class="col-lg-8 col-md-12">
-           <div class="gray-form" >
-             <div class="form-group col-md-6">
-                <label>Select your multifactor verification method*</label>
-                <div class="col-sm-6 col-md-6">
-                    <label class="radio-inline">
-                         <input name="multifactor-verification" [(ngModel)]="multifactorOption" value="phone" type="radio" />Phone
-                     </label>
+     <div class="row ">
+       <div class="col-md-12">
+        <div class="verify_box">
+            <div class="section-title">
+              <img src="../../../../assets/images/verify_icon.png"/>
+              <h2 *ngIf="!alreadyVerified">Your Account has been verified!</h2>
+              <h2 *ngIf="alreadyVerified">Your Account has been Already verified!</h2>
+              <div class="separator"></div>
+            </div> 
+            <div class="verify_inner">
+              <div class="toggle_bar">
+                <h5>DO you want two factor verification</h5>
+                <div class="switch_outer">
+                    <label class="switch">
+                            <input type="checkbox" #usermultifactorauth (change)="toggleIsMultifactorVerification($event)">
+                            <span class="slider round"></span>
+                    </label>
                 </div>
-                <div class="col-sm-6 col-md-6">
-                     <label class="radio-inline">
-                          <input name="multifactor-verification" [(ngModel)]="multifactorOption" value="email" type="radio" />Email
-                     </label>
-                 </div>
-             </div>
-           
-           </div>
-           <div class="row">
-            <div class="form-group col-md-6">
-              <button  type="submit" class="button red" (click)="onSubmit()">Submit </button>
               </div>
-          </div>
+              <div #multifactordiv class="collapseable_box " id="de"> 
+                <h6>Select Your two factor verification method</h6>
+                
+                <ul>
+                  <li>
+                      <div class="Radio_BTN">
+                          <input id="phone" type="radio" [(ngModel)]="multifactorOption" value="phone">
+                          <label for="phone">Phone</label>
+                      </div>
+                  </li>
+                  <li>
+                      <div class="Radio_BTN">
+                          <input id="Email" type="radio" [(ngModel)]="multifactorOption" value="email">
+                          <label for="Email">Email</label>
+                      </div>
+                  </li>
+                </ul>
+                <button class="red button border0" (click)="onSubmit()" >Submit</button>
+              </div>
+              <p>Already have an account? please <a routerLink="/seller/login">Login here </a></p>
+            </div>   
+         </div>
        </div>
      </div>
-
-     
    </div>
  </section>
  

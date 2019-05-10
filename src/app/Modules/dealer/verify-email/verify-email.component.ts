@@ -7,14 +7,13 @@ import { untilDestroyed } from 'ngx-take-until-destroy';// unsubscribe from obse
 //modules core services
 import { UserAuthService, TitleService, CognitoUserService } from '../../../core/_services';
 
-import { environment } from '../../../../environments/environment'
+import { environment } from '../../../../environments/environment';
 
 //shared services
-import { AlertService, PageLoaderService } from '../../../shared/_services'
+import { AlertService, PageLoaderService } from '../../../shared/_services';
 
 import * as _ from 'lodash';
-import { SUCCESS } from 'dropzone';
-declare var $;
+declare let $;
 @Component({
   selector: 'app-verify-email',
   templateUrl: './verify-email.component.html',
@@ -22,10 +21,9 @@ declare var $;
 })
 export class VerifyEmailComponent implements OnInit {
   authToken: string;
-  ismultifactorVerification: boolean = false;
   multifactorOption: string = 'phone';
   alreadyVerified: boolean;
-  is_multifactor_authorized: boolean;
+  // is_multifactor_authorized: boolean;
   otpFormsubmitted: boolean;
   user: any = {};
   //forms
@@ -34,11 +32,12 @@ export class VerifyEmailComponent implements OnInit {
 
 
   title: string = 'Dealer Email Verification';
-  constructor(private router:Router,private pageLoaderService:PageLoaderService,private cognitoUserService: CognitoUserService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private authService: UserAuthService, private toasterService: ToastrManager) { }
+  constructor(private router: Router, private pageLoaderService: PageLoaderService, private cognitoUserService: CognitoUserService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private authService: UserAuthService, private toasterService: ToastrManager) { }
   @ViewChild("otpSection") otpSection: ElementRef;
+  @ViewChild("multifactordiv") multifactordiv: ElementRef;
 
   ngOnInit() {
-  
+
     this.activatedRoute.params.subscribe((params) => {
       this.authToken = params['token'];
       //verify user usig the token if it is valid or not
@@ -46,7 +45,6 @@ export class VerifyEmailComponent implements OnInit {
         .pipe(untilDestroyed(this))
         .subscribe((response: any) => {
           if ('alreadyVerified' in response) {
-            console.log('hiiiiiiiiiiiiiiiiii')
             this.alreadyVerified = true;
             this.user = response.dealer;
           }
@@ -56,8 +54,8 @@ export class VerifyEmailComponent implements OnInit {
           }
 
         }, (error) => {
-         
-          this.toasterService.errorToastr(error, 'Oops!',{toastTimeout:2000});//showing error toaster message
+
+          this.toasterService.errorToastr(error, 'Oops!', { toastTimeout: 2000 });//showing error toaster message
           this.router.navigate(['/seller/login'])
         })
     })
@@ -66,6 +64,8 @@ export class VerifyEmailComponent implements OnInit {
     this.otpVerifyForm();
 
   }
+
+
 
 
 
@@ -79,6 +79,10 @@ export class VerifyEmailComponent implements OnInit {
   }
 
 
+  
+  toggleIsMultifactorVerification(value: any) {
+    $(this.multifactordiv.nativeElement).slideToggle('slow');
+  }
 
 
 
@@ -96,10 +100,10 @@ export class VerifyEmailComponent implements OnInit {
 
 
 
-      this.pageLoaderService.pageLoader(true);//start showing page loader
-      this.pageLoaderService.setLoaderText('Regestring seller...');//setting loader text
-      console.log('the user is '+userSignup)
-      //saving the seller at aws user pool
+    this.pageLoaderService.pageLoader(true);//start showing page loader
+    this.pageLoaderService.setLoaderText('Regestring seller...');//setting loader text
+    console.log('the user is ' + userSignup)
+    //saving the seller at aws user pool
     this.cognitoUserService.signup(userSignup)
       .pipe(untilDestroyed(this))
       .subscribe(
@@ -192,11 +196,10 @@ export class VerifyEmailComponent implements OnInit {
 
     this.authService.setDealerMFA({ userId: this.user._id, multifactorOption: this.multifactorOption }).subscribe((res: any) => {
       this.pageLoaderService.pageLoader(false);//start showing page loader
-      this.user.ismultifactorVerification = true;
       this.toasterService.successToastr('successfully updated the MFA!', 'Success!');
-     
+
       this.hidePopup();
-      
+
     }, error => {
       this.pageLoaderService.setLoaderText(environment.MESSAGES.ERROR_TEXT_LOADER);//setting loader text
       this.pageLoaderService.pageLoader(false);//hide page loader

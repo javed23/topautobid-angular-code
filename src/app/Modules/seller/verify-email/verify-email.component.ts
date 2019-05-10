@@ -14,7 +14,7 @@ import { AlertService, PageLoaderService } from '../../../shared/_services'
 
 import * as _ from 'lodash';
 import { SUCCESS } from 'dropzone';
-declare var $;
+declare let $;
 @Component({
   selector: 'app-verify-email',
   templateUrl: './verify-email.component.html',
@@ -22,10 +22,8 @@ declare var $;
 })
 export class VerifyEmailComponent implements OnInit {
   authToken: string;
-  ismultifactorVerification: boolean = false;
   multifactorOption: string = 'phone';
   alreadyVerified: boolean;
-  is_multifactor_authorized: boolean;
   otpFormsubmitted: boolean;
   user: any = {};
   //forms
@@ -36,6 +34,7 @@ export class VerifyEmailComponent implements OnInit {
   title: string = 'Seller Email Verification';
   constructor(private router:Router,private pageLoaderService:PageLoaderService,private cognitoUserService: CognitoUserService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private authService: UserAuthService, private toasterService: ToastrManager) { }
   @ViewChild("otpSection") otpSection: ElementRef;
+  @ViewChild("multifactordiv") multifactordiv: ElementRef;
 
   ngOnInit() {
 
@@ -66,6 +65,10 @@ export class VerifyEmailComponent implements OnInit {
 
   }
 
+
+  toggleIsMultifactorVerification(value:any){
+   $(this.multifactordiv.nativeElement).slideToggle('slow');
+  }
 
 
 
@@ -103,12 +106,10 @@ export class VerifyEmailComponent implements OnInit {
       .pipe(untilDestroyed(this))
       .subscribe(
         (response) => {
-          console.log('username', response['username'])
           this.showPopup(); //open verification popup
           this.pageLoaderService.pageLoader(false);//hide page loader  
 
           this.otpVerificationForm.controls['Username'].setValue(response['username']);
-          console.log('otpVerificationForm', this.otpVerificationForm.value)
           this.toasterService.successToastr(environment.MESSAGES.VERIFICATION_PENDING, 'Success!');//showing success toaster
 
         },
@@ -191,7 +192,6 @@ export class VerifyEmailComponent implements OnInit {
 
     this.authService.setMFA({ userId: this.user._id, multifactorOption: this.multifactorOption }).subscribe((res: any) => {
       this.pageLoaderService.pageLoader(false);//start showing page loader
-      this.user.ismultifactorVerification = true;
       this.toasterService.successToastr('successfully updated the MFA!', 'Success!');
      
       this.hidePopup();
