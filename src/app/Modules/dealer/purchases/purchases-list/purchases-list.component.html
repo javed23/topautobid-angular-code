@@ -31,8 +31,10 @@
                 [externalPaging]="true" [count]="page.totalElements" [offset]="page.pageNumber" [limit]="page.size"
                 (page)='setPage($event)'>
                 <ngx-datatable-column name="ref" prop="ref" [sortable]="true" [width]="200">
-                  <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
+                  <ng-template let-rowIndex="rowIndex" let-row="row"  ngx-datatable-cell-template>
+                    <span (click)="viewCarDetails(row?.car_id?._id)">
                     #{{ row?.car_id?.ref }}
+                  </span>
                   </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Bid Date" prop="bid_date" [sortable]="true" [width]="200">
@@ -95,21 +97,13 @@
                           [hidden]="!((rowCount / pageSize) > 1)" 
                           (change)="listingTable.onFooterPage($event)">
                         </datatable-pager>
-
                       </div>
-
-
                     </div>
-
                   </ng-template>
                 </ngx-datatable-footer>
-
               </ngx-datatable>
-
-
             </div>
           </div>
-
         </div>
       </div>
     </div>

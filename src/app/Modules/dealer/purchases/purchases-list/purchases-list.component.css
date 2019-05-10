@@ -5,6 +5,9 @@
   box-shadow: none;
   font-size: 14px;
 }
+.ngx-datatable .datatable-header {
+  background-color: black !important;
+}
 .ngx-datatable.bootstrap .datatable-header {
   height: unset !important;
 }

@@ -33,6 +33,7 @@ export class PurchasesListComponent implements OnInit {
   //Defined records limit and records limit options
   currentPageLimit: number = environment.DEFAULT_RECORDS_LIMIT
   readonly pageLimitOptions = environment.DEFAULT_PAGE_LIMIT_OPTIONS
+  
   constructor(private dealerService: DealerService, private titleService: TitleService, private pageLoaderService: PageLoaderService, private toastr: ToastrManager) {
 
     this.page.pageNumber = 0;
@@ -90,6 +91,11 @@ export class PurchasesListComponent implements OnInit {
     // this.viewedPages = [];
     this.page.search = searchValue
     // this.setPage(this.defaultPagination);    
+  }
+
+  viewCarDetails(carId:any){
+    console.log('the car id is ',carId);
+
   }
 
 
