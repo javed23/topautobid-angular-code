@@ -35,8 +35,9 @@ export class PurchasesListComponent implements OnInit {
    }
 
   ngOnInit() {
-    this.getPurchasesList();
+  
     this.setPage({ offset: 0 });
+    this.getPurchasesList();
   }
 
 /**
@@ -63,6 +64,8 @@ export class PurchasesListComponent implements OnInit {
   private getPurchasesList() {
    this.dealerService.getPurchaseList(this.page).subscribe(res=>{
      console.log('the response from the server is ',JSON.stringify(res))
+     this.purchases = res.data;
+     console.log('the data after purchase is',this.purchases);
    })
   }
 

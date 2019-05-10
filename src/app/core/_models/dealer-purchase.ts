@@ -2,28 +2,22 @@
  * A model for an individual corporate employee
  */
 export class Purchase {
-           car_id:any;
-           dealer_id:any;
-           price:number;
+          //  car_id:any;
            bid_date:Date;
-           bid_acceptance:string;
            bid_acceptance_date:Date;
-           time:{};
+           price:number;
+           contact:any;
            fee_status:string;
-           updated_by:any;
 
 
 
 
   constructor(object){
-    this.car_id = object.car_id;
-    this.dealer_id=object.dealer_id;
-    this.price  = object.price;
+    // this.car_id = object.car_id;
     this.bid_date = object.bid_date;
-    this.bid_acceptance = object.bid_acceptance;
     this.bid_acceptance_date= object.bid_acceptance_date;
-    this.time = object.time;
+    this.price  = object.price;
+    this.contact=object.dealer_id.name.first_name;
     this.fee_status = object.fee_status;
-    this.updated_by = object.updated_by;
     }
 }
