@@ -86,7 +86,7 @@ border: 1px solid #e3e3e3;
 }
 .ngx-datatable.bootstrap .datatable-header-cell {
  text-align: left;
- background: #323232;
+ background: #323232 ;
  color: #fff;
  font-size: 16px;
  font-weight: 600;
