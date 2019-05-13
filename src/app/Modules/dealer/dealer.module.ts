@@ -8,9 +8,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ArchwizardModule } from 'angular-archwizard';
 import { DropzoneModule, DropzoneConfigInterface,
   DROPZONE_CONFIG } from 'ngx-dropzone-wrapper';
-
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { NgxPaginationModule } from 'ngx-pagination'; 
 
 //import social login modules
 import { SocialLoginModule } from 'angularx-social-login';
@@ -32,17 +32,13 @@ import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
-//cars management components
-import { ListComponent as CarsListComponent } from './cars/list/list.component';
-import { CarViewComponent } from './cars/car-view/car-view.component';
 
 //dealerships management components
-import { ListComponent as DealershipsListComponent } from './dealerships/list/list.component';
+import { ListComponent as DealershipsListComponent } from './dealerships/table-view/list.component';
 import { ContactViewComponent } from './dealerships/contact-view/contact-view.component';
 import { DealershipViewComponent } from './dealerships/dealership-view/dealership-view.component';
 import { CreateDealershipComponent } from './dealerships/create-dealership/create-dealership.component';
 import { CreateContactComponent } from './dealerships/create-contact/create-contact.component';
-
 
 //facebook, google authentication configuration
 /*const fbLoginOptions: LoginOpt = {
@@ -84,14 +80,12 @@ let config = new AuthServiceConfig([
     HomeComponent,
     SignupComponent, 
     ProfileComponent, 
-    ForgotPasswordComponent,
-    CarsListComponent,
-    CarViewComponent,
+    ForgotPasswordComponent,   
     DealershipsListComponent,
     ContactViewComponent,
     DealershipViewComponent,
     CreateDealershipComponent,
-    CreateContactComponent    
+    CreateContactComponent
   ],
   imports: [
     CommonModule,
@@ -106,7 +100,8 @@ let config = new AuthServiceConfig([
     NgbModule,
     ArchwizardModule,
     NgScrollbarModule,
-    NgxDatatableModule
+    NgxDatatableModule,
+    NgxPaginationModule
   ],
   providers: [
     AdalService,

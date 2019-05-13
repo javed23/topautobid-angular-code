@@ -19,7 +19,6 @@ declare let jQuery: any;
 declare let $: any;
 declare let POTENZA: any;
 import * as _ from 'lodash';
-import Swal from 'sweetalert2'
 
 
 @Component({
@@ -39,6 +38,7 @@ export class ListComponent implements AfterViewInit {
   endDateModel:any;
   page = new Page();
   cars = new Array<Car>()
+  isGridListing:boolean=true; //set boolean value to show/hide listing (grid/list)
   viewedPages:any=[];
   car:Car;
   isModalOpen:boolean=false;
@@ -52,8 +52,8 @@ export class ListComponent implements AfterViewInit {
  
 
   //title and breadcrumbs
-  readonly title: string = 'Car Listing';
-  readonly breadcrumbs: any[] = [{ page: 'Home', link: '/seller/home' }, { page: 'Car Listing', link: '' }]
+  readonly title: string = 'Dashboard';
+  readonly breadcrumbs: any[] = [{ page: 'Home', link: '/seller/home' },{ page: "Car Listing", link: '/seller/car-listing' }, { page: "Dashboard", link: '' }]
 
  
   //default pagination settings
@@ -67,10 +67,12 @@ export class ListComponent implements AfterViewInit {
 
 
 
-  constructor(private commonUtilsService:CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder) {
+  constructor(private commonUtilsService:CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private titleService:TitleService) {
 
     //fetching the data with default settings
     this.setPage(this._defaultPagination,'all');
+    //setting the page title
+    this.titleService.setTitle();
   }
   
   /**
@@ -86,7 +88,13 @@ export class ListComponent implements AfterViewInit {
       //POTENZA.tabs()      
     }
 
-  
+  /**
+  * change listing type list/grid
+  * @return void
+  */
+  onChangeListingType(listingType:string):void {
+    this.isGridListing = (listingType=='list')?false:true
+  }
 
   /**
    * Populate the table with new data based on the page number
@@ -100,18 +108,19 @@ export class ListComponent implements AfterViewInit {
       this.page.size = page.pageSize;
 
       //Do not fetch page data if page is already clicked and paginated
-      if( _.includes(this.viewedPages, this.page.pageNumber))
+      /*if( _.includes(this.viewedPages, this.page.pageNumber))
         return;
       else    
-        this.viewedPages.push(this.page.pageNumber)
+        this.viewedPages.push(this.page.pageNumber)*/
 
       //Do not show page loader if fetching results using search
       if(!this.page.search){
+
         this.commonUtilsService.showPageLoader();
       }
       
       //hit api to fetch data
-      this.carService.listingCars(this.page).subscribe(
+      this.carService.listingCarsOnDatable(this.page).subscribe(
 
         //case success
         (pagedData) => {      
@@ -126,8 +135,9 @@ export class ListComponent implements AfterViewInit {
         }    
         const start = this.page.pageNumber * this.page.size;  
         pagedData.data.map((x, i) => cars[i + start] = x);
-        this.cars = cars;    
-        //console.log('Rows',this.cars);
+        this.cars = cars;
+        this.cars = [...this.cars];        
+        console.log('Rows',this.cars);  
         this.commonUtilsService.hidePageLoader();
       //case error 
       },error => {
@@ -169,17 +179,34 @@ export class ListComponent implements AfterViewInit {
     }
 
    /**
-   * To sort the records
+   * To sort the records according to selected option from sort by dropmenu
    * @param event event object which have column name and direction data
    * @return  void
-   */
-    onSort(event):void {
+   */    
+
+  onFilterSort(event):void {  
+      console.log('yes',event);   
       this.viewedPages = [];
-      const sort = event.sorts[0];
-      this.page.sortProperty = sort.prop
-      this.page.sortDirection = sort.dir   
-      this.setPage(this._defaultPagination,this.page.type);    
+      const sortingObject = event.target.value.split(',');    
+      this.page.sortProperty = sortingObject[0]
+      this.page.sortDirection = sortingObject[1] 
+      //console.log('this.page',this.page); 
+      this.setPage(this._defaultPagination,this.page.type);  
     }
+
+    /**
+ * To sort the records on dattable columns
+ * @param event event object which have column name and direction data
+ * @return  void
+*/
+onSort(event) {
+  
+  const sort = event.sorts[0];
+  this.page.sortProperty = sort.prop
+  this.page.sortDirection = sort.dir   
+  this.setPage(this._defaultPagination,this.page.type);    
+}
+
 
   
   
@@ -275,7 +302,9 @@ export class ListComponent implements AfterViewInit {
       //manually create a data object which have the car unique id and seller id 
       const data =  {
         id:item._id,
-        seller_id:localStorage.getItem('loggedinUserId')      
+        //seller_id:localStorage.getItem('loggedinUserId')    
+        seller_id:"5cd170562688321559f12f32"
+          
       } 
 
       //Start process to delete car
@@ -290,7 +319,7 @@ export class ListComponent implements AfterViewInit {
           let index = this.cars.indexOf(item, 0);
           if (index > -1)           
             this.cars.splice(index, 1);       
-            
+            this.setPage(this._defaultPagination,this.page.type);
           this.commonUtilsService.onSuccess(environment.MESSAGES.RECORD_DELETED);          
 
         //case error
@@ -298,6 +327,14 @@ export class ListComponent implements AfterViewInit {
           this.commonUtilsService.onError(error); 
         });
     }  
+    toggleExpandRow(row) {
+      console.log('Toggled Expand Row!', row);
+      this.listingTable.rowDetail.toggleExpandRow(row);
+    }
+  
+    onDetailToggle(event) {
+      console.log('Detail Toggled', event);
+    }
     
   // This method must be present, even if empty.
     ngOnDestroy() {

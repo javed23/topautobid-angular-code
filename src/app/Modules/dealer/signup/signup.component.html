@@ -103,7 +103,15 @@
                 <p *ngIf="signUpFormStep1.controls.password.touched || step1submitted">
                     <app-form-validation-errors minLength=10 maxLength=50 errorPrefix="Password " [errors]="signUpFormStep1.get('password').errors"></app-form-validation-errors>  
                   </p>
-              </div>         
+              </div> 
+              <div class="form-group">
+                <label>Re-enter Password*</label>
+                <input [ngClass]="{ 'is-invalid': (signUpFormStep1.controls.repassword.touched || step1submitted) && signUpFormStep1.get('repassword').errors }"
+                  class="form-control" type="password" placeholder="Confirm Password" formControlName="repassword">
+                <p *ngIf="signUpFormStep1.controls.repassword.touched || step1submitted">
+                  <app-form-validation-errors minLength=10 maxLength=50 errorPrefix="Confirm password" [errors]="signUpFormStep1.get('repassword').errors"></app-form-validation-errors>
+                </p>
+              </div>        
                   
                   
               <div class="form-group">
@@ -192,7 +200,7 @@
               <div class="form-group">
                 <div>
                   <label for="one">By signing up, you are agree with the <a routerLink="/web/user-agreement"> User
-                      Agreement </a> & <a routerLink="/web/privacy-policy"> Privacy Ploicy</a></label>
+                      Agreement </a> & <a routerLink="/web/privacy-policy"> Privacy Policy</a></label>
                 </div>
               </div>
               <div class="form-group text-right">

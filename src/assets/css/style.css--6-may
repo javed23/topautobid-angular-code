@@ -127,7 +127,7 @@ Page section margin padding
   Text Color
 ***********************/
 .text-red { color: #db2d2e; }
-.text-white { color: #ffffff;text-transform:none }
+.text-white { color: #ffffff; }
 .text-black { color: #323232; }
 .text-gray { color: #626262; }
 
@@ -275,7 +275,7 @@ select { border: 1px solid #232323; color: #777; cursor: pointer; display: block
 .mega-menu .menu-logo { padding: 36px 0px; }
 .mega-menu .menu-logo img { height: 36px; }
 .mega-menu .menu-links > li { line-height: 102px; }
-.mega-menu .menu-links > li > a { /*line-height: 102px*/; text-transform: uppercase; font-size: 13px; font-weight: 500; }
+.mega-menu .menu-links > li > a { /*line-height: 102px*/ text-transform: uppercase; font-size: 13px; font-weight: 500; }
 .mega-menu .drop-down-multilevel.right-menu { right: 0px; }
 .mega-menu .menu-links > li:last-child > a { padding-right: 0px; }
 .mega-menu .menu-links > li.active .drop-down-multilevel a { color: #555555; }
@@ -1077,7 +1077,7 @@ footer .copyright ul li a:hover { color: #db2d2e; }
 /*************************************
         Inner intro
 **************************************/
-.inner-intro { height: auto; display: block; padding: 10px 0;}
+.inner-intro { height: auto; display: block; padding: 25px 0;}
 .inner-intro .container { display: table; height: 100%; position: relative; }
 .inner-intro span { text-transform: capitalize; }
 .intro-title { display: table-cell; vertical-align: bottom; padding-bottom: 00px; }
@@ -2388,7 +2388,7 @@ app-form-validation-errors {color:red;}
     
     
     .added_address ul {
-        margin-top: 0px;
+        margin-top: 44px;
     }
     
     .added_address ul li {

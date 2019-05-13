@@ -91,7 +91,8 @@ i.float-right {margin-top: 2px; font-size: 12px !important;}
 }
 
 .custom-css .added_address ul {
-    max-height: 440px;    
+    max-height: 440px; 
+    margin-top:0px;   
 }    
 
 .custom-css .my-scrollbar .ng-scrollbar-thumb  {
