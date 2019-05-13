@@ -78,5 +78,8 @@ export const environment = {
     DEALERSHIP_ADDED: 'Dealership has been added successfully.',
     DEALERSHIP_UPDATED: 'Dealership has been updated successfully.',
     DELETING_RECORD: 'Deleting Record...',//new
+    CONTACT_ADDED: 'Legal Contact has been added successfully.',
+    NO_RECORDS_FOUND: 'No Records Found.',
+    
   }
 };

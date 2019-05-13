@@ -19,12 +19,17 @@ export class CarDetailPageComponent implements OnInit {
   isImageFilterEnable:Boolean = false
   selectedCategories: any= []
   allCategoryCars:any = []
+ 
+  
 
   title: string = 'Car Detail';
   breadcrumbs: any[] = [{ page: 'Home', link: '' }, { page: "Car Listing", link: '/seller/car-listing' }, { page: 'Car Detail', link: '' }]
 
-  constructor(private location: Location, private activatedRoute: ActivatedRoute, private carService: CarService, private commonUtilsService: CommonUtilsService) {
+  constructor(private location: Location, private activatedRoute: ActivatedRoute, private carService: CarService, private commonUtilsService: CommonUtilsService, private titleService:TitleService) {
     
+    //setting the page title
+    this.titleService.setTitle();
+
     this.commonUtilsService.showPageLoader();
 
     if('type' in this.activatedRoute.snapshot.params){
@@ -36,7 +41,8 @@ export class CarDetailPageComponent implements OnInit {
 
       //case success
       (response) => {
-        this.carDetail = response
+        this.carDetail = response     
+      
         this.allCategoryCars = this.carDetail.car_images
         this.commonUtilsService.hidePageLoader();
         setTimeout(function () {
@@ -79,7 +85,7 @@ export class CarDetailPageComponent implements OnInit {
     (event.target.checked)?this.selectedCategories.push(event.target.value):_.pullAt(this.selectedCategories,this.selectedCategories.indexOf(event.target.value))
   
     if(this.selectedCategories.length)
-      this.allCategoryCars = this.carDetail.car_images.filter((l) => _.includes(this.selectedCategories,l.category) ).map((l) => l);
+      this.allCategoryCars = this.carDetail.car_images.filter((l) => _.includes(this.selectedCategories,l.file_category) ).map((l) => l);
     else
       this.allCategoryCars = this.carDetail.car_images
 

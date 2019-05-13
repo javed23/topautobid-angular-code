@@ -72,7 +72,7 @@ export class CreateContactComponent implements OnInit {
     ]
   }
   
-  constructor(private http: HttpClient, private commonUtilsService:CommonUtilsService, private dealershipService: DealershipService, private pageLoaderService: PageLoaderService, private toastr: ToastrManager, private formBuilder: FormBuilder, private zone: NgZone,private router: Router) {
+  constructor(private titleService:TitleService, private http: HttpClient, private commonUtilsService:CommonUtilsService, private dealershipService: DealershipService, private pageLoaderService: PageLoaderService, private toastr: ToastrManager, private formBuilder: FormBuilder, private zone: NgZone,private router: Router) {
 
     //fetching us states
     this.fetchStates();
@@ -81,7 +81,9 @@ export class CreateContactComponent implements OnInit {
   
 
   ngOnChanges(changes: SimpleChanges) {
-
+    //setting the page title
+    this.titleService.setTitle();
+    
     if(this.isOpen){     
       $(this.contentSection.nativeElement).modal({backdrop: 'static', keyboard: false, show: true}); 
     }     
@@ -225,47 +227,49 @@ export class CreateContactComponent implements OnInit {
         state: [null, Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50),Validators.pattern('^[a-zA-Z ]*$')])],
         city: [null, Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50),Validators.pattern('^[a-zA-Z ]*$')])],
         zip: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])],
-        address_1 : [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')])],
-        address_2 : [null, Validators.compose([Validators.minLength(2), Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')])],
+        address_1 : [null, Validators.compose([Validators.required])],
+        address_2 : [null],
         default_legal_contact:[null],
         _id: [null],
-      })
-      console.log('newLegalContactForm',this.newLegalContactForm);
+      })      
     }
 
   private resetForm(){   
     this.zone.run(() => { 
       $(".dz-image img").attr('src', environment.WEB_ENDPOINT + '/' + environment.DEFAULT_PROFILE);
-      /*this.data = {
-        phones: [
-          {
-            phone: "",
-            default_phone: false,
-            country_code:environment.DEFAULT_COUNTRY_CODE
-          }
-        ],
-        emails: [
-          {
-            email: "",
-            default_email: false
-          }
-        ],
-        faxs: [
-          {
-            number: "",
-            default_fax: false
-          }
-        ]
-      } */    
+      
     });
     
-   // this.newLegalContactForm.reset(); 
-    //this.newLegalContactForm.reset({title:'',city:''}); 
-    /*this.initalizeNewLegalContactForm();  
+    this.newLegalContactForm.reset(); 
+    this.data = {
+      phones: [
+        {
+          phone: "",
+          default_phone: false,
+          country_code:environment.DEFAULT_COUNTRY_CODE
+        }
+      ],
+      emails: [
+        {
+          email: "",
+          default_email: false
+        }
+      ],
+      faxs: [
+        {
+          number: "",
+          default_fax: false
+        }
+      ]
+    } 
+    this.initalizeNewLegalContactForm();
     this.setPhones();
     this.setEmails();
-    this.setFaxs()*/
+    this.setFaxs()
+    console.log('updatd newLegalContactForm',this.newLegalContactForm);
+   
     
+
     
    
   }
@@ -474,7 +478,7 @@ editNewLegalContact(index) {
     this.newLegalContactForm.patchValue(this.legalContactItems[index]) //binding the dealership datat 
   });
     
-  console.log('newLegalContactForm',this.newLegalContactForm.value);
+
   /*Object.keys(this.newDealershipForm.controls).forEach(key => {      
     this.newDealershipForm.get(key).setValue(this.dealershipsItems[index][key])
   });*/
@@ -496,7 +500,11 @@ updateNewLegalContact() {
 } 
 
 // To delete specific dealership  
-deleteNewLegalContact(index) {  
+async deleteNewLegalContact(index) { 
+  //confirm before deleting car
+  if(! await this.commonUtilsService.isDeleteConfirmed()) {
+    return;
+  } 
   var pulled = _.pullAt(this.legalContactItems, [index]);
 }
 
@@ -532,7 +540,7 @@ onCreateLegalContact() {
         $(this.contentSection.nativeElement).modal('hide');
         this.pageLoaderService.pageLoader(false);//show page loader
         this.pageLoaderService.setLoaderText('');//setting loader text                   
-        this.toastr.successToastr(environment.MESSAGES.DEALERSHIP_ADDED, 'Success!'); //showing success toaster 
+        this.toastr.successToastr(environment.MESSAGES.CONTACT_ADDED, 'Success!'); //showing success toaster 
         this.pageLoaderService.refreshPage(true) 
        // this.setPage(this.defaultPagination);
         

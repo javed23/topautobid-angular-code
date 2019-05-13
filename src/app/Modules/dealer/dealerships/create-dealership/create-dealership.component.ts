@@ -53,8 +53,9 @@ export class CreateDealershipComponent implements OnInit {
 
   
 
-  constructor(private http: HttpClient, private commonUtilsService:CommonUtilsService, private dealershipService: DealershipService, private pageLoaderService: PageLoaderService, private toastr: ToastrManager, private formBuilder: FormBuilder, private zone: NgZone,private router: Router) {
+  constructor(private titleService:TitleService, private http: HttpClient, private commonUtilsService:CommonUtilsService, private dealershipService: DealershipService, private pageLoaderService: PageLoaderService, private toastr: ToastrManager, private formBuilder: FormBuilder, private zone: NgZone,private router: Router) {
 
+    
     //initalize new dealership form
     this.initalizeNewDealershipForm();
 
@@ -65,7 +66,9 @@ export class CreateDealershipComponent implements OnInit {
   
 
   ngOnChanges(changes: SimpleChanges) {
-
+    //setting the page title
+    this.titleService.setTitle();
+    
     if(this.isOpen)    
       $(this.contentSection.nativeElement).modal({backdrop: 'static', keyboard: false, show: true});       
       
@@ -300,12 +303,14 @@ export class CreateDealershipComponent implements OnInit {
     var pulled = _.pullAt(this.dealershipsItems, [index]);
   }
 
+
   //saving the new dealership
   onCreateDealership() {   
      
     console.log('dealershipsItems',this.dealershipsItems);
     if(this.dealershipsItems.length == 0){
       this.submitted = true;
+      this.toastr.errorToastr('Please add atleast one dealership.', 'Oops!');//showing error toaster message 
       return;
     }else{
       console.log('this.dealershipsItems',this.dealershipsItems);

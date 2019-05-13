@@ -23,7 +23,7 @@ export class CarService {
     public listingCars(page: Page): Observable<PagedData<Car>> {
 
         //page['seller_id'] = localStorage.getItem('loggedinUserId') 
-        page['seller_id'] = '5c99ee618fb7ce6cf845a53d'
+        page['seller_id'] = '5cd170562688321559f12f32'
         return this.httpClient.post('car/listingCars', page)
             .map((response: any) => {
 
@@ -35,7 +35,10 @@ export class CarService {
                 let start = page.pageNumber * page.size;
                 for (let i in response.records) {
                     let jsonObj = response.records[i];
+                    console.log('jsonObj',jsonObj);
                     let car = new Car(jsonObj);
+
+                    console.log('created object',car);
                     pagedData.data.push(car);
                 }
                 pagedData.page = page;
@@ -52,7 +55,7 @@ export class CarService {
    public listingCarsOnDatable(page: Page): Observable<PagedData<Car>> {
     
     //page['seller_id'] = localStorage.getItem('loggedinUserId') 
-    page['seller_id'] = '5c99ee618fb7ce6cf845a53d'
+    page['seller_id'] = '5cd170562688321559f12f32'
     return this.httpClient.post('car/listingCarsOnDatable', page,)
     .map((response: any) => {         
         
@@ -124,7 +127,11 @@ export class CarService {
     public carDetail(carIdObject): Observable<any> {
 
         return this.httpClient.post('car/carDetail', carIdObject)
-            .map((response: any) => response)
+            .map((response: any) => { 
+                let car = new Car(response);
+                console.log('car detail', car);
+                return car;
+             })
     }
     /*
     * @param carData    car object to delete from database.

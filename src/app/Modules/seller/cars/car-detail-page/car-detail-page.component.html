@@ -95,9 +95,16 @@ car-details -->
       </div>
       <div class="row">
        <div class="col-md-6">
+          
           <div class="slider-slick relative">
-
-              <div class="image_filter">
+             
+                  <div *ngIf="! allCategoryCars.length" class="slider slider-for detail-big-car-gallery"> 
+                      <span>
+                          <img src="/assets/images/no_vehicle.png" alt="" class="img-fluid">
+                      </span> 
+                  </div> 
+             
+              <div *ngIf="allCategoryCars.length" class="image_filter">
                   <div class="filter_dropdown">
                     <a (click)="imageFilterToggle()" href="javascript:void(0)" id="filter_menu_link"><img
                         src="assets/images/filter_icon.png"></a>
@@ -109,24 +116,19 @@ car-details -->
                         <li><input type="checkbox" value="interior" id="interior" (change)="onImageFilter($event)"> <label
                             for="interior">Interior</label></li>
       
-                      </ul>
-      
-      
-      
-      
-      
+                      </ul>    
       
                     </div>
                   </div>
                 </div>
-              <div class="slider slider-for detail-big-car-gallery"> 
+              <div *ngIf="allCategoryCars.length"class="slider slider-for detail-big-car-gallery"> 
                 <span *ngFor="let carImg of allCategoryCars">
-                    <img src="/assets/images/bg/cars/big/{{carImg.name}}" alt="" class="img-fluid">
+                    <img src="{{carImg.file_path}}" alt="" class="img-fluid">
                 </span>                 
               </div>
-              <div class="slider slider-nav"> 
+              <div *ngIf="allCategoryCars.length" class="slider slider-nav"> 
                   <span *ngFor="let carThumbImg of allCategoryCars">
-                      <img src="/assets/images/bg/cars/small/{{carThumbImg.name}}" alt=""
+                      <img src="{{carThumbImg.file_path}}" alt=""
                     class="img-fluid">
                   </span>    
                   
@@ -184,23 +186,23 @@ car-details -->
                   <tbody>
                     <tr>
                       <th scope="row"> Body</th>
-                      <td>Mark</td>
+                      <td>{{carDetail?.body_style | titlecase}}</td>
                     </tr>
                     <tr>
                       <th scope="row"> Trim</th>
-                      <td>Jacob</td>
+                      <td>{{carDetail?.trim | titlecase}}</td>
                     </tr>
-                    <tr>
+                    <!--<tr>
                       <th scope="row"> VIN</th>
-                      <td>Larry</td>
-                    </tr>
+                      <td>{{carDetail?.vin | titlecase}}</td>
+                    </tr>-->
                     <tr>
                       <th scope="row"> Engine</th>
-                      <td>Larry</td>
+                      <td>{{carDetail?.engine | titlecase}}</td>
                     </tr>
                     <tr>
                       <th scope="row">Transmission</th>
-                      <td>Larry</td>
+                      <td>{{carDetail?.transmission | titlecase}}</td>
                     </tr>
                     <tr>
                       <th scope="row">Mileage</th>

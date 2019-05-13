@@ -78,8 +78,9 @@ export class ListComponent implements OnInit, AfterViewInit {
   readonly breadcrumbs: any[] = [{ page: 'Home', link: '/dealer/home' }, { page: 'Dealership Listing', link: '' }]
    
   constructor(private http: HttpClient, private titleService:TitleService,private commonUtilsService:CommonUtilsService, private dealershipService: DealershipService, private pageLoaderService: PageLoaderService, private toastr: ToastrManager, private formBuilder: FormBuilder, private ngZone: NgZone) {
+    
     this.pageLoaderService.shouldPageLoad.subscribe((SholdPageRefresh: boolean) => {
-      console.log('SholdPageRefresh',SholdPageRefresh);
+     
       if(SholdPageRefresh){
         this.viewedPages = [];
         this.setPage(this.defaultPagination); 
@@ -87,7 +88,8 @@ export class ListComponent implements OnInit, AfterViewInit {
       }
     })
 
-    
+    //setting the page title
+    this.titleService.setTitle();
 
     //fetching the data with default settings
     this.setPage(this.defaultPagination);    
@@ -198,7 +200,7 @@ export class ListComponent implements OnInit, AfterViewInit {
    * Search results according to user inputs
    * @param searchValue user inputs to search particular data
    * @return  void
-   */
+  */
   onSearch(searchValue : string){
     this.viewedPages = [];
     this.page.search = searchValue
@@ -209,7 +211,7 @@ export class ListComponent implements OnInit, AfterViewInit {
    * To change the records limit on page
    * @param limit number of records to dispaly on page
    * @return  void
-   */
+  */
   public onLimitChange(limit: any): void {   
     this.viewedPages = [];
     //console.log('viewedPages',this.viewedPages);
@@ -221,13 +223,69 @@ export class ListComponent implements OnInit, AfterViewInit {
    * To sort the records
    * @param event event object which have column name and direction data
    * @return  void
-   */
+  */
   onSort(event) {
     this.viewedPages = [];
     const sort = event.sorts[0];
     this.page.sortProperty = sort.prop
     this.page.sortDirection = sort.dir   
-    this.setPage(this.defaultPagination);    
+    this.setPage(this.defaultPagination);  
+    
+    
+    this.page.pageNumber = 0
+    this.page.size =this.currentPageLimit
+   
+
+    if(!this.page.search){
+      this.pageLoaderService.setLoaderText(environment.MESSAGES.FETCHING_RECORDS);//setting loader text
+      this.pageLoaderService.pageLoader(true);//show page loader
+    }
+    
+    this.dealershipService.listingDealershipOnDatable(this.page).subscribe(
+      (pagedData) => {
+      
+      this.page = pagedData.page;
+
+      let dealerships = this.dealerships;
+      if (dealerships.length !== pagedData.page.totalElements) {
+        dealerships = Array.apply(null, Array(pagedData.page.totalElements));
+        
+        dealerships = dealerships.map((x, i) => this.dealerships[i]);
+      }
+      console.log('before sort',dealerships);
+      // calc start
+      const start = this.page.pageNumber * this.page.size;
+      
+      // set dealerships to our new dealerships
+      pagedData.data.map((x, i) => dealerships[i + start] = x);
+
+      /*const sort = event.sorts[0];
+      dealerships.sort((a, b) => {
+        return a[sort.prop].localeCompare(b[sort.prop]) * (sort.dir === 'desc' ? -1 : 1);
+      });*/
+      console.log('after sort',dealerships);
+      this.dealerships = dealerships;
+
+      
+
+      
+      this.dealerships = [...this.dealerships];
+      console.log('this.dealerships',this.dealerships);
+   
+      this.pageLoaderService.pageLoader(false);//show page loader
+      this.pageLoaderService.setLoaderText('');//setting loader text
+    
+
+    },error => {
+
+      this.pageLoaderService.setLoaderText(environment.MESSAGES.ERROR_TEXT_LOADER);//setting loader text
+      this.pageLoaderService.pageLoader(false);//hide page loader
+      this.toastr.errorToastr(error, 'Oops!');//showing error toaster message
+
+    });
+
+
+
   }
 
   /**
@@ -237,6 +295,7 @@ export class ListComponent implements OnInit, AfterViewInit {
 
   
  async delete(item){
+
     //confirm before deleting car
     if(! await this.commonUtilsService.isDeleteConfirmed()) {
       return;
@@ -271,7 +330,7 @@ export class ListComponent implements OnInit, AfterViewInit {
   /**
    * Filters records when user click on 'Apply Filters' button
    * @return  void
-   */
+  */
   onApplyingFilters(){
     this.viewedPages = [];
     this.page.filters = this.filtersForm.value

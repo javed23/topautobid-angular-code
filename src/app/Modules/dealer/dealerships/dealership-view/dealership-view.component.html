@@ -128,8 +128,8 @@
                       <td>{{contact.title}}</td>
                       <td *ngFor="let email of contact.emails"><span *ngIf="email.default">{{ email.email }}</span></td>
                       <td *ngFor="let phone of contact.phones"><span
-                          *ngIf="phone.default">{{ phone.country_code }}{{ phone.phone }}</span></td>
-                      <td *ngFor="let fax of contact.faxs"><span *ngIf="fax.default">{{ fax.number }}</span></td>
+                          *ngIf="phone.default">{{ phone.country_code }} {{phone.phone | mask: '(000) 000-0000'}}</span></td>
+                      <td *ngFor="let fax of contact.faxs"><span *ngIf="fax.default">{{ fax.country_code }} {{ fax.number | mask: '(000) 000-0000'}}</span></td>
                       <td *ngIf="contact.default_legal_contact">Yes</td>
                       <td *ngIf="!contact.default_legal_contact">No</td>
                     </tr>

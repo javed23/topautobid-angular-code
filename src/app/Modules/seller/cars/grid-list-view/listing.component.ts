@@ -31,8 +31,9 @@ export class ListingComponent implements OnInit {
   trims:any=[]
   bodyStyles:any=[{name: "2 Door Convertible"}, {name: "2 Door Coupe"}, {name: "4 Door Sedan"}];  
   transmissions:any=[{name: "Automated-Manual"}, {name: "Continuously Variable Transmission"}, {name: "Dual-Clutch Transmission"}]; 
-  interiorColors= [{name: "Black"}, {name: "Blue"}, {name: "Brown"}, {name: "Grey"}, {name: "Red"}, {name: "Silver"}];
-  exteriorColors= [{name: "Black"}, {name: "Blue"}, {name: "Brown"}, {name: "Grey"}, {name: "Red"}, {name: "Silver"}];
+  interiorColors= [{label:'Beige',value:'#F5F5DC'},{label:'Black',value:'#252627'},{label:'Brown',value:'#672E10'},{label:'Burgundy',value:'#75141C'},{label:'Charcoal Grey',value:'#757776'},{label:'Dark Blue',value:'#172356'},{label:'Dark Green',value:'#316241'},{label:'Gold',value:'#D6C17F'},{label:'Grey',value:'#808080'},{label:'Light Blue',value:'#5F7DC5'},{label:'Light Green',value:'#8E9F87'},{label:'Orange',value:'#FF9200'},{label:'Purple',value:'#6A4574'},{label:'Red',value:'#E32F43'},{label:'Silver',value:'#D4D9DC'},{label:'Tan',value:'#D2B48C'},{label:'White',value:'#F2F6F9'},{label:'Yellow',value:'#F8E81C'}];
+  
+  exteriorColors= [{label:'Beige',value:'#F5F5DC'},{label:'Black',value:'#252627'},{label:'Brown',value:'#672E10'},{label:'Burgundy',value:'#75141C'},{label:'Charcoal Grey',value:'#757776'},{label:'Dark Blue',value:'#172356'},{label:'Dark Green',value:'#316241'},{label:'Gold',value:'#D6C17F'},{label:'Grey',value:'#808080'},{label:'Light Blue',value:'#5F7DC5'},{label:'Light Green',value:'#8E9F87'},{label:'Orange',value:'#FF9200'},{label:'Purple',value:'#6A4574'},{label:'Red',value:'#E32F43'},{label:'Silver',value:'#D4D9DC'},{label:'Tan',value:'#D2B48C'},{label:'White',value:'#F2F6F9'},{label:'Yellow',value:'#F8E81C'}];
   isAllBodySelected:boolean=false;
   isAllTransmissionSelected:boolean=false;
   isAllInteriorColorSelected:boolean=false;
@@ -64,9 +65,13 @@ export class ListingComponent implements OnInit {
   readonly breadcrumbs: any[] = [{ page: 'Home', link: '/seller/home' }, { page: 'Car Listing', link: '' }]
 
 
-  constructor(private commonUtilsService:CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private ngZone: NgZone) {
+  constructor(private commonUtilsService:CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private ngZone: NgZone, private titleService:TitleService) {
     //fetching the data with default settings
     this.currentPage = 0
+
+    //setting the page title
+    this.titleService.setTitle();
+
     this.setPage(this._defaultPagination,'all');
     this.page.filters={}
   }
@@ -446,8 +451,8 @@ resetAll(filter,keyName=''):void{
     if(!keyName.length) this.isAllInteriorColorSelected = true
     this.interiorColors.forEach(element=> {
       if(keyName.length){
-        console.log('element.name',element.name);
-        if(element.name == keyName){
+        console.log('element.name',element.label);
+        if(element.label == keyName){
           element['checked'] = false
           console.log('element',element);
           return false;
@@ -462,7 +467,7 @@ resetAll(filter,keyName=''):void{
     if(!keyName.length)  this.isAllExtriorColorSelected = true
     this.exteriorColors.forEach(element=> {
       if(keyName.length){
-        if(element.name == keyName){
+        if(element.label == keyName){
           element['checked'] = false
           return false;
         }       
@@ -618,7 +623,7 @@ uncheckAllFetchRecords(option, filter):void{
   const data =  {
     id:item._id,
     //seller_id:localStorage.getItem('loggedinUserId')      .
-    seller_id:'5c99ee618fb7ce6cf845a53d' 
+    seller_id:'5cd170562688321559f12f32' 
     
   } 
 

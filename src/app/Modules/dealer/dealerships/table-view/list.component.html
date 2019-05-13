@@ -80,9 +80,7 @@
           <div class="sidebar-widget">
             <div class="unordered-lists table-responsive text-center">
 
-              <ngx-datatable #listingTable class="bootstrap" [rows]="dealerships" [sorts]="[{prop: 'created', dir: 'desc'}]"
-                [columnMode]="'force'" [headerHeight]="50" [limit]="currentPageLimit" [footerHeight]="80"
-                [rowHeight]="50" (sort)="onSort($event)" (page)="setPage($event)">
+              <ngx-datatable #listingTable class="bootstrap" [rows]="dealerships" [sorts]="[{prop: 'created', dir: 'desc'}]" [externalSorting]="true" [columnMode]="'force'" [headerHeight]="50" [limit]="currentPageLimit" [footerHeight]="80"  [rowHeight]="50" (sort)="onSort($event)" (page)="setPage($event)">
 
 
                 <ngx-datatable-row-detail [rowHeight]="100" #myDetailRow (toggle)="onDetailToggle($event)">
@@ -101,9 +99,12 @@
                         
                         <div class="row_detail col-md-12" *ngIf="row?.legal_contacts.length">
                             
-                            <div class="row_detail_inner" *ngFor="let contact of row?.legal_contacts"> 
-                                                                   
-                            <div class="row" *ngIf="contact.default_legal_contact">
+                            <div *ngFor="let contact of row?.legal_contacts"> 
+                                  <div class="row_detail_inner" *ngIf="contact.default_legal_contact">                               
+                            <div class="row" >
+                                <div class="col-md-12">                                   
+                                      <h6>Default Legal Contact</h6>
+                                </div>
                                 <div class="col-md-3">
                                     <span class="head">Title:</span>
                                     <span class="value">{{contact.title}}</span> 
@@ -122,7 +123,7 @@
                                 </div>
                                 
                             </div>
-                            <div class="row" *ngIf="contact.default_legal_contact">
+                            <div class="row">
                                     <div class="col-md-3">
                                             <span class="head">State:</span>
                                             <span class="value">{{contact.state}}</span> 
@@ -136,10 +137,11 @@
                                             <span class="value">{{contact.zip}}</span> 
                                     </div>
                                     <div class="col-md-3">
-                                            <span class="head">Address Line 1:</span>
-                                            <span class="value">{{contact.address_1}}</span> 
+                                            <span class="head">Default Contact:</span>
+                                            <span class="value">Yes</span> 
                                     </div>
                                 </div>
+                              </div>
                         </div>
                         </div>
                     

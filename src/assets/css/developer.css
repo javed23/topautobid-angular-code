@@ -255,6 +255,8 @@ ngb-datepicker-navigation-select select{
 
 .car-item .car-image img {
     max-height: 100%;
+    width: 100%;
+    object-fit: cover;
 }
 input[type=search] { 	
     font-style:italic;       
@@ -412,5 +414,35 @@ ngb-rating {
 .swal2-container {z-index: 999999999 !important;}
 .swal2-container.swal2-center.swal2-fade.swal2-shown {z-index: 9999999999 !important;}
 
+.slick-slide img {
+    margin: auto;
+}
 
 
+
+#toastr-container[_ngcontent-c14] {
+    z-index: 9999999999999!important;
+}
+
+.button{
+    border: 0;
+}
+
+.color_circle {
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+    border-radius: 100%;
+    vertical-align: middle;
+    margin-left: 3px;
+    border: 1px solid #a7a7a7;
+}
+
+.listing-sidebar .list-group-item > ul {
+    max-height: 200px;
+    overflow: auto;
+}
+
+.slick-slide img {
+    width: 100%;
+}

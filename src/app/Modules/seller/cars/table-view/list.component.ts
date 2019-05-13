@@ -19,7 +19,6 @@ declare let jQuery: any;
 declare let $: any;
 declare let POTENZA: any;
 import * as _ from 'lodash';
-import Swal from 'sweetalert2'
 
 
 @Component({
@@ -68,10 +67,12 @@ export class ListComponent implements AfterViewInit {
 
 
 
-  constructor(private commonUtilsService:CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder) {
+  constructor(private commonUtilsService:CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private titleService:TitleService) {
 
     //fetching the data with default settings
     this.setPage(this._defaultPagination,'all');
+    //setting the page title
+    this.titleService.setTitle();
   }
   
   /**
@@ -302,7 +303,7 @@ onSort(event) {
       const data =  {
         id:item._id,
         //seller_id:localStorage.getItem('loggedinUserId')    
-        seller_id:"5c99ee618fb7ce6cf845a53d"
+        seller_id:"5cd170562688321559f12f32"
           
       } 
 

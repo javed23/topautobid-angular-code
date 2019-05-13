@@ -171,8 +171,8 @@
                                         </div>
                                         <div class="row">
                                                 <div class="col-md-3">
-                                                        <span class="head">VIN:</span>
-                                                        <span class="value">{{row.vin}}</span> 
+                                                        <span class="head">Interior Material:</span>
+                                                        <span class="value">{{row.interior_material}}</span> 
                                                 </div>
                                                 <div class="col-md-3">
                                                         <span class="head">Fuel Type:</span>
@@ -231,10 +231,11 @@
                                     </ng-template>
                                 </ngx-datatable-column>
                                 
-                                <ngx-datatable-column name="bids" [sortable]="true" [width]="200">
+                                <ngx-datatable-column name="bids" [sortable]="false" [width]="200">
                                     <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
-
-                                        <b>{{row.best_bid | currency:'USD':true:'2.2-2'}} </b> <span
+                                        $<b>0.00</b>
+                                        <!--<b>{{row.best_bid | currency:'USD':true:'2.2-2'}} </b> -->
+                                        <span
                                             *ngIf="row.bids.length>1" class="left_bids">
                                             <!--<button (click)="show(rowIndex, 'posted-car-bids')" class="left_bids">+{{row.bids.length}} more</button>-->
                                             
@@ -280,6 +281,8 @@
                                         </span>
                                     </ng-template>
                                 </ngx-datatable-column>
+
+                                
                                 <ngx-datatable-footer>
                                     <ng-template ngx-datatable-footer-template let-rowCount="rowCount"
                                         let-pageSize="pageSize" let-selectedCount="selectedCount" let-curPage="curPage"
