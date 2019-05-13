@@ -12,6 +12,11 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 //dealerships management components
 import { ListComponent as DealershipsListComponent } from './dealerships/table-view/list.component';
 
+//cars management components
+import { ListingComponent as CarsGridListComponent } from './cars/grid-list-view/listing.component';
+import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
+
+
 //importing guards
 import { DealerAuthGuardService } from '../../core/guards/dealer-auth-guard.service'
 
@@ -55,7 +60,19 @@ const routes: Routes = [
     path: 'dealership-listing', 
     component: DealershipsListComponent, 
     data: { title: 'Dealerships listing' }
-  }
+  },
+  { 
+    path: 'car-listing', 
+    component: CarsGridListComponent, 
+    data: { title: "Dealer's Cars listing" },
+    /*canActivate: [DealerAuthGuardService]*/
+  }, 
+  { 
+    path: 'car-detail/:_id', 
+    component: CarDetailPageComponent, 
+    data: { title: "Car Details" },
+    /*canActivate: [DealerAuthGuardService]*/
+  },
 ];
 
 @NgModule({

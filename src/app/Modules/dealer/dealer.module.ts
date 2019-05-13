@@ -40,6 +40,12 @@ import { DealershipViewComponent } from './dealerships/dealership-view/dealershi
 import { CreateDealershipComponent } from './dealerships/create-dealership/create-dealership.component';
 import { CreateContactComponent } from './dealerships/create-contact/create-contact.component';
 
+//cars management components
+import { ListingComponent as CarsGridListComponent } from './cars/grid-list-view/listing.component';
+import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
+
+
+
 //facebook, google authentication configuration
 /*const fbLoginOptions: LoginOpt = {
   scope: 'email',
@@ -85,7 +91,9 @@ let config = new AuthServiceConfig([
     ContactViewComponent,
     DealershipViewComponent,
     CreateDealershipComponent,
-    CreateContactComponent
+    CreateContactComponent,
+    CarsGridListComponent,
+    CarDetailPageComponent
   ],
   imports: [
     CommonModule,

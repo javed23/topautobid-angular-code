@@ -47,7 +47,7 @@ declare let POTENZA:any;
   animations: [
     trigger('AnimateList', [
       transition(':enter', [  
-        style({opacity: 0, transform: 'translateX(75%)', offset: 1.0}),
+        style({opacity: 0, transform: 'translateX(75%)'}),
         animate('1s 500ms ease')
       ])
     ])
@@ -59,14 +59,14 @@ export class AddCarComponent implements OnInit {
 
   // Define Page Title and Breadcrumbs
   title:string = 'New Car Listing';
-  breadcrumbs: any[] = [{ page: 'Home', link: '' }, { page: "Car Listing", link: '/seller/car-listing' }, { page: 'New Car', link: '' }]
-
+  breadcrumbs:any = [{page:'Home',link:''},{page:'New Car Listing',link:''}]
 
   // Smooth Scroll To Add Car Form Wizard
   @ViewChild("contentSection") contentSection: ElementRef;
 
   // Array where we are going to do CRUD operations
   //vehicleImagesArray:any = [{Interior: []}, {Exterior: []}];
+  vehicleImages:any = [];
   interiorImagesArray:any = [];
   exteriorImagesArray:any = [];  
   getVehicleYear:string = "";
@@ -141,8 +141,7 @@ export class AddCarComponent implements OnInit {
 
   
   getMakeByYearArray:any = [];
-  getModelByMakeIdArray:any = [];
-  private _vehicleImage:string = '';
+  getModelByMakeIdArray:any = [];  
   private _secondKey:boolean= false;
   private _vehicleAftermarket:boolean= false;
   private _vehicleOwnership:string = 'Salvage';
@@ -268,7 +267,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     this.pickupLocationWizard = this.formBuilder.group({      
       vehicle_to_be_picked_up:  [false],             
       willing_to_drive : [false],
-      willing_to_drive_how_many_miles: ['']                      
+      willing_to_drive_how_many_miles: [0]                      
     });
   }
 
@@ -302,14 +301,21 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       }
     }
 
+    // Merge Category Image Array    
+    this.vehicleImages = [...this.interiorImagesArray, ...this.exteriorImagesArray];
+
+    this.vehicleImages.forEach(vehicleImage => {
+          this.vehicleImagesArray.push(new FormControl({file_path : vehicleImage.file_path, file_name : vehicleImage.file_name, file_key : vehicleImage.file_key, file_category : vehicleImage.file_category}))
+    }); 
+
     // set Default Vin Number
-    this.vehicleOption.controls.vin_number.setValue('1C6RR7GT1ES223950');
+    //this.vehicleOption.controls.vin_number.setValue('1C6RR7GT1ES223950');
 
     var mergeVehicleData = Object.assign(this.vehicleOption.value, this.basicInfoWizard.value, this.uploadVehicleImagesWizard.value, this.aboutVehicleWizard.value, this.vehicleConditionWizard.value, this.pickupLocationWizard.value, this.offerInHands.value);
 
-    console.log(mergeVehicleData);
+    //console.log(mergeVehicleData);
 
-    this.commonUtilsService.showPageLoader();
+    this.commonUtilsService.showPageLoader('Saving Your Car...');
 
     this.addVehicleSubscription = this.vehicleService.addYourVehicle(mergeVehicleData)
       .subscribe(
@@ -367,7 +373,8 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
           const reader = new FileReader();
           const _this = this
-          reader.onload = function(event) {             
+          reader.onload = function(event) {  
+                       
               let base64String = reader.result      
               const fileExtension = (file.name).split('.').pop();
               const isValidFile = componentObj.commonUtilsService.isImageCorrupted(base64String,_.toLower(fileExtension))              
@@ -392,7 +399,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
         this.on("totaluploadprogress",function(progress){          
           componentObj.pageLoaderService.pageLoader(true);//start showing page loader
-          componentObj.pageLoaderService.setLoaderText('Uploading file '+progress+'%');//setting loader text
+          componentObj.pageLoaderService.setLoaderText('Uploading file '+parseInt(progress)+'%');//setting loader text
           if(progress>=100){
             componentObj.pageLoaderService.pageLoader(false); //hide page loader
           }
@@ -490,7 +497,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
       this.on("totaluploadprogress",function(progress){          
         componentObj.pageLoaderService.pageLoader(true);//start showing page loader
-        componentObj.pageLoaderService.setLoaderText('Uploading file '+progress+'%');//setting loader text
+        componentObj.pageLoaderService.setLoaderText('Uploading file '+parseInt(progress)+'%');//setting loader text
         if(progress>=100){
           componentObj.pageLoaderService.pageLoader(false); //hide page loader
         }
@@ -500,7 +507,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
          
         
         componentObj.zone.run(() => { 
-          componentObj.afterMarketImagesArray.push(new FormControl({file_path : serverResponse.fileLocation, file_name : serverResponse.fileKey, file_key : serverResponse.fileName, file_category : 'aftermarket'}));
+          componentObj.afterMarketImagesArray.push(new FormControl({file_path : serverResponse.fileLocation, file_name : serverResponse.fileName, file_key : serverResponse.fileKey, file_category : 'aftermarket'}));
           
         });
         this.removeFile(file);
@@ -590,7 +597,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
         this.on("totaluploadprogress",function(progress){          
           componentObj.pageLoaderService.pageLoader(true);//start showing page loader
-          componentObj.pageLoaderService.setLoaderText('Uploading file '+progress+'%');//setting loader text
+          componentObj.pageLoaderService.setLoaderText('Uploading file '+parseInt(progress)+'%');//setting loader text
           if(progress>=100){
             componentObj.pageLoaderService.pageLoader(false); //hide page loader
           }
@@ -694,7 +701,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
         this.on("totaluploadprogress",function(progress){          
           componentObj.pageLoaderService.pageLoader(true);//start showing page loader
-          componentObj.pageLoaderService.setLoaderText('Uploading file '+progress+'%');//setting loader text
+          componentObj.pageLoaderService.setLoaderText('Uploading file '+parseInt(progress)+'%');//setting loader text
           if(progress>=100){
             componentObj.pageLoaderService.pageLoader(false); //hide page loader
           }
@@ -702,7 +709,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
        
         this.on("success", function(file, serverResponse) {
 
-          componentObj.vehicleImage = serverResponse.fileLocation; 
+          
           
           componentObj.zone.run(() => { 
             if(componentObj.getVehicleImageCategory() == "Interior"){
@@ -712,7 +719,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
               componentObj.exteriorImagesArray.push({file_path : serverResponse.fileLocation, file_key : serverResponse.fileKey, file_name : serverResponse.fileName, file_category : componentObj.getVehicleImageCategory().toLowerCase()});
             }
 
-            componentObj.vehicleImagesArray.push(new FormControl({file_path : serverResponse.fileLocation, file_key : serverResponse.fileKey, file_name : serverResponse.fileName, file_category : componentObj.getVehicleImageCategory().toLowerCase()}));
+            //componentObj.vehicleImagesArray.push(new FormControl({file_path : serverResponse.fileLocation, file_key : serverResponse.fileKey, file_name : serverResponse.fileName, file_category : componentObj.getVehicleImageCategory().toLowerCase()}));
 
           });
 
@@ -735,13 +742,15 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    * @param index index of the image array
    * @return  boolean
    */
-  removeImage(index, file_category): void {
+  removeImage(index, file_category, file_key): void {
     
     if(file_category == 'interior'){ _.pullAt(this.interiorImagesArray, [index]); }
     if(file_category == 'exterior'){ _.pullAt(this.exteriorImagesArray, [index]); }
     if(file_category == 'condition'){ this.vehicleConditionImagesArray.removeAt(index); }
     if(file_category == 'aftermarket'){ this.afterMarketImagesArray.removeAt(index);  }
     if(file_category == 'offer_in_hands'){ this.offerInHandsImagesArray.removeAt(index); }    
+
+    this.removeImageFromBucket(file_key);
   }
 
   /**
@@ -749,38 +758,22 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    * @param imagePath image url
    * @param bucket s3 bucket name
    */
-  removeImageFromBucket(imagePath){    
-    this.pageLoaderService.pageLoader(true);//start showing page loader
-    const params ={ fileKey:imagePath }
+  removeImageFromBucket(file_key){    
+    this.commonUtilsService.showPageLoader('Removing File...');
+
+    const params = { fileKey : file_key }
 
     this.commonUtilsService.removeImageFromBucket(params)
       .pipe(untilDestroyed(this))
       .subscribe(
         (response) => {
-          this.pageLoaderService.pageLoader(false);// hide page loader         
-          this.toastr.successToastr('Image has been removed successfully.', 'Success!');//showing success toaster        
+          this.commonUtilsService.onSuccess('File has been removed successfully.');                 
         },
         error => {
-          this.pageLoaderService.pageLoader(false);// hide page loader         
-          this.toastr.errorToastr(error, 'Oops!');//showing error toaster message
+          this.commonUtilsService.onError(error);
         });
   }  
-
-  /**
-  * get vehicle Image Path.
-  * @return  string(vehicle image path) .
-  */
-  get vehicleImage(): string {
-    return this._vehicleImage;
-  }
-
-  /**
-  * set image path.
-  * @param $image    string(vehicle image path).
-  */
-  set vehicleImage($image: string) {
-    this._vehicleImage = $image;    
-  }
+  
 
   /**
   * get vehicle Image Category.
@@ -932,7 +925,6 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       return;
     }
 
-    //console.log(this.uploadVehicleImagesWizard.value);
 
   }
 
@@ -1125,7 +1117,8 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    * @param  vehicleCategory refrence value 
    */
   checkVehicleImageCatgeory(vehicleCategory: string): void {
-    this.vehicleImageCategory = vehicleCategory;       
+    this.vehicleImageCategory = vehicleCategory;  
+    
   }
 
   /**

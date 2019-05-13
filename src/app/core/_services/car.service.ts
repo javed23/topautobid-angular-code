@@ -88,23 +88,25 @@ export class CarService {
         page['dealer_id'] = '5ca1e88f9dac60394419c0bc'
 
         return this.httpClient.post('car/listingDealersCars', page)
-            .map((response: any) => {
-                console.log('response', response);
+        .map((response: any) => {
 
-                page.totalElements = response.count;
+            page.totalElements = response.count;
+            let pagedData = new PagedData<Car>();
+            page.totalElements = response.count;
+            page.filteredElements = response.filteredRecords;
+            page.totalPages = page.totalElements / page.size;
+            let start = page.pageNumber * page.size;
+            for (let i in response.records) {
+                let jsonObj = response.records[i];
+                console.log('jsonObj',jsonObj);
+                let car = new Car(jsonObj);
 
-                let pagedData = new PagedData<Car>();
-                page.totalElements = response.count;
-                page.totalPages = page.totalElements / page.size;
-                let start = page.pageNumber * page.size;
-                for (let i in response.records) {
-                    let jsonObj = response.records[i];
-                    let car = new Car(jsonObj);
-                    pagedData.data.push(car);
-                }
-                pagedData.page = page;
-                return pagedData;
-            })
+                console.log('created object',car);
+                pagedData.data.push(car);
+            }
+            pagedData.page = page;
+            return pagedData;
+        })
     }
 
     /**
