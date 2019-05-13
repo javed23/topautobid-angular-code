@@ -315,6 +315,13 @@ button:disabled {
 
 .uploadImages .dz-preview{display:none;}
 
+
+#offerInHandsSection .uploadImages {
+    position: absolute;
+    right: 0;
+    width: 150px;
+}
+
 .vehicle_category > .form-group {
     display: inline-block;
     margin-right: 60px;
@@ -348,7 +355,7 @@ select:disabled {
 }
 
 #vehicleAfterMarketPreview .dz-preview  ,  #vehicleConditionPreview .dz-preview,  #offerInHandsPreview .dz-preview{
-    display: inline-block;
+    display: none;
     vertical-align: top;
 }
 
@@ -596,7 +603,7 @@ aw-wizard-navigation-bar.horizontal.small ul.steps-indicator li:not(:last-child)
 .steps_info {padding:50px 0px;}
 .steps_info label {font-size: 14px;width: 100%;padding:0px 0px 10px 0px;letter-spacing: 0.7px;color:#696969;letter-spacing: 0.8px; text-transform:none;}
 .steps_info h4 {font-size: 20px;margin: 0px;padding: 0px 0px 10px 0px;color: #6E6E6E;letter-spacing: 0.8px;text-transform: none;}
-p.error_msg {border:0px; padding:0px; position: absolute; left:0px;}
+p.error_msg {border:0px; padding:0px;     margin: 0; left:0px;}
 .bg-overlay-black-70:before {background:#464646;}
 .inner-intro {padding:10px 0px;}
 .category_Box ul li input:checked + label > span {color:#fff;}
@@ -709,7 +716,7 @@ p.error_msg {border:0px; padding:0px; position: absolute; left:0px;}
 }
 
 .collapsable_box {
-    border: 1px solid #e7e7e7;
+    /* border: 1px solid #e7e7e7; */
     margin-bottom: 30px;
     margin-top: 15px;
 }
@@ -823,7 +830,10 @@ p.error_msg {border:0px; padding:0px; position: absolute; left:0px;}
 }
 .color_box ul li {cursor:pointer; display:inline-block; text-align: center; font-size: inherit; margin:0px 13px 10px 0px;}
 .color_box ul li input {display:none;}
-.color_box ul li label {border: 2px solid  rgba(255, 0, 0, 0);display:inline-block;;cursor: pointer;margin:0px;padding:0px; width:40px; height:40px; border-radius:100%; float:left; position: relative;}
+.color_box ul li label {border: 2px solid  rgb(219, 219, 219);display:inline-block;;cursor: pointer;margin:0px;padding:0px; width:40px; height:40px; border-radius:100%; float:left; position: relative;}
+.color_box ul li input:checked + label {
+    border: 2px solid rgb(37, 38, 39);
+}
 .color_box ul li label:after{
     content: "\f00c";
     font: normal normal normal 14px/1 FontAwesome;
@@ -844,6 +854,11 @@ p.error_msg {border:0px; padding:0px; position: absolute; left:0px;}
 
 }
 
+.color_box ul li label.White:after,.color_box ul li label.Beige:after , .color_box ul li label.Silver:after, .color_box ul li label.Yellow:after {
+    color: #464646;
+}
+
+
 .color_box ul li label span {position: absolute; top:-15px; margin:0px; padding:0px; background: #000; width:200px; color:#fff; font-size:12px; text-transform: none; padding:4px; display: none;}
 .color_box ul li input:checked + label:after{
     -webkit-transform: scale(1);
@@ -853,7 +868,6 @@ p.error_msg {border:0px; padding:0px; position: absolute; left:0px;}
     transform: scale(1);
 
 }
-
 .color_box ul li input:checked + label:before {
     content: "";
     width: 100%;
@@ -863,8 +877,8 @@ p.error_msg {border:0px; padding:0px; position: absolute; left:0px;}
     border: 1.2px solid rgba(255, 255, 255, 0.74);
 }
 /*----------------------------*/
-
-
+#offerInHandsSection .thumbnails {text-align: center;}
+#offerInHandsSection .thumbnail_list {width: calc(100% / 3);}
 
 
 

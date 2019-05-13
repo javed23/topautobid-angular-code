@@ -32,6 +32,7 @@ import * as _ from 'lodash';
 import * as AWS from 'aws-sdk/global';
 import * as S3 from 'aws-sdk/clients/s3';
 import * as Dropzone from 'dropzone';
+import { bool } from 'aws-sdk/clients/signer';
 
 declare let jQuery:any;
 declare let $:any;
@@ -46,7 +47,7 @@ declare let POTENZA:any;
   animations: [
     trigger('AnimateList', [
       transition(':enter', [  
-        style({opacity: 0, transform: 'translateX(75%)', offset: 1.0}),
+        style({opacity: 0, transform: 'translateX(75%)'}),
         animate('1s 500ms ease')
       ])
     ])
@@ -65,6 +66,7 @@ export class AddCarComponent implements OnInit {
 
   // Array where we are going to do CRUD operations
   //vehicleImagesArray:any = [{Interior: []}, {Exterior: []}];
+  vehicleImages:any = [];
   interiorImagesArray:any = [];
   exteriorImagesArray:any = [];  
   getVehicleYear:string = "";
@@ -101,10 +103,14 @@ export class AddCarComponent implements OnInit {
   isOtherSelected:boolean = false;
   isVehicleConditionSelected:boolean = false;
   isYearEnabled:boolean = true;
+  isSkipSubmit:boolean = false;
 
   vehicleImageCategory:string = "Interior";
+  exteriorColor:string = "Black";
+  interiorColor:string = "Black";
+  vehicleImageCategoryOnSummary:string = "all";
 
-  addCarSubscription: Subscription;
+  addVehicleSubscription: Subscription;
 
   private setVehicleReferenceDefaultValue: string = "VIN";    // set Default Vehicle Reference Radio Button Value
   makes = [];  
@@ -135,15 +141,14 @@ export class AddCarComponent implements OnInit {
 
   
   getMakeByYearArray:any = [];
-  getModelByMakeIdArray:any = [];
-  private _vehicleImage:string = '';
-  private _secondKey:boolean;
-  private _vehicleAftermarket:boolean;
-  private _vehicleOwnership:string = '';
-  private _vehicleConditionValue:string = '';
-  private _cleanTitle:boolean;
-  private _willingToDrive:boolean;
-  private _vehiclePickedUp:boolean;
+  getModelByMakeIdArray:any = [];  
+  private _secondKey:boolean= false;
+  private _vehicleAftermarket:boolean= false;
+  private _vehicleOwnership:string = 'Salvage';
+  private _vehicleConditionValue:string = 'Ready for resale without any reconditioning';
+  private _cleanTitle:boolean= false;
+  private _willingToDrive:boolean= false;
+  private _vehiclePickedUp:boolean = false;
   yearRange:any = [];
   colors:any = [];
 
@@ -178,6 +183,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   private selectVehicleOption(){
     this.vehicleOption = this.formBuilder.group({
       vin_number: [''],
+      seller_id: ['5cd170562688321559f12f32'],
       vehicle_year: [''],
       vehicle_year_value: [''],
       existing_vehicle: [''],
@@ -193,7 +199,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           vehicle_zip: ['', Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])],
           vehicle_make: [{value: '', disabled: true}, Validators.compose([Validators.required])],
           vehicle_model: [{value: '', disabled: true}, Validators.compose([Validators.required])],
-          vehicle_mileage: ['', Validators.compose([Validators.required,Validators.pattern('^[0-9]{6}$')])],
+          vehicle_mileage: ['', Validators.compose([Validators.required,Validators.minLength(1),Validators.maxLength(6),Validators.pattern(/^-?(0|[1-9]\d*)?$/)])],
           vehicle_body_type: ['', Validators.compose([Validators.required])],
           vehicle_trim: [{value: '', disabled: true}, Validators.compose([Validators.required])],
           vehicle_doors: ['', Validators.compose([Validators.required])],
@@ -226,7 +232,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       vehicle_has_second_key: [false], 
       is_vehicle_aftermarket: [false],  
       vehicle_aftermarket:this.formBuilder.group({        
-        vehicle_aftermarket_description: [null],
+        vehicle_aftermarket_description: [''],
         vehicle_aftermarket_images: this.formBuilder.array([]),
       }),      
       vehicle_ownership:this.formBuilder.group({        
@@ -245,7 +251,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   */
   private vehicleCondition(){
     this.vehicleConditionWizard = this.formBuilder.group({      
-      vehicle_comments: ['', Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50)])],    
+      vehicle_comments: ['', Validators.compose([Validators.required,Validators.minLength(10),Validators.maxLength(200)])],    
       vehicle_condition:this.formBuilder.group({    
         vehicle_condition_value: ['Ready for resale without any reconditioning'],
         vehicle_condition_description: [''],
@@ -261,7 +267,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     this.pickupLocationWizard = this.formBuilder.group({      
       vehicle_to_be_picked_up:  [false],             
       willing_to_drive : [false],
-      willing_to_drive_how_many_miles: ['']                      
+      willing_to_drive_how_many_miles: [0]                      
     });
   }
 
@@ -270,8 +276,8 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   */
   private offerInHandsPopUp(){
     this.offerInHands = this.formBuilder.group({        
-      vehicle_offer_in_hands_price : [''],
-      vehicle_proof_image: this.formBuilder.array([], Validators.required),       
+      vehicle_offer_in_hands_price : [0],
+      vehicle_proof_image: this.formBuilder.array([]),       
     })
   }
 
@@ -281,22 +287,48 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   onSubmitAddCar(): void {
 
 
-    var merged = Object.assign(this.vehicleOption.value, this.basicInfoWizard.value, this.uploadVehicleImagesWizard.value, this.aboutVehicleWizard.value, this.vehicleConditionWizard.value, this.pickupLocationWizard.value, this.offerInHands.value);
 
+    //check Vehicle Year Value
+    const vehicleYear = this.vehicleOption.controls.vehicle_year;
+    if(vehicleYear.value == "more"){
+      vehicleYear.setValue(this.vehicleOption.controls.vehicle_year_value.value);
+    }
 
-    this.addCarSubscription = this.userAuthService.dealerSignup(merged)
+    if(this.isSkipSubmit){
+      this.offerInHands.controls.vehicle_offer_in_hands_price.setValue(0);
+      while (this.offerInHandsImagesArray.length) {
+        this.offerInHandsImagesArray.removeAt(this.offerInHandsImagesArray.length-1);
+      }
+    }
+
+    // Merge Category Image Array    
+    this.vehicleImages = [...this.interiorImagesArray, ...this.exteriorImagesArray];
+
+    this.vehicleImages.forEach(vehicleImage => {
+          this.vehicleImagesArray.push(new FormControl({file_path : vehicleImage.file_path, file_name : vehicleImage.file_name, file_key : vehicleImage.file_key, file_category : vehicleImage.file_category}))
+    }); 
+
+    // set Default Vin Number
+    //this.vehicleOption.controls.vin_number.setValue('1C6RR7GT1ES223950');
+
+    var mergeVehicleData = Object.assign(this.vehicleOption.value, this.basicInfoWizard.value, this.uploadVehicleImagesWizard.value, this.aboutVehicleWizard.value, this.vehicleConditionWizard.value, this.pickupLocationWizard.value, this.offerInHands.value);
+
+    //console.log(mergeVehicleData);
+
+    this.commonUtilsService.showPageLoader('Saving Your Car...');
+
+    this.addVehicleSubscription = this.vehicleService.addYourVehicle(mergeVehicleData)
       .subscribe(
-        (response) => {
+      (response) => { 
+        this.router.navigate(['/seller/car-listing']);
 
-          
-
-        },
-        error => {
-
-        });
-
-
-    console.log(merged);
+        this.commonUtilsService.onSuccess('Vehicle has been added successfully.');
+      },
+      error => {
+        
+        this.commonUtilsService.onError(error);
+      });
+    
   }
 
   /**
@@ -304,33 +336,34 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   */
   private offerInHandsDropzoneInit(){
     const componentObj = this;
-    this.offerInHandsConfiguration = {      
-      clickable: true,
-      paramName: "file",
-      uploadMultiple: false,
-      url: environment.API_ENDPOINT + "/api/common/imageUploadtoBucket",
-      maxFiles: 1,
-      autoReset: null,
-      errorReset: null,
-      cancelReset: null,
-      acceptedFiles: '.jpg, .png, .jpeg, .pdf',
-      maxFilesize: 2, // MB,
-      dictDefaultMessage: '<span class="button red">Upload Proof</span>',
-      //previewsContainer: "#offerInHandsPreview",
-      addRemoveLinks: true,
-      //resizeWidth: 125,
-      //resizeHeight: 125,
-      //createImageThumbnails:false,
-      dictInvalidFileType: 'Only valid jpeg, jpg, png file is accepted.',
-      dictFileTooBig: 'Maximum upload file size limit is 2MB',
-      dictCancelUpload: '<i class="fa fa-times" aria-hidden="true"></i>',
-      dictRemoveFile: '<i class="fa fa-times" aria-hidden="true"></i>',
-      headers: {
-        'Cache-Control': null,
-        'X-Requested-With': null,
-      },  
+    this.offerInHandsConfiguration = {       
+    clickable: true,
+    paramName: "file",
+    uploadMultiple: false,
+    url: environment.API_ENDPOINT + "/api/common/imageUploadtoBucket",
+    maxFiles: 1,
+    autoReset: null,
+    errorReset: null,
+    cancelReset: null,
+    acceptedFiles: '.jpg, .png, .jpeg',
+    maxFilesize: 2, // MB,
+    dictDefaultMessage: '<span class="button red">Upload Proof</span>',
+    //previewsContainer: "#offerInHandsPreview",
+    addRemoveLinks: true,
+    //resizeWidth: 125,
+    //resizeHeight: 125,
+    //createImageThumbnails:false,
+    dictInvalidFileType: 'Only valid jpeg, jpg, png file is accepted.',
+    dictFileTooBig: 'Maximum upload file size limit is 2MB',
+    dictCancelUpload: '<i class="fa fa-times" aria-hidden="true"></i>',
+    dictRemoveFile: '<i class="fa fa-times" aria-hidden="true"></i>',
+    headers: {
+      'Cache-Control': null,
+      'X-Requested-With': null,
+    },  
+  
       accept: function(file, done) {        
-          //this.removeAllFiles( true );
+          
 
           if((componentObj.offerInHandsImagesArray.length +1) > 1){
               componentObj.commonUtilsService.onError('You cannot upload any more files.');
@@ -340,7 +373,8 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
           const reader = new FileReader();
           const _this = this
-          reader.onload = function(event) {             
+          reader.onload = function(event) {  
+                       
               let base64String = reader.result      
               const fileExtension = (file.name).split('.').pop();
               const isValidFile = componentObj.commonUtilsService.isImageCorrupted(base64String,_.toLower(fileExtension))              
@@ -365,7 +399,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
         this.on("totaluploadprogress",function(progress){          
           componentObj.pageLoaderService.pageLoader(true);//start showing page loader
-          componentObj.pageLoaderService.setLoaderText('Uploading file '+progress+'%');//setting loader text
+          componentObj.pageLoaderService.setLoaderText('Uploading file '+parseInt(progress)+'%');//setting loader text
           if(progress>=100){
             componentObj.pageLoaderService.pageLoader(false); //hide page loader
           }
@@ -404,7 +438,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     paramName: "file",
     uploadMultiple: false,
     url: environment.API_ENDPOINT + "/api/common/imageUploadtoBucket",
-    maxFiles: 10,
+    maxFiles: 50,
     autoReset: null,
     errorReset: null,
     cancelReset: null,
@@ -427,7 +461,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     accept: function(file, done) { 
       
       
-        if((componentObj.afterMarketImagesArray.length +1) > 10){
+        if((componentObj.afterMarketImagesArray.length +1) > 50){
             componentObj.commonUtilsService.onError('You cannot upload any more files.');
             this.removeFile(file);
             return false;
@@ -463,7 +497,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
       this.on("totaluploadprogress",function(progress){          
         componentObj.pageLoaderService.pageLoader(true);//start showing page loader
-        componentObj.pageLoaderService.setLoaderText('Uploading file '+progress+'%');//setting loader text
+        componentObj.pageLoaderService.setLoaderText('Uploading file '+parseInt(progress)+'%');//setting loader text
         if(progress>=100){
           componentObj.pageLoaderService.pageLoader(false); //hide page loader
         }
@@ -473,7 +507,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
          
         
         componentObj.zone.run(() => { 
-          componentObj.afterMarketImagesArray.push(new FormControl({file_path : serverResponse.fileLocation, file_name : serverResponse.fileKey, file_key : serverResponse.fileName, file_category : 'aftermarket'}));
+          componentObj.afterMarketImagesArray.push(new FormControl({file_path : serverResponse.fileLocation, file_name : serverResponse.fileName, file_key : serverResponse.fileKey, file_category : 'aftermarket'}));
           
         });
         this.removeFile(file);
@@ -505,7 +539,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       paramName: "file",
       uploadMultiple: false,
       url: environment.API_ENDPOINT + "/api/common/imageUploadtoBucket",
-      maxFiles: 10,
+      maxFiles: 50,
       autoReset: null,
       errorReset: null,
       cancelReset: null,
@@ -527,7 +561,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       },  
       accept: function(file, done) {  
         
-          if((componentObj.vehicleConditionImagesArray.length +1) > 10){
+          if((componentObj.vehicleConditionImagesArray.length +1) > 50){
               componentObj.commonUtilsService.onError('You cannot upload any more files.');
               this.removeFile(file);
               return false;
@@ -563,7 +597,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
         this.on("totaluploadprogress",function(progress){          
           componentObj.pageLoaderService.pageLoader(true);//start showing page loader
-          componentObj.pageLoaderService.setLoaderText('Uploading file '+progress+'%');//setting loader text
+          componentObj.pageLoaderService.setLoaderText('Uploading file '+parseInt(progress)+'%');//setting loader text
           if(progress>=100){
             componentObj.pageLoaderService.pageLoader(false); //hide page loader
           }
@@ -604,7 +638,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       paramName: "file",
       uploadMultiple: false,
       url: environment.API_ENDPOINT + "/api/common/imageUploadtoBucket",
-      maxFiles: 20,
+      maxFiles: 50,
       autoReset: null,
       errorReset: null,
       cancelReset: null,
@@ -627,13 +661,13 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       accept: function(file, done) {            
         
           
-          if((componentObj.interiorImagesArray.length +1) > 10 && componentObj.getVehicleImageCategory() == "Interior"){
+          if((componentObj.interiorImagesArray.length +1) > 25 && componentObj.getVehicleImageCategory() == "Interior"){
               componentObj.commonUtilsService.onError('You cannot upload any more files.');
               this.removeFile(file);
               return false;
           }
 
-          if((componentObj.exteriorImagesArray.length +1) > 10 && componentObj.getVehicleImageCategory() == "Exterior"){
+          if((componentObj.exteriorImagesArray.length +1) > 25 && componentObj.getVehicleImageCategory() == "Exterior"){
               componentObj.commonUtilsService.onError('You cannot upload any more files.');
               this.removeFile(file);
               return false;
@@ -667,7 +701,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
         this.on("totaluploadprogress",function(progress){          
           componentObj.pageLoaderService.pageLoader(true);//start showing page loader
-          componentObj.pageLoaderService.setLoaderText('Uploading file '+progress+'%');//setting loader text
+          componentObj.pageLoaderService.setLoaderText('Uploading file '+parseInt(progress)+'%');//setting loader text
           if(progress>=100){
             componentObj.pageLoaderService.pageLoader(false); //hide page loader
           }
@@ -675,7 +709,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
        
         this.on("success", function(file, serverResponse) {
 
-          componentObj.vehicleImage = serverResponse.fileLocation; 
+          
           
           componentObj.zone.run(() => { 
             if(componentObj.getVehicleImageCategory() == "Interior"){
@@ -685,7 +719,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
               componentObj.exteriorImagesArray.push({file_path : serverResponse.fileLocation, file_key : serverResponse.fileKey, file_name : serverResponse.fileName, file_category : componentObj.getVehicleImageCategory().toLowerCase()});
             }
 
-            componentObj.vehicleImagesArray.push(new FormControl({file_path : serverResponse.fileLocation, file_key : serverResponse.fileKey, file_name : serverResponse.fileName, file_category : componentObj.getVehicleImageCategory().toLowerCase()}));
+            //componentObj.vehicleImagesArray.push(new FormControl({file_path : serverResponse.fileLocation, file_key : serverResponse.fileKey, file_name : serverResponse.fileName, file_category : componentObj.getVehicleImageCategory().toLowerCase()}));
 
           });
 
@@ -708,13 +742,15 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    * @param index index of the image array
    * @return  boolean
    */
-  removeImage(index, file_category): void {
+  removeImage(index, file_category, file_key): void {
     
     if(file_category == 'interior'){ _.pullAt(this.interiorImagesArray, [index]); }
     if(file_category == 'exterior'){ _.pullAt(this.exteriorImagesArray, [index]); }
-    if(file_category == 'condition'){ _.pullAt(this.vehicleConditionImagesArray, [index]); }
-    if(file_category == 'aftermarket'){ _.pullAt(this.afterMarketImagesArray, [index]); }
-    if(file_category == 'offer_in_hands'){ _.pullAt(this.offerInHandsImagesArray, [index]); }    
+    if(file_category == 'condition'){ this.vehicleConditionImagesArray.removeAt(index); }
+    if(file_category == 'aftermarket'){ this.afterMarketImagesArray.removeAt(index);  }
+    if(file_category == 'offer_in_hands'){ this.offerInHandsImagesArray.removeAt(index); }    
+
+    this.removeImageFromBucket(file_key);
   }
 
   /**
@@ -722,38 +758,22 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    * @param imagePath image url
    * @param bucket s3 bucket name
    */
-  removeImageFromBucket(imagePath, bucket){    
-    this.pageLoaderService.pageLoader(true);//start showing page loader
-    const params ={ imagePath:imagePath, bucket:bucket }
+  removeImageFromBucket(file_key){    
+    this.commonUtilsService.showPageLoader('Removing File...');
+
+    const params = { fileKey : file_key }
 
     this.commonUtilsService.removeImageFromBucket(params)
       .pipe(untilDestroyed(this))
       .subscribe(
         (response) => {
-          this.pageLoaderService.pageLoader(false);// hide page loader         
-          this.toastr.successToastr('Image has been removed successfully.', 'Success!');//showing success toaster        
+          this.commonUtilsService.onSuccess('File has been removed successfully.');                 
         },
         error => {
-          this.pageLoaderService.pageLoader(false);// hide page loader         
-          this.toastr.errorToastr(error, 'Oops!');//showing error toaster message
+          this.commonUtilsService.onError(error);
         });
   }  
-
-  /**
-  * get vehicle Image Path.
-  * @return  string(vehicle image path) .
-  */
-  get vehicleImage(): string {
-    return this._vehicleImage;
-  }
-
-  /**
-  * set image path.
-  * @param $image    string(vehicle image path).
-  */
-  set vehicleImage($image: string) {
-    this._vehicleImage = $image;    
-  }
+  
 
   /**
   * get vehicle Image Category.
@@ -763,8 +783,6 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     return this.uploadVehicleImagesWizard.controls.vehicle_image_category_name.value;
   }
 
-
-  
 
   /**
    * get Models By Make Name
@@ -907,7 +925,6 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       return;
     }
 
-    console.log(this.uploadVehicleImagesWizard.value);
 
   }
 
@@ -923,10 +940,44 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     }
 
       
-    console.log(this.aboutVehicleWizard.value);
+   // console.log(this.aboutVehicleWizard.value);
 
   }
 
+  /**
+   * validate offer in hands popup.   
+   */
+  validateOfferInHands() : void { 
+    this.isOfferInHandsSubmitted = true;   
+    this.isSkipSubmit = false;
+    if(this.offerInHands.invalid) {
+      return;
+    }  
+
+    $(this.offerInHandsSection.nativeElement).modal('hide');
+  } 
+
+  /**
+   * skip offer in hands.   
+   */
+  skipOfferInHands() : void { 
+    this.isSkipSubmit = true;
+
+    this.offerInHands.controls.vehicle_offer_in_hands_price.setValue(0);
+    while (this.offerInHandsImagesArray.length) {
+      this.offerInHandsImagesArray.removeAt(this.offerInHandsImagesArray.length-1);
+    }
+
+    $(this.offerInHandsSection.nativeElement).modal('hide');
+  } 
+
+  /**
+   * show vehicle Images by Catgeory.   
+    * @param category vehicle image catgeory 
+   */
+  showVehicleImagesOnSummary(category): void{
+    this.vehicleImageCategoryOnSummary = category;
+  }
 
   /**
    * validate About Condition Wizard and move to Pickup Location Wizard.   
@@ -939,7 +990,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       return;
     }
 
-    console.log(this.vehicleConditionWizard.value);
+   // console.log(this.vehicleConditionWizard.value);
 
   }
 
@@ -954,7 +1005,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       return;
     }
 
-    
+    // this.offerInHands.reset(); 
     $(this.offerInHandsSection.nativeElement).modal({backdrop: 'static', keyboard: false});
     
 
@@ -986,16 +1037,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     $(this.offerInHandsSection.nativeElement).modal({backdrop: 'static', keyboard: false});
   }
 
-  /**
-   * validate offer in hands popup.   
-   */
- /* validateOfferInHands(){
-    this.isOfferInHandsSubmitted = true;   
-
-    if(this.offerInHands.invalid) {
-      return;
-    }  
-  } */
+  
 
   /**
    * check vehicle year if more selected
@@ -1012,6 +1054,22 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       vehicleYearValue.clearValidators();
       vehicleYearValue.updateValueAndValidity();
     }   
+  }
+
+  /**
+   * check exterior color
+   * @param value color 
+   */
+  setExteriorColor(value: string): void {
+    this.exteriorColor = value;
+  }
+
+  /**
+   * check interior color
+   * @param value color 
+   */
+  setInteriorColor(value: string): void {
+    this.interiorColor = value;
   }
   
   /**
@@ -1059,7 +1117,8 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    * @param  vehicleCategory refrence value 
    */
   checkVehicleImageCatgeory(vehicleCategory: string): void {
-    this.vehicleImageCategory = vehicleCategory;       
+    this.vehicleImageCategory = vehicleCategory;  
+    
   }
 
   /**
@@ -1082,10 +1141,16 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    * @return  string
    */
   toggleVehicleAfterMarket(event){   
-    let vehicleAfterMarketDescription = this.aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description');        
+    let vehicleAfterMarketDescription = this.aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description');   
+    
+    vehicleAfterMarketDescription.patchValue('');
+    while (this.afterMarketImagesArray.length) {
+      this.afterMarketImagesArray.removeAt(this.afterMarketImagesArray.length-1);
+    }
+
     if( event.target.checked ){
       this.isVehicleAftermarketSelected = true;
-      vehicleAfterMarketDescription.setValidators(Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50)]));
+      vehicleAfterMarketDescription.setValidators(Validators.compose([Validators.required,Validators.minLength(10),Validators.maxLength(200)]));
       vehicleAfterMarketDescription.updateValueAndValidity();
 
       this.vehicleAftermarket = true;
@@ -1108,10 +1173,10 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
   /**
   * set vehicle aftermarket key value.
-  * @param $vehicleAftermarket  boolean.
+  * @param vehicleAftermarket  boolean.
   */
-  set vehicleAftermarket($vehicleAftermarket: boolean) {
-    this._vehicleAftermarket = $vehicleAftermarket;    
+  set vehicleAftermarket(vehicleAftermarket: boolean) {
+    this._vehicleAftermarket = vehicleAftermarket;    
   }
 
 
@@ -1138,7 +1203,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   */
   set secondKey(secondKey: boolean) {
     this._secondKey = secondKey; 
-    this.aboutVehicleWizard.controls.vehicle_has_second_key.setValue(secondKey);    
+        
   }
 
   /**
@@ -1165,7 +1230,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
       if(this.vehicleOwnership == "Other"){
         this.isOtherSelected = true;        
-        vehicleOwnershipDescription.setValidators(Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50)]));        
+        vehicleOwnershipDescription.setValidators(Validators.compose([Validators.required,Validators.minLength(10),Validators.maxLength(50)]));        
         vehicleOwnershipDescription.updateValueAndValidity();
       }else{
         this.isOtherSelected = false;        
@@ -1173,6 +1238,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
         vehicleOwnershipDescription.updateValueAndValidity();
       }       
     }
+    console.log(this.isOtherSelected);
     
   }
 
@@ -1186,10 +1252,10 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
   /**
   * set vehicle clean title value.
-  * @param $cleanTitle  boolean.
+  * @param cleanTitle  boolean.
   */
-  set cleanTitle($cleanTitle: boolean) {
-    this._cleanTitle = $cleanTitle;    
+  set cleanTitle(cleanTitle: boolean) {
+    this._cleanTitle = cleanTitle;    
   }
 
   /**
@@ -1219,7 +1285,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     vehicleOwnershipDescription.patchValue('');  
     if(vehicleOwnership == "Other"){
         this.isOtherSelected = true;        
-        vehicleOwnershipDescription.setValidators(Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50)]));        
+        vehicleOwnershipDescription.setValidators(Validators.compose([Validators.required,Validators.minLength(10),Validators.maxLength(200)]));        
         vehicleOwnershipDescription.updateValueAndValidity();
       }else{
         this.isOtherSelected = false;        
@@ -1231,16 +1297,21 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   
   /**
    * check vehicle condition value
+   * @param event object
    * @param vehicleCondition values
    */
-  checkVehicleConditionRadioValue(vehicleCondition: string): void { 
-    let vehicleConditionDescription = this.vehicleConditionWizard.controls.vehicle_condition.get('vehicle_condition_description');
+  checkVehicleConditionRadioValue(event, vehicleCondition: string): void { 
+    let vehicleConditionDescription = this.vehicleConditionWizard.controls.vehicle_condition.get('vehicle_condition_description');    
     vehicleConditionDescription.patchValue(''); 
+
+    while (this.vehicleConditionImagesArray.length) {
+      this.vehicleConditionImagesArray.removeAt(this.vehicleConditionImagesArray.length-1);
+    }
 
     if(vehicleCondition == "reconditioning" || vehicleCondition == "functional" || vehicleCondition == "parts"){
       this.isVehicleConditionSelected = true;  
          
-      vehicleConditionDescription.setValidators(Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50)]));        
+      vehicleConditionDescription.setValidators(Validators.compose([Validators.required,Validators.minLength(10),Validators.maxLength(200)]));        
       vehicleConditionDescription.updateValueAndValidity();
     }else{
       this.isVehicleConditionSelected = false; 
@@ -1248,7 +1319,8 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       vehicleConditionDescription.clearValidators();        
       vehicleConditionDescription.updateValueAndValidity();
     }
-    this.vehicleConditionValue = vehicleCondition;
+    this.vehicleConditionValue = event.target.value;
+    
   }
 
   /**
@@ -1276,7 +1348,8 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     let willingToDriveHowManyMiles = this.pickupLocationWizard.controls['willing_to_drive_how_many_miles'];        
     if( event.target.checked ){
       this.isWillingToDriveSelected = true;
-      willingToDriveHowManyMiles.setValidators(Validators.compose([Validators.required,Validators.pattern('^[0-9]{2}$')]));
+      willingToDriveHowManyMiles.setValidators(Validators.compose([Validators.required,Validators.minLength(1),Validators.maxLength(2),Validators.pattern(/^-?(0|[1-9]\d*)?$/)]));
+      
       willingToDriveHowManyMiles.updateValueAndValidity();
       this.willingToDrive = true;
     }else{ 
@@ -1368,7 +1441,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
   ngAfterViewInit(){    
     //this.yearRange = this.commonUtilsService.createYearRange();  
-    this.colors = [{label:'Beige',value:'#F5F5DC'},{label:'Black',value:'#252627'},{label:'Brown',value:'#672E10'},{label:'Burgundy',value:'#75141C'},{label:'Charcoal Grey',value:'#757776'},{label:'Dark Blue',value:'#172356'},{label:'Dark Green',value:'#316241'},{label:'Gold',value:'#D6C17F'},{label:'Grey',value:'#808080'},{label:'Light Blue',value:'#5F7DC5'},{label:'Light Green',value:'#8E9F87'},{label:'Orange',value:'#FF9200'},{label:'Pearl White',value:'#FDFDFB'},{label:'Purple',value:'#6A4574'},{label:'Red',value:'#E32F43'},{label:'Silver',value:'#D4D9DC'},{label:'Tan',value:'#D2B48C'},{label:'White',value:'#F2F6F9'},{label:'Yellow',value:'#F8E81C'}];
+    this.colors = [{label:'Beige',value:'#F5F5DC'},{label:'Black',value:'#252627'},{label:'Brown',value:'#672E10'},{label:'Burgundy',value:'#75141C'},{label:'Charcoal Grey',value:'#757776'},{label:'Dark Blue',value:'#172356'},{label:'Dark Green',value:'#316241'},{label:'Gold',value:'#D6C17F'},{label:'Grey',value:'#808080'},{label:'Light Blue',value:'#5F7DC5'},{label:'Light Green',value:'#8E9F87'},{label:'Orange',value:'#FF9200'},{label:'Purple',value:'#6A4574'},{label:'Red',value:'#E32F43'},{label:'Silver',value:'#D4D9DC'},{label:'Tan',value:'#D2B48C'},{label:'White',value:'#F2F6F9'},{label:'Yellow',value:'#F8E81C'}];
     
     for (let i = 0; i < 2; i++) {
       this.yearRange.push({
