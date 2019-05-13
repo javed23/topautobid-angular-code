@@ -79,7 +79,10 @@ export class VerifyEmailComponent implements OnInit {
   }
 
 
-  
+  /**
+   * toggle for multifactor authentication
+   * @param value 
+   */
   toggleIsMultifactorVerification(value: any) {
     $(this.multifactordiv.nativeElement).slideToggle('slow');
   }
@@ -101,19 +104,17 @@ export class VerifyEmailComponent implements OnInit {
 
 
     this.pageLoaderService.pageLoader(true);//start showing page loader
-    this.pageLoaderService.setLoaderText('Regestring seller...');//setting loader text
+    this.pageLoaderService.setLoaderText('Verifying seller...');//setting loader text
     console.log('the user is ' + userSignup)
     //saving the seller at aws user pool
     this.cognitoUserService.signup(userSignup)
       .pipe(untilDestroyed(this))
       .subscribe(
         (response) => {
-          console.log('username', response['username'])
           this.showPopup(); //open verification popup
           this.pageLoaderService.pageLoader(false);//hide page loader  
 
           this.otpVerificationForm.controls['Username'].setValue(response['username']);
-          console.log('otpVerificationForm', this.otpVerificationForm.value)
           this.toasterService.successToastr(environment.MESSAGES.VERIFICATION_PENDING, 'Success!');//showing success toaster
 
         },

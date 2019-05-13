@@ -110,7 +110,7 @@ export class VerifyEmailComponent implements OnInit {
           this.pageLoaderService.pageLoader(false);//hide page loader  
 
           this.otpVerificationForm.controls['Username'].setValue(response['username']);
-          this.toasterService.successToastr(environment.MESSAGES.VERIFICATION_PENDING, 'Success!');//showing success toaster
+          this.toasterService.successToastr(environment.MESSAGES.VERIFICATION_PENDING, 'Success!',{maxShown:1});//showing success toaster
 
         },
         error => {
