@@ -174,22 +174,7 @@
  .datatable-icon-prev:before {
    content: "\f100";
  }
- .blog-sidebar .sidebar-widget .tags li button {
-  display: block;
-  color: #999999;
-  border: 1px solid #e3e3e3;
-  background: transparent;
-  padding: 5px 10px;
-  margin-bottom: 5px;
-  font-size: 14px;
-  text-transform: capitalize;
-  cursor: pointer;
-}
-.blog-sidebar .sidebar-widget .tags li.active button {
-  border-color: #db2d2e;
-  background: #db2d2e;
-  color: #fff;
-}
+
 .ngx-datatable .datatable-footer .datatable-pager .pager li a i {
   line-height: 1!important;
 }
@@ -208,4 +193,13 @@
 
 .pagination_outer{
   padding: 0px 0px 0px 0px; 
+}
+.sorting-options-main {
+  margin-bottom: 10px;
+}
+.actions a{
+  color: #323232;
+}
+.actions a:hover{
+  color: #db2d2e;
 }

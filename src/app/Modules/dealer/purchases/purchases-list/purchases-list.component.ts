@@ -4,11 +4,12 @@ import { ToastrManager } from 'ng6-toastr-notifications';//toaster class
 import { AlertService, PageLoaderService } from '../../../../shared/_services'
 import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
 //import DealerService 
-import { TitleService, DealerService } from '../../../../core/_services';
+import { TitleService, DealerService ,CommonUtilsService} from '../../../../core/_services';
 //import models
 import { Page, Purchase } from "../../../../core/_models";
-
+import {  Router } from '@angular/router';
 import { environment } from '../../../../../environments/environment';
+import * as _ from 'lodash';
 @Component({
   selector: 'app-purchases-list',
   templateUrl: './purchases-list.component.html',
@@ -22,17 +23,19 @@ export class PurchasesListComponent implements OnInit {
   @ViewChild('myTable') table;
   page = new Page();
   purchases = new Array<Purchase>()
-
+  bidStartDate:any;
+  bidEndDate:any;
+  datesFilter:any = {};
 
   //title and breadcrumbs
-  readonly title: string = 'Dealer My Purchases Listing';
-  readonly breadcrumbs: any[] = [{ page: 'Home', link: '/dealer/home' }, { page: 'Dealer My Purchases Listing', link: '' }];
+  readonly title: string = 'My Purchase Listing';
+  readonly breadcrumbs: any[] = [{ page: 'Home', link: '/dealer/home' }, { page: 'My Purchase Listing', link: '' }];
 
   //Defined records limit and records limit options
   currentPageLimit: number = environment.DEFAULT_RECORDS_LIMIT
   readonly pageLimitOptions = environment.DEFAULT_PAGE_LIMIT_OPTIONS
 
-  constructor(private dealerService: DealerService, private titleService: TitleService, private pageLoaderService: PageLoaderService, private toastr: ToastrManager) {
+  constructor(private router:Router,private commonUtilsService:CommonUtilsService,private dealerService: DealerService, private titleService: TitleService, private pageLoaderService: PageLoaderService, private toastr: ToastrManager) {
   }
 
   //default pagination settings
@@ -58,6 +61,62 @@ export class PurchasesListComponent implements OnInit {
     this.currentPageLimit = this._defaultPagination.limit = this._defaultPagination.pageSize = parseInt(limit)
     this.setPage(this._defaultPagination);
   }
+
+  /**
+   * Check date validations and filters records when select start date filter
+   * @return  void
+   */
+  onBidDateSelected(event:any):void {
+    this.datesFilter['start']  = new Date(event.year,event.month-1,event.day+1)       
+    this.datesFilter['transformedStartDate']  = (this.datesFilter['start']).toISOString();
+    this.validateDateFilters();
+  }
+
+    /**
+   * Check date validations and filters records when select start date filter
+   * @return  void
+   */
+  onAcceptedDateSelected(event:any):void {
+    this.datesFilter['end']  = new Date(event.year,event.month-1,event.day+1)       
+    this.datesFilter['transformedEndDate']  = (this.datesFilter['end']).toISOString();
+    this.validateDateFilters();
+  }
+
+  /**
+  * To clear date filters(inputs)
+  * @return  void
+  */
+ clearDateFilters():void{
+  if(_.has(this.datesFilter, ['start']) || _.has(this.datesFilter, ['end'])){
+    this.bidStartDate = null
+    this.bidEndDate = null
+    this.page.filters['dates'] = this.datesFilter = {}
+    delete this.page.filters['dates']; 
+    this.setPage(this._defaultPagination);
+  }
+  
+}
+
+
+  /**
+  * To validate date filters
+  * @return  void
+  */
+ private validateDateFilters(){
+    
+  if(! _.has(this.datesFilter, ['start']))
+    this.commonUtilsService.onError('Please select bid date');
+  else if(! _.has(this.datesFilter, ['end']))
+    this.commonUtilsService.onError('Please select end date');
+  else if(_.has(this.datesFilter, ['end']) && (this.datesFilter['end']).getTime() < (this.datesFilter['start']).getTime()){
+    this.bidEndDate = null
+    this.commonUtilsService.onError('End date should not less than start date');  
+    
+  }else{     
+    this.page.filters['dates'] = this.datesFilter;
+    this.setPage(this._defaultPagination);
+  }
+}
 
 
 
@@ -90,6 +149,7 @@ export class PurchasesListComponent implements OnInit {
 
   viewCarDetails(carId: any) {
     console.log('the car id is ', carId);
+    this.router.navigate(['/dealer/car-detail/'+carId]);
 
   }
 

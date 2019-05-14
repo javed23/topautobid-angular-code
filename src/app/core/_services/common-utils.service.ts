@@ -85,8 +85,8 @@ export class CommonUtilsService {
   * Show page loder on fetching data
   * @return void
   */
-  public showPageLoader(): void {
-    this.pageLoaderService.setLoaderText(environment.MESSAGES.FETCHING_RECORDS);//setting loader text
+  public showPageLoader(message = environment.MESSAGES.FETCHING_RECORDS):void{
+    this.pageLoaderService.setLoaderText(message);//setting loader text
     this.pageLoaderService.pageLoader(true);//show page loader
   }
 
@@ -125,10 +125,10 @@ export class CommonUtilsService {
   */
   public removeImageFromBucket(params): Observable<any> {
     return this.httpClient
-      .post('common/removeImage', params)
+      .post('common/deleteObject', params)
       .map((response: Response) => {
         return response;
-      })
+      })  
   }
 
   /** ToDo

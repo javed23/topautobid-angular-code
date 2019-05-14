@@ -7,18 +7,19 @@ export const environment = {
   APP_NAME: 'TopAutoBid',
   DEFAULT_PROFILE: 'assets/images/default-user.png',
   DEFAULT_COUNTRY_CODE: '+1',
-  DEFAULT_RECORDS_LIMIT: 10,
+  DEFAULT_RECORDS_LIMIT: 6,
+  DEFAULT_PAGES_PAGINATION: 5, //Defines the maximum number of page links to display
   DEFAULT_PAGE_LIMIT_OPTIONS: [  
-    { value:5   },
-    { value:10  },
-    { value:25  },
-    { value:50  },
-    { value:100  },
+    { value:6   },
+    { value:12  },
+    { value:24  },
+    { value:48  },
+    { value:96  },
   ],
   //aws 
   AWS: {
-    ACCESS_KEY: 'AKIAJFK6YJMR4P23VEDA',
-    SECRET_KEY: 'wLsldZMYVVj6iPbY34JN8PyAuL/D2uuJjPSDnnrf',
+    ACCESS_KEY: '',//put your ACCESS_KEY
+    SECRET_KEY: '',//put your SECRET_KEY
     REGION: 'us-west-2',
     BUCEKT_NAME: 'topautobid-dev',
     COGNITO: {
@@ -75,6 +76,10 @@ export const environment = {
     FETCHING_RECORDS: 'Fetching Data...',
     RECORD_DELETED: 'Record has been deleted successfully.',
     DEALERSHIP_ADDED: 'Dealership has been added successfully.',
+    DEALERSHIP_UPDATED: 'Dealership has been updated successfully.',
     DELETING_RECORD: 'Deleting Record...',//new
+    CONTACT_ADDED: 'Legal Contact has been added successfully.',
+    NO_RECORDS_FOUND: 'No Records Found.',
+    
   }
 };

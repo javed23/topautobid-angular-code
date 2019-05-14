@@ -7,7 +7,6 @@ Design and Developed by: potenzaglobalsolutions.com
 
 */
 
-
  /*****************
 ================================================
  (  Media Queries  )
@@ -215,7 +214,7 @@ Design and Developed by: potenzaglobalsolutions.com
 .masonry.columns-4 .masonry-item { width:50%; } 
 .latest-blog.border.masonry-main .masonry.columns-2 .masonry-item { width: 100%; }
 .sorting-options-main .price-slide, .sorting-options-main .price-slide-2 { margin-bottom: 30px; }
-.sorting-options-main .text-right { text-align: left; margin-top: 10px; }
+.sorting-options-main .text-right { text-align: left;  }
 .sorting-options-main .pagination-nav.text-center { text-align: left; margin: 14px 0px; }
 .sorting-options-main .sorting-options .selectpicker { margin-left: 0px; margin-right: 10px; }
 .product-listing .car-grid .car-details { margin-top: 20px; }
@@ -324,7 +323,30 @@ Design and Developed by: potenzaglobalsolutions.com
 
 .search-top { display: block !important; float: none; padding: 19px 0px; margin-left: 0; }
 .search-box { opacity: 1 !important; visibility:visible !important; position: inherit!important; width: 100% !important; border-top: 0; }
-
+.product-listing .listing-sidebar .widget-search ul li i {
+  padding-right: 2px;
+}
+.product-listing .listing-sidebar .widget-search ul li span {
+  font-size: 10px;
+  width: 22px;
+  height: 22px;
+  line-height: 22px;
+  margin-top: 5px;
+}
+.pagination-nav ul li a {
+  padding: 8px 16px !important;
+  line-height: 1;
+}
+.ngx-pagination .current{
+  padding: 0px 16px !important;
+}
+.ngx-pagination .disabled{
+  padding: 0px 16px !important;
+}
+.listing_outer .right_sec {
+  display: block;
+  width: 100%;
+}
 }
 @media (max-width: 767px){
 .container {
@@ -427,6 +449,12 @@ h2 { font-size: 32px; }
 /*car-directory*/
 .car-directory-banner .search-tab .car-total { float: left !important; }
 .car-item .car-image img { width: 100%; }
+.Listing_view .car-item .car-image img {
+  width: auto;
+}
+.Listing_view .car-item .car-image {
+  text-align: left;
+}
 
 }
 
@@ -484,6 +512,58 @@ h2 { font-size: 32px; }
 
 
 }
+
+@media( max-width:575px){
+  .sorting-options .change-view-button {
+    margin-top: 10px;
+    display: flex!important;
+    justify-content: space-around;
+    margin-bottom: 10px;
+  }
+  .product-listing .price-search {
+    width: 100%;
+    margin-top: 10px;
+}
+.listing_outer .right_sec .selected-box, .listing_outer .right_sec .date_filters_start {
+  display: block;
+  width: 100%!important;
+  margin: 5px 0;
+}
+.clear_inputs {
+  float: none;
+  width: 100%;
+  padding: 0;
+  margin-top: 5px;
+}
+.clear_inputs i:before {
+  content: "Reset Date"!important;
+  background: #db2d2e;
+  color: #fff;
+  line-height: 1;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 15px;
+  padding: 10px 14px;
+  display: block;
+}
+
+
+.product-listing .car-item {
+  margin-top: 30px;
+  max-width: 300px;
+  margin: 15px auto;
+}
+.pagination_outer {
+  justify-content: center;
+}
+
+.showing_records {
+  margin-bottom: 15px;
+}
+
+
+}
+
+
 
 @media( max-width:479px) { 
 /*home-2*/

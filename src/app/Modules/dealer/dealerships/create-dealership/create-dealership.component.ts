@@ -1,4 +1,4 @@
-import { Component,  SimpleChanges, OnInit, ViewChild, AfterViewInit, ViewEncapsulation, ElementRef, Input, NgZone } from '@angular/core';
+import { Component,  SimpleChanges, OnInit, Output, EventEmitter, ViewChild, AfterViewInit, ViewEncapsulation, ElementRef, Input, NgZone } from '@angular/core';
 import { AbstractControl, FormGroup, FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { of, Observable } from 'rxjs';
 import { Router, ActivatedRoute } from "@angular/router";
@@ -37,7 +37,10 @@ import * as _ from 'lodash';
 export class CreateDealershipComponent implements OnInit {
   @Input() isOpen: any;  
   @Input() updateExistingDealership: boolean;   
-  @Input() dealershipsItems: any;   
+  @Input() dealershipsItems: any;  
+  @Input() dealershipItemIndex:any;
+  @Output() onUpdateDealership: EventEmitter<any> = new EventEmitter<any>();
+
   @ViewChild('contentSection') contentSection :ElementRef;
 
   updatedItem:any='';
@@ -50,8 +53,9 @@ export class CreateDealershipComponent implements OnInit {
 
   
 
-  constructor(private http: HttpClient, private commonUtilsService:CommonUtilsService, private dealershipService: DealershipService, private pageLoaderService: PageLoaderService, private toastr: ToastrManager, private formBuilder: FormBuilder, private zone: NgZone,private router: Router) {
+  constructor(private titleService:TitleService, private http: HttpClient, private commonUtilsService:CommonUtilsService, private dealershipService: DealershipService, private pageLoaderService: PageLoaderService, private toastr: ToastrManager, private formBuilder: FormBuilder, private zone: NgZone,private router: Router) {
 
+    
     //initalize new dealership form
     this.initalizeNewDealershipForm();
 
@@ -62,9 +66,11 @@ export class CreateDealershipComponent implements OnInit {
   
 
   ngOnChanges(changes: SimpleChanges) {
-
+    //setting the page title
+    this.titleService.setTitle();
+    
     if(this.isOpen)    
-      $(this.contentSection.nativeElement).modal('show');       
+      $(this.contentSection.nativeElement).modal({backdrop: 'static', keyboard: false, show: true});       
       
     
 
@@ -150,7 +156,7 @@ export class CreateDealershipComponent implements OnInit {
         this.profilePic = (profilePath) ? profilePath : defaultPath;
   
         // Create the mock file:
-        const mockFile = { name: "Filename", size: 12345 };
+        const mockFile = {  };
   
         // Call the default addedfile event handler
         this.emit("addedfile", mockFile);
@@ -160,23 +166,15 @@ export class CreateDealershipComponent implements OnInit {
        
         this.emit("complete", mockFile);
   
-  
-        this.on("totaluploadprogress",function(progress){ 
-          console.log('totaluploadprogress')
-          componentObj.pageLoaderService.pageLoader(true);//start showing page loader
-          componentObj.pageLoaderService.setLoaderText('Uploading file '+progress+'%');//setting loader text
-          if(progress>=100){
-            componentObj.pageLoaderService.pageLoader(false);//hide page loader
-          }
-        })
-        this.on('sending', function(file, xhr, formData){
-          console.log('sending')
+    
+      
+        this.on('sending', function(file, xhr, formData){         
           formData.append('folder', 'Dealership');
         });
        
         this.on("success", function(file, serverResponse) {
           console.log('success')
-          this.removeFile(file);
+         
           // Called after the file successfully uploaded.         
           
           componentObj.newDealershipForm.controls['profile_pic'].setValue(serverResponse);    
@@ -189,15 +187,20 @@ export class CreateDealershipComponent implements OnInit {
             $(".dz-image img").attr('class', 'img-fluid');
             $(".dz-image img").attr('src', serverResponse);
           });
-          
+          this.removeFile(file); 
           componentObj.pageLoaderService.pageLoader(false);//hide page loader
         });
         this.on("error", function(file, serverResponse) {
           console.log('error')
+          this.removeFile(file);
           // Called after the file successfully uploaded.         
           componentObj.pageLoaderService.pageLoader(false);
           componentObj.toastr.errorToastr(serverResponse, 'Oops!');        
         });
+        this.on("complete", function(file, serverResponse) {
+         // this.removeFile(file);      
+        });
+        
       }     
     };
   }
@@ -213,8 +216,10 @@ export class CreateDealershipComponent implements OnInit {
       state: ['', Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50),Validators.pattern('^[a-zA-Z ]*$')])],
       zip: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])], 
       profile_pic: [null],
+      _id:[null],
+      //dealer_id: [localStorage.getItem('loggedinUserId')],
+      dealer_id: "5ca1e88f9dac60394419c0bc"
       
-      dealer_id: [localStorage.getItem('loggedinUserId')],
     });
   }
   // push new dealership item 
@@ -224,7 +229,8 @@ export class CreateDealershipComponent implements OnInit {
       this.submitted = true;
       return;
     }   
-    this.newDealershipForm.get('dealer_id').setValue(localStorage.getItem('loggedinUserId'))
+    //this.newDealershipForm.get('dealer_id').setValue(localStorage.getItem('loggedinUserId'))
+    this.newDealershipForm.get('dealer_id').setValue('5ca1e88f9dac60394419c0bc')
     console.log('form',this.newDealershipForm.value);
     this.dealershipsItems.push(
       this.newDealershipForm.value
@@ -244,34 +250,59 @@ export class CreateDealershipComponent implements OnInit {
       let dealerProfilePic = (this.dealershipsItems[index]['profile_pic'])?this.dealershipsItems[index]['profile_pic']:environment.WEB_ENDPOINT + '/' + environment.DEFAULT_PROFILE;
       $(".dz-image img").attr('src', dealerProfilePic);
     });
-    this.newDealershipForm.patchValue(this.dealershipsItems[index]) //binding the dealership datat   
-
-    /*Object.keys(this.newDealershipForm.controls).forEach(key => {      
-      this.newDealershipForm.get(key).setValue(this.dealershipsItems[index][key])
-    });*/
-    
-    
+    this.newDealershipForm.patchValue(this.dealershipsItems[index])        
   }
 
   // update content of newely added dealership
-  updateNewDealership() { 
+  onUpdateExistingDealership() { 
     
 
     if(this.newDealershipForm.invalid) {
       return;
     } 
-    this.dealershipsItems[this.updatedItem] = this.newDealershipForm.value;   
+  
+    
+    
+      console.log('dealershipsItems',this.newDealershipForm.value);
+      this.onUpdateDealership.emit({index:this.dealershipItemIndex, value:this.newDealershipForm.value });  
+      this.dealershipsItems[this.dealershipItemIndex] = this.newDealershipForm.value;
+      console.log('this.dealershipsItems',this.dealershipsItems);
+      this.dealershipService.newDealership([this.newDealershipForm.value])     
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        (response) => {  
+          //this.viewedpages = [];
+          this.resetForm();
+          this.dealershipsItems = [];         
+          //this.isLoading = false;
+          
+          $(this.contentSection.nativeElement).modal('hide');   
+          this.commonUtilsService.onSuccess(environment.MESSAGES.DEALERSHIP_UPDATED);           
+          this.pageLoaderService.refreshPage(true)            
+          
+        },error => {
+
+          this.commonUtilsService.onError(error); 
+
+        });
+
+        //console.log('dealerships',this.newDealershipForm.value)
+         
+    
+
     this.IsForUpdate = false;
     this.resetForm(); 
   } 
 
   // To delete specific dealership  
-  deleteNewDealership(index) {  
-    if(! confirm("Are you sure to delete this record ?")) {
+  async deleteNewDealership(index) {  
+     //confirm before deleting car
+    if(! await this.commonUtilsService.isDeleteConfirmed()) {
       return;
     }
     var pulled = _.pullAt(this.dealershipsItems, [index]);
   }
+
 
   //saving the new dealership
   onCreateDealership() {   
@@ -279,6 +310,7 @@ export class CreateDealershipComponent implements OnInit {
     console.log('dealershipsItems',this.dealershipsItems);
     if(this.dealershipsItems.length == 0){
       this.submitted = true;
+      this.toastr.errorToastr('Please add atleast one dealership.', 'Oops!');//showing error toaster message 
       return;
     }else{
       console.log('this.dealershipsItems',this.dealershipsItems);
@@ -293,18 +325,13 @@ export class CreateDealershipComponent implements OnInit {
           //this.isLoading = false;
           
           $(this.contentSection.nativeElement).modal('hide');
-          this.pageLoaderService.pageLoader(false);//show page loader
-          this.pageLoaderService.setLoaderText('');//setting loader text                    
-          this.toastr.successToastr(environment.MESSAGES.DEALERSHIP_ADDED, 'Success!'); //showing success toaster 
+          this.commonUtilsService.onSuccess(environment.MESSAGES.DEALERSHIP_ADDED);         
           this.pageLoaderService.refreshPage(true)  
           //this.setPage(this.defaultPagination);
           
           
         },error => {
-
-          this.pageLoaderService.setLoaderText(environment.MESSAGES.ERROR_TEXT_LOADER);//setting loader text
-          this.pageLoaderService.pageLoader(false);//hide page loader
-          this.toastr.errorToastr(error, 'Oops!');//showing error toaster message
+          this.commonUtilsService.onError(error); 
 
         });
 

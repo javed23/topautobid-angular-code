@@ -6,11 +6,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskModule } from 'ngx-mask'
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ArchwizardModule } from 'angular-archwizard';
-import { DropzoneModule, DropzoneConfigInterface,
-  DROPZONE_CONFIG } from 'ngx-dropzone-wrapper';
-
+import {
+  DropzoneModule, DropzoneConfigInterface,
+  DROPZONE_CONFIG
+} from 'ngx-dropzone-wrapper';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { NgxImageZoomModule } from 'ngx-image-zoom';
+
 
 //import social login modules
 import { SocialLoginModule } from 'angularx-social-login';
@@ -32,17 +36,19 @@ import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
-//cars management components
-import { ListComponent as CarsListComponent } from './cars/list/list.component';
-import { CarViewComponent } from './cars/car-view/car-view.component';
 
 //dealerships management components
-import { ListComponent as DealershipsListComponent } from './dealerships/list/list.component';
+import { ListComponent as DealershipsListComponent } from './dealerships/table-view/list.component';
 import { ContactViewComponent } from './dealerships/contact-view/contact-view.component';
 import { DealershipViewComponent } from './dealerships/dealership-view/dealership-view.component';
 import { CreateDealershipComponent } from './dealerships/create-dealership/create-dealership.component';
 import { CreateContactComponent } from './dealerships/create-contact/create-contact.component';
 import { PurchasesListComponent } from './purchases/purchases-list/purchases-list.component';
+
+//cars management components
+import { ListingComponent as CarsGridListComponent } from './cars/grid-list-view/listing.component';
+import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
+
 
 
 //facebook, google authentication configuration
@@ -83,32 +89,35 @@ let config = new AuthServiceConfig([
   declarations: [
     LoginComponent,
     HomeComponent,
-    SignupComponent, 
-    ProfileComponent, 
+    SignupComponent,
+    ProfileComponent,
     ForgotPasswordComponent,
-    CarsListComponent,
-    CarViewComponent,
     DealershipsListComponent,
     ContactViewComponent,
     DealershipViewComponent,
     CreateDealershipComponent,
     CreateContactComponent,
-    PurchasesListComponent    
-  ],
-  imports: [
+    PurchasesListComponent,
+    CarsGridListComponent,
+    CarDetailPageComponent
+  ]
+  ,
+ imports: [
     CommonModule,
     DealerRoutingModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SocialLoginModule,
+    SocialLoginModule, 
     SharedModule,
-    DropzoneModule,
-    NgxMaskModule.forRoot(),
-    NgbModule,
-    ArchwizardModule,
-    NgScrollbarModule,
-    NgxDatatableModule
+      DropzoneModule,
+      NgxMaskModule.forRoot(),
+      NgbModule,
+      ArchwizardModule,
+      NgScrollbarModule,
+      NgxDatatableModule,
+      NgxPaginationModule,
+    NgxImageZoomModule.forRoot()
   ],
   providers: [
     AdalService,

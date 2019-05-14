@@ -407,6 +407,27 @@ POTENZA.revolutionSlider = function (jQuery) {
       }
   }
 
+  POTENZA.slicksliderRecent = function () {
+    if ($(".slider-slick").exists()) {
+        $('.slider-for').slick({
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          arrows: true,
+          asNavFor: '.slider-nav'
+        });
+      $('.slider-nav').slick({
+        slidesToShow: 5,
+        slidesToScroll: 1,
+        asNavFor: '.slider-for',
+        dots: false,
+        centerMode: true,
+        focusOnSelect: true
+      });
+    }
+}
+
+
+
     /*************************
         NiceScroll
 *************************/ 
@@ -698,6 +719,7 @@ POTENZA.toggleFilters = function () {
         POTENZA.Isotope(),
         POTENZA.masonry();
         POTENZA.toggleFilters();
+        POTENZA.slicksliderRecent();
         
     });
 

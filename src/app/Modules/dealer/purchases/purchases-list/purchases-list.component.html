@@ -10,16 +10,62 @@
     <div class="row">
       <div class="col-md-12">
         <div class="listing_outer blog-sidebar">
-          <div class="sidebar-widget">
-            <div class="text-md-right mt-md-0 mt-sm-3">
-              <button class="button red" (click)="downloadCsv(1)"> Download </button>
-              <div class="widget-search ml-4">
-                <i class="fa fa-search"></i>
-                <input type="search" class="form-control placeholder" (input)="onSearch($event.target.value)"
-                  placeholder="Search....">
+          <div class="sorting-options-main">
+            <div class="row blog-sidebar listing_outer">
+              <div class="col-md-12 d-flex">
+                <div class="product-listing">
+                  <div class="price-search">
+                    <div class="search">
+                      <i class="fa fa-search"></i>
+                      <input type="search" class="form-control placeholder" (input)="onSearch($event.target.value)"
+                        placeholder="search.....">
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="right_sec ml-auto">
+                  <div class="input-group date_filters_start d-inline-block">
+                    <button class="button red" (click)="downloadCsv(1)"> Download </button>
+                  </div>
+
+                  <div class="input-group date_filters_start d-inline-block">
+                    <input [(ngModel)]="bidStartDate" class="form-control" (dateSelect)="onBidDateSelected($event)"
+                      type="text" (click)="startDate.toggle()" placeholder="Bid Date" ngbDatepicker
+                      #startDate="ngbDatepicker">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary calendar" (click)="startDate.toggle()"
+                        type="button"><span><i class="fa fa-calendar" aria-hidden="true"></i></span></button>
+                    </div>
+                  </div>
+
+                  <div class="input-group date_filters_start d-inline-block">
+                    <input [(ngModel)]="bidEndDate" class="form-control" type="text"
+                      (dateSelect)="onAcceptedDateSelected($event)" (click)="endDate.toggle()" placeholder="End Date"
+                      ngbDatepicker #endDate="ngbDatepicker">
+
+
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary calendar" (click)="endDate.toggle()"
+                        type="button"><span><i class="fa fa-calendar" aria-hidden="true"></i></span></button>
+                    </div>
+                  </div>
+
+
+                  <div data-toggle="tooltip" title="Reset Date Filter" (click)="clearDateFilters()"
+                    class="clear_inputs d-inline-block">
+                    <i class="fa fa-refresh" aria-hidden="true"></i>
+                  </div>
+
+                </div>
               </div>
             </div>
           </div>
+
+
+
+
+
           <div class="sidebar-widget">
             <div class="unordered-lists table-responsive text-center">
               <ngx-datatable #listingTable class="bootstrap" [rows]="purchases"

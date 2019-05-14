@@ -23,7 +23,7 @@ export class CarService {
     public listingCars(page: Page): Observable<PagedData<Car>> {
 
         //page['seller_id'] = localStorage.getItem('loggedinUserId') 
-        page['seller_id'] = '5c99ee618fb7ce6cf845a53d'
+        page['seller_id'] = '5cd170562688321559f12f32'
         return this.httpClient.post('car/listingCars', page)
             .map((response: any) => {
 
@@ -35,7 +35,10 @@ export class CarService {
                 let start = page.pageNumber * page.size;
                 for (let i in response.records) {
                     let jsonObj = response.records[i];
+                    console.log('jsonObj',jsonObj);
                     let car = new Car(jsonObj);
+
+                    console.log('created object',car);
                     pagedData.data.push(car);
                 }
                 pagedData.page = page;
@@ -43,6 +46,37 @@ export class CarService {
             })
     }
 
+    /**
+     * List seller's car
+     * @param page    passed object of Page.
+     * @return        Observable<PagedData<Car>>
+    */
+
+   public listingCarsOnDatable(page: Page): Observable<PagedData<Car>> {
+    
+    //page['seller_id'] = localStorage.getItem('loggedinUserId') 
+    page['seller_id'] = '5cd170562688321559f12f32'
+    return this.httpClient.post('car/listingCarsOnDatable', page,)
+    .map((response: any) => {         
+        
+        page.totalElements = response.count;
+        let pagedData = new PagedData<Car>();
+        page.totalElements = response.count;
+        page.filteredElements = response.filteredRecords;
+        page.totalPages = page.totalElements / page.size;
+        let start = page.pageNumber * page.size;        
+        for(let i in response.records){            
+            let jsonObj = response.records[i];
+            let car = new Car(jsonObj);
+            pagedData.data.push(car);
+        }
+        pagedData.page = page;
+        return pagedData;
+    })    
+}
+
+
+    
     /**
      * List cars on which delaer has posted the bids
      * @param page    passed object of Page.
@@ -54,23 +88,25 @@ export class CarService {
         page['dealer_id'] = '5ca1e88f9dac60394419c0bc'
 
         return this.httpClient.post('car/listingDealersCars', page)
-            .map((response: any) => {
-                console.log('response', response);
+        .map((response: any) => {
 
-                page.totalElements = response.count;
+            page.totalElements = response.count;
+            let pagedData = new PagedData<Car>();
+            page.totalElements = response.count;
+            page.filteredElements = response.filteredRecords;
+            page.totalPages = page.totalElements / page.size;
+            let start = page.pageNumber * page.size;
+            for (let i in response.records) {
+                let jsonObj = response.records[i];
+                console.log('jsonObj',jsonObj);
+                let car = new Car(jsonObj);
 
-                let pagedData = new PagedData<Car>();
-                page.totalElements = response.count;
-                page.totalPages = page.totalElements / page.size;
-                let start = page.pageNumber * page.size;
-                for (let i in response.records) {
-                    let jsonObj = response.records[i];
-                    let car = new Car(jsonObj);
-                    pagedData.data.push(car);
-                }
-                pagedData.page = page;
-                return pagedData;
-            })
+                console.log('created object',car);
+                pagedData.data.push(car);
+            }
+            pagedData.page = page;
+            return pagedData;
+        })
     }
 
     /**
@@ -93,7 +129,11 @@ export class CarService {
     public carDetail(carIdObject): Observable<any> {
 
         return this.httpClient.post('car/carDetail', carIdObject)
-            .map((response: any) => response)
+            .map((response: any) => { 
+                let car = new Car(response);
+                console.log('car detail', car);
+                return car;
+             })
     }
     /*
     * @param carData    car object to delete from database.
