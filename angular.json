@@ -37,7 +37,8 @@
               "src/assets/css/developer.css",
               "src/assets/css/responsive.css",              
               "src/styles.css",
-              "src/assets/css/css-loader.css"
+              "src/assets/css/css-loader.css",
+              "src/assets/css/ngx-datatable.css"
             ],
             "scripts": [
               "src/assets/js/jquery-3.3.1.min.js",

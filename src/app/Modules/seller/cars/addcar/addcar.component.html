@@ -219,13 +219,13 @@
                                 
                                         
                                                 <div class="f_width">
-                                                    <label>Body Type*</label>
+                                                    <label>Body Style*</label>
                                                     <select class="simple_select selectpicker" #vehicle_body_type formControlName="vehicle_body_type" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_body_type').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_body_type').errors }">
-                                                            <option value="">Select Body Type</option>
+                                                            <option value="">Select Body Style</option>
                                                             <option *ngFor="let bodyStyle of bodyStyles;" value="{{bodyStyle.name}}">{{bodyStyle.name}}</option> 
                                                         </select>
                                                     <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_body_type').touched || isBasicInfoSubmitted">                      
-                                                        <app-form-validation-errors errorPrefix="Body Type " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_body_type').errors"></app-form-validation-errors>   
+                                                        <app-form-validation-errors errorPrefix="Body Style " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_body_type').errors"></app-form-validation-errors>   
                                                         </p> 
                                                 </div>
                                         
@@ -266,8 +266,14 @@
                                                                                 {{color.label}}
                                                                         </span>
                                                                     </label>
-                                                                </li> 
+                                                                </li>
+                                                                 
                                                             </ul>
+
+                                                            <div class="Radio_BTN other_color">
+                                                                <input (click)="setInteriorColor('Other')" formControlName="vehicle_interior_color"  type="radio" value="Other" id="vehicle_interior_color_other">
+                                                                <label for="vehicle_interior_color_other">Other Color</label>
+                                                            </div>
 
                                                             <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_interior_color').touched || isBasicInfoSubmitted">                      
                                                                 <app-form-validation-errors errorPrefix="Interior Color " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_interior_color').errors"></app-form-validation-errors>   
@@ -277,6 +283,15 @@
                                                     
                                                         
                                                     
+                                                </div>
+
+                                                <div class="f_width" [hidden]="!isOtherInteriorColorSelected">
+                                                   
+                                                    <input type="text" class="simple_select form-control placeholder" formControlName="vehicle_interior_color_if_other_selected" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_interior_color_if_other_selected').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_interior_color_if_other_selected').errors }" #vehicle_interior_color_if_other_selected>
+                
+                                                    <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_interior_color_if_other_selected').touched || isBasicInfoSubmitted">                      
+                                                        <app-form-validation-errors minLength=2 maxLength=20 errorPrefix="Interior Color " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_interior_color_if_other_selected').errors"></app-form-validation-errors>   
+                                                    </p>                                       			
                                                 </div>
                                         
                                                 <div class="f_width">
@@ -291,13 +306,27 @@
                                                                     </span>
                                                                 </label>
                                                             </li> 
-                                                        </ul>    
+                                                            
+                                                        </ul> 
+                                                        <div class="Radio_BTN other_color">
+                                                                <input (click)="setExteriorColor('Other')" formControlName="vehicle_exterior_color"  type="radio" value="Other" id="vehicle_exterior_color_other">
+                                                                <label for="vehicle_exterior_color_other">Other Color</label>
+                                                            </div>    
                                                                                                                 
                                                         <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_exterior_color').touched || isBasicInfoSubmitted">                      
                                                             <app-form-validation-errors errorPrefix="Exterior Color " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_exterior_color').errors"></app-form-validation-errors>   
                                                         </p>
                                                     </div>			
-                                                </div>                        
+                                                </div> 
+                                                
+                                                <div class="f_width" [hidden]="!isOtherExteriorColorSelected">
+                                                   
+                                                    <input type="text" class="simple_select form-control placeholder" formControlName="vehicle_exterior_color_if_other_selected" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_exterior_color_if_other_selected').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_exterior_color_if_other_selected').errors }" #vehicle_exterior_color_if_other_selected>
+                
+                                                    <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_exterior_color_if_other_selected').touched || isBasicInfoSubmitted">                      
+                                                        <app-form-validation-errors minLength=2 maxLength=20 errorPrefix="Exterior Color " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_exterior_color_if_other_selected').errors"></app-form-validation-errors>   
+                                                    </p>                                       			
+                                                </div>
                                             
                                                 <div class="f_width">
                                                                 
@@ -431,7 +460,7 @@
                                                     <div class="details_inner">
                                                         <h6>Your Vehicle info</h6>
                                                     <ul>
-                                                        <li><label>Zip: </label><span>{{vehicle_zip.value}}</span></li>
+                                                        <li><label>ZIP: </label><span>{{vehicle_zip.value}}</span></li>
                                                         <li><label>Make: </label><span>{{vehicle_make.value}}</span></li>
                                                         <li><label>Model: </label><span>{{vehicle_model.value}}</span></li>
                                                         <li><label>Trim: </label><span>{{vehicle_trim.value}}</span></li>
@@ -442,8 +471,10 @@
                                                         <li><label>Transmission: </label><span>{{vehicle_transmission.value}}</span></li>
                                                         <li><label>Fuel Type: </label><span>{{vehicle_fuel_type.value}}</span></li>
                                                         <li><label>Drive Type: </label><span>{{vehicle_drive_type.value}}</span></li>
-                                                        <li><label>Interior Color: </label><span>{{interiorColor}}</span></li>
-                                                        <li><label>Exterior Color: </label><span>{{exteriorColor}}</span></li>
+                                                        <li><label>Interior Color: </label><span>{{!isOtherInteriorColorSelected?interiorColor:vehicle_interior_color_if_other_selected.value}}</span></li>
+                                                        
+                                                        <li><label>Exterior Color: </label><span>{{!isOtherExteriorColorSelected?exteriorColor:vehicle_exterior_color_if_other_selected.value}}</span></li>
+                                                        
                                                         <li><label>Interior Material: </label><span>{{vehicle_interior_material.value}}</span></li>
                                                     </ul>
                                                 </div>
@@ -620,25 +651,7 @@
                                                     </div>
                                             </div>
                                             <div class="clearfix"></div>
-                                            <div class="col-md-12">
-                                                <div class="form-group ">
-                                                    <label>My Pay Off*</label>
-                                                    <input #vehicle_pay_off type="text" currencyMask [options]="{ allowNegative: false, align: 'left', nullable: true}" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_pay_off" [ngClass]="{ 'is-invalid': (aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_pay_off').touched || isAboutVehicleSubmitted) && aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_pay_off').errors }">        
-                                                    
-                                                    <p *ngIf="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_pay_off').touched || isAboutVehicleSubmitted">                      
-                                                        <app-form-validation-errors errorPrefix="Pay Off " [errors]="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_pay_off').errors"></app-form-validation-errors>   
-                                                    </p>
-                                                </div>
-                                                
-                                                <div class="form-group">
-                                                        <label>Finance Bank*</label>
-                                                        <input #vehicle_finance_bank type="text" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_finance_bank" [ngClass]="{ 'is-invalid': (aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_finance_bank').touched || isAboutVehicleSubmitted) && aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_finance_bank').errors }">        
-                                                        
-                                                        <p *ngIf="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_finance_bank').touched || isAboutVehicleSubmitted">                      
-                                                            <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="Finance Bank " [errors]="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_finance_bank').errors"></app-form-validation-errors>   
-                                                        </p>
-                                                </div>
-                                            </div>
+                                            
                                     </div>
                                     <!--Vehicle Ownership Section-->
 
@@ -665,7 +678,7 @@
                                         <div class="details_inner">
                                             <h6>Your Vehicle info</h6>
                                         <ul>
-                                            <li><label>Zip: </label><span>{{vehicle_zip.value}}</span></li>
+                                            <li><label>ZIP: </label><span>{{vehicle_zip.value}}</span></li>
                                             <li><label>Make: </label><span>{{vehicle_make.value}}</span></li>
                                             <li><label>Model: </label><span>{{vehicle_model.value}}</span></li>
                                             <li><label>Trim: </label><span>{{vehicle_trim.value}}</span></li>
@@ -676,14 +689,16 @@
                                             <li><label>Transmission: </label><span>{{vehicle_transmission.value}}</span></li>
                                             <li><label>Fuel Type: </label><span>{{vehicle_fuel_type.value}}</span></li>
                                             <li><label>Drive Type: </label><span>{{vehicle_drive_type.value}}</span></li>
-                                            <li><label>Interior Color: </label><span>{{interiorColor}}</span></li>
-                                            <li><label>Exterior Color: </label><span>{{exteriorColor}}</span></li>
+                                            <li><label>Interior Color: </label><span>{{!isOtherInteriorColorSelected?interiorColor:vehicle_interior_color_if_other_selected.value}}</span></li>
+                                            
+                                            <li><label>Exterior Color: </label><span>{{!isOtherExteriorColorSelected?exteriorColor:vehicle_exterior_color_if_other_selected.value}}</span></li>
+                                            
                                             <li><label>Interior Material: </label><span>{{vehicle_interior_material.value}}</span></li>
                                         </ul>
                                         </div>
                                         <div class="details_inner" *ngIf="interiorImagesArray?.length > 0 || exteriorImagesArray?.length > 0">
                                                 <div *ngIf="interiorImagesArray?.length > 0">
-                                                    <h6>Upload Images: Interior</h6>
+                                                    <h6>Interior Images: </h6>
                                                     <div class="category_images">
                                                         
                                                         <ul>
@@ -694,7 +709,7 @@
                                                     </div>
                                                 </div>
                                                 <div *ngIf="exteriorImagesArray?.length > 0">
-                                                    <h6 class="mt-4">Upload Images: Exterior</h6>
+                                                    <h6 class="mt-4">Exterior Images: </h6>
                                                     <div class="category_images">                                 
                                                         <ul>
                                                             <li *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
@@ -771,12 +786,12 @@
                                                     <div class="collapsable_body">
                                                             <div class="collapsable_body_inner">   
                                                                 <div class="form-group">
-                                                                        <label>Description*</label>
+                                                                        <label>Explain*</label>
             
                                                                         <textarea #vehicle_condition_description class="simple_select form-control placeholder" formControlName="vehicle_condition_description" [ngClass]="{ 'is-invalid': (vehicleConditionWizard.controls.vehicle_condition.get('vehicle_condition_description').touched || isVehicleConditionSubmitted) && vehicleConditionWizard.controls.vehicle_condition.get('vehicle_condition_description').errors }"></textarea>
                     
                                                                         <p *ngIf="vehicleConditionWizard.controls.vehicle_condition.get('vehicle_condition_description').touched || isVehicleConditionSubmitted">                      
-                                                                            <app-form-validation-errors minLength=10 maxLength=200 errorPrefix="Description " [errors]="vehicleConditionWizard.controls.vehicle_condition.get('vehicle_condition_description').errors"></app-form-validation-errors>   
+                                                                            <app-form-validation-errors minLength=10 maxLength=200 errorPrefix="Explain " [errors]="vehicleConditionWizard.controls.vehicle_condition.get('vehicle_condition_description').errors"></app-form-validation-errors>   
                                                                         </p>      
                                                                 </div>  
                                                                 <div class="form-group">
@@ -856,7 +871,7 @@
                                                     <div class="details_inner">
                                                         <h6>Your Vehicle info</h6>
                                                         <ul>
-                                                            <li><label>Zip: </label><span>{{vehicle_zip.value}}</span></li>
+                                                            <li><label>ZIP: </label><span>{{vehicle_zip.value}}</span></li>
                                                             <li><label>Make: </label><span>{{vehicle_make.value}}</span></li>
                                                             <li><label>Model: </label><span>{{vehicle_model.value}}</span></li>
                                                             <li><label>Trim: </label><span>{{vehicle_trim.value}}</span></li>
@@ -867,14 +882,16 @@
                                                             <li><label>Transmission: </label><span>{{vehicle_transmission.value}}</span></li>
                                                             <li><label>Fuel Type: </label><span>{{vehicle_fuel_type.value}}</span></li>
                                                             <li><label>Drive Type: </label><span>{{vehicle_drive_type.value}}</span></li>
-                                                            <li><label>Interior Color: </label><span>{{interiorColor}}</span></li>
-                                                            <li><label>Exterior Color: </label><span>{{exteriorColor}}</span></li>
+                                                            <li><label>Interior Color: </label><span>{{!isOtherInteriorColorSelected?interiorColor:vehicle_interior_color_if_other_selected.value}}</span></li>
+                                                            
+                                                            <li><label>Exterior Color: </label><span>{{!isOtherExteriorColorSelected?exteriorColor:vehicle_exterior_color_if_other_selected.value}}</span></li>
+                                                            
                                                             <li><label>Interior Material: </label><span>{{vehicle_interior_material.value}}</span></li>
                                                         </ul>
                                                     </div>
                                                     <div class="details_inner" *ngIf="interiorImagesArray?.length > 0 || exteriorImagesArray?.length > 0">
                                                             <div *ngIf="interiorImagesArray?.length > 0">
-                                                                <h6>Upload Images: Interior</h6>
+                                                                <h6>Interior Images: </h6>
                                                                 <div class="category_images">
                                                                     
                                                                     <ul>
@@ -885,7 +902,7 @@
                                                                 </div>
                                                             </div>
                                                             <div *ngIf="exteriorImagesArray?.length > 0">
-                                                                <h6 class="mt-4">Upload Images: Exterior</h6>
+                                                                <h6 class="mt-4">Exterior Images: </h6>
                                                                 <div class="category_images">                                 
                                                                     <ul>
                                                                         <li *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
@@ -898,8 +915,8 @@
                                                     <div class="details_inner">
                                                             <h6>About Vehicle</h6>
                                                             <ul>
-                                                                    <li><label>Vehicle has Second Key: </label><span>{{secondKey?'On':'Off'}}</span></li>                                            
-                                                                    <li><label>Vehicle has any aftermarket: </label><span>{{vehicleAftermarket?'On':'Off'}}</span></li>                              
+                                                                    <li><label>Vehicle has Second Key: </label><span>{{secondKey?'ON':'OFF'}}</span></li>                                            
+                                                                    <li><label>Vehicle has any aftermarket: </label><span>{{vehicleAftermarket?'ON':'OFF'}}</span></li>                              
                                                                     <li *ngIf="vehicleAftermarket"><label>Description: </label><span>{{vehicle_aftermarket_description?.value}}</span></li>                                    
                                                                     <li *ngIf="vehicleAftermarket && (checkObjectLength(afterMarketImagesArray.value) > 0)">
                                                                         <label>Images: </label>
@@ -911,11 +928,10 @@
                                                                         </ul>
                                                                         </div>
                                                                     </li>     
-                                                                    <li *ngIf="cleanTitle"><label>Clean Title: </label><span>{{cleanTitle?'On':'Off'}}</span></li> 
+                                                                    <li *ngIf="cleanTitle"><label>Clean Title: </label><span>{{cleanTitle?'ON':'OFF'}}</span></li> 
                                                                     <li *ngIf="!cleanTitle"><label>Clean Title: </label><span>{{vehicleOwnership}}</span></li>          
                                                                     <li *ngIf="isOtherSelected"><label>Explain: </label><span>{{vehicle_ownership_description?.value}}</span></li>  
-                                                                    <li><label>Pay Off: </label><span>{{vehicle_pay_off?.value}}</span></li> 
-                                                                    <li><label>Finance Bank: </label><span>{{vehicle_finance_bank?.value}}</span></li>                                       
+                                                                                                           
                                                                 </ul>
                                                     </div>        
                                             </div>
@@ -991,7 +1007,7 @@
                                         <div class="details_inner">
                                             <h6>Your Vehicle info</h6>
                                             <ul>
-                                                <li><label>Zip: </label><span>{{vehicle_zip.value}}</span></li>
+                                                <li><label>ZIP: </label><span>{{vehicle_zip.value}}</span></li>
                                                 <li><label>Make: </label><span>{{vehicle_make.value}}</span></li>
                                                 <li><label>Model: </label><span>{{vehicle_model.value}}</span></li>
                                                 <li><label>Trim: </label><span>{{vehicle_trim.value}}</span></li>
@@ -1002,14 +1018,16 @@
                                                 <li><label>Transmission: </label><span>{{vehicle_transmission.value}}</span></li>
                                                 <li><label>Fuel Type: </label><span>{{vehicle_fuel_type.value}}</span></li>
                                                 <li><label>Drive Type: </label><span>{{vehicle_drive_type.value}}</span></li>
-                                                <li><label>Interior Color: </label><span>{{interiorColor}}</span></li>
-                                                <li><label>Exterior Color: </label><span>{{exteriorColor}}</span></li>
+                                                <li><label>Interior Color: </label><span>{{!isOtherInteriorColorSelected?interiorColor:vehicle_interior_color_if_other_selected.value}}</span></li>
+                                                
+                                                <li><label>Exterior Color: </label><span>{{!isOtherExteriorColorSelected?exteriorColor:vehicle_exterior_color_if_other_selected.value}}</span></li>
+                                                
                                                 <li><label>Interior Material: </label><span>{{vehicle_interior_material.value}}</span></li>
                                             </ul>
                                         </div>
                                         <div class="details_inner" *ngIf="interiorImagesArray?.length > 0 || exteriorImagesArray?.length > 0">
                                                 <div *ngIf="interiorImagesArray?.length > 0">
-                                                    <h6>Upload Images: Interior</h6>
+                                                    <h6>Interior Images: </h6>
                                                     <div class="category_images">
                                                         
                                                         <ul>
@@ -1020,7 +1038,7 @@
                                                     </div>
                                                 </div>
                                                 <div *ngIf="exteriorImagesArray?.length > 0">
-                                                    <h6 class="mt-4">Upload Images: Exterior</h6>
+                                                    <h6 class="mt-4">Exterior Images: </h6>
                                                     <div class="category_images">                                 
                                                         <ul>
                                                             <li *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
@@ -1034,7 +1052,7 @@
                                                 <h6>About Vehicle</h6>
                                                 <ul>
                                                         <li><label>Vehicle has Second Key: </label><span>{{secondKey?'On':'Off'}}</span></li>                                            
-                                                        <li><label>Vehicle has any aftermarket: </label><span>{{vehicleAftermarket?'On':'Off'}}</span></li>                              
+                                                        <li><label>Vehicle has any aftermarket: </label><span>{{vehicleAftermarket?'ON':'OFF'}}</span></li>                              
                                                         <li *ngIf="vehicleAftermarket"><label>Description: </label><span>{{vehicle_aftermarket_description?.value}}</span></li>                                    
                                                         <li *ngIf="vehicleAftermarket && (checkObjectLength(afterMarketImagesArray.value) > 0)"><label>Images: </label>
                                                             <div class="category_images">
@@ -1045,11 +1063,10 @@
                                                             </ul>
                                                             </div>
                                                         </li>     
-                                                        <li *ngIf="cleanTitle"><label>Clean Title: </label><span>{{cleanTitle?'On':'Off'}}</span></li> 
+                                                        <li *ngIf="cleanTitle"><label>Clean Title: </label><span>{{cleanTitle?'ON':'OFF'}}</span></li> 
                                                         <li *ngIf="!cleanTitle"><label>Clean Title: </label><span>{{vehicleOwnership}}</span></li>          
                                                         <li *ngIf="isOtherSelected"><label>Explain: </label><span>{{vehicle_ownership_description?.value}}</span></li>  
-                                                        <li><label>Pay Off: </label><span>{{vehicle_pay_off?.value}}</span></li> 
-                                                        <li><label>Finance Bank: </label><span>{{vehicle_finance_bank?.value}}</span></li>                                       
+                                                                                              
                                                     </ul>
                                         </div>  
                                         <div class="details_inner">
@@ -1057,7 +1074,7 @@
                                             <ul>
                                                 <li><label>Car Condition: </label><span>
                                                         {{vehicleConditionValue}}</span></li>
-                                                <li *ngIf="isVehicleConditionSelected"><label>Description: </label><span>{{vehicle_condition_description?.value}}</span></li> 
+                                                <li *ngIf="isVehicleConditionSelected"><label>Explain: </label><span>{{vehicle_condition_description?.value}}</span></li> 
                                                 <li *ngIf="isVehicleConditionSelected && (checkObjectLength(vehicleConditionImagesArray.value) > 0)"><label>Images: </label>
                                                     <div class="category_images">
                                                     <ul>
@@ -1083,25 +1100,50 @@
                             <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header justify-content-center">
-                                        <h2 class="underline_heading">Seller Comments</h2>         
+                                        <h2 class="underline_heading">FINANCE DETAILS</h2>         
                                 </div>
                                 <form [formGroup]="offerInHands">
-                                <div class="modal-body">            
+                                      
+                                <div formGroupName="vehicle_finance_details" class="modal-body">   
                                     
-                                        <label>Enter Price* </label>
+                                    
+
+                                    <div class="col-md-12">
+                                            <div class="form-group ">
+                                                <label>My Pay Off*</label>
+                                                <input #vehicle_pay_off type="text" currencyMask [options]="{ allowNegative: false, align: 'left', nullable: true}" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_pay_off" [ngClass]="{ 'is-invalid': (offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').touched || isOfferInHandsSubmitted) && offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').errors }">        
+                                                
+                                                <p *ngIf="offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').touched || isOfferInHandsSubmitted">                      
+                                                    <app-form-validation-errors errorPrefix="Pay Off " [errors]="offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').errors"></app-form-validation-errors>   
+                                                </p>
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                    <label>Finance Bank*</label>
+                                                    <input #vehicle_finance_bank type="text" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_finance_bank" [ngClass]="{ 'is-invalid': (offerInHands.controls.vehicle_finance_details.get('vehicle_finance_bank').touched || isOfferInHandsSubmitted) && offerInHands.controls.vehicle_finance_details.get('vehicle_finance_bank').errors }">        
+                                                    
+                                                    <p *ngIf="offerInHands.controls.vehicle_finance_details.get('vehicle_finance_bank').touched || isOfferInHandsSubmitted">                      
+                                                        <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="Finance Bank " [errors]="offerInHands.controls.vehicle_finance_details.get('vehicle_finance_bank').errors"></app-form-validation-errors>   
+                                                    </p>
+                                            </div>
+                                        
+
+
+                                    
+                                        <label>Offer In Hand* </label>
                                         <div class="form-group enter_price">
                                             
-                                            <input #offerInHandsPrice type="text" currencyMask [options]="{ allowNegative: false, align: 'left', nullable: true}" class="form-control grey_input" formControlName="vehicle_offer_in_hands_price" [ngClass]="{ 'is-invalid': (offerInHands.controls.vehicle_offer_in_hands_price.touched || isOfferInHandsSubmitted) && offerInHands.controls.vehicle_offer_in_hands_price.errors }">   
+                                            <input #offerInHandsPrice type="text" currencyMask [options]="{ allowNegative: false, align: 'left', nullable: true}" class="form-control grey_input" formControlName="vehicle_offer_in_hands_price" [ngClass]="{ 'is-invalid': (offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').touched || isOfferInHandsSubmitted) && offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').errors }">   
                                             <div class="uploadImages">
                                                 <div class="dropzone dropzone-container" [dropzone]="offerInHandsConfiguration" [disabled]="disabled"></div>
                                             </div>  
                                             
                                             
-                                            <p *ngIf="offerInHands.controls.vehicle_offer_in_hands_price.touched || isOfferInHandsSubmitted">                      
-                                                    <app-form-validation-errors errorPrefix="Price " [errors]="offerInHands.controls.vehicle_offer_in_hands_price.errors"></app-form-validation-errors>   
+                                            <p *ngIf="offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').touched || isOfferInHandsSubmitted">                      
+                                                    <app-form-validation-errors errorPrefix="Offer In Hand " [errors]="offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').errors"></app-form-validation-errors>   
                                                 </p>
                                         </div>                
-                                    
+                                    </div>
                                         
                                     <!--Upload Images Section-->
                                         <div class="col-md-12"> 
@@ -1153,7 +1195,7 @@
                                         </div>
                                         <div class="detail_body">
                                             <ul>
-                                                <li><span class="label">Zip: </span><span class="value">{{vehicle_zip?.value}}</span></li>
+                                                <li><span class="label">ZIP: </span><span class="value">{{vehicle_zip?.value}}</span></li>
                                                 <li><span class="label">Make: </span><span class="value">{{vehicle_make?.value}}</span></li>
                                                 <li><span class="label">Model: </span><span class="value">{{vehicle_model?.value}}</span></li>
                                                 <li><span class="label">Trim: </span><span class="value">{{vehicle_trim?.value}}</span></li>
@@ -1164,8 +1206,10 @@
                                                 <li><span class="label">Transmission: </span><span class="value">{{vehicle_transmission?.value}}</span></li>
                                                 <li><span class="label">Fuel Type: </span><span class="value">{{vehicle_fuel_type?.value}}</span></li>
                                                 <li><span class="label">Drive Type: </span><span class="value">{{vehicle_drive_type?.value}}</span></li>  
-                                                <li><span class="label">Interior Color: </span><span class="value">{{interiorColor}}</span></li>  
-                                                <li><span class="label">Exterior Color: </span><span class="value">{{exteriorColor}}</span></li>  
+                                                <li><span class="label">Interior Color: </span><span class="value">{{!isOtherInteriorColorSelected?interiorColor:vehicle_interior_color_if_other_selected.value}}</span></li> 
+                                                 
+                                                <li><span class="label">Exterior Color: </span><span class="value">{{!isOtherExteriorColorSelected?exteriorColor:vehicle_exterior_color_if_other_selected.value}}</span></li> 
+                                                                                               
                                                 <li><span class="label">Interior Material: </span><span class="value">{{vehicle_interior_material?.value}}</span></li>
                                                                         
                                             </ul>
@@ -1234,8 +1278,8 @@
                                         </div>
                                         <div class="detail_body">
                                             <ul>
-                                                <li><span class="label">Vehicle has any second key :</span> <span class="value">{{secondKey?'On':'Off'}}</span></li>
-                                                <li><span class="label">Vehicle has any aftermarket :</span> <span class="value">{{vehicleAftermarket?'On':'Off'}}</span>
+                                                <li><span class="label">Vehicle has any second key :</span> <span class="value">{{secondKey?'ON':'OFF'}}</span></li>
+                                                <li><span class="label">Vehicle has any aftermarket :</span> <span class="value">{{vehicleAftermarket?'ON':'OFF'}}</span>
                                                     <span *ngIf="vehicleAftermarket" class="inner_box">
                                                         <span class="box_outer">
                                                             <h6>Description:</h6>
@@ -1252,15 +1296,12 @@
                                                     </span>
                                                 </li>
                                                 <li *ngIf="cleanTitle"><span class="label">Clean Title :</span> <span class="value">
-                                                    {{cleanTitle?'On':'Off'}}</span></li>
+                                                    {{cleanTitle?'ON':'OFF'}}</span></li>
                                                         
                                                 <li *ngIf="!cleanTitle"><span class="label">Clean Title:</span> <span class="value">{{vehicleOwnership}}</span>                            
                                                 <li *ngIf="isOtherSelected"><span class="label">If Other, Explain</span> <span class="value">{{vehicle_ownership_description?.value}}</span>
                                                 </li>
-                                                <li><span class="label">Pay Off :</span> <span class="value">
-                                                    {{vehicle_pay_off?.value}}</span></li>
-                                                <li><span class="label">Finance Bank :</span> <span class="value">
-                                                    {{vehicle_finance_bank?.value}}</span></li>
+                                                
                                             </ul>
                                         </div>
                                     </div>
@@ -1280,7 +1321,7 @@
                                                     <span class="value">{{vehicleConditionValue}}</span>
                                                     <span *ngIf="isVehicleConditionSelected" class="inner_box pb-3">
                                                         <span class="box_outer">
-                                                            <h6>Description:</h6>
+                                                            <h6>Explain:</h6>
                                                             <p>{{vehicle_condition_description?.value}}</p>
                                                             <h6 *ngIf="checkObjectLength(vehicleConditionImagesArray.value) > 0">Images :</h6>
                                                             <span *ngIf="checkObjectLength(vehicleConditionImagesArray.value) > 0" class="relative_images">
@@ -1309,11 +1350,11 @@
                                         </div>
                                         <div class="detail_body">
                                             <ul>
-                                                <li><span class="label">Car to be picked up :</span> <span class="value">{{vehiclePickedUp?'On':'Off'}}</span>
+                                                <li><span class="label">Car to be picked up :</span> <span class="value">{{vehiclePickedUp?'ON':'OFF'}}</span>
                                                     
                                                 </li>
                                                 <li><span class="label">Willing Drive :</span> <span class="value">
-                                                    {{willingToDrive?'On':'Off'}}</span></li>
+                                                    {{willingToDrive?'ON':'OFF'}}</span></li>
 
                                                 <li *ngIf="willingToDrive"><span class="label">How Many Miles? :</span> <span class="value">
                                                             {{willing_to_drive_how_many_miles?.value}}</span></li>    
@@ -1325,19 +1366,23 @@
                                 <div *ngIf="!isSkipSubmit" class="col-lg-6">
                                     <div class="detail_box">
                                         <div class="detail_head">
-                                            <h5>Offer In Hand</h5>
+                                            <h5>Finance Details</h5>
                                             <!--a href="javascript:void(0)" (click)="showOfferInHands()" class="edit ml-auto">Edit <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a-->
                                         </div>
                                         <div class="detail_body">
                                             <ul>
+                                                    <li><span class="label">Pay Off :</span> <span class="value">
+                                                            {{vehicle_pay_off?.value}}</span></li>
+                                                        <li><span class="label">Finance Bank :</span> <span class="value">
+                                                            {{vehicle_finance_bank?.value}}</span></li>
                                                 <li>
-                                                    <span class="label">Price :</span> <span class="value">
+                                                    <span class="label">Offer In Hand :</span> <span class="value">
                                                         {{offerInHandsPrice?.value}}
                                                     </span>
-                                                    <div class="inner_box">
+                                                    <div *ngIf="checkObjectLength(offerInHandsImagesArray.value) > 0" class="inner_box">
 
                                                             <div class="box_outer">
-                                                                <span *ngIf="checkObjectLength(offerInHandsImagesArray.value) > 0" class="relative_images">
+                                                                <span  class="relative_images">
                                                                         <span *ngFor="let offerInHandsImage of offerInHandsImagesArray.value | keyvalue; let offerInHandsIndex = index;" class="img_box">
                                                                             <a href="javascript:void(0)">
                                                                                 <img src="{{offerInHandsImage.value.file_path}}" alt="" class="img-fluid">
@@ -1367,7 +1412,7 @@
                                 <div class="col-lg-12 text-center">
                                         <div class="button_Submission mb-4">
                                                 <button class="button red d-inline-block width-auto boder0 mt-4" type="button" awPreviousStep>Previous Step</button>                                    
-                                                <button class="button red d-inline-block width-auto boder0 mt-4" (click)="onSubmitAddCar()" type="button" >Add Car</button>		
+                                                <button class="button red d-inline-block width-auto boder0 mt-4" (click)="onSubmitAddCar()" type="button" >Submit Car</button>		
                                             </div>
                                 </div>
                             </div>

@@ -11,7 +11,7 @@ import { DropzoneModule, DropzoneConfigInterface,
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxPaginationModule } from 'ngx-pagination'; 
-import { NgxImageZoomModule } from 'ngx-image-zoom';
+import { NgxGalleryModule } from 'ngx-gallery';
 
 
 //import social login modules
@@ -112,7 +112,8 @@ let config = new AuthServiceConfig([
     NgScrollbarModule,
     NgxDatatableModule,
     NgxPaginationModule,
-    NgxImageZoomModule.forRoot()
+    NgxGalleryModule
+
   ],
   providers: [
     AdalService,

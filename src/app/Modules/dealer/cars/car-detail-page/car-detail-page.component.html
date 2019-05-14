@@ -98,13 +98,9 @@ car-details -->
           
           <div class="slider-slick relative">
              
-                  <div *ngIf="! allCategoryCars.length" class="slider slider-for detail-big-car-gallery"> 
-                      <span>
-                          <img src="/assets/images/no_vehicle.png" alt="" class="img-fluid">
-                      </span> 
-                  </div> 
+                  
              
-              <div *ngIf="allCategoryCars.length" class="image_filter">
+              <div *ngIf="galleryImages.length" class="image_filter">
                   <div class="filter_dropdown">
                     <a (click)="imageFilterToggle()" href="javascript:void(0)" id="filter_menu_link"><img
                         src="assets/images/filter_icon.png"></a>
@@ -121,23 +117,15 @@ car-details -->
                     </div>
                   </div>
                 </div>
-              <div *ngIf="allCategoryCars.length"class="slider slider-for detail-big-car-gallery"> 
-                <span *ngFor="let carImg of allCategoryCars">
-                   
-                    <ngx-image-zoom  
-                        click   
-                        [thumbImage]=myThumbnail
-                        [fullImage]=myFullresImage
-                    ></ngx-image-zoom>
-                </span>                 
+                <div *ngIf="! galleryImages.length" class="slider slider-for detail-big-car-gallery"> 
+                  <span>
+                      <img src="/assets/images/no_vehicle.png" alt="" class="img-fluid">
+                  </span> 
               </div>
-              <div *ngIf="allCategoryCars.length" class="slider slider-nav"> 
-                  <span *ngFor="let carThumbImg of allCategoryCars">
-                      <img src="{{carThumbImg.file_path}}" alt=""
-                    class="img-fluid">
-                  </span>    
-                  
-              </div>
+                <div *ngIf="galleryImages.length">
+                   <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
+                </div>
+             
            </div>
           
        </div>

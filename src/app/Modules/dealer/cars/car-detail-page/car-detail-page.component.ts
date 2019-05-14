@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import {Location} from '@angular/common';
+import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from 'ngx-gallery';
 
 //modules services, models and enviornment file
 import { TitleService, CarService, CommonUtilsService } from '../../../../core/_services'
@@ -15,12 +16,14 @@ import * as _ from 'lodash';
   styleUrls: ['./car-detail-page.component.css']
 })
 export class CarDetailPageComponent implements OnInit {
+  galleryOptions: NgxGalleryOptions[];
+  galleryImages: NgxGalleryImage[];
+
+
   carDetail: any;
   isImageFilterEnable:Boolean = false
   selectedCategories: any= []
   allCategoryCars:any = []
-  myThumbnail="https://wittlock.github.io/ngx-image-zoom/assets/thumb.jpg"
-  myFullresImage="https://wittlock.github.io/ngx-image-zoom/assets/fullres.jpg"
   
 
   title: string = 'Car Detail';
@@ -45,6 +48,16 @@ export class CarDetailPageComponent implements OnInit {
         this.carDetail = response     
       
         this.allCategoryCars = this.carDetail.car_images
+        this.carDetail.car_images.forEach(element => {
+          this.galleryImages.push(
+            {
+              small: element.file_path,
+              medium: element.file_path,
+              big: element.file_path,
+              label:element.file_category
+          }
+          )
+        });
         this.commonUtilsService.hidePageLoader();
         setTimeout(function () {
           POTENZA.slicksliderRecent()
@@ -85,10 +98,33 @@ export class CarDetailPageComponent implements OnInit {
   onImageFilter(event):void{   
     (event.target.checked)?this.selectedCategories.push(event.target.value):_.pullAt(this.selectedCategories,this.selectedCategories.indexOf(event.target.value))
   
-    if(this.selectedCategories.length)
-      this.allCategoryCars = this.carDetail.car_images.filter((l) => _.includes(this.selectedCategories,l.file_category) ).map((l) => l);
-    else
-      this.allCategoryCars = this.carDetail.car_images
+    if(this.selectedCategories.length){
+      this.carDetail.car_images.forEach(element => {
+        if(_.includes(this.selectedCategories,element.file_category)){
+          this.galleryImages.push(
+            {
+              small: element.file_path,
+              medium: element.file_path,
+              big: element.file_path,
+              label:element.file_category
+          }
+          )
+        }        
+      });
+    }
+    else{
+      this.carDetail.car_images.forEach(element => {
+        this.galleryImages.push(
+          {
+            small: element.file_path,
+            medium: element.file_path,
+            big: element.file_path,
+            label:element.file_category
+        }
+        )
+      });
+    }
+      
 
  
       this.destorySliderReinit()
@@ -108,6 +144,35 @@ export class CarDetailPageComponent implements OnInit {
 
   ngOnInit() {
     POTENZA.tabs();
-    POTENZA.carousel();     
+    POTENZA.carousel();  
+    
+    
+    this.galleryOptions = [
+      {
+          width: '100%',
+          height: '490px',
+          thumbnailsColumns: 4,
+          imageAnimation: NgxGalleryAnimation.Slide
+      },
+      // max-width 800
+      {
+          breakpoint: 800,
+          width: '100%',
+          height: '600px',
+          imagePercent: 80,
+          thumbnailsPercent: 20,
+          thumbnailsMargin: 20,
+          thumbnailMargin: 20
+      },
+      // max-width 400
+      {
+          breakpoint: 400,
+          preview: false
+      }
+  ];
+  console.log('this.galleryImages',typeof this.galleryImages)
+  this.galleryImages = [];
+  console.log('this.galleryImages',typeof this.galleryImages)
+
   } 
 }

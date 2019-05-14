@@ -450,4 +450,62 @@ ngx-image-zoom .ngxImageZoomContainer[_ngcontent-c7] {
     width: 100% !important;
     height: auto !important;
 }
+.ngx-gallery-arrow-left .ngx-gallery-icon .ngx-gallery-icon-content {
+    background: #ffffff;
+    border-radius: 50%;
+    border: 1px solid #e3e3e3;
+    width: 36px;
+    height: 36px;
+}
+.ngx-gallery-arrow-right .ngx-gallery-icon .ngx-gallery-icon-content {
+    background: #ffffff;
+    border-radius: 50%;
+    border: 1px solid #e3e3e3;
+    width: 36px;
+    height: 36px;
+}
+
+
+
+.ngx-gallery-arrow-right .ngx-gallery-icon .ngx-gallery-icon-content:before {
+    content: '\f105' !important;
+    font-size: 20px;
+    line-height: 35px;
+    text-align: center;
+    color: #323232;
+    padding-left: 13px;
+    position: absolute;
+}
+.ngx-gallery-arrow-left .ngx-gallery-icon .ngx-gallery-icon-content:before {
+    content: '\f104' !important;
+    font-size: 20px;
+    line-height: 35px;
+    text-align: center;
+    color: #323232;
+    padding-left: 13px;
+    position: absolute;
+}
+.ngx-gallery-arrow-left .ngx-gallery-icon .ngx-gallery-icon-content:hover {
+    background: #db2d2e;
+    border-color: #db2d2e;
+}
+.ngx-gallery-arrow-right .ngx-gallery-icon .ngx-gallery-icon-content:hover {
+    background: #db2d2e;
+    border-color: #db2d2e;
+}
+.ngx-gallery-arrow-left .ngx-gallery-icon .ngx-gallery-icon-content:hover:before {
+    color: #fff;
+}
+.ngx-gallery-arrow-right .ngx-gallery-icon .ngx-gallery-icon-content:hover:before {
+    color: #fff;
+}
+
+/*
+.slider-for .slick-next:before {
+    content: '\f105';
+    font-size: 20px;
+    line-height: 30px;
+    text-align: center;
+    color: #323232;
+}*/
 
