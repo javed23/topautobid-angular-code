@@ -19,7 +19,8 @@ export class CarDetailPageComponent implements OnInit {
   isImageFilterEnable:Boolean = false
   selectedCategories: any= []
   allCategoryCars:any = []
- 
+  myThumbnail="https://wittlock.github.io/ngx-image-zoom/assets/thumb.jpg"
+  myFullresImage="https://wittlock.github.io/ngx-image-zoom/assets/fullres.jpg"
   
 
   title: string = 'Car Detail';

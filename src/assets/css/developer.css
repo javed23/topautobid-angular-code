@@ -446,3 +446,8 @@ ngb-rating {
 .slick-slide img {
     width: 100%;
 }
+ngx-image-zoom .ngxImageZoomContainer[_ngcontent-c7] {
+    width: 100% !important;
+    height: auto !important;
+}
+

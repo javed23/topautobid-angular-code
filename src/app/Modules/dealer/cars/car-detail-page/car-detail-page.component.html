@@ -123,7 +123,12 @@ car-details -->
                 </div>
               <div *ngIf="allCategoryCars.length"class="slider slider-for detail-big-car-gallery"> 
                 <span *ngFor="let carImg of allCategoryCars">
-                    <img src="{{carImg.file_path}}" alt="" class="img-fluid">
+                   
+                    <ngx-image-zoom  
+                        click   
+                        [thumbImage]=myThumbnail
+                        [fullImage]=myFullresImage
+                    ></ngx-image-zoom>
                 </span>                 
               </div>
               <div *ngIf="allCategoryCars.length" class="slider slider-nav"> 
@@ -136,6 +141,8 @@ car-details -->
            </div>
           
        </div>
+      
+
        <div class="col-md-6">
          <div class="car-details-sidebar car-details-page">
             <div class="details-block details-weight">
@@ -263,6 +270,8 @@ car-details -->
              </div>
            </div>-->
          </div>
+        
+        
          <div class="feature-car">
          <h6>Recently Vehicle</h6>
      <div class="row">

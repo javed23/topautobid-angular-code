@@ -35,6 +35,7 @@
     "ng2-currency-mask": "^5.3.1",
     "ng6-toastr-notifications": "^1.0.4",
     "ngx-dropzone-wrapper": "^7.2.1",
+    "ngx-image-zoom": "^0.3.4",
     "ngx-mask": "^7.3.2",
     "ngx-pagination": "^3.2.1",
     "ngx-scrollbar": "^4.1.1",
