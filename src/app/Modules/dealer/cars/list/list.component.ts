@@ -8,7 +8,7 @@ import { NgbDateAdapter, NgbDateStruct, NgbDateNativeAdapter } from '@ng-bootstr
 //import services
 
   //modules core services
-  import { TitleService, CarService, CommonUtilsService  } from '../../../../core/_services'
+import { TitleService, CarService, CommonUtilsService  } from '../../../../core/_services'
 
 //import models
 import { PagedData, Car, Page } from "../../../../core/_models";
@@ -37,7 +37,7 @@ export class ListComponent implements AfterViewInit {
   startDateModel:any;
   endDateModel:any;
   page = new Page();
-  cars = new Array<Car>()
+  cars = new Array<Car>();
   viewedPages:any=[];
   car:Car;
   isModalOpen:boolean=false;
@@ -49,7 +49,7 @@ export class ListComponent implements AfterViewInit {
  readonly pageLimitOptions = environment.DEFAULT_PAGE_LIMIT_OPTIONS
  
  //dealer_id = localStorage.getItem('loggedinUserId')  
- dealer_id = '5ca1e88f9dac60394419c0bc'
+  dealer_id = '5ca1e88f9dac60394419c0bc';
  
 
   //title and breadcrumbs
@@ -137,12 +137,11 @@ export class ListComponent implements AfterViewInit {
           cars = Array.apply(null, Array(pagedData.page.totalElements));        
           cars = cars.map((x, i) => this.cars[i]);
         }    
-        const start = this.page.pageNumber * this.page.size;  
+        const start = this.page.pageNumber * this.page.size;
         pagedData.data.map((x, i) => cars[i + start] = x);
-        this.cars = cars;    
-        console.log('Rows',this.cars);
+        this.cars = cars;
         this.commonUtilsService.hidePageLoader();
-      //case error 
+      //case error
       },error => {
         this.commonUtilsService.onError(error);
       });
@@ -232,7 +231,6 @@ export class ListComponent implements AfterViewInit {
   * @return  void
   */
   private validateDateFilters(){
-    console.log('dates',this.datesFilter);
     if(! _.has(this.datesFilter, ['start']))
       this.commonUtilsService.onError('Please select start date');
     else if(! _.has(this.datesFilter, ['end']))
@@ -262,6 +260,7 @@ export class ListComponent implements AfterViewInit {
     }
     
   }
+
   /**
   * Show a popup modal
   * @param index    array index of selected car
@@ -275,7 +274,8 @@ export class ListComponent implements AfterViewInit {
       this.isModalOpen = true     
       this.car = this.cars[index]
     }
-  /**
+
+    /**
   * Reset modal popup to hide
   * @param isOpened    boolean value 
   * @return void

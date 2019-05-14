@@ -11,9 +11,8 @@
       <div class="col-md-12">
         <div class="listing_outer blog-sidebar">
           <div class="sidebar-widget">
-
             <div class="text-md-right mt-md-0 mt-sm-3">
-              <button class="button red" (click)="show(1,'createDealership')"> Download </button>
+              <button class="button red" (click)="downloadCsv(1)"> Download </button>
               <div class="widget-search ml-4">
                 <i class="fa fa-search"></i>
                 <input type="search" class="form-control placeholder" (input)="onSearch($event.target.value)"
@@ -21,20 +20,18 @@
               </div>
             </div>
           </div>
-
           <div class="sidebar-widget">
             <div class="unordered-lists table-responsive text-center">
-
-              <ngx-datatable #listingTable class="material" [rows]="purchases"
+              <ngx-datatable #listingTable class="bootstrap" [rows]="purchases"
                 [columns]="[{name:'ref'},{name:'Bid Date'},{name:'Acceptance Date'},{name:'Bid Price'},{name:'Contacts'},{name:'Fee Status'}]"
                 [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'"
                 [externalPaging]="true" [count]="page.totalElements" [offset]="page.pageNumber" [limit]="page.size"
                 (page)='setPage($event)'>
                 <ngx-datatable-column name="ref" prop="ref" [sortable]="true" [width]="200">
-                  <ng-template let-rowIndex="rowIndex" let-row="row"  ngx-datatable-cell-template>
+                  <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
                     <span (click)="viewCarDetails(row?.car_id?._id)">
-                    #{{ row?.car_id?.ref }}
-                  </span>
+                      #{{ row?.car_id?.ref }}
+                    </span>
                   </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Bid Date" prop="bid_date" [sortable]="true" [width]="200">
@@ -66,15 +63,11 @@
                     {{ row?.fee_status }}
                   </ng-template>
                 </ngx-datatable-column>
-
                 <ngx-datatable-footer>
                   <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
                     let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset"
                     let-isVisible="isVisible">
-
-
                     <div class="pagination_outer d-flex">
-
                       <div class="showing_records">
                         Showing <div class="selected-box number_records">
                           <select class="selectpicker my_select" id="per-page"
@@ -86,16 +79,11 @@
                           </select>
                         </div> records on page
                       </div>
-
                       <div class="ml-auto">
-                        <datatable-pager 
-                          [pagerLeftArrowIcon]="'datatable-icon-left'"
-                          [pagerRightArrowIcon]="'datatable-icon-right'"
-                           [pagerPreviousIcon]="'datatable-icon-prev'"
-                          [pagerNextIcon]="'datatable-icon-skip'" 
-                          [page]="curPage" [size]="pageSize" [count]="rowCount"
-                          [hidden]="!((rowCount / pageSize) > 1)" 
-                          (change)="listingTable.onFooterPage($event)">
+                        <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+                          [pagerRightArrowIcon]="'datatable-icon-right'" [pagerPreviousIcon]="'datatable-icon-prev'"
+                          [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage" [size]="pageSize" [count]="rowCount"
+                          [hidden]="!((rowCount / pageSize) > 1)" (change)="listingTable.onFooterPage($event)">
                         </datatable-pager>
                       </div>
                     </div>

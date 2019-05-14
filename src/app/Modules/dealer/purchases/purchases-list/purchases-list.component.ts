@@ -1,11 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild ,ViewEncapsulation} from '@angular/core';
 import { ToastrManager } from 'ng6-toastr-notifications';//toaster class
-import { DropzoneComponent, DropzoneDirective, DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
-//import services
-
 //shared services
 import { AlertService, PageLoaderService } from '../../../../shared/_services'
-
+import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
 //import DealerService 
 import { TitleService, DealerService } from '../../../../core/_services';
 //import models
@@ -19,6 +16,7 @@ import { environment } from '../../../../../environments/environment';
   providers: [
     DealerService
   ],
+  encapsulation: ViewEncapsulation.None
 })
 export class PurchasesListComponent implements OnInit {
   @ViewChild('myTable') table;
@@ -33,11 +31,8 @@ export class PurchasesListComponent implements OnInit {
   //Defined records limit and records limit options
   currentPageLimit: number = environment.DEFAULT_RECORDS_LIMIT
   readonly pageLimitOptions = environment.DEFAULT_PAGE_LIMIT_OPTIONS
-  
-  constructor(private dealerService: DealerService, private titleService: TitleService, private pageLoaderService: PageLoaderService, private toastr: ToastrManager) {
 
-    this.page.pageNumber = 0;
-    this.page.size = 2;
+  constructor(private dealerService: DealerService, private titleService: TitleService, private pageLoaderService: PageLoaderService, private toastr: ToastrManager) {
   }
 
   //default pagination settings
@@ -52,6 +47,7 @@ export class PurchasesListComponent implements OnInit {
     this.setPage(this._defaultPagination);
     // this.getPurchasesList();
   }
+  
   /**
    * To change the records limit on page
    * @param limit number of records to dispaly on page
@@ -67,18 +63,18 @@ export class PurchasesListComponent implements OnInit {
 
   /**
      * Populate the table with new data based on the page number
-     * @param page The page to select
+     * @param pageInfo The page object to select the records
      */
   setPage(pageInfo) {
     this.page.pageNumber = pageInfo.offset;
     this.page.size = pageInfo.pageSize;
     this.dealerService.getPurchaseList(this.page).subscribe(pagedData => {
-    this.page = pagedData.page;
-    this.purchases = pagedData.data;
+      this.page = pagedData.page;
+      this.purchases = pagedData.data;
     },
-    error=>{
-      this.toastr.errorToastr(error, 'Oops!');//showing error toaster message
-    });
+      error => {
+        this.toastr.errorToastr(error, 'Oops!');//showing error toaster message
+      });
   }
 
 
@@ -88,14 +84,49 @@ export class PurchasesListComponent implements OnInit {
    * @return  void
    */
   onSearch(searchValue: string) {
-    // this.viewedPages = [];
     this.page.search = searchValue
-    // this.setPage(this.defaultPagination);    
+    this.setPage(this._defaultPagination);
   }
 
-  viewCarDetails(carId:any){
-    console.log('the car id is ',carId);
+  viewCarDetails(carId: any) {
+    console.log('the car id is ', carId);
 
+  }
+
+
+  /**
+   * download the list of all purchases in csv
+   */
+  downloadCsv() {
+
+    if (this.purchases.length == 0)
+      return
+
+    var options = {
+      fieldSeparator: ',',
+      showLabels: true,
+      showTitle: true,
+      title: 'My Purchases List',
+      useBom: true,
+      headers: ["Ref ", "Bid Date", "Acceptence Date", "Bid Price", "Contacts", "Fee Status"]
+    };
+
+    let data = [];
+    //iterate purchase list and make custom data
+    this.purchases.forEach(purchase => {
+      let purchaseObj = {
+        car_ref: purchase.car_id.ref,
+        bid_date: purchase.bid_date,
+        bid_acceptence_date: purchase.bid_acceptance_date,
+        price: purchase.price,
+        contact: purchase.contact,
+        fee_status: purchase.fee_status
+      };
+      data.push(purchaseObj);
+    });
+
+    //pass data and options to download csv
+    new Angular5Csv(data, 'My Purchase List', options);
   }
 
 
