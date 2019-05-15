@@ -126,17 +126,8 @@ export class ListComponent implements AfterViewInit {
         (pagedData) => {      
         
         this.page = pagedData.page;
-        let cars = this.cars;
-
-        //if total fetched rows and totalElements(total rows from database) is not same
-        if (cars.length !== pagedData.page.totalElements) {
-          cars = Array.apply(null, Array(pagedData.page.totalElements));        
-          cars = cars.map((x, i) => this.cars[i]);
-        }    
-        const start = this.page.pageNumber * this.page.size;  
-        pagedData.data.map((x, i) => cars[i + start] = x);
-        this.cars = cars;
-        this.cars = [...this.cars];        
+       
+        this.cars =  pagedData.data;  
         console.log('Rows',this.cars);  
         this.commonUtilsService.hidePageLoader();
       //case error 

@@ -45,6 +45,7 @@ import { CreateContactComponent } from './dealerships/create-contact/create-cont
 //cars management components
 import { ListingComponent as CarsGridListComponent } from './cars/grid-list-view/listing.component';
 import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
+import { ContactRequestComponent } from './cars/contact-request/contact-request.component';
 
 
 
@@ -95,7 +96,8 @@ let config = new AuthServiceConfig([
     CreateDealershipComponent,
     CreateContactComponent,
     CarsGridListComponent,
-    CarDetailPageComponent
+    CarDetailPageComponent,
+    ContactRequestComponent
   ],
   imports: [
     CommonModule,

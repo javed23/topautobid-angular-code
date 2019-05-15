@@ -59,7 +59,7 @@
                                         <!--end--> 
                                         <input mask="0000" *ngIf="isMoreSelected" formControlName="vehicle_year_value" type="text" data-typeahead="sellCarModelYear" class="gs_ta" placeholder="Year" autocomplete="off"  [ngClass]="{ 'is-invalid': (vehicleOption.controls.vehicle_year_value.touched || isVehicleOptionSubmitted) && vehicleOption.controls.vehicle_year_value.errors }">
                                         <p class="error_label" *ngIf="(vehicleOption.controls.vehicle_year_value.touched || isVehicleOptionSubmitted) ">                      
-                                            <app-form-validation-errors errorPrefix="Year " minValue={{minYear}}  maxValue={{maxYear}}  [errors]="vehicleOption.controls.vehicle_year_value.errors"></app-form-validation-errors>
+                                            <app-form-validation-errors errorPrefix="Year " [isPrice]=false minValue={{minYear}}  maxValue={{maxYear}}  [errors]="vehicleOption.controls.vehicle_year_value.errors"></app-form-validation-errors>
                                         </p>
                                     </div>
                                    <button class="grayBtn" type="button" [disabled]="vehicleOption.invalid" (click)="validateYearOption()">Get My Car Details</button> 
@@ -1111,10 +1111,10 @@
                                     <div class="col-md-12">
                                             <div class="form-group ">
                                                 <label>My Pay Off*</label>
-                                                <input #vehicle_pay_off type="text" currencyMask [options]="{ allowNegative: false, align: 'left', nullable: true}" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_pay_off" [ngClass]="{ 'is-invalid': (offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').touched || isOfferInHandsSubmitted) && offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').errors }">        
+                                                <input #vehicle_pay_off type="text" currencyMask [options]="{ allowNegative: false, align: 'left'}" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_pay_off" [ngClass]="{ 'is-invalid': (offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').touched || isOfferInHandsSubmitted) && offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').errors }">        
                                                 
                                                 <p *ngIf="offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').touched || isOfferInHandsSubmitted">                      
-                                                    <app-form-validation-errors errorPrefix="Pay Off " [errors]="offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').errors"></app-form-validation-errors>   
+                                                    <app-form-validation-errors errorPrefix="Pay Off " [isPrice]=true minAmount='$1' [errors]="offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').errors"></app-form-validation-errors>   
                                                 </p>
                                             </div>
                                             
@@ -1133,14 +1133,14 @@
                                         <label>Offer In Hand* </label>
                                         <div class="form-group enter_price">
                                             
-                                            <input #offerInHandsPrice type="text" currencyMask [options]="{ allowNegative: false, align: 'left', nullable: true}" class="form-control grey_input" formControlName="vehicle_offer_in_hands_price" [ngClass]="{ 'is-invalid': (offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').touched || isOfferInHandsSubmitted) && offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').errors }">   
+                                            <input #offerInHandsPrice type="text" currencyMask [options]="{ allowNegative: false, align: 'left'}" class="form-control grey_input" formControlName="vehicle_offer_in_hands_price" [ngClass]="{ 'is-invalid': (offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').touched || isOfferInHandsSubmitted) && offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').errors }">   
                                             <div class="uploadImages">
                                                 <div class="dropzone dropzone-container" [dropzone]="offerInHandsConfiguration" [disabled]="disabled"></div>
                                             </div>  
                                             
                                             
                                             <p *ngIf="offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').touched || isOfferInHandsSubmitted">                      
-                                                    <app-form-validation-errors errorPrefix="Offer In Hand " [errors]="offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').errors"></app-form-validation-errors>   
+                                                    <app-form-validation-errors minAmount='$1' [isPrice]=true  errorPrefix="Offer In Hand " [errors]="offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').errors"></app-form-validation-errors>   
                                                 </p>
                                         </div>                
                                     </div>
@@ -1158,7 +1158,7 @@
                                         <!--Upload Images Section-->
                                 </div>  
                                 <div class="modal-footer justify-content-center">  
-                                    <button class="button red d-inline-block width-auto boder0 " type="button" data-dismiss="modal" (click)="skipOfferInHands()" awNextStep>Skip</button>          
+                                    <!--button class="button red d-inline-block width-auto boder0 " type="button" data-dismiss="modal" (click)="skipOfferInHands()" awNextStep>Skip</button-->          
                                     <button class="button red d-inline-block width-auto boder0 " [disabled]="offerInHands.invalid" type="submit" (click)="validateOfferInHands()" awNextStep>Submit </button>
                                 </div>
                                 </form>  

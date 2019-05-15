@@ -18,8 +18,8 @@ export const environment = {
   ],
   //aws 
   AWS: {
-    ACCESS_KEY: 'AKIAUGU7PKGK2DTCJVPA',
-    SECRET_KEY: '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',
+    ACCESS_KEY: '',
+    SECRET_KEY: '',
     REGION: 'us-west-2',
     BUCEKT_NAME: 'topautobid-dev',
     COGNITO: {

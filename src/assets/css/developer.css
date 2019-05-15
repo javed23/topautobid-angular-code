@@ -60,6 +60,7 @@ input[type="file"] {
     padding: 0;
     margin: 10px 0 0 10px;
     background: none;
+    border:0;
 }
 
 .country_code input {
@@ -300,7 +301,7 @@ input[type=search] {
 .top_sorting .change-view-button, .selected-box, .price-search {display: inline-block;}
 .top_sorting .selected-box{width:162px;}
 .product-listing .price-search {width:306px;}
-.pagination_outer {padding:20px 0px 0px 0px; width:100%;}
+.pagination_outer {padding:20px 0px 0px 0px !important; width:100%;}
 .pagination_outer .pagination-nav {margin-top:0px;}
 .input-group-append .calendar {border:0px;}
 .number_records {padding:0px 5px; display: inline-block;}
@@ -500,12 +501,19 @@ ngx-image-zoom .ngxImageZoomContainer[_ngcontent-c7] {
     color: #fff;
 }
 
-/*
-.slider-for .slick-next:before {
-    content: '\f105';
-    font-size: 20px;
-    line-height: 30px;
-    text-align: center;
-    color: #323232;
-}*/
+.ngx-gallery-arrow-right[_ngcontent-c12] .ngx-gallery-arrow[_ngcontent-c12] {
+    right: -17px!important;
+}
 
+.ngx-gallery-arrow-left[_ngcontent-c12] .ngx-gallery-arrow[_ngcontent-c12] {
+    left: -17px!important;
+}
+#newLegalContactForm .modal-content .Radio_BTN {
+    display: inline-block;
+    margin-right: 15px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+#newLegalContactForm .modal-content .Radio_BTN  label:before{
+    top: 2px;
+}

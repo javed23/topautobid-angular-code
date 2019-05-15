@@ -32,6 +32,7 @@ export class Car {
     miles: number;
     cover_image: string;
     car_images: any;
+    market_value: any;
 
 
 
@@ -65,11 +66,12 @@ export class Car {
         this.comments = object.vehicle_comments;
         this.location = object.location;
         this.images = object.vehicle_images;
-        this.bids = []
+        this.bids = object.bids
         this.offer_in_hand_images = object.vehicle_finance_details.vehicle_proof_image
         this.type = object.type
         this.miles = object.basic_info.vehicle_mileage;
         this.cover_image = (object.vehicle_images.length > 0) ? object.vehicle_images[0]['file_path'] : 'assets/images/no_vehicle.png'
         this.car_images = object.vehicle_images;
+        this.market_value = object.vehicle_aftermarket.vehicle_aftermarket_description;
     }
 }

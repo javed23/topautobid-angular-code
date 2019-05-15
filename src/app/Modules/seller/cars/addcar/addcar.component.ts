@@ -281,8 +281,8 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     this.offerInHands = this.formBuilder.group({ 
       vehicle_finance_details:this.formBuilder.group({
         vehicle_finance_bank: ['', Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50)])],
-        vehicle_pay_off: ['', Validators.compose([Validators.required])],       
-        vehicle_offer_in_hands_price : [0],
+        vehicle_pay_off: [0, Validators.compose([Validators.required, Validators.min(1)])],       
+        vehicle_offer_in_hands_price : [0, Validators.compose([Validators.required, Validators.min(1)])],
         vehicle_proof_image: this.formBuilder.array([]), 
       })      
     })
