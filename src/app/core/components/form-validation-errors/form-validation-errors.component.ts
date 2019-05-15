@@ -13,13 +13,17 @@ export class FormValidationErrorsComponent implements OnInit {
   @Input() errorPrefix: string;
   @Input() minLength: number;
   @Input() maxLength: number;
-  @Input() minValue: number;
+  @Input() minValue: number; 
   @Input() maxValue: number;
   @Input() patternError: string;
   @Input() errors: ValidationErrors;
+  @Input() minAmount: number;
+  @Input() isPrice: boolean;
 
   constructor() { }
 
   ngOnInit() { }
+
+
 
 }

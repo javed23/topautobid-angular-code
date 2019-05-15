@@ -880,7 +880,12 @@ p.error_msg {border:0px; padding:0px;     margin: 0; left:0px;}
 #offerInHandsSection .thumbnails {text-align: center;}
 #offerInHandsSection .thumbnail_list {width: calc(100% / 3);}
 
-
+.other_color {
+    margin-top: 15px;
+}
+.other_color label:before {
+    margin-top: 0;
+}
 
 
 /*-----Please do not include any other css at the bottom of responsive css-------*/

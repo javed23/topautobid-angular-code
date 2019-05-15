@@ -159,5 +159,29 @@ export class CommonUtilsService {
     })    
   }
 
+
+  /**
+  * Show confirmation popup before going to previous step.
+  * @return any
+  */
+ public isPreviousConfirmed(): any {
+  let isConfirmed = Swal.fire({
+    title: 'Do you want to leave this page?',
+    text: "Changes you made may not be saved.",
+    type: 'warning',
+    showCancelButton: true,
+    allowOutsideClick: false,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Leave',
+    cancelButtonText: 'Stay'
+  }).then((result) => {
+   
+    return (result.value) ? true : false
+  })  
+  
+  return isConfirmed;
+}
+
     
 }
