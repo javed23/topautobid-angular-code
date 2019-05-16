@@ -233,13 +233,12 @@
                                 
                                 <ngx-datatable-column name="bids" [sortable]="false" [width]="200">
                                     <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
-                                        $<b>0.00</b>
-                                        <!--<b>{{row.best_bid | currency:'USD':true:'2.2-2'}} </b> -->
-                                        <span
-                                            *ngIf="row.bids.length>1" class="left_bids">
-                                            <!--<button (click)="show(rowIndex, 'posted-car-bids')" class="left_bids">+{{row.bids.length}} more</button>-->
+                                        <!-- $<b>0.00</b> -->
+                                        <b>{{row?.best_bid | currency:'USD':true:'2.2-2'}} </b>
+                                        <span *ngIf="row?.bids"   class="left_bids">
+                                            <button (click)="show(row?._id)" class="left_bids">+{{ (row?.bids) -1}} more</button>
                                             
-                                            <button>See all ({{row.bids.length}}) bids</button></span>
+                                            <button>See all ({{row?.bids}}) bids</button></span>
                                     </ng-template>
                                 </ngx-datatable-column>
 
@@ -346,4 +345,4 @@ blog -->
 <!--<app-car-view [isOpen]="isModalOpen" (onClose)="hide($event)" [carObject]="car"></app-car-view>-->
 
 <!-- car-bids-details -->
-<app-car-bids [isOpen]="isBidsModalOpen" [carObject]="car"></app-car-bids>                
+<app-car-bids [isOpen]="isBidsModalOpen" [carId]="carId"></app-car-bids>                

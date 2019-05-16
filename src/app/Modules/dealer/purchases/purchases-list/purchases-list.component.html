@@ -71,8 +71,8 @@
               <ngx-datatable #listingTable class="bootstrap" [rows]="purchases"
                 [columns]="[{name:'ref'},{name:'Bid Date'},{name:'Acceptance Date'},{name:'Bid Price'},{name:'Contacts'},{name:'Fee Status'}]"
                 [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'"
-                [externalPaging]="true" [count]="page.totalElements" [offset]="page.pageNumber" [limit]="page.size"
-                (page)='setPage($event)'>
+                [externalPaging]="true"[externalSorting]="true" [count]="page.totalElements" [offset]="page.pageNumber" [limit]="page.size"
+                (page)='setPage($event)' (sort)="sortCallback($event)">
                 <ngx-datatable-column name="ref" prop="ref" [sortable]="true" [width]="200">
                   <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
                     <span (click)="viewCarDetails(row?.car_id?._id)">

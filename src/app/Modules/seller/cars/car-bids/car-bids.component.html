@@ -18,34 +18,54 @@
 
                 <div class="sidebar-widget">
                   <div class="unordered-lists table-responsive text-center">
-                    <table class="table table-bordered-custom-modal table-striped table-image-set">
-                      <thead class="thead-dark-custom-modal">
-                        <tr>
-                          <th>Ref</th>
-                          <th>Dealer</th>
-                          <th>Price</th>
-                          <th>Created At</th>                          
-                        </tr>
-                      </thead>
-                      <tbody *ngIf="carObject?.bids?.length <= 0">
-                        <tr>
-                          <td colspan="4" style="text-align:center">No records to display.</td>
-                        </tr>
-                      </tbody>
-
-                      <tbody *ngIf="carObject?.bids?.length>0">
-
-                        <tr *ngFor="let bid of carObject?.bids; let i = index">
-
-                          <td> {{i+1}}   </td>
-                          <td></td>
-                          <td>{{bid.price | currency:'USD':true:'2.2-2'}}</td>                       
-                        
-                          <td> {{ row?.created_at | date:'dd-MM-yyyy h:mm'}}</td>                        
-                        </tr>
-
-                      </tbody>
-                    </table>
+                    <ngx-datatable
+                    class="material"
+                    [rows]="bidss"
+                    [loadingIndicator]="loadingIndicator"
+                    [columns]="columns"
+                    [columnMode]="'force'"
+                    [headerHeight]="50"
+                    [footerHeight]="50"
+                    [rowHeight]="'auto'"
+                    [reorderable]="reorderable">
+      
+                    <ngx-datatable-column name="ref" prop="ref" [sortable]="true" [width]="200">
+                      <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
+                        <span (click)="viewCarDetails(row?.car_id?._id)">
+                          #{{ row?.car_id?.ref }}
+                        </span>
+                      </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Bid Date" prop="bid_date" [sortable]="true" [width]="200">
+                      <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
+                        {{ row?.bid_date | date }}
+                      </ng-template>
+                    </ngx-datatable-column>
+    
+                    <ngx-datatable-column name="Acceptance Date" prop="bid_acceptance_date" [sortable]="true" [width]="200">
+                      <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
+                        {{ row?.bid_acceptance_date | date }}
+                      </ng-template>
+                    </ngx-datatable-column>
+    
+                    <ngx-datatable-column name="Bid Price" prop="price" [sortable]="true" [width]="200">
+                      <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
+                        {{ row?.price }}
+                      </ng-template>
+                    </ngx-datatable-column>
+    
+                    <ngx-datatable-column name="Contacts" prop="contact" [sortable]="true" [width]="200">
+                      <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
+                        {{ row?.contact }}
+                      </ng-template>
+                    </ngx-datatable-column>
+    
+                    <ngx-datatable-column name="Fee Status" [sortable]="true" [width]="200">
+                      <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
+                        {{ row?.fee_status }}
+                      </ng-template>
+                    </ngx-datatable-column>
+                  </ngx-datatable>
                   </div>
 
                 </div>

@@ -40,7 +40,7 @@ export class ListComponent implements AfterViewInit {
   cars = new Array<Car>()
   isGridListing:boolean=true; //set boolean value to show/hide listing (grid/list)
   viewedPages:any=[];
-  car:Car;
+  carId:any;
   isModalOpen:boolean=false;
   isBidsModalOpen:boolean=false;
   isFiltersModalOpen:boolean=false;
@@ -136,7 +136,7 @@ export class ListComponent implements AfterViewInit {
         const start = this.page.pageNumber * this.page.size;  
         pagedData.data.map((x, i) => cars[i + start] = x);
         this.cars = cars;
-        this.cars = [...this.cars];        
+        this.cars = pagedData.data;        
         console.log('Rows',this.cars);  
         this.commonUtilsService.hidePageLoader();
       //case error 
@@ -271,10 +271,10 @@ onSort(event) {
   * @param type     which modal popup should show
   * Before delete, system confirm to delete the car. If yes opted then process deleting car else no action;
   */
-    show(index, type):void {
-      this.isBidsModalOpen = this.isModalOpen = false;
-      (type=='posted-car-bids') ? this.isBidsModalOpen = true : this.isModalOpen = true  
-      this.car = this.cars[index]
+    show(carId):void {
+      this.isBidsModalOpen  = true;
+      this.carId = carId
+
     }
 
   /**

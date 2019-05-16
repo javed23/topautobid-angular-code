@@ -65,7 +65,7 @@ export class Car {
         this.comments = object.vehicle_comments;
         this.location = object.location;
         this.images = object.vehicle_images;
-        this.bids = []
+        this.bids = object.bids
         this.offer_in_hand_images = object.vehicle_proof_image
         this.type = object.type
         this.miles = object.basic_info.vehicle_mileage;
