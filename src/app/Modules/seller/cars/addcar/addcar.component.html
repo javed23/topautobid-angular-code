@@ -6,7 +6,7 @@
 
 
 
- <section #contentSection class="  accordian_listing">
+ <section #addCarSection class="accordian_listing">
     <div class="banner_col" *ngIf="!isVehicleOptionSelected">
         <div class="banner_col_inner">
             <div class="banner_col_inner_center">
@@ -90,7 +90,7 @@
     <div *ngIf="isVehicleOptionSelected" [@AnimateList]>
       
         <aw-wizard #wizard class="step_col">    
-                <aw-wizard-step stepTitle="Basic Info" (stepEnter)="scrollToSpecificDiv($event)" [canExit]="moveDirection.bind(this, basicInfoWizard.valid)">  
+                <aw-wizard-step stepTitle="Basic Info" (stepEnter)="scrollToSpecificDiv()" [canExit]="moveDirection.bind(this, basicInfoWizard.valid)">  
                     
                     <div class="container">
                         <div class="steps_info">
@@ -287,10 +287,10 @@
 
                                                 <div class="f_width" [hidden]="!isOtherInteriorColorSelected">
                                                    
-                                                    <input type="text" class="simple_select form-control placeholder" formControlName="vehicle_interior_color_if_other_selected" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_interior_color_if_other_selected').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_interior_color_if_other_selected').errors }" #vehicle_interior_color_if_other_selected>
+                                                    <input type="text" minLength=2 maxLength=20 class="simple_select form-control placeholder" formControlName="vehicle_other_interior_color" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_other_interior_color').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_other_interior_color').errors }" #vehicle_other_interior_color>
                 
-                                                    <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_interior_color_if_other_selected').touched || isBasicInfoSubmitted">                      
-                                                        <app-form-validation-errors patternError="Must contain only characters." minLength=2 maxLength=20 errorPrefix="Interior Color " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_interior_color_if_other_selected').errors"></app-form-validation-errors>   
+                                                    <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_other_interior_color').touched || isBasicInfoSubmitted">                      
+                                                        <app-form-validation-errors patternError="Must contain only characters." minLength=2 maxLength=20 errorPrefix="Interior Color " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_other_interior_color').errors"></app-form-validation-errors>   
                                                     </p>                                       			
                                                 </div>
                                         
@@ -321,10 +321,10 @@
                                                 
                                                 <div class="f_width" [hidden]="!isOtherExteriorColorSelected">
                                                    
-                                                    <input type="text" class="simple_select form-control placeholder" formControlName="vehicle_exterior_color_if_other_selected" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_exterior_color_if_other_selected').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_exterior_color_if_other_selected').errors }" #vehicle_exterior_color_if_other_selected>
+                                                    <input type="text" minLength=2 maxLength=20 class="simple_select form-control placeholder" formControlName="vehicle_other_exterior_color" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_other_exterior_color').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_other_exterior_color').errors }" #vehicle_other_exterior_color>
                 
-                                                    <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_exterior_color_if_other_selected').touched || isBasicInfoSubmitted">                      
-                                                        <app-form-validation-errors patternError="Must contain only characters." minLength=2 maxLength=20 errorPrefix="Exterior Color " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_exterior_color_if_other_selected').errors"></app-form-validation-errors>   
+                                                    <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_other_exterior_color').touched || isBasicInfoSubmitted">                      
+                                                        <app-form-validation-errors patternError="Must contain only characters." minLength=2 maxLength=20 errorPrefix="Exterior Color " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_other_exterior_color').errors"></app-form-validation-errors>   
                                                     </p>                                       			
                                                 </div>
                                             
@@ -391,7 +391,7 @@
                         </div>  
                     </div>  
                 </aw-wizard-step>    
-                <aw-wizard-step stepTitle="Vehicle Images" (stepEnter)="scrollToSpecificDiv($event)" [canExit]="moveDirection.bind(this, uploadVehicleImagesWizard.valid)">
+                <aw-wizard-step stepTitle="Vehicle Images" (stepEnter)="scrollToSpecificDiv()" [canExit]="moveDirection.bind(this, uploadVehicleImagesWizard.valid)">
                     <!--Upload Images Section-->
                     <form [formGroup]="uploadVehicleImagesWizard">
                         <div class="container">      
@@ -473,9 +473,9 @@
                                                         <li><label>Transmission: </label><span>{{vehicle_transmission.value}}</span></li>
                                                         <li><label>Fuel Type: </label><span>{{vehicle_fuel_type.value}}</span></li>
                                                         <li><label>Drive Type: </label><span>{{vehicle_drive_type.value}}</span></li>
-                                                        <li><label>Interior Color: </label><span>{{!isOtherInteriorColorSelected?interiorColor:vehicle_interior_color_if_other_selected.value}}</span></li>
+                                                        <li><label>Interior Color: </label><span>{{!isOtherInteriorColorSelected?interiorColor:vehicle_other_interior_color.value}}</span></li>
                                                         
-                                                        <li><label>Exterior Color: </label><span>{{!isOtherExteriorColorSelected?exteriorColor:vehicle_exterior_color_if_other_selected.value}}</span></li>
+                                                        <li><label>Exterior Color: </label><span>{{!isOtherExteriorColorSelected?exteriorColor:vehicle_other_exterior_color.value}}</span></li>
                                                         
                                                         <li><label>Interior Material: </label><span>{{vehicle_interior_material.value}}</span></li>
                                                     </ul>
@@ -492,7 +492,7 @@
                     <!--Upload Images Section-->
 
                 </aw-wizard-step>   
-                <aw-wizard-step stepTitle="About Vehicle" (stepEnter)="scrollToSpecificDiv($event)" [canExit]="moveDirection.bind(this, aboutVehicleWizard.valid)">
+                <aw-wizard-step stepTitle="About Vehicle" (stepEnter)="scrollToSpecificDiv()" [canExit]="moveDirection.bind(this, aboutVehicleWizard.valid)">
                     
                         <!--More About Vehicle Section-->
 
@@ -505,7 +505,7 @@
                                     <div class="head_section">
                                         <h2 class="underline_heading">More About Your Vehicle</h2>
                                         <div class="switch_outer">
-                                        <span>Vehicle has any second key*</span>
+                                        <span>Has second key?</span>
                                         <label class="switch">
                                                 <input type="checkbox" #vehicleHasSecondKey (change)="toggleVehicleSecondKey($event)" formControlName="vehicle_has_second_key">
                                                 <span class="slider round"></span>
@@ -520,7 +520,7 @@
                                             <div class="col-md-12">
                                                 <div class="text-center collapsable_head">
                                                     <div class="switch_outer">                                                
-                                                        <span>Vehicle has any aftermarket options*</span>
+                                                        <span>Has aftermarket options?</span>
                                                         <label class="switch">
                                                         <input type="checkbox" formControlName="is_vehicle_aftermarket" (change)="toggleVehicleAfterMarket($event)">
                                                         <span class="slider round"></span>
@@ -534,11 +534,11 @@
 
                                             <div class="col-md-12">      
                                                 
-                                                <div class="collapsable_body" [hidden]="!isVehicleAftermarketSelected">
+                                                <div class="collapsable_body vehicle_aftermarket_label" [hidden]="!isVehicleAftermarketSelected">
                                                     <div class="collapsable_body_inner">   
                                                         <div class="form-group">
                                                                 <label>Description*</label>
-                                                                <textarea rows="4" class="simple_select form-control placeholder" formControlName="vehicle_aftermarket_description" [ngClass]="{ 'is-invalid': (aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').touched || isAboutVehicleSubmitted) && aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').errors }" #vehicle_aftermarket_description></textarea>  
+                                                                <textarea rows="4" minLength=10 maxLength=200 class="simple_select form-control placeholder" formControlName="vehicle_aftermarket_description" [ngClass]="{ 'is-invalid': (aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').touched || isAboutVehicleSubmitted) && aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').errors }" #vehicle_aftermarket_description></textarea>  
                                                                 
                                                                 <p *ngIf="aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').touched || isAboutVehicleSubmitted">                      
                                                                     <app-form-validation-errors minLength=10 maxLength=200 errorPrefix="Description " [errors]="aboutVehicleWizard.controls.vehicle_aftermarket.get('vehicle_aftermarket_description').errors"></app-form-validation-errors>   
@@ -642,10 +642,10 @@
                                                 
                                             </div> 
 
-                                            <div class="col-md-12" [hidden]="!isOtherSelected">
+                                            <div class="col-md-12 vehicle_ownership_other" [hidden]="!isOtherSelected">
                                                     <div class="form-group">
                                                             <label>Explain*</label>
-                                                            <textarea class="simple_select form-control placeholder" formControlName="vehicle_ownership_description" [ngClass]="{ 'is-invalid': (aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description').touched || isAboutVehicleSubmitted) && aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description').errors }" #vehicle_ownership_description></textarea>        
+                                                            <textarea minLength=10 maxLength=200 class="simple_select form-control placeholder" formControlName="vehicle_ownership_description" [ngClass]="{ 'is-invalid': (aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description').touched || isAboutVehicleSubmitted) && aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description').errors }" #vehicle_ownership_description></textarea>        
                                                             
                                                             <p *ngIf="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description').touched || isAboutVehicleSubmitted">                      
                                                                 <app-form-validation-errors minLength=10 maxLength=200 errorPrefix="Explain " [errors]="aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description').errors"></app-form-validation-errors>   
@@ -691,9 +691,9 @@
                                             <li><label>Transmission: </label><span>{{vehicle_transmission.value}}</span></li>
                                             <li><label>Fuel Type: </label><span>{{vehicle_fuel_type.value}}</span></li>
                                             <li><label>Drive Type: </label><span>{{vehicle_drive_type.value}}</span></li>
-                                            <li><label>Interior Color: </label><span>{{!isOtherInteriorColorSelected?interiorColor:vehicle_interior_color_if_other_selected.value}}</span></li>
+                                            <li><label>Interior Color: </label><span>{{!isOtherInteriorColorSelected?interiorColor:vehicle_other_interior_color.value}}</span></li>
                                             
-                                            <li><label>Exterior Color: </label><span>{{!isOtherExteriorColorSelected?exteriorColor:vehicle_exterior_color_if_other_selected.value}}</span></li>
+                                            <li><label>Exterior Color: </label><span>{{!isOtherExteriorColorSelected?exteriorColor:vehicle_other_exterior_color.value}}</span></li>
                                             
                                             <li><label>Interior Material: </label><span>{{vehicle_interior_material.value}}</span></li>
                                         </ul>
@@ -728,7 +728,7 @@
                     </div> 
                     </div>  
                 </aw-wizard-step> 
-                <aw-wizard-step stepTitle="Vehicle's Condition" (stepEnter)="scrollToSpecificDiv($event)" [canExit]="moveDirection.bind(this, vehicleConditionWizard.valid)">
+                <aw-wizard-step stepTitle="Vehicle's Condition" (stepEnter)="scrollToSpecificDiv()" [canExit]="moveDirection.bind(this, vehicleConditionWizard.valid)">
                     
                         <div class="container">
                             <div class="row">
@@ -785,12 +785,12 @@
                                                     
                                                                             
         
-                                                    <div class="collapsable_body">
+                                                    <div class="collapsable_body vehicle_condition_label">
                                                             <div class="collapsable_body_inner">   
                                                                 <div class="form-group">
                                                                         <label>Explain*</label>
             
-                                                                        <textarea #vehicle_condition_description class="simple_select form-control placeholder" formControlName="vehicle_condition_description" [ngClass]="{ 'is-invalid': (vehicleConditionWizard.controls.vehicle_condition.get('vehicle_condition_description').touched || isVehicleConditionSubmitted) && vehicleConditionWizard.controls.vehicle_condition.get('vehicle_condition_description').errors }"></textarea>
+                                                                        <textarea minLength=10 maxLength=200 #vehicle_condition_description class="simple_select form-control placeholder" formControlName="vehicle_condition_description" [ngClass]="{ 'is-invalid': (vehicleConditionWizard.controls.vehicle_condition.get('vehicle_condition_description').touched || isVehicleConditionSubmitted) && vehicleConditionWizard.controls.vehicle_condition.get('vehicle_condition_description').errors }"></textarea>
                     
                                                                         <p *ngIf="vehicleConditionWizard.controls.vehicle_condition.get('vehicle_condition_description').touched || isVehicleConditionSubmitted">                      
                                                                             <app-form-validation-errors minLength=10 maxLength=200 errorPrefix="Explain " [errors]="vehicleConditionWizard.controls.vehicle_condition.get('vehicle_condition_description').errors"></app-form-validation-errors>   
@@ -838,9 +838,9 @@
 
                                                         <div class="text-center"><h2 class="underline_heading">Seller Comments</h2></div>
                                                                     
-                                                        <label>Seller Comments*</label>                               
+                                                        <label>Seller Comments</label>                               
             
-                                                        <textarea #vehicle_comments class="grey_input form-control placeholder" rows="4" formControlName="vehicle_comments" [ngClass]="{ 'is-invalid': (vehicleConditionWizard.controls.vehicle_comments.touched || isVehicleConditionSubmitted) && vehicleConditionWizard.controls.vehicle_comments.errors }"></textarea>
+                                                        <textarea minLength=10 maxLength=200 #vehicle_comments class="grey_input form-control placeholder" rows="4" formControlName="vehicle_comments" [ngClass]="{ 'is-invalid': (vehicleConditionWizard.controls.vehicle_comments.touched || isVehicleConditionSubmitted) && vehicleConditionWizard.controls.vehicle_comments.errors }"></textarea>
             
                                                         <p *ngIf="vehicleConditionWizard.controls.vehicle_comments.touched || isVehicleConditionSubmitted">                      
                                                             <app-form-validation-errors minLength=10 maxLength=200 errorPrefix="Comment " [errors]="vehicleConditionWizard.controls.vehicle_comments.errors"></app-form-validation-errors>   
@@ -884,9 +884,9 @@
                                                             <li><label>Transmission: </label><span>{{vehicle_transmission.value}}</span></li>
                                                             <li><label>Fuel Type: </label><span>{{vehicle_fuel_type.value}}</span></li>
                                                             <li><label>Drive Type: </label><span>{{vehicle_drive_type.value}}</span></li>
-                                                            <li><label>Interior Color: </label><span>{{!isOtherInteriorColorSelected?interiorColor:vehicle_interior_color_if_other_selected.value}}</span></li>
+                                                            <li><label>Interior Color: </label><span>{{!isOtherInteriorColorSelected?interiorColor:vehicle_other_interior_color.value}}</span></li>
                                                             
-                                                            <li><label>Exterior Color: </label><span>{{!isOtherExteriorColorSelected?exteriorColor:vehicle_exterior_color_if_other_selected.value}}</span></li>
+                                                            <li><label>Exterior Color: </label><span>{{!isOtherExteriorColorSelected?exteriorColor:vehicle_other_exterior_color.value}}</span></li>
                                                             
                                                             <li><label>Interior Material: </label><span>{{vehicle_interior_material.value}}</span></li>
                                                         </ul>
@@ -917,8 +917,8 @@
                                                     <div class="details_inner">
                                                             <h6>About Vehicle</h6>
                                                             <ul>
-                                                                    <li><label>Vehicle has Second Key: </label><span>{{secondKey?'ON':'OFF'}}</span></li>                                            
-                                                                    <li><label>Vehicle has any aftermarket: </label><span>{{vehicleAftermarket?'ON':'OFF'}}</span></li>                              
+                                                                    <li><label>Has Second Key: </label><span>{{secondKey?'ON':'OFF'}}</span></li>                                            
+                                                                    <li><label>Has Aftermarket Options: </label><span>{{vehicleAftermarket?'ON':'OFF'}}</span></li>                              
                                                                     <li *ngIf="vehicleAftermarket"><label>Description: </label><span>{{vehicle_aftermarket_description?.value}}</span></li>                                    
                                                                     <li *ngIf="vehicleAftermarket && (checkObjectLength(afterMarketImagesArray.value) > 0)">
                                                                         <label>Images: </label>
@@ -943,7 +943,7 @@
 
 
                 </aw-wizard-step>  
-                <aw-wizard-step stepTitle="Pick Up Location" (stepEnter)="scrollToSpecificDiv($event)" [canExit]="moveDirection.bind(this, pickupLocationWizard.valid)">
+                <aw-wizard-step stepTitle="Pick Up Location" (stepEnter)="scrollToSpecificDiv()" [canExit]="moveDirection.bind(this, pickupLocationWizard.valid)">
                     <div class="container">
                     <div class="row">
                         <div class="form-group col-md-8">
@@ -951,7 +951,7 @@
                                 <div class="row">
                                     <div class="form-group col-md-12"> 
                                             <div class="switch_outer text-center">                                               
-                                        <span>Do you want the car to be picked up?*</span>
+                                        <span>Do you want the car to be picked up?</span>
                                         <label class="switch">
                                                 <input type="checkbox" (change)="toggleVehiclePickedUp($event)" formControlName="vehicle_to_be_picked_up">
                                                 <span class="slider round"></span>
@@ -965,21 +965,21 @@
                                         <div class="col-md-12">
                                             <div class="text-center collapsable_head">     
                                                 <div class="switch_outer">                                           
-                                                    <span>Willing to Drive?*</span>
+                                                    <span>Willing to Drive?</span>
                                                     <label class="switch">
                                                             <input type="checkbox" (change)="toggleWillingToDrive($event)" formControlName="willing_to_drive">
                                                             <span class="slider round"></span>
                                                     </label>
                                                 </div>
                                             </div>
-                                            <div class="collapsable_body" [hidden]="!isWillingToDriveSelected">
+                                            <div class="collapsable_body willing_to_drive_label" [hidden]="!isWillingToDriveSelected">
                                                     <div class="collapsable_body_inner">
                                                         <label>Miles*</label>
-                                                        <input #willing_to_drive_how_many_miles mask="00" type="text" class="simple_select form-control placeholder" placeholder="How Many Miles" formControlName="willing_to_drive_how_many_miles" [ngClass]="{ 'is-invalid': (pickupLocationWizard.controls.willing_to_drive_how_many_miles.touched || isPickupLocationSubmitted) && pickupLocationWizard.controls.willing_to_drive_how_many_miles.errors }">        
+                                                        <input #willing_to_drive_how_many_miles mask="000" type="text" class="simple_select form-control placeholder" placeholder="How Many Miles" formControlName="willing_to_drive_how_many_miles" [ngClass]="{ 'is-invalid': (pickupLocationWizard.controls.willing_to_drive_how_many_miles.touched || isPickupLocationSubmitted) && pickupLocationWizard.controls.willing_to_drive_how_many_miles.errors }">        
                                                         
                                                         
                                                         <p *ngIf="pickupLocationWizard.controls.willing_to_drive_how_many_miles.touched || isPickupLocationSubmitted">                      
-                                                            <app-form-validation-errors minLength=1 maxLength=2 errorPrefix="Miles " [errors]="pickupLocationWizard.controls.willing_to_drive_how_many_miles.errors"></app-form-validation-errors>   
+                                                            <app-form-validation-errors minLength=1 maxLength=3 errorPrefix="Miles " [errors]="pickupLocationWizard.controls.willing_to_drive_how_many_miles.errors"></app-form-validation-errors>   
                                                         </p>
                                                     </div>
                                             </div>
@@ -1020,9 +1020,9 @@
                                                 <li><label>Transmission: </label><span>{{vehicle_transmission.value}}</span></li>
                                                 <li><label>Fuel Type: </label><span>{{vehicle_fuel_type.value}}</span></li>
                                                 <li><label>Drive Type: </label><span>{{vehicle_drive_type.value}}</span></li>
-                                                <li><label>Interior Color: </label><span>{{!isOtherInteriorColorSelected?interiorColor:vehicle_interior_color_if_other_selected.value}}</span></li>
+                                                <li><label>Interior Color: </label><span>{{!isOtherInteriorColorSelected?interiorColor:vehicle_other_interior_color.value}}</span></li>
                                                 
-                                                <li><label>Exterior Color: </label><span>{{!isOtherExteriorColorSelected?exteriorColor:vehicle_exterior_color_if_other_selected.value}}</span></li>
+                                                <li><label>Exterior Color: </label><span>{{!isOtherExteriorColorSelected?exteriorColor:vehicle_other_exterior_color.value}}</span></li>
                                                 
                                                 <li><label>Interior Material: </label><span>{{vehicle_interior_material.value}}</span></li>
                                             </ul>
@@ -1053,8 +1053,8 @@
                                         <div class="details_inner">
                                                 <h6>About Vehicle</h6>
                                                 <ul>
-                                                        <li><label>Vehicle has Second Key: </label><span>{{secondKey?'On':'Off'}}</span></li>                                            
-                                                        <li><label>Vehicle has any aftermarket: </label><span>{{vehicleAftermarket?'ON':'OFF'}}</span></li>                              
+                                                        <li><label>Has Second Key: </label><span>{{secondKey?'On':'Off'}}</span></li>                                            
+                                                        <li><label>Has Aftermarket Options: </label><span>{{vehicleAftermarket?'ON':'OFF'}}</span></li>                              
                                                         <li *ngIf="vehicleAftermarket"><label>Description: </label><span>{{vehicle_aftermarket_description?.value}}</span></li>                                    
                                                         <li *ngIf="vehicleAftermarket && (checkObjectLength(afterMarketImagesArray.value) > 0)"><label>Images: </label>
                                                             <div class="category_images">
@@ -1085,8 +1085,9 @@
                                                         </li>
                                                     </ul>
                                                     </div>
-                                                </li>   
-                                                <li><label>Seller Comments: </label><span>{{vehicle_comments?.value}}</span></li>
+                                                </li>  
+                                                
+                                                <li *ngIf="vehicle_comments?.value"><label>Seller Comments: </label><span>{{vehicle_comments?.value}}</span></li>
                                             </ul>        
                                         </div>              
                                 </div> 
@@ -1102,7 +1103,7 @@
                             <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header justify-content-center">
-                                        <h2 class="underline_heading">FINANCE DETAILS</h2>         
+                                        <h2 class="underline_heading">Finance Details</h2>         
                                 </div>
                                 <form [formGroup]="offerInHands">
                                       
@@ -1113,7 +1114,7 @@
                                     <div class="col-md-12">
                                             <div class="form-group ">
                                                 <label>My Pay Off*</label>
-                                                <input #vehicle_pay_off type="text" currencyMask [options]="{ allowNegative: false, align: 'left'}" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_pay_off" [ngClass]="{ 'is-invalid': (offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').touched || isOfferInHandsSubmitted) && offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').errors }">        
+                                                <input #vehicle_pay_off maxLength=17 type="text" currencyMask [options]="{ allowNegative: false, align: 'left'}" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_pay_off" [ngClass]="{ 'is-invalid': (offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').touched || isOfferInHandsSubmitted) && offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').errors }">        
                                                 
                                                 <p *ngIf="offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').touched || isOfferInHandsSubmitted">                      
                                                     <app-form-validation-errors errorPrefix="Pay Off " [isPrice]=true minAmount='$1' [errors]="offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').errors"></app-form-validation-errors>   
@@ -1122,7 +1123,7 @@
                                             
                                             <div class="form-group">
                                                     <label>Finance Bank*</label>
-                                                    <input #vehicle_finance_bank type="text" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_finance_bank" [ngClass]="{ 'is-invalid': (offerInHands.controls.vehicle_finance_details.get('vehicle_finance_bank').touched || isOfferInHandsSubmitted) && offerInHands.controls.vehicle_finance_details.get('vehicle_finance_bank').errors }">        
+                                                    <input #vehicle_finance_bank minLength=2 maxLength=50 type="text" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_finance_bank" [ngClass]="{ 'is-invalid': (offerInHands.controls.vehicle_finance_details.get('vehicle_finance_bank').touched || isOfferInHandsSubmitted) && offerInHands.controls.vehicle_finance_details.get('vehicle_finance_bank').errors }">        
                                                     
                                                     <p *ngIf="offerInHands.controls.vehicle_finance_details.get('vehicle_finance_bank').touched || isOfferInHandsSubmitted">                      
                                                         <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="Finance Bank " [errors]="offerInHands.controls.vehicle_finance_details.get('vehicle_finance_bank').errors"></app-form-validation-errors>   
@@ -1135,7 +1136,7 @@
                                         <label>Offer In Hand* </label>
                                         <div class="form-group enter_price">
                                             
-                                            <input #offerInHandsPrice type="text" currencyMask [options]="{ allowNegative: false, align: 'left'}" class="form-control grey_input" formControlName="vehicle_offer_in_hands_price" [ngClass]="{ 'is-invalid': (offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').touched || isOfferInHandsSubmitted) && offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').errors }">   
+                                            <input #offerInHandsPrice maxLength=17 type="text" currencyMask [options]="{ allowNegative: false, align: 'left'}" class="form-control grey_input" formControlName="vehicle_offer_in_hands_price" [ngClass]="{ 'is-invalid': (offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').touched || isOfferInHandsSubmitted) && offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').errors }">   
                                             <div class="uploadImages">
                                                 <div class="dropzone dropzone-container" [dropzone]="offerInHandsConfiguration" [disabled]="disabled"></div>
                                             </div>  
@@ -1176,7 +1177,7 @@
 
                     
                 </aw-wizard-step>
-                <aw-wizard-step stepTitle="Preview" (stepEnter)="scrollToSpecificDiv($event)">
+                <aw-wizard-step stepTitle="Preview" (stepEnter)="scrollToSpecificDiv()">
                     <div class="summary_page">
 
                         <div class="container">
@@ -1197,22 +1198,22 @@
                                         </div>
                                         <div class="detail_body">
                                             <ul>
-                                                <li><span class="label">ZIP: </span><span class="value">{{vehicle_zip?.value}}</span></li>
-                                                <li><span class="label">Make: </span><span class="value">{{vehicle_make?.value}}</span></li>
-                                                <li><span class="label">Model: </span><span class="value">{{vehicle_model?.value}}</span></li>
-                                                <li><span class="label">Trim: </span><span class="value">{{vehicle_trim?.value}}</span></li>
-                                                <li><span class="label">Mileage: </span><span class="value">{{vehicle_mileage?.value}}</span></li>
-                                                <li><span class="label">Body Style: </span><span class="value">{{vehicle_body_type?.value}}</span></li>
-                                                <li><span class="label">Doors: </span><span class="value">{{vehicle_doors?.value}}</span></li>
-                                                <li><span class="label">Engine: </span><span class="value">{{vehicle_engine?.value}}</span></li>
-                                                <li><span class="label">Transmission: </span><span class="value">{{vehicle_transmission?.value}}</span></li>
-                                                <li><span class="label">Fuel Type: </span><span class="value">{{vehicle_fuel_type?.value}}</span></li>
-                                                <li><span class="label">Drive Type: </span><span class="value">{{vehicle_drive_type?.value}}</span></li>  
-                                                <li><span class="label">Interior Color: </span><span class="value">{{!isOtherInteriorColorSelected?interiorColor:vehicle_interior_color_if_other_selected.value}}</span></li> 
+                                                <li><span class="label">ZIP : </span><span class="value">{{vehicle_zip?.value}}</span></li>
+                                                <li><span class="label">Make : </span><span class="value">{{vehicle_make?.value}}</span></li>
+                                                <li><span class="label">Model : </span><span class="value">{{vehicle_model?.value}}</span></li>
+                                                <li><span class="label">Trim : </span><span class="value">{{vehicle_trim?.value}}</span></li>
+                                                <li><span class="label">Mileage : </span><span class="value">{{vehicle_mileage?.value}}</span></li>
+                                                <li><span class="label">Body Style : </span><span class="value">{{vehicle_body_type?.value}}</span></li>
+                                                <li><span class="label">Doors : </span><span class="value">{{vehicle_doors?.value}}</span></li>
+                                                <li><span class="label">Engine : </span><span class="value">{{vehicle_engine?.value}}</span></li>
+                                                <li><span class="label">Transmission : </span><span class="value">{{vehicle_transmission?.value}}</span></li>
+                                                <li><span class="label">Fuel Type : </span><span class="value">{{vehicle_fuel_type?.value}}</span></li>
+                                                <li><span class="label">Drive Type : </span><span class="value">{{vehicle_drive_type?.value}}</span></li>  
+                                                <li><span class="label">Interior Color : </span><span class="value">{{!isOtherInteriorColorSelected?interiorColor:vehicle_other_interior_color.value}}</span></li> 
                                                  
-                                                <li><span class="label">Exterior Color: </span><span class="value">{{!isOtherExteriorColorSelected?exteriorColor:vehicle_exterior_color_if_other_selected.value}}</span></li> 
+                                                <li><span class="label">Exterior Color : </span><span class="value">{{!isOtherExteriorColorSelected?exteriorColor:vehicle_other_exterior_color.value}}</span></li> 
                                                                                                
-                                                <li><span class="label">Interior Material: </span><span class="value">{{vehicle_interior_material?.value}}</span></li>
+                                                <li><span class="label">Interior Material : </span><span class="value">{{vehicle_interior_material?.value}}</span></li>
                                                                         
                                             </ul>
                                         </div>
@@ -1280,11 +1281,11 @@
                                         </div>
                                         <div class="detail_body">
                                             <ul>
-                                                <li><span class="label">Vehicle has any second key :</span> <span class="value">{{secondKey?'ON':'OFF'}}</span></li>
-                                                <li><span class="label">Vehicle has any aftermarket :</span> <span class="value">{{vehicleAftermarket?'ON':'OFF'}}</span>
+                                                <li><span class="label">Has Second Key :</span> <span class="value">{{secondKey?'ON':'OFF'}}</span></li>
+                                                <li><span class="label">Has Aftermarket Options :</span> <span class="value">{{vehicleAftermarket?'ON':'OFF'}}</span>
                                                     <span *ngIf="vehicleAftermarket" class="inner_box">
                                                         <span class="box_outer">
-                                                            <h6>Description:</h6>
+                                                            <h6>Description :</h6>
                                                             <p>{{vehicle_aftermarket_description?.value}}</p>
                                                             <h6 *ngIf="checkObjectLength(afterMarketImagesArray.value) > 0">Images :</h6>
                                                             <span *ngIf="checkObjectLength(afterMarketImagesArray.value) > 0" class="relative_images">
@@ -1300,8 +1301,8 @@
                                                 <li *ngIf="cleanTitle"><span class="label">Clean Title :</span> <span class="value">
                                                     {{cleanTitle?'ON':'OFF'}}</span></li>
                                                         
-                                                <li *ngIf="!cleanTitle"><span class="label">Clean Title:</span> <span class="value">{{vehicleOwnership}}</span>                            
-                                                <li *ngIf="isOtherSelected"><span class="label">If Other, Explain</span> <span class="value">{{vehicle_ownership_description?.value}}</span>
+                                                <li *ngIf="!cleanTitle"><span class="label">Clean Title :</span> <span class="value">{{vehicleOwnership}}</span>                            
+                                                <li *ngIf="isOtherSelected"><span class="label">If Other, Explain :</span> <span class="value">{{vehicle_ownership_description?.value}}</span>
                                                 </li>
                                                 
                                             </ul>
@@ -1323,7 +1324,7 @@
                                                     <span class="value">{{vehicleConditionValue}}</span>
                                                     <span *ngIf="isVehicleConditionSelected" class="inner_box pb-3">
                                                         <span class="box_outer">
-                                                            <h6>Explain:</h6>
+                                                            <h6>Explain :</h6>
                                                             <p>{{vehicle_condition_description?.value}}</p>
                                                             <h6 *ngIf="checkObjectLength(vehicleConditionImagesArray.value) > 0">Images :</h6>
                                                             <span *ngIf="checkObjectLength(vehicleConditionImagesArray.value) > 0" class="relative_images">
@@ -1337,7 +1338,7 @@
                                                     </span>
                                                 </li>
                 
-                                                <li><span class="label"> Seller Comments :</span> <span class="value">
+                                                <li *ngIf="vehicle_comments?.value"><span class="label"> Seller Comments :</span> <span class="value">
                                                     {{vehicle_comments?.value}}</span>
                                                 </li>
                                             </ul>

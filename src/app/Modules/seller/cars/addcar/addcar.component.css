@@ -103,6 +103,11 @@ input:checked + .slider:before {
     cursor: pointer;
     line-height: 17px;
     font-weight: 600;
+    text-transform: capitalize;
+}
+
+.comments_outer label{
+    text-transform: capitalize;
 }
 
 .Radio_BTN label .addition_info {
@@ -322,6 +327,12 @@ button:disabled {
     width: 150px;
 }
 
+#offerInHandsSection label{
+    text-transform: capitalize;
+    font-size: 14px;
+    color: #696969
+}
+
 .vehicle_category > .form-group {
     display: inline-block;
     margin-right: 60px;
@@ -534,7 +545,11 @@ i.fa-caret-down {position: absolute;font-size: 18px;right:5%;top: 30%;color: #BA
     color: #424856;
     font-weight: 500;
 }
-.detail_head h5 {color: #da2a2b;margin: 0;font-weight: bold;line-height: 1;font-size: 16px;}
+.vehicle_ownership_other label{text-transform: capitalize;}
+.willing_to_drive_label label{text-transform: capitalize;}
+.vehicle_aftermarket_label label{text-transform: capitalize;}
+.vehicle_condition_label label{text-transform: capitalize;}
+.detail_head h5 {color: #da2a2b;margin: 0;font-weight: bold;line-height: 1;font-size: 16px; text-transform: capitalize;}
 .detail_head a {color: #424856;font-weight: 500;}
 .detail_head a i {margin-left: 3px;}
 .detail_head a:hover {color: #da2a2b;text-decoration: none;}
@@ -551,7 +566,7 @@ i.fa-caret-down {position: absolute;font-size: 18px;right:5%;top: 30%;color: #BA
 .detail_body ul>li span.value {font-weight: normal;font-size: 14px;}
 .detail_body ul>li .inner_box {padding: 0 20px;display: block;margin-bottom: 8px;}
 .detail_body ul>li .inner_box .box_outer {display: block;background: rgba(0, 0, 0, 0.10);width: 100%;margin: auto;padding: 10px;}
-.detail_body ul>li .inner_box .box_outer h6 {color: #4066c1;font-size: 13px;font-weight: 600;}
+.detail_body ul>li .inner_box .box_outer h6 {color: #4066c1;font-size: 13px;font-weight: 600; text-transform: capitalize;}
 .detail_body ul>li .inner_box .box_outer p {font-size: 12px;color: #424856;line-height: 18px;}
 .detail_body ul>li .inner_box .box_outer .relative_images {display: flex;flex-wrap: wrap;}
 .detail_body ul>li .inner_box .box_outer .relative_images .img_box {width: 76px;height: 54px;display: inline-block;margin-right: 4px;position: relative;margin-bottom: 4px;}
@@ -611,7 +626,7 @@ p.error_msg {border:0px; padding:0px;     margin: 0; left:0px;}
 /*-----------------*/
 .right_col_head {font-size:20px; text-transform:uppercase; position:relative; font-weight:500;margin-bottom:30px;}
 .right_col_head:before {content:""; position: absolute; left:0px; right:0px; top:12px; border-top:1px solid red;}
-.right_col_head h5 {display:inline-block;background: #fff;padding: 0px 15px 0px 0px; letter-spacing: 0.8px; margin: 0px;position: relative;z-index: 1; font-size: 14px;}
+.right_col_head h5 {display:inline-block;background: #fff;padding: 0px 15px 0px 0px; letter-spacing: 0.8px; margin: 0px;position: relative;z-index: 1; font-size: 15px; text-transform: capitalize;}
 /*-----------------*/
 .details_inner {background: #f2f2f2;padding:15px 20px;margin: 0 0 20px 0;
 }
@@ -630,7 +645,7 @@ p.error_msg {border:0px; padding:0px;     margin: 0; left:0px;}
     height: 100%;
     object-fit: cover;
 }
-.details_inner h6 {font-size:13px; font-weight:600; letter-spacing:0.8px;}
+.details_inner h6 {font-size:13px; font-weight:600; letter-spacing:0.8px; text-transform: capitalize;}
 .details_inner ul li {width:100%; border-bottom:1px solid #e8e8e8;}
 .details_inner ul li label {width:auto; font-size:12px; margin:0px; padding:0px; font-weight:600;}
 .details_inner ul li span {width:auto; font-size:12px;margin-left: 7px;}
@@ -671,9 +686,9 @@ p.error_msg {border:0px; padding:0px;     margin: 0; left:0px;}
     margin: 0px;
     position: relative;
     z-index: 1;
-    font-size: 14px;
+    font-size: 15px;
     color: #363636;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
 }
 
 .underline_heading:after {
@@ -731,8 +746,8 @@ p.error_msg {border:0px; padding:0px;     margin: 0; left:0px;}
 
 .switch_outer span {
     font-weight: 600;
-    text-transform: uppercase;
-    font-size: 12px;
+    /* text-transform: uppercase; */
+    font-size: 14px;
 }
 
 .collapsable_body .collapsable_body_inner .simple_select {

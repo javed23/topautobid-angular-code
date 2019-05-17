@@ -134,7 +134,7 @@ export class CreateContactComponent implements OnInit {
               console.log('base64',reader.result)
               var base64String = reader.result      
               const fileExtension = (file.name).split('.').pop();
-              const isValidFile = componentObj.commonUtilsService.isImageCorrupted(base64String,_.toLower(fileExtension))
+              const isValidFile = componentObj.commonUtilsService.isFileCorrupted(base64String,_.toLower(fileExtension))
               console.log('isvalidfile',isValidFile);
               if(!isValidFile){
                 //componentObj.toastr.errorToastr('File is corrupted or invalid.', 'Oops!');//showing error toaster 
