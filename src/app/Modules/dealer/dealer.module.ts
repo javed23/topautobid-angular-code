@@ -13,7 +13,7 @@ import {
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { NgxImageZoomModule } from 'ngx-image-zoom';
+import { NgxGalleryModule } from 'ngx-gallery';
 
 
 //import social login modules
@@ -48,6 +48,7 @@ import { PurchasesListComponent } from './purchases/purchases-list/purchases-lis
 //cars management components
 import { ListingComponent as CarsGridListComponent } from './cars/grid-list-view/listing.component';
 import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
+import { ContactRequestComponent } from './cars/contact-request/contact-request.component';
 
 
 
@@ -103,6 +104,9 @@ let config = new AuthServiceConfig([
   ]
   ,
  imports: [
+    CarDetailPageComponent,
+    ContactRequestComponent
+  ,
     CommonModule,
     DealerRoutingModule,
     CommonModule,
@@ -110,14 +114,15 @@ let config = new AuthServiceConfig([
     ReactiveFormsModule,
     SocialLoginModule, 
     SharedModule,
-      DropzoneModule,
-      NgxMaskModule.forRoot(),
-      NgbModule,
-      ArchwizardModule,
-      NgScrollbarModule,
-      NgxDatatableModule,
-      NgxPaginationModule,
-    NgxImageZoomModule.forRoot()
+    DropzoneModule,
+    NgxMaskModule.forRoot(),
+    NgbModule,
+    ArchwizardModule,
+    NgScrollbarModule,
+    NgxDatatableModule,
+    NgxPaginationModule,
+    NgxGalleryModule
+
   ],
   providers: [
     AdalService,

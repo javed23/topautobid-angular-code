@@ -19,6 +19,7 @@ declare let jQuery: any;
 declare let $: any;
 declare let POTENZA: any;
 import * as _ from 'lodash';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -67,7 +68,7 @@ export class ListComponent implements AfterViewInit {
 
 
 
-  constructor(private commonUtilsService:CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private titleService:TitleService) {
+  constructor(private router:Router, private commonUtilsService:CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private titleService:TitleService) {
 
     //fetching the data with default settings
     this.setPage(this._defaultPagination,'all');
@@ -126,17 +127,8 @@ export class ListComponent implements AfterViewInit {
         (pagedData) => {      
         
         this.page = pagedData.page;
-        let cars = this.cars;
-
-        //if total fetched rows and totalElements(total rows from database) is not same
-        if (cars.length !== pagedData.page.totalElements) {
-          cars = Array.apply(null, Array(pagedData.page.totalElements));        
-          cars = cars.map((x, i) => this.cars[i]);
-        }    
-        const start = this.page.pageNumber * this.page.size;  
-        pagedData.data.map((x, i) => cars[i + start] = x);
-        this.cars = cars;
-        this.cars = pagedData.data;        
+       
+        this.cars =  pagedData.data;  
         console.log('Rows',this.cars);  
         this.commonUtilsService.hidePageLoader();
       //case error 
@@ -272,8 +264,8 @@ onSort(event) {
   * Before delete, system confirm to delete the car. If yes opted then process deleting car else no action;
   */
     show(carId):void {
-      this.isBidsModalOpen  = true;
-      this.carId = carId
+      this.router.navigate(['/seller/car-bids',carId])
+    
 
     }
 

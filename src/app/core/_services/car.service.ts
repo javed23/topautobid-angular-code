@@ -3,7 +3,7 @@ import { Observable } from "rxjs";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/observable/of';
 import { delay } from "rxjs/operators";
-import { PagedData, Car, Page } from "../../core/_models";
+import { PagedData, Car, Page, Bid } from "../../core/_models";
 
 /**
  * A server used to mock a paged data result from a server
@@ -135,6 +135,7 @@ export class CarService {
                 return car;
             })
     }
+
     /*
     * @param carData    car object to delete from database.
     * @return        Observable<any>
@@ -145,15 +146,40 @@ export class CarService {
             .map((response: any) => response)
     }
 
+    /*
+    * @param requestData    contact request object 
+    * @return        Observable<any>
+   */
+    public contactRequest(requestData): Observable<any> {
+
+        return this.httpClient.post('car/contactRequest', requestData)
+            .map((response: any) => response)
+    }
+
 
     /*
   * @param carId    car id to fetch data from database.
   * @return        Observable<any>
  */
-    public getCarBids(carId): Observable<any> {
+    public getCarBids(page: Page): Observable<PagedData<Bid>> {
 
-        return this.httpClient.post('car/getCarBids', { carId: carId })
-            .map((response: any) => response)
+        return this.httpClient.post('car/getCarBids', page)
+            .map((response: any) => {
+                page.totalElements = response.count;
+                let pagedData = new PagedData<Bid>();
+                page.filteredElements = response.filteredRecords;
+                page.totalPages = page.totalElements / page.size;
+                for (let i in response.records) {
+                    let jsonObj = response.records[i];
+                    let bid = new Bid(jsonObj);
+                    pagedData.data.push(bid);
+                }
+                pagedData.page = page;
+                return pagedData;
+
+
+
+            })
     }
 
 

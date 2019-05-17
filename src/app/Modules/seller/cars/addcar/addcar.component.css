@@ -1001,5 +1001,11 @@ p.error_msg {border:0px; padding:0px;     margin: 0; left:0px;}
     }
 
 }
+.other_color {
+    margin-top: 15px;
+}
+.other_color label:before {
+    margin-top: 0;
+}
 
 

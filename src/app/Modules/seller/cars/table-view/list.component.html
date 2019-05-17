@@ -138,10 +138,11 @@
                     <div class="sidebar-widget">
                         <div class="unordered-lists table-responsive text-center">
 
+                           
+
                             <ngx-datatable #listingTable class="bootstrap" [rows]="cars"
                                 [columns]="[{name:'Year'},{name:'Make'},{name:'Model'},{name:'Trim'},{name:'Listed'},{name:'Status'},{name:'Bids'}]"
-                                [sorts]="[{prop: 'created_at', dir: 'desc'}]" [columnMode]="'force'" [headerHeight]="50"
-                                [limit]="currentPageLimit" [footerHeight]="80"
+                                [sorts]="[{prop: 'created_at', dir: 'desc'}]" [columnMode]="'force'" [headerHeight]="50"   [footerHeight]="80" [externalPaging]="true" [count]="page.totalElements" [offset]="page.pageNumber" [limit]="page.size"
                                 [rowHeight]="55" (sort)="onSort($event)" (page)="setPage($event,'all')">
 
                                 <ngx-datatable-row-detail [rowHeight]="100" #myDetailRow (toggle)="onDetailToggle($event)">
@@ -231,7 +232,7 @@
                                     </ng-template>
                                 </ngx-datatable-column>
                                 
-                                <ngx-datatable-column name="bids" [sortable]="false" [width]="200">
+                                <ngx-datatable-column name="bids" prop="best_bid" [sortable]="true" [width]="200">
                                     <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
                                         <!-- $<b>0.00</b> -->
                                         <b>{{row?.best_bid | currency:'USD':true:'2.2-2'}} </b>
@@ -304,12 +305,11 @@
 
                                         <div class="ml-auto">
                                                 <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
-                                                [pagerRightArrowIcon]="'datatable-icon-right'"
-                                                [pagerPreviousIcon]="'datatable-icon-prev'"
-                                                [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage" [size]="pageSize"
-                                                [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
-                                                (change)="listingTable.onFooterPage($event)">
-                                            </datatable-pager>
+                          [pagerRightArrowIcon]="'datatable-icon-right'" [pagerPreviousIcon]="'datatable-icon-prev'"
+                          [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage" [size]="pageSize" [count]="rowCount"
+                          [hidden]="!((rowCount / pageSize) > 1)" (change)="listingTable.onFooterPage($event)">
+                        </datatable-pager>
+                                   
 
                                         </div>
 
@@ -345,4 +345,4 @@ blog -->
 <!--<app-car-view [isOpen]="isModalOpen" (onClose)="hide($event)" [carObject]="car"></app-car-view>-->
 
 <!-- car-bids-details -->
-<app-car-bids [isOpen]="isBidsModalOpen" [carId]="carId"></app-car-bids>                
+<!-- <app-car-bids [isOpen]="isBidsModalOpen" [carId]="carId"></app-car-bids>                 -->

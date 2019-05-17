@@ -86,6 +86,7 @@ let config = new AuthServiceConfig([
     NgxPaginationModule,
     CurrencyMaskModule,
     ArchwizardModule
+
   ],
   providers: [
     {

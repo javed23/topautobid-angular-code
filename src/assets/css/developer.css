@@ -60,6 +60,7 @@ input[type="file"] {
     padding: 0;
     margin: 10px 0 0 10px;
     background: none;
+    border:0;
 }
 
 .country_code input {
@@ -300,7 +301,7 @@ input[type=search] {
 .top_sorting .change-view-button, .selected-box, .price-search {display: inline-block;}
 .top_sorting .selected-box{width:162px;}
 .product-listing .price-search {width:306px;}
-.pagination_outer {padding:20px 0px 0px 0px; width:100%;}
+.pagination_outer {padding:20px 0px 0px 0px !important; width:100%;}
 .pagination_outer .pagination-nav {margin-top:0px;}
 .input-group-append .calendar {border:0px;}
 .number_records {padding:0px 5px; display: inline-block;}
@@ -450,4 +451,69 @@ ngx-image-zoom .ngxImageZoomContainer[_ngcontent-c7] {
     width: 100% !important;
     height: auto !important;
 }
+.ngx-gallery-arrow-left .ngx-gallery-icon .ngx-gallery-icon-content {
+    background: #ffffff;
+    border-radius: 50%;
+    border: 1px solid #e3e3e3;
+    width: 36px;
+    height: 36px;
+}
+.ngx-gallery-arrow-right .ngx-gallery-icon .ngx-gallery-icon-content {
+    background: #ffffff;
+    border-radius: 50%;
+    border: 1px solid #e3e3e3;
+    width: 36px;
+    height: 36px;
+}
 
+
+
+.ngx-gallery-arrow-right .ngx-gallery-icon .ngx-gallery-icon-content:before {
+    content: '\f105' !important;
+    font-size: 20px;
+    line-height: 35px;
+    text-align: center;
+    color: #323232;
+    padding-left: 13px;
+    position: absolute;
+}
+.ngx-gallery-arrow-left .ngx-gallery-icon .ngx-gallery-icon-content:before {
+    content: '\f104' !important;
+    font-size: 20px;
+    line-height: 35px;
+    text-align: center;
+    color: #323232;
+    padding-left: 13px;
+    position: absolute;
+}
+.ngx-gallery-arrow-left .ngx-gallery-icon .ngx-gallery-icon-content:hover {
+    background: #db2d2e;
+    border-color: #db2d2e;
+}
+.ngx-gallery-arrow-right .ngx-gallery-icon .ngx-gallery-icon-content:hover {
+    background: #db2d2e;
+    border-color: #db2d2e;
+}
+.ngx-gallery-arrow-left .ngx-gallery-icon .ngx-gallery-icon-content:hover:before {
+    color: #fff;
+}
+.ngx-gallery-arrow-right .ngx-gallery-icon .ngx-gallery-icon-content:hover:before {
+    color: #fff;
+}
+
+.ngx-gallery-arrow-right[_ngcontent-c12] .ngx-gallery-arrow[_ngcontent-c12] {
+    right: -17px!important;
+}
+
+.ngx-gallery-arrow-left[_ngcontent-c12] .ngx-gallery-arrow[_ngcontent-c12] {
+    left: -17px!important;
+}
+#newLegalContactForm .modal-content .Radio_BTN {
+    display: inline-block;
+    margin-right: 15px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+#newLegalContactForm .modal-content .Radio_BTN  label:before{
+    top: 2px;
+}

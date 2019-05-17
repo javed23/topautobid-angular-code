@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
-import {Location} from '@angular/common';
+import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from 'ngx-gallery';
 
 //modules services, models and enviornment file
 import { TitleService, CarService, CommonUtilsService } from '../../../../core/_services'
@@ -15,56 +15,58 @@ import * as _ from 'lodash';
   styleUrls: ['./car-detail-page.component.css']
 })
 export class CarDetailPageComponent implements OnInit {
+  sliderOptions: NgxGalleryOptions[];
+  sliderImages: NgxGalleryImage[];
+
+
   carDetail: any;
   isImageFilterEnable:Boolean = false
-  selectedCategories: any= []
-  allCategoryCars:any = []
-  myThumbnail="https://wittlock.github.io/ngx-image-zoom/assets/thumb.jpg"
-  myFullresImage="https://wittlock.github.io/ngx-image-zoom/assets/fullres.jpg"
-  
+  selectedCategories: any= [] 
+  isOpen:boolean=false;
 
+  //title and breadcrumbs
   title: string = 'Car Detail';
   breadcrumbs: any[] = [{ page: 'Home', link: '' }, { page: "Car Listing", link: '/dealer/car-listing' }, { page: 'Car Detail', link: '' }]
 
-  constructor(private location: Location, private activatedRoute: ActivatedRoute, private carService: CarService, private commonUtilsService: CommonUtilsService, private titleService:TitleService) {
+  constructor(private activatedRoute: ActivatedRoute, private carService: CarService, private commonUtilsService: CommonUtilsService, private titleService:TitleService) {
     
     //setting the page title
     this.titleService.setTitle();
+    this.commonUtilsService.showPageLoader();  
 
-    this.commonUtilsService.showPageLoader();
-
-    if('type' in this.activatedRoute.snapshot.params){
-      console.log('breadcrumbs');
-      this.breadcrumbs = [{ page: 'Home', link: '' }, { page: "Dashboard", link: '/seller/car-dashboard' }, { page: 'Car Detail', link: '' }]
-    }
     //hit api to fetch data
     this.carService.carDetail({ id: this.activatedRoute.snapshot.params._id }).subscribe(
 
       //case success
       (response) => {
         this.carDetail = response     
-      
-        this.allCategoryCars = this.carDetail.car_images
+        this.carDetail.car_images.forEach(element => {
+          this.sliderImages.push(
+            {
+              small: element.file_path,
+              medium: element.file_path,
+              big: element.file_path,
+              label:element.file_category
+          }
+          )
+        });
         this.commonUtilsService.hidePageLoader();
-        setTimeout(function () {
-          POTENZA.slicksliderRecent()
-        }, 500);
+       
         //case error 
       }, error => {
         this.commonUtilsService.onError(error);
       }
-    );  
-    
+    );     
     
   }
 
-  /**
-   * Function to back the control on listin page
-   * @return  void
-  */
-  backToListPage():void {
-    this.location.back();
-  }
+  ngOnInit() {
+    POTENZA.tabs();
+    POTENZA.carousel();  
+    this.sliderinit();
+ 
+
+  } 
 
 
 /**
@@ -84,30 +86,88 @@ export class CarDetailPageComponent implements OnInit {
 */
   onImageFilter(event):void{   
     (event.target.checked)?this.selectedCategories.push(event.target.value):_.pullAt(this.selectedCategories,this.selectedCategories.indexOf(event.target.value))
-  
-    if(this.selectedCategories.length)
-      this.allCategoryCars = this.carDetail.car_images.filter((l) => _.includes(this.selectedCategories,l.file_category) ).map((l) => l);
-    else
-      this.allCategoryCars = this.carDetail.car_images
-
- 
-      this.destorySliderReinit()
-
+    this.sliderImages = [];
+    if(this.selectedCategories.length){
+      this.carDetail.car_images.forEach(element => {
+        if(_.includes(this.selectedCategories,element.file_category)){
+          this.sliderImages.push(
+            {
+              small: element.file_path,
+              medium: element.file_path,
+              big: element.file_path,
+              label:element.file_category
+          }
+          )
+        }        
+      });
+    }
+    else{
+      this.carDetail.car_images.forEach(element => {
+        this.sliderImages.push(
+          {
+            small: element.file_path,
+            medium: element.file_path,
+            big: element.file_path,
+            label:element.file_category
+        }
+        )
+      });
+    }
   }
+
 /**
- * Private function to destroy anf re-initalize slick slider 
+ * Private function to initalize slider 
  * @return  void
 */
-  private destorySliderReinit():void{
-    $(".slider-for").slick('destroy');      
-      $(".slider-nav").slick('destroy');
-      setTimeout(function () {
-        POTENZA.slicksliderRecent()
-        }, 500);
+  private sliderinit():void{
+    this.sliderOptions = [
+      {
+          width: '100%',
+          height: '365px',     
+          imageAnimation: NgxGalleryAnimation.Slide,
+          imageArrowsAutoHide:true,          
+          thumbnailsArrows:true,
+          thumbnailsColumns:5,
+          thumbnailMargin: 2,
+          thumbnailsPercent:20,
+          imageInfinityMove:true,
+          thumbnailsAutoHide:true,
+          closeIcon:'fa fa-times'
+         
+      },
+      // max-width 800
+      {
+          breakpoint: 800,
+          width: '100%',
+          height: '600px',
+          imagePercent: 80,
+          thumbnailsMargin: 20,
+          thumbnailMargin: 20,
+           
+      },
+      // max-width 400
+      {
+          breakpoint: 400,
+          preview: false
+      }
+    ];  
+    this.sliderImages = [];
   }
 
-  ngOnInit() {
-    POTENZA.tabs();
-    POTENZA.carousel();     
-  } 
+/**
+* Show a popup modal 
+*/
+show():void {
+  this.isOpen = true;  
+}
+ /**
+  * Reset modal popup to hide
+  * @param isOpened    boolean value 
+  * @return void
+  */
+ hide(isOpened:boolean):void{
+  this.isOpen = isOpened; //set to false which will reset modal to show on click again
+}
+
+
 }
