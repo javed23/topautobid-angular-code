@@ -152,7 +152,6 @@ export class CarBidsComponent {
       * @param sortValue The sort object to select the records
       */
   sortCallback(sortValue: any): void {
-    console.log('the value of sorting is ', sortValue);
     this.page.sortProperty = sortValue.sorts[0].prop;
     this.page.sortDirection = sortValue.sorts[0].dir;
     this.setPage(this._defaultPagination)

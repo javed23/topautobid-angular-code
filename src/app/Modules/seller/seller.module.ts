@@ -34,7 +34,7 @@ import { FiltersComponent } from './cars/filters/filters.component';
 import { AddCarComponent } from './cars/addcar/addcar.component';
 import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
 
-
+//loader components
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   acceptedFiles: '.jpg, .png, .jpeg',
@@ -68,7 +68,7 @@ let config = new AuthServiceConfig([
     FiltersComponent,
     CarsGridListComponent,
     CarDetailPageComponent,
-    AddCarComponent
+    AddCarComponent,
   ],
   
   imports: [
