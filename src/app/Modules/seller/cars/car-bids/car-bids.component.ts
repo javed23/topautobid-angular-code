@@ -147,7 +147,7 @@ export class CarBidsComponent {
 
 
 
-  /**
+      /**
       * Populate the table with new data based on the sorting
       * @param sortValue The sort object to select the records
       */

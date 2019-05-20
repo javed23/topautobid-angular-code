@@ -100,13 +100,11 @@ let config = new AuthServiceConfig([
     CreateContactComponent,
     PurchasesListComponent,
     CarsGridListComponent,
-    CarDetailPageComponent
+    CarDetailPageComponent,
+    ContactRequestComponent
   ]
   ,
  imports: [
-    CarDetailPageComponent,
-    ContactRequestComponent
-  ,
     CommonModule,
     DealerRoutingModule,
     CommonModule,
