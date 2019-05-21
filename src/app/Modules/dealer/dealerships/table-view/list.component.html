@@ -80,7 +80,8 @@
           <div class="sidebar-widget">
             <div class="unordered-lists table-responsive text-center">
 
-              <ngx-datatable #listingTable class="bootstrap" [rows]="dealerships" [sorts]="[{prop: 'created', dir: 'desc'}]" [externalSorting]="true" [columnMode]="'force'" [headerHeight]="50" [limit]="currentPageLimit" [footerHeight]="80"  [rowHeight]="50" (sort)="onSort($event)" (page)="setPage($event)">
+              <ngx-datatable #listingTable class="bootstrap" [rows]="dealerships" [sorts]="[{prop: 'created', dir: 'desc'}]" [externalPaging]="true" [count]="page.totalElements"
+              [offset]="page.pageNumber" [limit]="page.size" [columnMode]="'force'" [headerHeight]="50" [limit]="currentPageLimit" [footerHeight]="80"  [rowHeight]="50" (sort)="onSort($event)" (page)="setPage($event)">
 
 
                 <ngx-datatable-row-detail [rowHeight]="100" #myDetailRow (toggle)="onDetailToggle($event)">
@@ -100,47 +101,41 @@
                         <div class="row_detail col-md-12" *ngIf="row?.legal_contacts.length">
                             
                             <div *ngFor="let contact of row?.legal_contacts"> 
-                                  <div class="row_detail_inner" *ngIf="contact.default_legal_contact">                               
-                            <div class="row" >
-                                <div class="col-md-12">                                   
-                                      <h6>Default Legal Contact</h6>
-                                </div>
-                                <div class="col-md-3">
-                                    <span class="head">Title:</span>
-                                    <span class="value">{{contact.title}}</span> 
-                                </div>
-                                <div class="col-md-3">
-                                        <span class="head">Prefix:</span>
-                                        <span class="value"> {{contact.name.prefix}}</span> 
-                                </div>
-                                <div class="col-md-3">
-                                        <span class="head">First Name:</span>
-                                        <span class="value">{{contact.name.first_name}}</span> 
-                                </div>
-                                <div class="col-md-3">
-                                        <span class="head">Last Name:</span>
-                                        <span class="value">{{contact.name.last_name}}</span> 
-                                </div>
-                                
-                            </div>
-                            <div class="row">
-                                    <div class="col-md-3">
-                                            <span class="head">State:</span>
-                                            <span class="value">{{contact.state}}</span> 
-                                    </div>
-                                    <div class="col-md-3">
-                                            <span class="head">City:</span>
-                                            <span class="value">{{contact.city}}</span> 
-                                    </div>
-                                    <div class="col-md-3">
-                                            <span class="head">Zipcode:</span>
-                                            <span class="value">{{contact.zip}}</span> 
-                                    </div>
-                                    <div class="col-md-3">
-                                            <span class="head">Default Contact:</span>
-                                            <span class="value">Yes</span> 
-                                    </div>
-                                </div>
+                                  <div class="row_detail_inner" *ngIf="contact.default_legal_contact">   
+                                    
+                                    <div class="row">
+                                        <div class="col-md-12">                                   
+                                            <h6>Default Legal Contact</h6>
+                                      </div>
+
+                                        <div class="col-md-12">
+                                            <div class="vehicle_table_details">
+                                                
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered">
+                                                      <tr>
+                                                          <td><span class="head">Title:</span><span class="value">{{contact.title}}</span></td>
+                                                          <td><span class="head">Prefix:</span><span class="value">{{contact.name.prefix}}</span></td>
+                                                      </tr>  
+                                                      <tr>
+                                                        <td><span class="head">First Name:</span><span class="value">{{contact.name.first_name}}</span></td>
+                                                        <td><span class="head">Last Name:</span><span class="value">{{contact.name.last_name}}</span></td>
+                                                    </tr>   
+                                                    <tr>
+                                                        <td><span class="head">State:</span><span class="value">{{contact.state}}</span></td>
+                                                        <td><span class="head">City:</span><span class="value">{{contact.city}}</span></td>
+                                                    </tr> 
+                                                    <tr>
+                                                        <td><span class="head">Zipcode:</span><span class="value">{{contact.zip}}</span></td>
+                                                        <td><span class="head">Default Contact:</span><span class="value">Yes</span></td>
+                                                    </tr>                                                           
+                                                                
+                                                    </table>
+                                                  </div>
+                                            </div>
+                                        </div>
+                                    </div>                           
+                          
                               </div>
                         </div>
                         </div>
@@ -169,7 +164,8 @@
                     </ng-template>
                 </ngx-datatable-column>
 
-                <ngx-datatable-column name="Image" [sortable]="false" [width]="200">
+                <ngx-datatable-column name="Image" [sortable]="false" [resizeable]="false"
+                [draggable]="false">
                   <ng-template let-row="row" ngx-datatable-cell-template>
                     <span class="avtar" *ngIf="row.profile_pic"><img title="Dealership Avatar" class="img-fluid"
                         src="{{row.profile_pic}}"></span>
@@ -178,14 +174,16 @@
                   </ng-template>
                 </ngx-datatable-column>
 
-                <ngx-datatable-column name="Name" [sortable]="true" [width]="200" prop="legalcoroporationname">
+                <ngx-datatable-column name="Name" [sortable]="true" [resizeable]="false"
+                [draggable]="false" prop="legalcoroporationname">
                   <ng-template let-row="row" ngx-datatable-cell-template>
                     {{ row.legalcoroporationname }}
                   </ng-template>
                 </ngx-datatable-column>
 
 
-                <ngx-datatable-column name="Number" [sortable]="true" [width]="200" prop="dealershipnumber">
+                <ngx-datatable-column name="Number" [sortable]="true" [resizeable]="false"
+                [draggable]="false" prop="dealershipnumber">
                   <ng-template let-row="row" ngx-datatable-cell-template>
                     {{ row.dealershipnumber }}
                   </ng-template>
@@ -200,27 +198,32 @@
                         class="left_bids  badge badge-danger">{{row?.legal_contacts?.length}}</button></span>
                   </ng-template>
                 </ngx-datatable-column>-->
-                <ngx-datatable-column name="city" [sortable]="true" [width]="200">
+                <ngx-datatable-column name="city" [sortable]="true" [resizeable]="false"
+                [draggable]="false">
                   <ng-template let-row="row" ngx-datatable-cell-template>
                     {{ row.city }}
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="state" [sortable]="true" [width]="200">
+                <ngx-datatable-column name="state" [sortable]="true" [resizeable]="false"
+                [draggable]="false">
                   <ng-template let-row="row" ngx-datatable-cell-template>
                     {{ row.state }}
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="zip" [sortable]="true" [width]="200">
+                <ngx-datatable-column name="zip" [sortable]="true" [resizeable]="false"
+                [draggable]="false">
                   <ng-template let-row="row" ngx-datatable-cell-template>
                     {{ row.zip }}
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="created At" prop="created_at" [sortable]="true" [width]="200">
+                <ngx-datatable-column name="created At" prop="created_at" [sortable]="true" [resizeable]="false"
+                [draggable]="false">
                   <ng-template let-row="row" ngx-datatable-cell-template>
                     {{ row.created_at | date:'dd-MM-yyyy h:mm' }}
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Action" [sortable]="false" [width]="200">
+                <ngx-datatable-column name="Action" [sortable]="false" [resizeable]="false"
+                [draggable]="false">
                   <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
 
                     <span class="actions">
@@ -263,13 +266,14 @@
                             </div>
 
                         <div class="ml-auto">
-                                <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
-                                [pagerRightArrowIcon]="'datatable-icon-right'"
-                                [pagerPreviousIcon]="'datatable-icon-prev'"
-                                [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage" [size]="pageSize"
-                                [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
-                                (change)="listingTable.onFooterPage($event)">
-                            </datatable-pager>
+                          <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+                          [pagerRightArrowIcon]="'datatable-icon-right'"
+                          [pagerPreviousIcon]="'datatable-icon-prev'"
+                          [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage"
+                          [size]="pageSize" [count]="rowCount"
+                          [hidden]="!((rowCount / pageSize) > 1)"
+                          (change)="listingTable.onFooterPage($event)">
+                          </datatable-pager>
 
                         </div>
 

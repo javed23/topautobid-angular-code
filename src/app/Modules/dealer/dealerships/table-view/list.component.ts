@@ -146,53 +146,26 @@ export class ListComponent implements OnInit, AfterViewInit {
    * Populate the table with new data based on the page number
    * @param pageInfo The page to select  
    */
-  setPage(pageInfo) {    
-    
+  setPage(pageInfo) {      
    
     this.page.pageNumber = pageInfo.offset;
     this.page.size = pageInfo.pageSize;
-    //console.log('viewedPages',this.viewedPages);
-    /*if( _.includes(this.viewedPages, this.page.pageNumber))
-      return;
-    else    
-      this.viewedPages.push(this.page.pageNumber)*/
-
     if(!this.page.search){
-      this.pageLoaderService.setLoaderText(environment.MESSAGES.FETCHING_RECORDS);//setting loader text
-      this.pageLoaderService.pageLoader(true);//show page loader
+      this.commonUtilsService.showPageLoader();
     }
     
     this.dealershipService.listingDealershipOnDatable(this.page).subscribe(
+      //case success
       (pagedData) => {
       
       this.page = pagedData.page;
+      this.dealerships = pagedData.data;
+      console.log('this.dealerships',this.dealerships);   
+      this.commonUtilsService.hidePageLoader(); 
 
-      let dealerships = this.dealerships;
-      if (dealerships.length !== pagedData.page.totalElements) {
-        dealerships = Array.apply(null, Array(pagedData.page.totalElements));
-        
-        dealerships = dealerships.map((x, i) => this.dealerships[i]);
-      }
-
-      // calc start
-      const start = this.page.pageNumber * this.page.size;
-      
-      // set dealerships to our new dealerships
-      pagedData.data.map((x, i) => dealerships[i + start] = x);
-      this.dealerships = dealerships;
-      this.dealerships = [...this.dealerships];
-      console.log('this.dealerships',this.dealerships);
-   
-      this.pageLoaderService.pageLoader(false);//show page loader
-      this.pageLoaderService.setLoaderText('');//setting loader text
-    
-
+    //case error 
     },error => {
-
-      this.pageLoaderService.setLoaderText(environment.MESSAGES.ERROR_TEXT_LOADER);//setting loader text
-      this.pageLoaderService.pageLoader(false);//hide page loader
-      this.toastr.errorToastr(error, 'Oops!');//showing error toaster message
-
+      this.commonUtilsService.onError(error);
     });
   }
 
@@ -214,7 +187,6 @@ export class ListComponent implements OnInit, AfterViewInit {
   */
   public onLimitChange(limit: any): void {   
     this.viewedPages = [];
-    //console.log('viewedPages',this.viewedPages);
     this.currentPageLimit = this.defaultPagination.limit=this.defaultPagination.pageSize = parseInt(limit) 
     this.setPage(this.defaultPagination);
   }
@@ -230,70 +202,12 @@ export class ListComponent implements OnInit, AfterViewInit {
     this.page.sortProperty = sort.prop
     this.page.sortDirection = sort.dir   
     this.setPage(this.defaultPagination);  
-    
-    
-    this.page.pageNumber = 0
-    this.page.size =this.currentPageLimit
-   
-
-    if(!this.page.search){
-      this.pageLoaderService.setLoaderText(environment.MESSAGES.FETCHING_RECORDS);//setting loader text
-      this.pageLoaderService.pageLoader(true);//show page loader
-    }
-    
-    this.dealershipService.listingDealershipOnDatable(this.page).subscribe(
-      (pagedData) => {
-      
-      this.page = pagedData.page;
-
-      let dealerships = this.dealerships;
-      if (dealerships.length !== pagedData.page.totalElements) {
-        dealerships = Array.apply(null, Array(pagedData.page.totalElements));
-        
-        dealerships = dealerships.map((x, i) => this.dealerships[i]);
-      }
-      console.log('before sort',dealerships);
-      // calc start
-      const start = this.page.pageNumber * this.page.size;
-      
-      // set dealerships to our new dealerships
-      pagedData.data.map((x, i) => dealerships[i + start] = x);
-
-      /*const sort = event.sorts[0];
-      dealerships.sort((a, b) => {
-        return a[sort.prop].localeCompare(b[sort.prop]) * (sort.dir === 'desc' ? -1 : 1);
-      });*/
-      console.log('after sort',dealerships);
-      this.dealerships = dealerships;
-
-      
-
-      
-      this.dealerships = [...this.dealerships];
-      console.log('this.dealerships',this.dealerships);
-   
-      this.pageLoaderService.pageLoader(false);//show page loader
-      this.pageLoaderService.setLoaderText('');//setting loader text
-    
-
-    },error => {
-
-      this.pageLoaderService.setLoaderText(environment.MESSAGES.ERROR_TEXT_LOADER);//setting loader text
-      this.pageLoaderService.pageLoader(false);//hide page loader
-      this.toastr.errorToastr(error, 'Oops!');//showing error toaster message
-
-    });
-
-
-
   }
 
   /**
      * Remove/delete a dealership
      * @param  item array index     
-  */ 
-
-  
+  */   
  async delete(item){
 
     //confirm before deleting car
@@ -377,16 +291,33 @@ export class ListComponent implements OnInit, AfterViewInit {
    * @return  void
    */
   onStartDateSelected(event:any):void {
+    let currentDate = new Date();   
+    
+    
     this.datesFilter['start']  = new Date(event.year,event.month-1,event.day+1)       
     this.datesFilter['transformedStartDate']  = (this.datesFilter['start']).toISOString();
+    
+    if((this.datesFilter['start']).getTime() > (currentDate).getTime()){
+      this.startDateModel = null
+      this.endDateModel = null
+      this.commonUtilsService.onError('Start date should not greater than today.');  
+      return;      
+    }else if(!_.has(this.datesFilter, ['end'])){
+      this.datesFilter['end']  = currentDate;
+   
+      this.datesFilter['transformedEndDate']  = (this.datesFilter['end']).toISOString();
+    }
+
     this.validateDateFilters();       
   }
   /**
    * Check date validations and filters records when select end date filter
    * @return  void
    */
-  onEndDateSelected(event:any):void {    
+  onEndDateSelected(event:any):void {
+    
     this.datesFilter['end']  = new Date(event.year,event.month-1,event.day+1)
+   
     this.datesFilter['transformedEndDate']  = (this.datesFilter['end']).toISOString();
     this.validateDateFilters();        
   }
@@ -395,8 +326,11 @@ export class ListComponent implements OnInit, AfterViewInit {
   * To validate date filters
   * @return  void
   */
-  private validateDateFilters(){
-    
+  private validateDateFilters(){    
+
+
+
+
     if(! _.has(this.datesFilter, ['start']))
       this.commonUtilsService.onError('Please select start date');
     else if(! _.has(this.datesFilter, ['end']))

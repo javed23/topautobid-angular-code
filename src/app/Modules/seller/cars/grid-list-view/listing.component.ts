@@ -161,12 +161,7 @@ export class ListingComponent implements OnInit {
     this.page.type = type;
     this.page.pageNumber = page.offset;
     this.page.size = page.pageSize;
-
-    //Do not fetch page data if page is already clicked and paginated
-    /*if( _.includes(this.viewedPages, this.page.pageNumber))
-      return;
-    else    
-      this.viewedPages.push(this.page.pageNumber)*/
+  
 
     //Do not show page loader if fetching results using search
     if(!this.page.search){
@@ -653,8 +648,23 @@ uncheckAllFetchRecords(option, filter):void{
    * @return  void
    */
   onStartDateSelected(event:any):void {
+    let currentDate = new Date();   
+    
+    
     this.datesFilter['start']  = new Date(event.year,event.month-1,event.day+1)       
     this.datesFilter['transformedStartDate']  = (this.datesFilter['start']).toISOString();
+    
+    if((this.datesFilter['start']).getTime() > (currentDate).getTime()){
+      this.startDateModel = null
+      this.endDateModel = null
+      this.commonUtilsService.onError('Start date should not greater than today.');  
+      return;      
+    }else if(!_.has(this.datesFilter, ['end'])){
+      this.datesFilter['end']  = currentDate;
+   
+      this.datesFilter['transformedEndDate']  = (this.datesFilter['end']).toISOString();
+    }
+
     this.validateDateFilters();       
   }
   /**

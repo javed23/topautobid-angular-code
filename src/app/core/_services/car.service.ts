@@ -157,6 +157,18 @@ export class CarService {
     }
 
 
+    /*
+    * @param ratingReview    rating and review object
+    * @return        Observable<any>
+   */
+  public ratingReview(ratingReview): Observable<any> {
+
+    return this.httpClient.post('car/ratingReview', ratingReview)
+        .map((response: any) => response)
+}
+
+
+
 
 
 

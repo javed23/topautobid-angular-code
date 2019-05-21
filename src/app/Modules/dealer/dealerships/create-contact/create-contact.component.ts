@@ -3,10 +3,8 @@ import { AbstractControl, FormGroup, FormArray, FormBuilder, FormControl, Valida
 import { of, Observable } from 'rxjs';
 import { Router, ActivatedRoute } from "@angular/router";
 import { map, catchError } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { untilDestroyed } from 'ngx-take-until-destroy';// unsubscribe from observables when the  component destroyed
-import { ToastrManager } from 'ng6-toastr-notifications';//toaster class
 import { DropzoneComponent, DropzoneDirective, DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 //import services
 
@@ -72,7 +70,7 @@ export class CreateContactComponent implements OnInit {
     ]
   }
   
-  constructor(private titleService:TitleService, private http: HttpClient, private commonUtilsService:CommonUtilsService, private dealershipService: DealershipService, private pageLoaderService: PageLoaderService, private toastr: ToastrManager, private formBuilder: FormBuilder, private zone: NgZone,private router: Router) {
+  constructor(private pageLoaderService:PageLoaderService, private titleService:TitleService, private commonUtilsService:CommonUtilsService, private dealershipService: DealershipService,  private formBuilder: FormBuilder, private zone: NgZone,private router: Router) {
 
     //fetching us states
     this.fetchStates();
@@ -95,8 +93,7 @@ export class CreateContactComponent implements OnInit {
     this.onClose.emit(false);    
   } 
 
-  ngOnInit() {
-   
+  ngOnInit() {   
 
     //initalize new legal contact form
     this.initalizeNewLegalContactForm();    
@@ -112,7 +109,7 @@ export class CreateContactComponent implements OnInit {
       clickable: true,
       paramName: "file",
       uploadMultiple: false,
-      url: environment.API_ENDPOINT + "/api/common/imageUpload",
+      url: environment.FILE_UPLOAD_API,
       maxFiles: 1,
       autoReset: null,
       errorReset: null,
@@ -137,19 +134,17 @@ export class CreateContactComponent implements OnInit {
           const _this = this
           reader.onload = function(event) {
               
-              // event.target.result contains base64 encoded image
-              console.log('base64',reader.result)
+              // event.target.result contains base64 encoded image     
               var base64String = reader.result      
               const fileExtension = (file.name).split('.').pop();
-              const isValidFile = componentObj.commonUtilsService.isImageCorrupted(base64String,_.toLower(fileExtension))
-              console.log('isvalidfile',isValidFile);
+              const isValidFile = componentObj.commonUtilsService.isFileCorrupted(base64String,_.toLower(fileExtension))   
               if(!isValidFile){
                 //componentObj.toastr.errorToastr('File is corrupted or invalid.', 'Oops!');//showing error toaster 
                 done('File is corrupted or invalid.');
                 _this.removeFile(file);
                 return false;
-              } 
-              componentObj.pageLoaderService.pageLoader(true);//start showing page loader
+              }              
+              componentObj.commonUtilsService.showPageLoader();
               done();             
                        
           };
@@ -168,40 +163,34 @@ export class CreateContactComponent implements OnInit {
         this.emit("addedfile", mockFile);
   
         // And optionally show the thumbnail of the file:
-        console.log('profilePic',this.profilePic)
         this.emit("thumbnail", mockFile, this.profilePic);
        
         this.emit("complete", mockFile);
   
   
-        this.on("totaluploadprogress",function(progress){
-          console.log('progress',progress);
-          componentObj.pageLoaderService.pageLoader(true);//start showing page loader
-          componentObj.pageLoaderService.setLoaderText('Uploading file '+progress+'%');//setting loader text
+        this.on("totaluploadprogress",function(progress){          
+            componentObj.commonUtilsService.showPageLoader('Uploading file '+progress+'%');
           if(progress>=100){
-            componentObj.pageLoaderService.pageLoader(false);//hide page loader
+            componentObj.commonUtilsService.hidePageLoader();
           }
         })
         this.on('sending', function(file, xhr, formData){
           formData.append('folder', 'Legal_contacts');
         });
        
-        this.on("success", function(file, serverResponse) {
+        this.on("success", function(file, response) {
           // Called after the file successfully uploaded.         
           
-          componentObj.newLegalContactForm.controls['profile_pic'].setValue(serverResponse);        
+          componentObj.newLegalContactForm.controls['profile_pic'].setValue(response.fileLocation);        
           componentObj.zone.run(() => { 
-            $(".dz-image img").attr('src', serverResponse);
+            $(".dz-image img").attr('src', response.fileLocation);
           });
-          this.removeFile(file);
-          componentObj.pageLoaderService.pageLoader(false);//hide page loader
+          this.removeFile(file);  
+          componentObj.commonUtilsService.hidePageLoader();
         });
-        this.on("error", function(file, serverResponse) {
-          console.log('serverResponse',serverResponse)
-          // Called after the file successfully uploaded.         
-          componentObj.pageLoaderService.pageLoader(false);//hide page loader  
-          componentObj.toastr.errorToastr(serverResponse, 'Oops!');
-          //componentObj.toastr.errorToastr('Could not upload profile picture.', 'Oops!');//showing error toaster message
+        this.on("error", function(file, error) {    
+
+          componentObj.commonUtilsService.onError(error);
         });
       }     
     };
@@ -476,13 +465,7 @@ editNewLegalContact(index) {
     let profilePic = (this.legalContactItems[index]['profile_pic'])?this.legalContactItems[index]['profile_pic']:environment.WEB_ENDPOINT + '/' + environment.DEFAULT_PROFILE;
     $(".dz-image img").attr('src', profilePic);
     this.newLegalContactForm.patchValue(this.legalContactItems[index]) //binding the dealership datat 
-  });
-    
-
-  /*Object.keys(this.newDealershipForm.controls).forEach(key => {      
-    this.newDealershipForm.get(key).setValue(this.dealershipsItems[index][key])
-  });*/
-  
+  }); 
   
 }
 
@@ -490,8 +473,7 @@ editNewLegalContact(index) {
 updateNewLegalContact() { 
   
 
-  if(this.newLegalContactForm.invalid) {
-    console.log('invalid');
+  if(this.newLegalContactForm.invalid) { 
     return;
   } 
   this.legalContactItems[this.updatedLegalContactItem] = this.newLegalContactForm.value;   
@@ -509,19 +491,18 @@ async deleteNewLegalContact(index) {
 }
 
 onCreateLegalContact() {   
-   
-  console.log('legalContactItems',this.legalContactItems);
+ 
   let defaultLegalContact = this.legalContactItems.filter((l) => l.default_legal_contact).map((l) => l);
  
   if(this.legalContactItems.length == 0){
-    this.submitted = true;
-    this.toastr.errorToastr('Please add atleast one legal contact.', 'Oops!');//showing error toaster message    
+    this.submitted = true;    
+    this.commonUtilsService.onError(environment.MESSAGES.ATLEAST_ONE_CONTACT);  
     return;
-  }else if(defaultLegalContact.length>1){
-    this.toastr.errorToastr('Primary contact can not be more than one.', 'Oops!');//showing error toaster message
+  }else if(defaultLegalContact.length>1){  
+    this.commonUtilsService.onError(environment.MESSAGES.MAXIMUM_PRIMARY_CONTACT);  
     return;
   }else if(defaultLegalContact.length<=0){
-    this.toastr.errorToastr('Please select primary contact.', 'Oops!');//showing error toaster message
+    this.commonUtilsService.onError(environment.MESSAGES.SELECT_PRIMARY);   
     return;
   }else{
     
@@ -538,17 +519,13 @@ onCreateLegalContact() {
         //this.isLoading = false;
         
         $(this.contentSection.nativeElement).modal('hide');
-        this.pageLoaderService.pageLoader(false);//show page loader
-        this.pageLoaderService.setLoaderText('');//setting loader text                   
-        this.toastr.successToastr(environment.MESSAGES.CONTACT_ADDED, 'Success!'); //showing success toaster 
+        this.commonUtilsService.onSuccess(environment.MESSAGES.CONTACT_ADDED);       
         this.pageLoaderService.refreshPage(true) 
        // this.setPage(this.defaultPagination);
         
       },error => {
 
-        this.pageLoaderService.setLoaderText(environment.MESSAGES.ERROR_TEXT_LOADER);//setting loader text
-        this.pageLoaderService.pageLoader(false);//hide page loader
-        this.toastr.errorToastr(error, 'Oops!');//showing error toaster message
+        this.commonUtilsService.onError(error);
         
       });
 
@@ -567,7 +544,7 @@ private fetchStates(){
 
   },error => {    
 
-    this.toastr.errorToastr(error, 'Oops!');//showing error toaster message
+    this.commonUtilsService.onError(error);
 
   });
   }

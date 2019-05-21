@@ -232,8 +232,8 @@ product-listing  -->
                     <div class="selected-box">
                         <select (change)="onSort($event)" class="my_select">
                           <option value="">Sort by </option>
-                          <option value="vehicle_ownership.vehicle_pay_off,asc">Price: Lowest first</option>
-                          <option  value="vehicle_ownership.vehicle_pay_off,desc">Price: Highest first </option>
+                          <option value="vehicle_finance_details.vehicle_offer_in_hands_price,asc">Price: Lowest first</option>
+                          <option  value="vehicle_finance_details.vehicle_offer_in_hands_price,desc">Price: Highest first </option>
                           <option value="vehicle_year,asc">Year: Lowest first</option>
                           <option  value="vehicle_year,desc">Year: Highest first </option>
                           <option  value="basic_info.vehicle_make,asc">Make: A to Z </option>
@@ -319,14 +319,14 @@ product-listing  -->
                   </ul>
                 </div>
               </div>
-              <div class="car-list">
-                <ul class="list-inline">
-                  <li><i class="fa fa-registered"></i> {{car.year}}</li>
-                  <li><i class="fa fa-cog"></i> {{car.transmission}} </li>
-                  <li><i class="fa fa-road"></i> {{car.miles | number}} mi</li>
-                </ul>
-              </div>
-              <div class="car-content">
+              
+              
+              <div class="car-content">                  
+
+              <div class="star">
+                  <i class="fa fa-registered"></i> {{car.year}}                 
+                  <i class="fa fa-road"></i> {{car.miles | number}} mi                
+                </div>
                 <div class="star">
                   <i class="fa fa-star orange-color"></i>
                   <i class="fa fa-star orange-color"></i>
@@ -334,7 +334,7 @@ product-listing  -->
                   <i class="fa fa-star orange-color"></i>
                   <i class="fa fa-star-o orange-color"></i>
                 </div>
-                <a href="#">{{car.make}} {{car.model}}</a>
+                <a routerLink="/seller/car-detail/{{car._id}}">{{car.make}} {{car.model}}</a>
                 <div class="separator"></div>
                 <div class="price">
                  <!-- <span class="old-price">{{car.offer_in_hand | currency:'USD':true:'2.2-2'}}</span>-->
@@ -368,7 +368,7 @@ product-listing  -->
             <div class="col-md-8">
               <div class="car-details">
                 <div class="car-title">
-                  <a href="#">{{car.make}} {{car.model}}</a>
+                  <a routerLink="/seller/car-detail/{{car._id}}">{{car.make}} {{car.model}}</a>
                  
                     <p>{{car?.comments}}</p>
                 </div>
@@ -380,7 +380,7 @@ product-listing  -->
                 <div class="car-list">
                   <ul class="list-inline">
                     <li><i class="fa fa-registered"></i> {{car.year}}</li>
-                    <li><i class="fa fa-cog"></i> {{car.transmission}} </li>
+          
                     <li><i class="fa fa fa-road"></i> {{car.miles | number}}</li>
                   </ul>
                 </div>

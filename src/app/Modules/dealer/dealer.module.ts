@@ -46,7 +46,12 @@ import { CreateContactComponent } from './dealerships/create-contact/create-cont
 import { ListingComponent as CarsGridListComponent } from './cars/grid-list-view/listing.component';
 import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
 import { ContactRequestComponent } from './cars/contact-request/contact-request.component';
+import { FilterComponent } from './bids/filter/filter.component';
+import { SortComponent } from './bids/sort/sort.component';
+import { ListingComponent as BidsListingComponent} from './bids/listing/listing.component';
 
+//rate & review
+import { RatingReviewComponent } from './rating-review/rating-review.component';
 
 
 //facebook, google authentication configuration
@@ -97,7 +102,11 @@ let config = new AuthServiceConfig([
     CreateContactComponent,
     CarsGridListComponent,
     CarDetailPageComponent,
-    ContactRequestComponent
+    ContactRequestComponent,
+    FilterComponent,
+    SortComponent,
+    BidsListingComponent,
+    RatingReviewComponent
   ],
   imports: [
     CommonModule,

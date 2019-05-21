@@ -16,6 +16,10 @@ import { ListComponent as DealershipsListComponent } from './dealerships/table-v
 import { ListingComponent as CarsGridListComponent } from './cars/grid-list-view/listing.component';
 import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
 
+//bids management components
+import { ListingComponent as BidsListingComponent} from './bids/listing/listing.component';
+
+
 
 //importing guards
 import { DealerAuthGuardService } from '../../core/guards/dealer-auth-guard.service'
@@ -71,6 +75,12 @@ const routes: Routes = [
     path: 'car-detail/:_id', 
     component: CarDetailPageComponent, 
     data: { title: "Car Details" },
+    /*canActivate: [DealerAuthGuardService]*/
+  },
+  { 
+    path: 'bid-listing', 
+    component: BidsListingComponent, 
+    data: { title: "Cars Bids Listing" },
     /*canActivate: [DealerAuthGuardService]*/
   },
 ];

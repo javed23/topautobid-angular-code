@@ -20,7 +20,6 @@ declare let $: any;
 declare let POTENZA: any;
 import * as _ from 'lodash';
 
-
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
@@ -40,7 +39,7 @@ export class ListComponent implements AfterViewInit {
   cars = new Array<Car>()
   isGridListing:boolean=true; //set boolean value to show/hide listing (grid/list)
   viewedPages:any=[];
-  car:Car;
+  carId:any;
   isModalOpen:boolean=false;
   isBidsModalOpen:boolean=false;
   isFiltersModalOpen:boolean=false;
@@ -72,7 +71,7 @@ export class ListComponent implements AfterViewInit {
     //fetching the data with default settings
     this.setPage(this._defaultPagination,'all');
     //setting the page title
-    this.titleService.setTitle();
+    this.titleService.setTitle();    
   }
   
   /**
@@ -127,7 +126,8 @@ export class ListComponent implements AfterViewInit {
         
         this.page = pagedData.page;
        
-        this.cars =  pagedData.data;  
+        //this.cars =  pagedData.data; 
+        this.cars =  [...pagedData.data];   
         console.log('Rows',this.cars);  
         this.commonUtilsService.hidePageLoader();
       //case error 
@@ -207,8 +207,23 @@ onSort(event) {
    * @return  void
    */
   onStartDateSelected(event:any):void {
+    let currentDate = new Date();   
+    
+    
     this.datesFilter['start']  = new Date(event.year,event.month-1,event.day+1)       
-    this.datesFilter['transformedStartDate']  = (this.datesFilter['start']).toISOString();
+    this.datesFilter['transformedStartDate']  = (this.datesFilter['start']).toISOString().substr(0,10);
+    
+    if((this.datesFilter['start']).getTime() > (currentDate).getTime()){
+      this.startDateModel = null
+      this.endDateModel = null
+      this.commonUtilsService.onError('Start date should not greater than today.');  
+      return;      
+    }else if(!_.has(this.datesFilter, ['end'])){
+      this.datesFilter['end']  = currentDate;
+   
+      this.datesFilter['transformedEndDate']  = (this.datesFilter['end']).toISOString().substr(0,10);
+    }
+
     this.validateDateFilters();       
   }
   /**
@@ -217,7 +232,7 @@ onSort(event) {
    */
   onEndDateSelected(event:any):void {    
     this.datesFilter['end']  = new Date(event.year,event.month-1,event.day+1)
-    this.datesFilter['transformedEndDate']  = (this.datesFilter['end']).toISOString();
+    this.datesFilter['transformedEndDate']  = (this.datesFilter['end']).toISOString().substr(0,10);
     this.validateDateFilters();        
   }
 
@@ -262,10 +277,9 @@ onSort(event) {
   * @param type     which modal popup should show
   * Before delete, system confirm to delete the car. If yes opted then process deleting car else no action;
   */
-    show(index, type):void {
-      this.isBidsModalOpen = this.isModalOpen = false;
-      (type=='posted-car-bids') ? this.isBidsModalOpen = true : this.isModalOpen = true  
-      this.car = this.cars[index]
+    show(carId):void {
+      this.isBidsModalOpen = true 
+      this.carId = carId
     }
 
   /**
@@ -309,9 +323,10 @@ onSort(event) {
           
           let index = this.cars.indexOf(item, 0);
           if (index > -1)           
-            this.cars.splice(index, 1);       
-            this.setPage(this._defaultPagination,this.page.type);
-          this.commonUtilsService.onSuccess(environment.MESSAGES.RECORD_DELETED);          
+            this.cars.splice(index, 1);  
+            this.cars =  [...this.cars];       
+            //this.setPage(this._defaultPagination,this.page.type);
+            this.commonUtilsService.onSuccess(environment.MESSAGES.RECORD_DELETED);          
 
         //case error
         },error => {

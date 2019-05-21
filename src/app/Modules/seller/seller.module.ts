@@ -12,7 +12,7 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxPaginationModule } from 'ngx-pagination'; 
 import { ArchwizardModule } from 'angular-archwizard';
 import { CurrencyMaskModule } from "ng2-currency-mask";
-
+import { NgxGalleryModule } from 'ngx-gallery';
 
 //import enviorment file
 import { environment } from '../../../environments/environment';
@@ -29,10 +29,9 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 //cars management components
 import { ListingComponent as CarsGridListComponent } from './cars/grid-list-view/listing.component';
 import { ListComponent as CarsTableComponent } from './cars/table-view/list.component';
-import { CarBidsComponent } from './cars/car-bids/car-bids.component';
-import { FiltersComponent } from './cars/filters/filters.component';
 import { AddCarComponent } from './cars/addcar/addcar.component';
 import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
+import { ContactRequestComponent } from './cars/contact-request/contact-request.component';
 
 
 
@@ -64,11 +63,10 @@ let config = new AuthServiceConfig([
     ProfileComponent, 
     ForgotPasswordComponent,
     CarsTableComponent,
-    CarBidsComponent,
-    FiltersComponent,
     CarsGridListComponent,
     CarDetailPageComponent,
-    AddCarComponent
+    AddCarComponent,
+    ContactRequestComponent
   ],
   
   imports: [
@@ -85,7 +83,8 @@ let config = new AuthServiceConfig([
     NgxDatatableModule,
     NgxPaginationModule,
     CurrencyMaskModule,
-    ArchwizardModule
+    ArchwizardModule,
+    NgxGalleryModule
 
   ],
   providers: [

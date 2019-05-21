@@ -163,16 +163,9 @@ export class ListingComponent implements OnInit {
     this.page.pageNumber = page.offset;
     this.page.size = page.pageSize;
 
-    //Do not fetch page data if page is already clicked and paginated
-    /*if( _.includes(this.viewedPages, this.page.pageNumber))
-      return;
-    else    
-      this.viewedPages.push(this.page.pageNumber)*/
-
     //Do not show page loader if fetching results using search
     if(!this.page.search){
-      this.commonUtilsService.showPageLoader();
-    }
+      this.commonUtilsService.showPageLoader();    }
     
     //hit api to fetch data
     this.carService.listingDealersCars(this.page).subscribe(
@@ -248,8 +241,7 @@ export class ListingComponent implements OnInit {
       this.page.sortDirection = 'created_at'
     }
     this.currentPage = 0
-    this.viewedPages = [];    
-    console.log('this.page',this.page); 
+    this.viewedPages = [];   
     this.setPage(this._defaultPagination,this.page.type);  
   }
 
