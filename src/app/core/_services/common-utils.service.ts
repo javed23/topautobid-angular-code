@@ -77,7 +77,7 @@ export class CommonUtilsService {
  }  
 
   private extractData(res: Response) {
-    return res;
+    return Promise.resolve(res);
   }
 
   private handleError(error: any): Promise<any> {

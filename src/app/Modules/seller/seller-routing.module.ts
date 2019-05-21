@@ -11,6 +11,7 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 //cars management components
 import { ListComponent as CarsListComponent } from './cars/list/list.component';
 import { AddCarComponent } from './cars/addcar/addcar.component';
+import { EditCarComponent } from './cars/editcar/editcar.component';
 //importing guards
 import { SellerAuthGuardService } from '../../core/guards/seller-auth-guard.service';
 
@@ -58,6 +59,11 @@ const routes: Routes = [
     path: 'addcar',
     component: AddCarComponent,
     data: { title: 'Seller AddCar' }
+  },
+  {
+    path: 'editcar',
+    component: EditCarComponent,
+    data: { title: 'Seller EditCar' }
   }
 
 ];

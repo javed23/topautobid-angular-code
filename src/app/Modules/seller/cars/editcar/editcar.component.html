@@ -6,7 +6,7 @@
 
 
 
- <section #addCarSection class="accordian_listing">
+ <section #editCarSection class="accordian_listing">
     <div class="banner_col" *ngIf="!isVehicleOptionSelected">
         <div class="banner_col_inner">
             <div class="banner_col_inner_center">
@@ -1103,10 +1103,7 @@
                             <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header justify-content-center">
-                                        <h2 class="underline_heading">Finance Details</h2>    
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>     
+                                        <h2 class="underline_heading">Finance Details</h2>         
                                 </div>
                                 <form [formGroup]="offerInHands">
                                       
@@ -1115,18 +1112,8 @@
                                     
 
                                     <div class="col-md-12">
-
                                             <div class="form-group ">
-                                                <label>Estimated Price*</label>
-                                                <input #vehicle_estimated_price maxLength=17 type="text" currencyMask [options]="{ allowNegative: false, align: 'left'}" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_estimated_price" [ngClass]="{ 'is-invalid': (offerInHands.controls.vehicle_finance_details.get('vehicle_estimated_price').touched || isOfferInHandsSubmitted) && offerInHands.controls.vehicle_finance_details.get('vehicle_estimated_price').errors }">        
-                                                
-                                                <p *ngIf="offerInHands.controls.vehicle_finance_details.get('vehicle_estimated_price').touched || isOfferInHandsSubmitted">                      
-                                                    <app-form-validation-errors errorPrefix="Pay Off " [isPrice]=true minAmount='$1' [errors]="offerInHands.controls.vehicle_finance_details.get('vehicle_estimated_price').errors"></app-form-validation-errors>   
-                                                </p>
-                                            </div>
-
-                                            <div class="form-group ">
-                                                <label>My Pay Off</label>
+                                                <label>My Pay Off*</label>
                                                 <input #vehicle_pay_off maxLength=17 type="text" currencyMask [options]="{ allowNegative: false, align: 'left'}" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_pay_off" [ngClass]="{ 'is-invalid': (offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').touched || isOfferInHandsSubmitted) && offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').errors }">        
                                                 
                                                 <p *ngIf="offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').touched || isOfferInHandsSubmitted">                      
@@ -1135,7 +1122,7 @@
                                             </div>
                                             
                                             <div class="form-group">
-                                                    <label>Finance Bank</label>
+                                                    <label>Finance Bank*</label>
                                                     <input #vehicle_finance_bank minLength=2 maxLength=50 type="text" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_finance_bank" [ngClass]="{ 'is-invalid': (offerInHands.controls.vehicle_finance_details.get('vehicle_finance_bank').touched || isOfferInHandsSubmitted) && offerInHands.controls.vehicle_finance_details.get('vehicle_finance_bank').errors }">        
                                                     
                                                     <p *ngIf="offerInHands.controls.vehicle_finance_details.get('vehicle_finance_bank').touched || isOfferInHandsSubmitted">                      
@@ -1146,7 +1133,7 @@
 
 
                                     
-                                        <label>Offer In Hand </label>
+                                        <label>Offer In Hand* </label>
                                         <div class="form-group enter_price">
                                             
                                             <input #offerInHandsPrice maxLength=17 type="text" currencyMask [options]="{ allowNegative: false, align: 'left'}" class="form-control grey_input" formControlName="vehicle_offer_in_hands_price" [ngClass]="{ 'is-invalid': (offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').touched || isOfferInHandsSubmitted) && offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').errors }">   
@@ -1387,18 +1374,13 @@
                                         </div>
                                         <div class="detail_body">
                                             <ul>
-                                                    <li><span class="label">Estimated Price :</span> <span class="value">
-                                                            {{vehicle_estimated_price?.value}}</span></li> 
-                                                    <li *ngIf="vehicle_pay_off?.value && vehicle_pay_off?.value != 0"><span class="label">Pay Off :</span> <span class="value">
+                                                    <li><span class="label">Pay Off :</span> <span class="value">
                                                             {{vehicle_pay_off?.value}}</span></li>
-                                                           
-                                                        <li *ngIf="vehicle_finance_bank?.value"><span class="label">Finance Bank :</span> <span class="value">
+                                                        <li><span class="label">Finance Bank :</span> <span class="value">
                                                             {{vehicle_finance_bank?.value}}</span></li>
                                                 <li>
-                                                    <span *ngIf="offerInHandsPrice?.value && offerInHandsPrice?.value != 0">
-                                                        <span class="label">Offer In Hand :</span> <span class="value">
-                                                            {{offerInHandsPrice?.value}}
-                                                        </span>
+                                                    <span class="label">Offer In Hand :</span> <span class="value">
+                                                        {{offerInHandsPrice?.value}}
                                                     </span>
                                                     <div *ngIf="checkObjectLength(offerInHandsImagesArray.value) > 0" class="inner_box">
 

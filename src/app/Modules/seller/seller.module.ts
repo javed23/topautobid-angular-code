@@ -30,6 +30,7 @@ import { ListComponent as CarsListComponent } from './cars/list/list.component';
 import { CarViewComponent } from './cars/car-view/car-view.component';
 import { CarBidsComponent } from './cars/car-bids/car-bids.component';
 import { AddCarComponent } from './cars/addcar/addcar.component';
+import { EditCarComponent } from './cars/editcar/editcar.component';
 
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -62,7 +63,8 @@ let config = new AuthServiceConfig([
     CarsListComponent,
     CarViewComponent,
     CarBidsComponent,
-    AddCarComponent
+    AddCarComponent,
+    EditCarComponent
   ],
   imports: [
     CommonModule,

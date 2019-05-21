@@ -41,9 +41,9 @@ declare let POTENZA:any;
 
 
 @Component({
-  selector: 'app-addcar',
-  templateUrl: './addcar.component.html',
-  styleUrls: ['./addcar.component.css'],
+  selector: 'app-editcar',
+  templateUrl: './editcar.component.html',
+  styleUrls: ['./editcar.component.css'],
   encapsulation: ViewEncapsulation.None,
   animations: [
     trigger('AnimateList', [
@@ -54,7 +54,7 @@ declare let POTENZA:any;
     ])
    ]
 })
-export class AddCarComponent implements OnInit {
+export class EditCarComponent implements OnInit {
   // Offer In Hands Popup
   @ViewChild("offerInHandsSection") offerInHandsSection: ElementRef;
 
@@ -63,7 +63,7 @@ export class AddCarComponent implements OnInit {
   breadcrumbs:any = [{page:'Home',link:''},{page:'New Car Listing',link:''}]
 
   // Smooth Scroll To Add Car Form Wizard
-  @ViewChild("addCarSection") addCarSection: ElementRef;
+  @ViewChild("editCarSection") editCarSection: ElementRef;
 
   // Array where we are going to do CRUD operations
   //vehicleImagesArray:any = [{Interior: []}, {Exterior: []}];
@@ -73,7 +73,7 @@ export class AddCarComponent implements OnInit {
   getVehicleYear:string = "";
   
 
-  // AddCar Form Group Wizard
+  // EditCar Form Group Wizard
   vehicleOption: FormGroup;
   basicInfoWizard: FormGroup;
   uploadVehicleImagesWizard: FormGroup;
@@ -147,7 +147,7 @@ export class AddCarComponent implements OnInit {
   getModelByMakeIdArray:any = [];  
   private _secondKey:boolean= false;
   private _vehicleAftermarket:boolean= false;
-  private _vehicleOwnership:string = '';
+  private _vehicleOwnership:string = 'Salvage';
   private _vehicleConditionValue:string = 'Ready for resale without any reconditioning';
   private _cleanTitle:boolean= false;
   private _willingToDrive:boolean= false;
@@ -242,7 +242,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       }),      
       vehicle_ownership:this.formBuilder.group({        
         vehicle_clean_title : [false],
-        vehicle_ownership_value : ['', Validators.compose([Validators.required])],
+        vehicle_ownership_value : ['Salvage'],
         vehicle_ownership_description : ['']
             
       })
@@ -281,10 +281,9 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   private offerInHandsPopUp(){
     this.offerInHands = this.formBuilder.group({ 
       vehicle_finance_details:this.formBuilder.group({
-        vehicle_finance_bank: ['', Validators.compose([Validators.minLength(2),Validators.maxLength(50)])],
-        vehicle_estimated_price: [0, Validators.compose([Validators.required, Validators.min(1)])],       
-        vehicle_pay_off: [0],       
-        vehicle_offer_in_hands_price : [0],
+        vehicle_finance_bank: ['', Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50)])],
+        vehicle_pay_off: [0, Validators.compose([Validators.required, Validators.min(1)])],       
+        vehicle_offer_in_hands_price : [0, Validators.compose([Validators.required, Validators.min(1)])],
         vehicle_proof_image: this.formBuilder.array([]), 
       })      
     })
@@ -393,7 +392,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
               if(fileExtension == "pdf"){   
 
-                let hello = componentObj.isPDFCorrupted(base64String, _.toLower(fileExtension));
+                const hello = componentObj.isPDFCorrupted(base64String, _.toLower(fileExtension));
                 console.log('asd', hello);
                 if(!hello){
                   done('File is corrupted or invalid.');
@@ -780,10 +779,12 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     };  
   }
 
-  private isPDFCorrupted(base64String, fileExtension) {    
+  private isPDFCorrupted(base64String, fileExtension) {
+    
     return this.commonUtilsService.isPDFCorrupted(base64String, fileExtension)
     .then(result => {console.log('result', result); return result; })
-    .catch(error => {console.log('error', error); return error; })      
+    .catch(error => {console.log('error', error); return error; })             
+    //console.log('response', hello);
   }                
 
   /**
@@ -1568,11 +1569,11 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    * smooth scroll to specific div*   
    */
   scrollToSpecificDiv(): void {   
-    this.addCarSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" }); 
+    this.editCarSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" }); 
   }
 
   ngOnInit() {  
-    this.addCarSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });     
+    this.editCarSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });     
   }
 
   ngAfterViewInit(){    
