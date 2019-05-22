@@ -112,6 +112,7 @@ export class AddCarComponent implements OnInit {
   exteriorColor:string = "Black";
   interiorColor:string = "Black";
   vehicleImageCategoryOnSummary:string = "all";
+  base64StringFile:any;
 
   addVehicleSubscription: Subscription;
 
@@ -387,11 +388,14 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           reader.onload = function(event) {  
                        
               let base64String = reader.result      
-              const fileExtension = (file.name).split('.').pop();
+              let fileExtension = (file.name).split('.').pop();
 
-             
+              componentObj.base64StringFile = reader.result;
+              if(fileExtension == "pdf"){
+                componentObj.base64StringFile = componentObj.base64StringFile.replace('data:application/pdf;base64,', '');
+              }
 
-              if(fileExtension == "pdf"){   
+              /*if(fileExtension == "pdf"){   
 
                 let hello = componentObj.isPDFCorrupted(base64String, _.toLower(fileExtension));
                 console.log('asd', hello);
@@ -403,7 +407,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
                 
 
-              }else if(fileExtension == "png" || fileExtension == "jpg" || fileExtension == "jpeg"){ 
+              }else  if(fileExtension == "png" || fileExtension == "jpg" || fileExtension == "jpeg"){ 
 
                 const isValidFile = componentObj.commonUtilsService.isFileCorrupted(base64String,_.toLower(fileExtension));
 
@@ -413,14 +417,14 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
                   return false;
                 } 
 
-              }  
+              }  */
               
-             /* const isValidFile = componentObj.commonUtilsService.isFileCorrupted(base64String,_.toLower(fileExtension))              
+             const isValidFile = componentObj.commonUtilsService.isFileCorrupted(base64String,_.toLower(fileExtension))              
               if(!isValidFile){
                 done('File is corrupted or invalid.');
                 _this.removeFile(file);
                 return false;
-              } */
+              }
              
 
               componentObj.pageLoaderService.pageLoader(true);//start showing page loader
@@ -432,8 +436,11 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       init: function() { 
                 
         
-        this.on('sending', function(file, xhr, formData){          
+        this.on('sending', function(file, xhr, formData){     
+             
           formData.append('folder', 'OfferInHands');
+          formData.append('fileType', file.type);
+          formData.append('base64StringFile', componentObj.base64StringFile);
         });
         
 
@@ -449,7 +456,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           
           
           componentObj.zone.run(() => { 
-            componentObj.offerInHandsImagesArray.push(new FormControl({file_path : serverResponse.fileLocation, file_name : serverResponse.fileName, file_key : serverResponse.fileKey, file_category : 'offer_in_hands'}));
+            componentObj.offerInHandsImagesArray.push(new FormControl({file_path : serverResponse.fileLocation, file_name : serverResponse.fileName, file_key : serverResponse.fileKey, file_mimetype : serverResponse.fileMimeType, file_category : 'offer_in_hands'}));
           });
 
           this.removeFile(file);
@@ -484,7 +491,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     cancelReset: null,
     acceptedFiles: '.jpg, .png, .jpeg',
     maxFilesize: 2, // MB,
-    dictDefaultMessage: 'Click or drag images here to upload',
+    dictDefaultMessage: 'Click or Drag Images Here to Upload',
     //previewsContainer: "#vehicleAfterMarketPreview",
     addRemoveLinks: true,
     //resizeWidth: 125,
@@ -585,7 +592,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       cancelReset: null,
       acceptedFiles: '.jpg, .png, .jpeg',
       maxFilesize: 2, // MB,
-      dictDefaultMessage: 'Click or drag images here to upload',
+      dictDefaultMessage: 'Click or Drag Images Here to Upload',
       //previewsContainer: "#vehicleConditionPreview",
       addRemoveLinks: true,
       //resizeWidth: 125,
@@ -684,7 +691,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       cancelReset: null,
       acceptedFiles: '.jpg, .png, .jpeg',
       maxFilesize: 2, // MB,
-      dictDefaultMessage: 'Click or drag images here to upload',
+      dictDefaultMessage: 'Click or Drag Images Here to Upload',
      // previewsContainer: "#vehicleImagesPreview",      
       addRemoveLinks: true,
       //resizeWidth: 125,
@@ -1349,6 +1356,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    */
   toggleVehicleCleanTitle(event): void {  
     let vehicleOwnershipDescription = this.aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description');
+    let vehicleOwnershipValue = this.aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_value');
     vehicleOwnershipDescription.patchValue('');
     if ( event.target.checked ) {      
       this.isVehicleCleanTitleSelected = true; 
@@ -1358,7 +1366,9 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       this.isOtherSelected=false; 
       
       vehicleOwnershipDescription.clearValidators();        
-      vehicleOwnershipDescription.updateValueAndValidity();
+      vehicleOwnershipDescription.updateValueAndValidity(); 
+      vehicleOwnershipValue.clearValidators();        
+      vehicleOwnershipValue.updateValueAndValidity();
 
     }else{
       this.isVehicleCleanTitleSelected = false; 
@@ -1373,7 +1383,10 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
         this.isOtherSelected = false;        
         vehicleOwnershipDescription.clearValidators();        
         vehicleOwnershipDescription.updateValueAndValidity();
-      }       
+      } 
+      
+      vehicleOwnershipValue.setValidators(Validators.compose([Validators.required]));        
+      vehicleOwnershipValue.updateValueAndValidity();
     }
     console.log(this.isOtherSelected);
     

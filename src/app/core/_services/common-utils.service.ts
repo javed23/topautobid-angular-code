@@ -53,6 +53,9 @@ export class CommonUtilsService {
         
         return true;
       }
+      else if(type=='pdf'){ 
+        return true;
+      }
       else if(type=='jpeg' || type=='jpg'){      
         const imageDataJpeg = Array.from(atob(base64string.replace('data:image/jpeg;base64,', '')), c => c.charCodeAt(0))
         const imageCorrupted = ((imageDataJpeg[imageDataJpeg.length - 1] === 217) && (imageDataJpeg[imageDataJpeg.length - 2] === 255))
