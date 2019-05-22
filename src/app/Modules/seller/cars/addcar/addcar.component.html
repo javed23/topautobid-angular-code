@@ -100,7 +100,7 @@
                                         <div class="form-group col-md-6">
                                         <h4>Vehicle Info</h4>
                                         <div class="f_width">       
-                                            <label>Where is this car currently located?*</label>
+                                            <label>Where is this Car Currently Located?*</label>
                                             <input #vehicle_zip mask="00000" type="text" class="simple_select form-control placeholder" placeholder="ZIP" formControlName="vehicle_zip" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_zip').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_zip').errors }">
         
                                             <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_zip').touched || isBasicInfoSubmitted">                      
@@ -425,7 +425,7 @@
                                             <div class="content-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="auto">
                                                                             
                                                 <div class="dropzone dropzone-container draganddrop custom_dragger" [dropzone]="vehicleImagesConfiguration" [disabled]="disabled">
-                                                    <div class="drag_box"><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i><p>Drag/Drop Images here to upload</p><span>OR</span><button class="button red d-inline-block width-auto boder0 mt-4" type="button">Click to Upload</button></div>
+                                                    <div class="drag_box"><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i><p>Drag/Drop Images Here to Upload</p><span>OR</span><button class="button red d-inline-block width-auto boder0 mt-4" type="button">Click to Upload</button></div>
                                                 </div>
 
                                                 
@@ -505,7 +505,7 @@
                                     <div class="head_section">
                                         <h2 class="underline_heading">More About Your Vehicle</h2>
                                         <div class="switch_outer">
-                                        <span>Has second key?</span>
+                                        <span>Has Second Key?</span>
                                         <label class="switch">
                                                 <input type="checkbox" #vehicleHasSecondKey (change)="toggleVehicleSecondKey($event)" formControlName="vehicle_has_second_key">
                                                 <span class="slider round"></span>
@@ -520,7 +520,7 @@
                                             <div class="col-md-12">
                                                 <div class="text-center collapsable_head">
                                                     <div class="switch_outer">                                                
-                                                        <span>Has aftermarket options?</span>
+                                                        <span>Has Aftermarket Options?</span>
                                                         <label class="switch">
                                                         <input type="checkbox" formControlName="is_vehicle_aftermarket" (change)="toggleVehicleAfterMarket($event)">
                                                         <span class="slider round"></span>
@@ -555,7 +555,7 @@
                                                                                                 
                                                                     <div class="dropzone dropzone-container draganddrop custom_dragger" [dropzone]="vehicleAftermarketConfiguration" [disabled]="disabled">
 
-                                                                            <div class="drag_box"><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i><p class="ng-tns-c5-0">Drag/Drop Images here to upload</p><span class="ng-tns-c5-0">OR</span><button class="button red d-inline-block width-auto boder0 mt-4" type="button">Click to Upload</button></div>
+                                                                            <div class="drag_box"><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i><p class="ng-tns-c5-0">Drag/Drop Images Here to Upload</p><span class="ng-tns-c5-0">OR</span><button class="button red d-inline-block width-auto boder0 mt-4" type="button">Click to Upload</button></div>
                                                                     </div>
 
                                                                     
@@ -610,6 +610,7 @@
                                             </div>  
                                             
                                             <div class="col-md-12" *ngIf="!isVehicleCleanTitleSelected">
+                                                <p class="note text-center">Please Select Any of the Options Below.</p>
                                                     <ol class="ownership_btns">
                                                     <li>
                                                         <div class="Radio_BTN">
@@ -743,7 +744,7 @@
                                                 <ol class="condition_options">
                                                     <li>
                                                         <div class="Radio_BTN">
-                                                                <input type="radio" value="Ready for resale without any reconditioning" (click)="checkVehicleConditionRadioValue($event,'resale')" formControlName="vehicle_condition_value" id="resale">
+                                                                <input type="radio" value="Ready For Resale Without Any Reconditioning" (click)="checkVehicleConditionRadioValue($event,'resale')" formControlName="vehicle_condition_value" id="resale">
                                                                 <label for="resale">Ready for resale without any reconditioning
 
                                                                 <span class="addition_info">(no odor, no mechanical/interiror/exterior damages - the overall vehicle is in good condition)</span>
@@ -752,14 +753,14 @@
                                                     </li>
                                                     <li>
                                                         <div class="Radio_BTN">
-                                                            <input type="radio" value="May need some reconditioning" (click)="checkVehicleConditionRadioValue($event,'reconditioning')" formControlName="vehicle_condition_value" id="reconditioning">
+                                                            <input type="radio" value="May Need Some Reconditioning" (click)="checkVehicleConditionRadioValue($event,'reconditioning')" formControlName="vehicle_condition_value" id="reconditioning">
                                                             <label for="reconditioning">May need some reconditioning
                                                                     <span class="addition_info">(moderate internal/external wear and tear however there is no mechanical damages)</span> </label>
                                                             </div> 
                                                     </li>
                                                     <li>
                                                         <div class="Radio_BTN">
-                                                            <input type="radio" value="Needs some reconditioning but yet functional" (click)="checkVehicleConditionRadioValue($event,'functional')" formControlName="vehicle_condition_value" id="functional">
+                                                            <input type="radio" value="Needs Some Reconditioning But Yet Functional" (click)="checkVehicleConditionRadioValue($event,'functional')" formControlName="vehicle_condition_value" id="functional">
                                                                 <label for="functional">Needs some reconditioning but yet functional
                                                                     <span class="addition_info">(moderate internal/external wear and tear and moderate mechanical damages)
                                                                         </span>
@@ -768,7 +769,7 @@
                                                     </li>
                                                     <li>
                                                         <div class="Radio_BTN">
-                                                            <input type="radio" value="Parts only" (click)="checkVehicleConditionRadioValue($event,'parts')" formControlName="vehicle_condition_value" id="parts">
+                                                            <input type="radio" value="Parts Only" (click)="checkVehicleConditionRadioValue($event,'parts')" formControlName="vehicle_condition_value" id="parts">
                                                             <label for="parts">Parts only
                                                                     <!--span class="addition_info">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nostrum eveniet amet enim repudiandae</span-->
                                                             </label>
@@ -804,7 +805,7 @@
                                                                                                                 
                                                                                     <div class="dropzone dropzone-container draganddrop custom_dragger" [dropzone]="vehicleConditionConfiguration" [disabled]="disabled">
                 
-                                                                                            <div class="drag_box"><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i><p>Drag/Drop Images here to upload</p><span>OR</span><button class="button red d-inline-block width-auto boder0 mt-4" type="button">Click to Upload</button></div>
+                                                                                            <div class="drag_box"><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i><p>Drag/Drop Images Here to Upload</p><span>OR</span><button class="button red d-inline-block width-auto boder0 mt-4" type="button">Click to Upload</button></div>
                 
                                                                                     </div>
                                 
@@ -951,7 +952,7 @@
                                 <div class="row">
                                     <div class="form-group col-md-12"> 
                                             <div class="switch_outer text-center">                                               
-                                        <span>Do you want the car to be picked up?</span>
+                                        <span>Do You Want the Car to be Picked Up?</span>
                                         <label class="switch">
                                                 <input type="checkbox" (change)="toggleVehiclePickedUp($event)" formControlName="vehicle_to_be_picked_up">
                                                 <span class="slider round"></span>
@@ -1085,8 +1086,9 @@
                                                         </li>
                                                     </ul>
                                                     </div>
-                                                </li>   
-                                                <li *ngIf="vehicle_comments?.length > 0"><label>Seller Comments: </label><span>{{vehicle_comments?.value}}</span></li>
+                                                </li>  
+                                                
+                                                <li *ngIf="vehicle_comments?.value"><label>Seller Comments: </label><span>{{vehicle_comments?.value}}</span></li>
                                             </ul>        
                                         </div>              
                                 </div> 
@@ -1102,7 +1104,10 @@
                             <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header justify-content-center">
-                                        <h2 class="underline_heading">Finance Details</h2>         
+                                        <h2 class="underline_heading">Finance Details</h2>    
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>     
                                 </div>
                                 <form [formGroup]="offerInHands">
                                       
@@ -1111,8 +1116,18 @@
                                     
 
                                     <div class="col-md-12">
+
                                             <div class="form-group ">
-                                                <label>My Pay Off*</label>
+                                                <label>Estimated Price*</label>
+                                                <input #vehicle_estimated_price maxLength=17 type="text" currencyMask [options]="{ allowNegative: false, align: 'left'}" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_estimated_price" [ngClass]="{ 'is-invalid': (offerInHands.controls.vehicle_finance_details.get('vehicle_estimated_price').touched || isOfferInHandsSubmitted) && offerInHands.controls.vehicle_finance_details.get('vehicle_estimated_price').errors }">        
+                                                
+                                                <p *ngIf="offerInHands.controls.vehicle_finance_details.get('vehicle_estimated_price').touched || isOfferInHandsSubmitted">                      
+                                                    <app-form-validation-errors errorPrefix="Pay Off " [isPrice]=true minAmount='$1' [errors]="offerInHands.controls.vehicle_finance_details.get('vehicle_estimated_price').errors"></app-form-validation-errors>   
+                                                </p>
+                                            </div>
+
+                                            <div class="form-group ">
+                                                <label>My Pay Off</label>
                                                 <input #vehicle_pay_off maxLength=17 type="text" currencyMask [options]="{ allowNegative: false, align: 'left'}" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_pay_off" [ngClass]="{ 'is-invalid': (offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').touched || isOfferInHandsSubmitted) && offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').errors }">        
                                                 
                                                 <p *ngIf="offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').touched || isOfferInHandsSubmitted">                      
@@ -1121,7 +1136,7 @@
                                             </div>
                                             
                                             <div class="form-group">
-                                                    <label>Finance Bank*</label>
+                                                    <label>Finance Bank</label>
                                                     <input #vehicle_finance_bank minLength=2 maxLength=50 type="text" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_finance_bank" [ngClass]="{ 'is-invalid': (offerInHands.controls.vehicle_finance_details.get('vehicle_finance_bank').touched || isOfferInHandsSubmitted) && offerInHands.controls.vehicle_finance_details.get('vehicle_finance_bank').errors }">        
                                                     
                                                     <p *ngIf="offerInHands.controls.vehicle_finance_details.get('vehicle_finance_bank').touched || isOfferInHandsSubmitted">                      
@@ -1132,7 +1147,7 @@
 
 
                                     
-                                        <label>Offer In Hand* </label>
+                                        <label>Offer In Hand </label>
                                         <div class="form-group enter_price">
                                             
                                             <input #offerInHandsPrice maxLength=17 type="text" currencyMask [options]="{ allowNegative: false, align: 'left'}" class="form-control grey_input" formControlName="vehicle_offer_in_hands_price" [ngClass]="{ 'is-invalid': (offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').touched || isOfferInHandsSubmitted) && offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').errors }">   
@@ -1151,7 +1166,11 @@
                                         <div class="col-md-12"> 
                                             <div class="thumbnails" *ngIf="checkObjectLength(offerInHandsImagesArray.value) > 0">
                                                 <div class="thumbnail_list" *ngFor="let offerInHandsImage of offerInHandsImagesArray.value | keyvalue; let offerInHandsImage = index;">
-                                                    <img src="{{offerInHandsImage.value.file_path}}">
+
+                                                    <img *ngIf="offerInHandsImage.value.file_mimetype != 'application/pdf'" src="{{offerInHandsImage.value.file_path}}">
+
+                                                    <a class="upload_pdf" data-toggle="tooltip" title="{{offerInHandsImage.value.file_name}}" *ngIf="offerInHandsImage.value.file_mimetype == 'application/pdf'" href="{{offerInHandsImage.value.file_path}}" target="_blank"><img src="assets/images/pdf_icon.png"></a>
+
                                                     <i (click)="removeImage(offerInHandsImage.key, 'offer_in_hands',offerInHandsImage.value.file_key)" class="fa fa-times" aria-hidden="true"></i>
                                                 </div>
                                             </div>
@@ -1337,7 +1356,7 @@
                                                     </span>
                                                 </li>
                 
-                                                <li *ngIf="vehicle_comments?.length > 0"><span class="label"> Seller Comments :</span> <span class="value">
+                                                <li *ngIf="vehicle_comments?.value"><span class="label"> Seller Comments :</span> <span class="value">
                                                     {{vehicle_comments?.value}}</span>
                                                 </li>
                                             </ul>
@@ -1373,22 +1392,31 @@
                                         </div>
                                         <div class="detail_body">
                                             <ul>
-                                                    <li><span class="label">Pay Off :</span> <span class="value">
+                                                    <li><span class="label">Estimated Price :</span> <span class="value">
+                                                            {{vehicle_estimated_price?.value}}</span></li> 
+                                                    <li *ngIf="vehicle_pay_off?.value"><span class="label">Pay Off :</span> <span class="value">
                                                             {{vehicle_pay_off?.value}}</span></li>
-                                                        <li><span class="label">Finance Bank :</span> <span class="value">
+                                                           
+                                                        <li *ngIf="vehicle_finance_bank?.value"><span class="label">Finance Bank :</span> <span class="value">
                                                             {{vehicle_finance_bank?.value}}</span></li>
                                                 <li>
-                                                    <span class="label">Offer In Hand :</span> <span class="value">
-                                                        {{offerInHandsPrice?.value}}
+                                                    <span>
+                                                        <span class="label">Offer In Hand :</span> <span class="value">
+                                                            {{offerInHandsPrice?.value}}
+                                                        </span>
                                                     </span>
                                                     <div *ngIf="checkObjectLength(offerInHandsImagesArray.value) > 0" class="inner_box">
 
                                                             <div class="box_outer">
                                                                 <span  class="relative_images">
                                                                         <span *ngFor="let offerInHandsImage of offerInHandsImagesArray.value | keyvalue; let offerInHandsIndex = index;" class="img_box">
-                                                                            <a href="javascript:void(0)">
+                                                                            <a *ngIf="offerInHandsImage.value.file_mimetype != 'application/pdf'" href="javascript:void(0)">
                                                                                 <img src="{{offerInHandsImage.value.file_path}}" alt="" class="img-fluid">
                                                                             </a>
+
+                                                                            <a data-toggle="tooltip" title="{{offerInHandsImage.value.file_name}}" class="upload_pdf" *ngIf="offerInHandsImage.value.file_mimetype == 'application/pdf'" href="{{offerInHandsImage.value.file_path}}" target="_blank">
+                                                                                    <img src="assets/images/pdf_icon.png" alt="" class="img-fluid">
+                                                                                </a>
                                                                         </span>                                             
                                                                     </span>
                                                             </div>

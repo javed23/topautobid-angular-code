@@ -4,7 +4,8 @@ import { HTTP_INTERCEPTORS, HttpClientModule, HttpClient } from '@angular/common
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskModule } from 'ngx-mask'
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+
 import { ArchwizardModule } from 'angular-archwizard';
 import { DropzoneModule, DropzoneConfigInterface,
   DROPZONE_CONFIG } from 'ngx-dropzone-wrapper';
@@ -20,12 +21,15 @@ import { AuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider } from 'a
 //import microsoft module
 import { AdalService, AdalGuard, AdalInterceptor } from 'adal-angular4';
 
+
 //import enviorment file
 import { environment } from '../../../environments/environment';
 //import dealer routing 
 import { DealerRoutingModule } from './dealer-routing.module';
 //import shared module
 import { SharedModule } from '../../core/shared.module';
+
+import { CustomNgbDateParserFormatter } from '../../core/custom-ngbDateParserFormatter'
 
 //import components
 import { LoginComponent } from './login/login.component';
@@ -50,8 +54,6 @@ import { FilterComponent } from './bids/filter/filter.component';
 import { SortComponent } from './bids/sort/sort.component';
 import { ListingComponent as BidsListingComponent} from './bids/listing/listing.component';
 
-//rate & review
-import { RatingReviewComponent } from './rating-review/rating-review.component';
 
 
 //facebook, google authentication configuration
@@ -105,8 +107,7 @@ let config = new AuthServiceConfig([
     ContactRequestComponent,
     FilterComponent,
     SortComponent,
-    BidsListingComponent,
-    RatingReviewComponent
+    BidsListingComponent
   ],
   imports: [
     CommonModule,
@@ -136,6 +137,10 @@ let config = new AuthServiceConfig([
     {
       provide: AuthServiceConfig,
       useFactory: provideConfig
+    },
+    {
+      provide: NgbDateParserFormatter, 
+      useFactory: () => new CustomNgbDateParserFormatter('longDate')
     }
   ],
 })

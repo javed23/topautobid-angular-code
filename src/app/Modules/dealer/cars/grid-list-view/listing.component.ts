@@ -1,6 +1,6 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbDateAdapter, NgbDateStruct, NgbDateNativeAdapter } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateAdapter, NgbDateParserFormatter, NgbDateStruct, NgbDateNativeAdapter } from '@ng-bootstrap/ng-bootstrap';
 
 //modules services, models and enviornment file
 import { TitleService, CarService, CommonUtilsService  } from '../../../../core/_services'
@@ -65,7 +65,7 @@ export class ListingComponent implements OnInit {
   readonly breadcrumbs: any[] = [{ page: 'Home', link: '/dealer/home' }, { page: 'Car Listing', link: '' }]
 
 
-  constructor(private commonUtilsService:CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private ngZone: NgZone, private titleService:TitleService) {
+  constructor(private ngbDateParserFormatter: NgbDateParserFormatter, private commonUtilsService:CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private ngZone: NgZone, private titleService:TitleService) {
     //fetching the data with default settings
     this.currentPage = 0   
 
@@ -646,16 +646,39 @@ uncheckAllFetchRecords(option, filter):void{
    * @return  void
    */
   onStartDateSelected(event:any):void {
-    this.datesFilter['start']  = new Date(event.year,event.month-1,event.day+1)       
+    let currentDate = new Date();   
+    console.log('currentDate',currentDate);
+    this.ngbDateParserFormatter.parse(event.year + "-" + (event.month-1).toString() + "-" + (event.day));
+
+    this.datesFilter['start']  = new Date(event.year,event.month-1,event.day+1)   
+    this.datesFilter['startCurrent']  = new Date(event.year,event.month-1,event.day)       
     this.datesFilter['transformedStartDate']  = (this.datesFilter['start']).toISOString();
-    this.validateDateFilters();       
+
+    if((this.datesFilter['startCurrent']).getTime() > (currentDate).getTime()){
+      this.startDateModel = null
+      this.endDateModel = null
+      this.commonUtilsService.onError('Start date should not greater than today.');  
+      return;      
+    }else if(!_.has(this.datesFilter, ['end'])){
+      this.datesFilter['end']  = currentDate;
+      this.datesFilter['endCurrent']  = currentDate
+      this.datesFilter['transformedEndDate']  = (this.datesFilter['end']).toISOString();
+    }
+
+    this.validateDateFilters(); 
+    //return this.ngbDateParserFormatter.parse(startYear + "-" + startMonth.toString() + "-" + startDay);      
   }
   /**
    * Check date validations and filters records when select end date filter
    * @return  void
    */
-  onEndDateSelected(event:any):void {    
+  onEndDateSelected(event:any):void {
+    
+    this.ngbDateParserFormatter.parse(event.year + "-" + (event.month-1).toString() + "-" + (event.day));
+
     this.datesFilter['end']  = new Date(event.year,event.month-1,event.day+1)
+    this.datesFilter['endCurrent']  = new Date(event.year,event.month-1,event.day)
+    
     this.datesFilter['transformedEndDate']  = (this.datesFilter['end']).toISOString();
     this.validateDateFilters();        
   }
@@ -670,7 +693,7 @@ uncheckAllFetchRecords(option, filter):void{
       this.commonUtilsService.onError('Please select start date');
     else if(! _.has(this.datesFilter, ['end']))
       this.commonUtilsService.onError('Please select end date');
-    else if(_.has(this.datesFilter, ['end']) && (this.datesFilter['end']).getTime() < (this.datesFilter['start']).getTime()){
+    else if(_.has(this.datesFilter, ['end']) && (this.datesFilter['endCurrent']).getTime() < (this.datesFilter['startCurrent']).getTime()){
       this.endDateModel = null
       this.commonUtilsService.onError('End date should not less than start date');  
       

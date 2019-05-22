@@ -157,13 +157,37 @@ export class CarService {
     }
 
 
-    /*
-    * @param ratingReview    rating and review object
-    * @return        Observable<any>
-   */
-  public ratingReview(ratingReview): Observable<any> {
+/*
+* Function to rate & review car by dealer
+* @param ratingReview    rating and review object
+* @return        Observable<any>
+*/
+  public ratingReviewByDealer(ratingReview): Observable<any> {
+    ratingReview['dealer_id'] = '5ca1e88f9dac60394419c0bc'
+    return this.httpClient.post('car/ratingReviewByDealer', ratingReview)
+        .map((response: any) => response)
+}
 
-    return this.httpClient.post('car/ratingReview', ratingReview)
+
+/*
+* Function to rate & review car by seller
+* @param ratingReview    rating and review object
+* @return        Observable<any>
+*/
+public ratingReviewBySeller(ratingReview): Observable<any> {
+    ratingReview['seller_id'] = '5ca1e88f9dac60394419c0bc'
+    return this.httpClient.post('car/ratingReviewBySeller', ratingReview)
+        .map((response: any) => response)
+}
+
+
+/*
+* Function to rate & review car by seller
+* @param ratingReview    rating and review object
+* @return        Observable<any>
+*/
+public changeCarStatus(carData): Observable<any> {   
+    return this.httpClient.post('car/changeCarStatus', carData)
         .map((response: any) => response)
 }
 

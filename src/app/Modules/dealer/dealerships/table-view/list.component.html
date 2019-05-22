@@ -41,7 +41,7 @@
               <div class="right_sec ml-auto">
 
                 <div class="input-group date_filters_start d-inline-block">
-                  <input [(ngModel)]="startDateModel" class="form-control" (dateSelect)="onStartDateSelected($event)"
+                  <input  [(ngModel)]="startDateModel" class="form-control" (dateSelect)="onStartDateSelected($event)"
                     type="text" (click)="startDate.toggle()" placeholder="Start date" ngbDatepicker
                     #startDate="ngbDatepicker">
                   <div class="input-group-append">
@@ -219,7 +219,7 @@
                 <ngx-datatable-column name="created At" prop="created_at" [sortable]="true" [resizeable]="false"
                 [draggable]="false">
                   <ng-template let-row="row" ngx-datatable-cell-template>
-                    {{ row.created_at | date:'dd-MM-yyyy h:mm' }}
+                    {{ row.created_at | date:'MMM d y h:mm' }}
                   </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Action" [sortable]="false" [resizeable]="false"

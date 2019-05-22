@@ -120,13 +120,14 @@ car-details -->
           <ul class="tabs">
             <li data-tabs="tab1" class="active"> <span aria-hidden="true" class="icon-diamond"></span> Details & Specs
             </li>
-            <li data-tabs="tab2"><span aria-hidden="true" class="icon-list"></span>Vehicle History</li>
+            <li data-tabs="tab2"><span aria-hidden="true" class="icon-list"></span>More Information</li>
             <li data-tabs="tab3"> <span aria-hidden="true" class="icon-equalizer"></span> Seller Comments</li>
             <li data-tabs="tab4"> <span aria-hidden="true" class="icon-equalizer"></span> Market Value</li>
+            <li data-tabs="tab5"> <span aria-hidden="true" class="icon-equalizer"></span> Location</li>
           </ul>
           <div id="tab1" class="tabcontent">
             
-            <table class="table table-bordered">
+            <!-- <table class="table table-bordered">
 
               <tbody>
                 <tr>
@@ -150,10 +151,67 @@ car-details -->
                   <td> {{carDetail?.mileage | number}} km/hwy</td>
                 </tr>
               </tbody>
-            </table>
+            </table> -->
+            <ul class="car_details_tab">
+              <li>
+                <span class="head">Body</span>
+                <span class="value">{{carDetail?.body_style | titlecase}}</span>
+              </li>
+              <li>
+                  <span class="head">Trim</span>
+                  <span class="value">{{carDetail?.trim | titlecase}}</span>
+              </li>
+              <li>
+                  <span class="head">Engine</span>
+                  <span class="value">{{carDetail?.engine | titlecase}}</span>
+              </li>
+
+
+              <li>
+                  <span class="head">Transmission</span>
+                  <span class="value">{{carDetail?.transmission | titlecase}}</span>
+              </li>
+              <li>
+                  <span class="head">Mileage</span>
+                  <span class="value">{{carDetail?.mileage | number}}</span>
+              </li> 
+              <li>
+                  <span class="head">Interior Color</span>
+                  <span class="value">{{carDetail?.interior_color | titlecase}}</span>
+              </li>
+              <li>
+                  <span class="head">Exterior Color</span>
+                  <span class="value">{{carDetail?.exterior_color | titlecase}}</span>
+              </li>  
+              <li>
+                  <span class="head">Interior Material</span>
+                  <span class="value">{{carDetail?.interior_material | titlecase}}</span>
+              </li>
+              
+              
+
+            </ul>
           </div>
-          <div id="tab2" class="tabcontent">           
-            {{carDetail?.market_value}}
+          <div id="tab2" class="tabcontent">
+              <ul class="car_details_tab">
+                  <li>
+                    <span class="head">Vehicle Condition</span>
+                    <span class="value">{{carDetail?.vehicle_condition?.vehicle_condition_value | titlecase}}</span>
+                  </li>
+                  <li>
+                      <span class="head">Description</span>
+                      <span class="value">{{carDetail?.vehicle_condition?.vehicle_condition_description}}</span>
+                  </li>
+                  <li>
+                    <span class="head">Vehicle has second key</span>
+                    <span class="value">{{carDetail?.vehicle_has_second_key}}</span>
+                </li>
+                  
+                  
+                  
+    
+                </ul>
+            
           </div>
           <div id="tab3" class="tabcontent">
             {{carDetail?.comments}}
@@ -161,6 +219,31 @@ car-details -->
           <div id="tab4" class="tabcontent">
             {{carDetail?.comments}}
           </div>
+          <div id="tab5" class="tabcontent">
+            <ul class="car_details_tab">
+                <li>
+                  <span class="head">Zipcode</span>
+                  <span class="value">{{carDetail?.zipcode }}</span>
+                </li>
+                <li>
+                    <span class="head">Willing to drive</span>
+                    <span class="value">{{carDetail?.willing_to_drive}}</span>
+                </li>
+                <li>
+                  <span class="head">Drive how many miles:</span>
+                  <span class="value">{{carDetail?.willing_to_drive_how_many_miles}}</span>
+                </li>
+                <li>
+                  <span class="head">Vehicle to be picked up:</span>
+                  <span class="value">{{carDetail?.vehicle_to_be_picked_up}}</span>
+                </li>
+                
+                
+                
+    
+              </ul>
+          
+        </div> 
         </div>
 
       </div>

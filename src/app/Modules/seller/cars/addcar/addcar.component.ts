@@ -112,6 +112,7 @@ export class AddCarComponent implements OnInit {
   exteriorColor:string = "Black";
   interiorColor:string = "Black";
   vehicleImageCategoryOnSummary:string = "all";
+  base64StringFile:any;
 
   addVehicleSubscription: Subscription;
 
@@ -147,7 +148,7 @@ export class AddCarComponent implements OnInit {
   getModelByMakeIdArray:any = [];  
   private _secondKey:boolean= false;
   private _vehicleAftermarket:boolean= false;
-  private _vehicleOwnership:string = 'Salvage';
+  private _vehicleOwnership:string = '';
   private _vehicleConditionValue:string = 'Ready for resale without any reconditioning';
   private _cleanTitle:boolean= false;
   private _willingToDrive:boolean= false;
@@ -242,7 +243,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       }),      
       vehicle_ownership:this.formBuilder.group({        
         vehicle_clean_title : [false],
-        vehicle_ownership_value : ['Salvage'],
+        vehicle_ownership_value : ['', Validators.compose([Validators.required])],
         vehicle_ownership_description : ['']
             
       })
@@ -281,13 +282,16 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   private offerInHandsPopUp(){
     this.offerInHands = this.formBuilder.group({ 
       vehicle_finance_details:this.formBuilder.group({
-        vehicle_finance_bank: ['', Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50)])],
-        vehicle_pay_off: [0, Validators.compose([Validators.required, Validators.min(1)])],       
-        vehicle_offer_in_hands_price : [0, Validators.compose([Validators.required, Validators.min(1)])],
+        vehicle_finance_bank: ['', Validators.compose([Validators.minLength(2),Validators.maxLength(50)])],
+        vehicle_estimated_price: [0, Validators.compose([Validators.required, Validators.min(1)])],       
+        vehicle_pay_off: [0],       
+        vehicle_offer_in_hands_price : [0],
         vehicle_proof_image: this.formBuilder.array([]), 
       })      
     })
   }
+
+  
 
   /**
    * save Car in DB  
@@ -384,14 +388,18 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           reader.onload = function(event) {  
                        
               let base64String = reader.result      
-              const fileExtension = (file.name).split('.').pop();
+              let fileExtension = (file.name).split('.').pop();
 
-
+              componentObj.base64StringFile = reader.result;
+              if(fileExtension == "pdf"){
+                componentObj.base64StringFile = componentObj.base64StringFile.replace('data:application/pdf;base64,', '');
+              }
 
               /*if(fileExtension == "pdf"){   
-                
-                
-                if(!componentObj.isPDFCorrupted(base64String,_.toLower(fileExtension))){
+
+                let hello = componentObj.isPDFCorrupted(base64String, _.toLower(fileExtension));
+                console.log('asd', hello);
+                if(!hello){
                   done('File is corrupted or invalid.');
                   _this.removeFile(file);
                   return false;
@@ -399,7 +407,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
                 
 
-              }else if(fileExtension == "png" || fileExtension == "jpg" || fileExtension == "jpeg"){ 
+              }else  if(fileExtension == "png" || fileExtension == "jpg" || fileExtension == "jpeg"){ 
 
                 const isValidFile = componentObj.commonUtilsService.isFileCorrupted(base64String,_.toLower(fileExtension));
 
@@ -409,14 +417,14 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
                   return false;
                 } 
 
-              }  */ 
+              }  */
               
-              const isValidFile = componentObj.commonUtilsService.isFileCorrupted(base64String,_.toLower(fileExtension))              
+             const isValidFile = componentObj.commonUtilsService.isFileCorrupted(base64String,_.toLower(fileExtension))              
               if(!isValidFile){
                 done('File is corrupted or invalid.');
                 _this.removeFile(file);
                 return false;
-              } 
+              }
              
 
               componentObj.pageLoaderService.pageLoader(true);//start showing page loader
@@ -428,8 +436,11 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       init: function() { 
                 
         
-        this.on('sending', function(file, xhr, formData){          
+        this.on('sending', function(file, xhr, formData){     
+             
           formData.append('folder', 'OfferInHands');
+          formData.append('fileType', file.type);
+          formData.append('base64StringFile', componentObj.base64StringFile);
         });
         
 
@@ -445,7 +456,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           
           
           componentObj.zone.run(() => { 
-            componentObj.offerInHandsImagesArray.push(new FormControl({file_path : serverResponse.fileLocation, file_name : serverResponse.fileName, file_key : serverResponse.fileKey, file_category : 'offer_in_hands'}));
+            componentObj.offerInHandsImagesArray.push(new FormControl({file_path : serverResponse.fileLocation, file_name : serverResponse.fileName, file_key : serverResponse.fileKey, file_mimetype : serverResponse.fileMimeType, file_category : 'offer_in_hands'}));
           });
 
           this.removeFile(file);
@@ -480,7 +491,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     cancelReset: null,
     acceptedFiles: '.jpg, .png, .jpeg',
     maxFilesize: 2, // MB,
-    dictDefaultMessage: 'Click or drag images here to upload',
+    dictDefaultMessage: 'Click or Drag Images Here to Upload',
     //previewsContainer: "#vehicleAfterMarketPreview",
     addRemoveLinks: true,
     //resizeWidth: 125,
@@ -581,7 +592,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       cancelReset: null,
       acceptedFiles: '.jpg, .png, .jpeg',
       maxFilesize: 2, // MB,
-      dictDefaultMessage: 'Click or drag images here to upload',
+      dictDefaultMessage: 'Click or Drag Images Here to Upload',
       //previewsContainer: "#vehicleConditionPreview",
       addRemoveLinks: true,
       //resizeWidth: 125,
@@ -680,7 +691,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       cancelReset: null,
       acceptedFiles: '.jpg, .png, .jpeg',
       maxFilesize: 2, // MB,
-      dictDefaultMessage: 'Click or drag images here to upload',
+      dictDefaultMessage: 'Click or Drag Images Here to Upload',
      // previewsContainer: "#vehicleImagesPreview",      
       addRemoveLinks: true,
       //resizeWidth: 125,
@@ -776,19 +787,11 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     };  
   }
 
-  async isPDFCorrupted(base64String, fileExtension) {
-    await this.commonUtilsService.isPDFCorrupted(base64String, fileExtension)                
-      .subscribe(
-        (response) => {
-          return response;
-          console.log('valid PDF') ;                                  
-        },
-        error => {
-          //done('File is corrupted or invalid.');
-          //_this.removeFile(file);
-          return false;
-      });
-   }                
+ /* private isPDFCorrupted(base64String, fileExtension) {    
+    return this.commonUtilsService.isPDFCorrupted(base64String, fileExtension)
+    .then(result => {console.log('result', result); return result; })
+    .catch(error => {console.log('error', error); return error; })      
+  }*/              
 
   /**
    * remove Vehicle Image
@@ -1353,6 +1356,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    */
   toggleVehicleCleanTitle(event): void {  
     let vehicleOwnershipDescription = this.aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description');
+    let vehicleOwnershipValue = this.aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_value');
     vehicleOwnershipDescription.patchValue('');
     if ( event.target.checked ) {      
       this.isVehicleCleanTitleSelected = true; 
@@ -1362,7 +1366,9 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       this.isOtherSelected=false; 
       
       vehicleOwnershipDescription.clearValidators();        
-      vehicleOwnershipDescription.updateValueAndValidity();
+      vehicleOwnershipDescription.updateValueAndValidity(); 
+      vehicleOwnershipValue.clearValidators();        
+      vehicleOwnershipValue.updateValueAndValidity();
 
     }else{
       this.isVehicleCleanTitleSelected = false; 
@@ -1377,7 +1383,10 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
         this.isOtherSelected = false;        
         vehicleOwnershipDescription.clearValidators();        
         vehicleOwnershipDescription.updateValueAndValidity();
-      }       
+      } 
+      
+      vehicleOwnershipValue.setValidators(Validators.compose([Validators.required]));        
+      vehicleOwnershipValue.updateValueAndValidity();
     }
     console.log(this.isOtherSelected);
     

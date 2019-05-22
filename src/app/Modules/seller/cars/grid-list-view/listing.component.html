@@ -232,8 +232,8 @@ product-listing  -->
                     <div class="selected-box">
                         <select (change)="onSort($event)" class="my_select">
                           <option value="">Sort by </option>
-                          <option value="vehicle_finance_details.vehicle_offer_in_hands_price,asc">Price: Lowest first</option>
-                          <option  value="vehicle_finance_details.vehicle_offer_in_hands_price,desc">Price: Highest first </option>
+                          <option value="vehicle_finance_details.vehicle_estimated_price,asc">Price: Lowest first</option>
+                          <option  value="vehicle_finance_details.vehicle_estimated_price,desc">Price: Highest first </option>
                           <option value="vehicle_year,asc">Year: Lowest first</option>
                           <option  value="vehicle_year,desc">Year: Highest first </option>
                           <option  value="basic_info.vehicle_make,asc">Make: A to Z </option>
@@ -328,11 +328,7 @@ product-listing  -->
                   <i class="fa fa-road"></i> {{car.miles | number}} mi                
                 </div>
                 <div class="star">
-                  <i class="fa fa-star orange-color"></i>
-                  <i class="fa fa-star orange-color"></i>
-                  <i class="fa fa-star orange-color"></i>
-                  <i class="fa fa-star orange-color"></i>
-                  <i class="fa fa-star-o orange-color"></i>
+                  <app-rating-review   [carId]="car._id" [currentRating]="car?.review?.rating" ></app-rating-review>
                 </div>
                 <a routerLink="/seller/car-detail/{{car._id}}">{{car.make}} {{car.model}}</a>
                 <div class="separator"></div>
@@ -371,6 +367,9 @@ product-listing  -->
                   <a routerLink="/seller/car-detail/{{car._id}}">{{car.make}} {{car.model}}</a>
                  
                     <p>{{car?.comments}}</p>
+                </div>
+                <div class="star">
+                  <app-rating-review [carId]="car._id" [currentRating]="car?.review?.rating" ></app-rating-review>
                 </div>
                 <div class="price">
                  <!-- <span class="old-price">{{car.offer_in_hand | currency:'USD':true:'2.2-2'}}</span>-->

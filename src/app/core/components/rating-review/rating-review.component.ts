@@ -50,8 +50,7 @@ export class RatingReviewComponent implements OnInit {
     this.ratingReviewForm = this.formBuilder.group({
       _id:[this.carId],
       rating:[null],
-      //dealer_id:localStorage.getItem('loggedinUserId'),  
-      dealer_id:'5ca1e88f9dac60394419c0bc',
+      //dealer_id:localStorage.getItem('loggedinUserId'),       
       comment: [null, [Validators.minLength(10),Validators.maxLength(500)]]      
     });
   }
@@ -63,9 +62,9 @@ export class RatingReviewComponent implements OnInit {
   * @param $starRate    number(starRate) which is selected by user.
   * @return             void
   */
-  public show($starRate):void{  
+  public show($starRate):void{    
     this.rating = $starRate    
-    $(this.contentSection.nativeElement).modal({keyboard: false, show: true});
+   // $(this.contentSection.nativeElement).modal({keyboard: false, show: true});
   }
 
   /**
@@ -110,7 +109,7 @@ export class RatingReviewComponent implements OnInit {
       return true;
     }
     this.commonUtilsService.showPageLoader(environment.MESSAGES.PLS_WAIT_TEXT);   
-    this.carService.ratingReview(this.ratingReviewForm.value)
+    this.carService.ratingReviewByDealer(this.ratingReviewForm.value)
       .subscribe(
         (response) => {
           this.isDisable = true;

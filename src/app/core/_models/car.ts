@@ -32,11 +32,12 @@ export class Car {
     car_images: any;
     market_value: any;
     review: number;
-
-
-
-
-
+    vehicle_condition:any;
+    zipcode:number;
+    willing_to_drive:any;
+    willing_to_drive_how_many_miles:any;
+    vehicle_to_be_picked_up:any
+    vehicle_has_second_key:any
 
 
 
@@ -61,7 +62,7 @@ export class Car {
         this.exterior_color = (object.basic_info.vehicle_exterior_color=='Other')?object.basic_info.vehicle_other_exterior_color:object.basic_info.vehicle_exterior_color;
         this.interior_material = object.basic_info.vehicle_interior_material;
         this.created_at = object.created_at;
-        this.offer_in_hand = object.vehicle_finance_details.vehicle_offer_in_hands_price;
+        this.offer_in_hand = object.vehicle_finance_details.vehicle_estimated_price;
         this.comments = object.vehicle_comments;       
         this.images = object.vehicle_images;
         this.bids = object.bids
@@ -72,5 +73,11 @@ export class Car {
         this.car_images = object.vehicle_images;
         this.market_value = object.vehicle_aftermarket.vehicle_aftermarket_description;
         this.review = object.review;
+        this.vehicle_condition = object.vehicle_condition
+        this.zipcode = object.basic_info.vehicle_zip
+        this.willing_to_drive = (object.willing_to_drive)?'Yes':'No';
+        this.willing_to_drive_how_many_miles = object.willing_to_drive_how_many_miles
+        this.vehicle_to_be_picked_up = (object.vehicle_to_be_picked_up)?'Yes':'No';
+        this.vehicle_has_second_key = (object.vehicle_has_second_key)?'Yes':'No';
     }
 }

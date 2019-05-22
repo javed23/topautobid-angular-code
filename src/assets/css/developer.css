@@ -517,3 +517,33 @@ ngx-image-zoom .ngxImageZoomContainer[_ngcontent-c7] {
 #newLegalContactForm .modal-content .Radio_BTN  label:before{
     top: 2px;
 }
+
+.car_details_tab {
+    padding: 20px;
+    display: block;
+    border: 1px solid #d2d2d2;
+
+}
+
+.car_details_tab li{
+    list-style-type: none;
+    margin-bottom: 13px;
+    line-height: 1;
+}
+
+.car_details_tab li span {
+    width: 210px;
+    display: inline-block;
+    color: #737373;
+    vertical-align: top;
+    padding-right: 20px;
+    line-height: 19px;
+    font-size: 13px;
+}
+
+.car_details_tab li .value {
+    color: #000;
+}
+.car_details_tab li:last-child {
+    margin-bottom: 0;
+}

@@ -4,7 +4,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule, HttpClient } from '@angular/common/http';
 import { SocialLoginModule } from 'angularx-social-login';
 import { AuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { NgxMaskModule } from 'ngx-mask'
 import { DropzoneModule, DropzoneConfigInterface, DROPZONE_CONFIG } from 'ngx-dropzone-wrapper';
 import { NgScrollbarModule } from 'ngx-scrollbar';
@@ -16,6 +16,8 @@ import { NgxGalleryModule } from 'ngx-gallery';
 
 //import enviorment file
 import { environment } from '../../../environments/environment';
+
+import { CustomNgbDateParserFormatter } from '../../core/custom-ngbDateParserFormatter'
 
 //importing components
 import { SellerRoutingModule } from './seller-routing.module';
@@ -95,6 +97,10 @@ let config = new AuthServiceConfig([
     {
       provide: DROPZONE_CONFIG,
       useValue: DEFAULT_DROPZONE_CONFIG
+    },
+    {
+      provide: NgbDateParserFormatter, 
+      useFactory: () => new CustomNgbDateParserFormatter('longDate')
     }
   ],
 })

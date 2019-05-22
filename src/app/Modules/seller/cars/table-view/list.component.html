@@ -72,10 +72,13 @@
 
                                             <li [ngClass]="{ active: page.type=='active'}"><button
                                                     (click)="onChangeListType('active')">Active</button></li>
+                                            <li [ngClass]="{ active: page.type=='inactive'}"><button
+                                                    (click)="onChangeListType('inactive')">Inactive</button></li>
                                             <li [ngClass]="{ active: page.type=='sold'}"><button
                                                     (click)="onChangeListType('sold')">Sold</button></li>
                                             <li [ngClass]="{ active: page.type=='archived'}"><button
                                                     (click)="onChangeListType('archived')">Archived</button></li>
+
                                         </ul>
                                     </div>
                                 </div>
@@ -228,7 +231,7 @@
                                 <ngx-datatable-column [resizeable]="false"
                                 [draggable]="false"  name="Created At" prop="created_at" [sortable]="true">
                                     <ng-template let-row="row" ngx-datatable-cell-template>
-                                        {{ row.created_at | date:'dd-MM-yyyy h:mm'}}
+                                        {{ row.created_at | date:'MMM d y h:mm'}}
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column [resizeable]="false"
@@ -239,11 +242,24 @@
                                             <!--<button type="button" (click)="show(rowIndex, 'car-view')">
                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                             </button>-->
-                                            <a routerLink="/seller/car-detail/{{row._id}}/dashboard"><i
+                                            <a title="Car Detail" routerLink="/seller/car-detail/{{row._id}}/dashboard"><i
                                                     class="fa fa-eye"></i></a>
 
-                                            <button type="button" (click)="delete(row)">
+                                            <button title="Delete Car" type="button" (click)="delete(row)">
                                                 <i class="fa fa-trash" aria-hidden="true"></i>
+                                            </button>
+
+                                            <button title="Deactivate Car" *ngIf="row.type=='active'" type="button" (click)="changeCarStatus(row,'inactive')">
+                                                <img src="/assets/images/car_active.png">
+                                            </button>
+                                            <button title="Activate Car" *ngIf="row.type !='active'" type="button" (click)="changeCarStatus(row,'active')">
+                                                <img src="/assets/images/car_inactive.png">
+                                            </button>
+                                            <button title="Unarchive Car" *ngIf="row.type=='archived'" type="button" (click)="changeCarStatus(row,'active')">
+                                                <img src="/assets/images/car_archive.png">
+                                            </button>
+                                            <button title="Archive Car" *ngIf="(row.type=='active' || row.type=='inactive') && row.type!='archived'" type="button" (click)="changeCarStatus(row,'archived')">
+                                                <img src="/assets/images/car_unarchive.png">
                                             </button>
                                         </span>
                                     </ng-template>
