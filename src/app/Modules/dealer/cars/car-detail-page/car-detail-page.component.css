@@ -4,3 +4,6 @@
 .image_filter{
     z-index: 9999;
 }
+.img-thumbnail{
+    max-width:50% !important;
+}

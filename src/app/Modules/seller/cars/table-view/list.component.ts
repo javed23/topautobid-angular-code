@@ -32,8 +32,7 @@ import * as _ from 'lodash';
 export class ListComponent implements AfterViewInit {
   @ViewChild('listingTable') listingTable;  
 
-  startDateModel:any;
-  endDateModel:any;
+
   page = new Page();
   cars = new Array<Car>()
   isGridListing:boolean=true; //set boolean value to show/hide listing (grid/list)
@@ -43,10 +42,10 @@ export class ListComponent implements AfterViewInit {
   isBidsModalOpen:boolean=false;
   isFiltersModalOpen:boolean=false;
   datesFilter:any = {};
- 
- //Defined records limit and records limit options
- currentPageLimit: number = environment.DEFAULT_RECORDS_LIMIT
- readonly pageLimitOptions = environment.DEFAULT_PAGE_LIMIT_OPTIONS
+  dateFilterForm:FormGroup
+  //Defined records limit and records limit options
+  currentPageLimit: number = environment.DEFAULT_RECORDS_LIMIT
+  readonly pageLimitOptions = environment.DEFAULT_PAGE_LIMIT_OPTIONS
  
 
   //title and breadcrumbs
@@ -67,10 +66,17 @@ export class ListComponent implements AfterViewInit {
 
   constructor(private ngbDateParserFormatter: NgbDateParserFormatter,private commonUtilsService:CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private titleService:TitleService) {
 
+    //setting the page title
+    this.titleService.setTitle();  
+
+    this.dateFilterForm = this.formBuilder.group( {
+      startDate: [null, null],
+      endDate: [null, null]
+    });
+
     //fetching the data with default settings
     this.setPage(this._defaultPagination,'all');
-    //setting the page title
-    this.titleService.setTitle();    
+      
   }
   
   /**
@@ -206,20 +212,27 @@ onSort(event) {
    * @return  void
    */
   onStartDateSelected(event:any):void {
-    let currentDate = new Date();   
-    console.log('currentDate',currentDate);
-    this.ngbDateParserFormatter.parse(event.year + "-" + (event.month-1).toString() + "-" + (event.day));
+    let currentDate = new Date();      
+   // this.ngbDateParserFormatter.parse(event.year + "-" + (event.month-1).toString() + "-" + (event.day));
+    let formattedStartDate = new Date(event.year,event.month-1,event.day)
+    
 
-    this.datesFilter['start']  = new Date(event.year,event.month-1,event.day+1)   
-    this.datesFilter['startCurrent']  = new Date(event.year,event.month-1,event.day)       
-    this.datesFilter['transformedStartDate']  = (this.datesFilter['start']).toISOString();
 
-    if((this.datesFilter['startCurrent']).getTime() > (currentDate).getTime()){
-      this.startDateModel = null
-      this.endDateModel = null
-      this.commonUtilsService.onError('Start date should not greater than today.');  
-      return;      
-    }else if(!_.has(this.datesFilter, ['end'])){
+    
+
+    if((formattedStartDate).getTime() > (currentDate).getTime()){ 
+      this.dateFilterForm.patchValue({
+        startDate: null,        
+      });
+      this.commonUtilsService.onError('Start date should not be greater than today.'); 
+      return;
+    }else{
+      this.datesFilter['start']  = new Date(event.year,event.month-1,event.day+1)   
+      this.datesFilter['startCurrent']  = new Date(event.year,event.month-1,event.day)       
+      this.datesFilter['transformedStartDate']  = (this.datesFilter['start']).toISOString();
+    }
+   
+    if(_.has(this.datesFilter, ['start']) &&  !_.has(this.datesFilter, ['end'])){
       this.datesFilter['end']  = currentDate;
       this.datesFilter['endCurrent']  = currentDate
       this.datesFilter['transformedEndDate']  = (this.datesFilter['end']).toISOString();
@@ -234,7 +247,7 @@ onSort(event) {
    */
   onEndDateSelected(event:any):void {
     
-    this.ngbDateParserFormatter.parse(event.year + "-" + (event.month-1).toString() + "-" + (event.day));
+    //this.ngbDateParserFormatter.parse(event.year + "-" + (event.month-1).toString() + "-" + (event.day));
 
     this.datesFilter['end']  = new Date(event.year,event.month-1,event.day+1)
     this.datesFilter['endCurrent']  = new Date(event.year,event.month-1,event.day)
@@ -254,7 +267,9 @@ onSort(event) {
     else if(! _.has(this.datesFilter, ['end']))
       this.commonUtilsService.onError('Please select end date');
     else if(_.has(this.datesFilter, ['end']) && (this.datesFilter['endCurrent']).getTime() < (this.datesFilter['startCurrent']).getTime()){
-      this.endDateModel = null
+      this.dateFilterForm.patchValue({
+        endDate: null,        
+      });
       this.commonUtilsService.onError('End date should not less than start date');  
       
     }else{     
@@ -269,8 +284,10 @@ onSort(event) {
   */
   clearDateFilters():void{
     if(_.has(this.datesFilter, ['start']) || _.has(this.datesFilter, ['end'])){
-      this.startDateModel = null
-      this.endDateModel = null
+      this.dateFilterForm.patchValue({
+        endDate: null,  
+        startDate: null,      
+      });
       this.page.filters['dates'] = this.datesFilter = {}
       this.viewedPages = [];  
       delete this.page.filters['dates']; 

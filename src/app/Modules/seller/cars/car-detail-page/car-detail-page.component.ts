@@ -22,6 +22,7 @@ export class CarDetailPageComponent implements OnInit {
 
   carDetail: any;
   isImageFilterEnable: Boolean = false
+  isCategoryHaveThumbnail:boolean=true
   selectedCategories: any = []
   isOpen: boolean = false;
 
@@ -105,6 +106,8 @@ export class CarDetailPageComponent implements OnInit {
           this.pushElement(element);
         }
       });
+      if(this.sliderImages.length<=0)
+        this.isCategoryHaveThumbnail = false
     }
     else {
       this.carDetail.car_images.forEach(element => {
@@ -130,7 +133,8 @@ export class CarDetailPageComponent implements OnInit {
         thumbnailsPercent: 20,
         imageInfinityMove: true,
         thumbnailsAutoHide: true,
-        closeIcon: 'fa fa-times'
+        closeIcon: 'fa fa-times',
+  
 
       },
       // max-width 800

@@ -474,6 +474,7 @@ updateNewLegalContact() {
   
 
   if(this.newLegalContactForm.invalid) { 
+    this.submitted = true;  
     return;
   } 
   this.legalContactItems[this.updatedLegalContactItem] = this.newLegalContactForm.value;   

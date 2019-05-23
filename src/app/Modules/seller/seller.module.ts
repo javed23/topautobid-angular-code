@@ -97,10 +97,6 @@ let config = new AuthServiceConfig([
     {
       provide: DROPZONE_CONFIG,
       useValue: DEFAULT_DROPZONE_CONFIG
-    },
-    {
-      provide: NgbDateParserFormatter, 
-      useFactory: () => new CustomNgbDateParserFormatter('longDate')
     }
   ],
 })

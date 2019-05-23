@@ -277,6 +277,18 @@ export class CreateDealershipComponent implements OnInit {
     this.resetForm();
   }
 
+  // update content of newely added dealership
+  updateNewDealership() { 
+    
+
+    if(this.newDealershipForm.invalid) {
+      return;
+    } 
+    this.dealershipsItems[this.updatedItem] = this.newDealershipForm.value;   
+    this.IsForUpdate = false;
+    this.resetForm(); 
+  } 
+  
   // To delete specific dealership  
   async deleteNewDealership(index) {
     //confirm before deleting car

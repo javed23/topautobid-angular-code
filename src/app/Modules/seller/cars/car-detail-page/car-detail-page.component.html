@@ -46,9 +46,9 @@ car-details -->
 
         <div class="slider-slick relative">
 
-
+         
           <!-- If images are attached then show image filter options-->
-          <div *ngIf="sliderImages.length" class="image_filter">
+          <div *ngIf="sliderImages.length || !isCategoryHaveThumbnail" class="image_filter">
             <div class="filter_dropdown">
               <a (click)="imageFilterToggle()" href="javascript:void(0)" id="filter_menu_link"><img
                   src="assets/images/filter_icon.png"></a>
@@ -127,31 +127,7 @@ car-details -->
           </ul>
           <div id="tab1" class="tabcontent">
             
-            <!-- <table class="table table-bordered">
-
-              <tbody>
-                <tr>
-                  <th scope="row"> Body</th>
-                  <td>{{carDetail?.body_style | titlecase}}</td>
-                </tr>
-                <tr>
-                  <th scope="row"> Trim</th>
-                  <td>{{carDetail?.trim | titlecase}}</td>
-                </tr>               
-                <tr>
-                  <th scope="row"> Engine</th>
-                  <td>{{carDetail?.engine | titlecase}}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Transmission</th>
-                  <td>{{carDetail?.transmission | titlecase}}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Mileage</th>
-                  <td> {{carDetail?.mileage | number}} km/hwy</td>
-                </tr>
-              </tbody>
-            </table> -->
+           
             <ul class="car_details_tab">
               <li>
                 <span class="head">Body</span>
@@ -187,6 +163,10 @@ car-details -->
                   <span class="head">Interior Material</span>
                   <span class="value">{{carDetail?.interior_material | titlecase}}</span>
               </li>
+              <li>
+                <span class="head">Doors</span>
+                <span class="value">{{carDetail?.doors | titlecase}}</span>
+            </li>
               
               
 
@@ -195,17 +175,59 @@ car-details -->
           <div id="tab2" class="tabcontent">
               <ul class="car_details_tab">
                   <li>
-                    <span class="head">Vehicle Condition</span>
-                    <span class="value">{{carDetail?.vehicle_condition?.vehicle_condition_value | titlecase}}</span>
-                  </li>
+                      <span class="head">Vehicle has second key</span>
+                      <span class="value">{{carDetail?.vehicle_has_second_key}}</span>
+                    </li>
+
                   <li>
+                    <span class="head">Has Aftermarket Options</span>
+                    <span class="value">{{carDetail?.is_vehicle_aftermarket | titlecase}}</span>
+                  </li>
+                  
+                  <li *ngIf="carDetail?.is_vehicle_aftermarket=='Yes'">
+                      <span class="head"></span>
+                      <span class="value">{{carDetail?.vehicle_aftermarket?.vehicle_aftermarket_description}}</span>
+                  </li>
+                  <li *ngIf="carDetail?.is_vehicle_aftermarket=='Yes'">
+                      <span class="head"></span>
+                      <span class="value" >
+                        <span *ngFor="let marketImage of carDetail?.vehicle_aftermarket?.vehicle_aftermarket_images">
+                          <img class="img-thumbnail" src="{{marketImage.file_path}}">
+                        </span>
+                      </span>
+                  </li>
+
+                  <li>
+                      <span class="head">Clean Title</span>
+                      <span class="value">{{carDetail?.clean_title}}</span>
+                  </li>
+                  
+                  <li *ngIf="carDetail?.clean_title=='No'">
+                    <span class="head">Clean Title Option</span>
+                    <span class="value">{{carDetail?.vehicle_ownership?.vehicle_ownership_value | titlecase}}</span>
+                  </li>
+                  <li *ngIf="carDetail?.vehicle_ownership?.vehicle_ownership_value=='Other'">
                       <span class="head">Description</span>
-                      <span class="value">{{carDetail?.vehicle_condition?.vehicle_condition_description}}</span>
+                      <span class="value">{{carDetail?.vehicle_ownership?.vehicle_ownership_description}}</span>
                   </li>
+
                   <li>
-                    <span class="head">Vehicle has second key</span>
-                    <span class="value">{{carDetail?.vehicle_has_second_key}}</span>
-                </li>
+                      <span class="head">Car Condition</span>
+                      <span class="value">{{carDetail?.vehicle_condition?.vehicle_condition_value}}</span>
+                  </li>
+                  <li *ngIf="carDetail?.vehicle_condition?.vehicle_condition_value!='Ready For Resale Without Any Reconditioning'">
+                      <span class="head">Description</span>
+                      <span class="value">{{carDetail?.vehicle_condition?.vehicle_condition_description | titlecase}}</span>
+                  </li>
+                  <li *ngIf="carDetail?.vehicle_condition?.vehicle_condition_value!='Ready For Resale Without Any Reconditioning'">
+                      <span class="head">Images</span>
+                      <span class="value" >
+                        <span *ngFor="let condition of carDetail?.vehicle_condition?.vehicle_condition_images">
+                          <img class="img-thumbnail" src="{{condition.file_path}}">
+                        </span>
+                      </span>
+                  </li>
+                 
                   
                   
                   
@@ -217,7 +239,36 @@ car-details -->
             {{carDetail?.comments}}
           </div>
           <div id="tab4" class="tabcontent">
-            {{carDetail?.comments}}
+              <ul class="car_details_tab">
+                  <li>
+                      <span class="head">Estimated Price</span>
+                      <span class="value">{{carDetail?.vehicle_finance?.vehicle_offer_in_hands_price | currency:'USD':true:'2.2-2'}}</span>
+                    </li>
+
+                  <li>
+                    <span class="head">My Pay Off</span>
+                    <span class="value">{{carDetail?.vehicle_finance?.vehicle_pay_off | currency:'USD':true:'2.2-2'}}</span>
+                  </li>
+
+                  <li>
+                      <span class="head">Finance Bank</span>
+                      <span class="value">{{carDetail?.vehicle_finance?.vehicle_finance_bank}}</span>
+                    </li>
+
+                  <li>
+                    <span class="head">Offer In Hand</span>
+                    <span class="value">{{carDetail?.vehicle_finance?.vehicle_offer_in_hands_price | currency:'USD':true:'2.2-2'}}</span>
+                  </li>
+                  <li>
+                      <span class="head">Proofs</span>
+                      <span class="value" >
+                        <span *ngFor="let proof of carDetail?.vehicle_finance?.vehicle_proof_image">
+                          <img class="img-thumbnail" src="{{proof.file_path}}">
+                        </span>
+                      </span>
+                  </li>
+                  
+              </ul>
           </div>
           <div id="tab5" class="tabcontent">
             <ul class="car_details_tab">

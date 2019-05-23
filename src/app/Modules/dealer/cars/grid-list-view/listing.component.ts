@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone, ElementRef, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbDateAdapter, NgbDateParserFormatter, NgbDateStruct, NgbDateNativeAdapter } from '@ng-bootstrap/ng-bootstrap';
 
@@ -19,9 +19,11 @@ import * as _ from 'lodash';
   styleUrls: ['./listing.component.css'],
 })
 export class ListingComponent implements OnInit {
+  @ViewChild("listingSection") listingSection: ElementRef;
   page = new Page(); //object of Page type  
   cars = new Array<Car>() //array of Car type 
   filtersForm:FormGroup;
+  dateFilterForm:FormGroup;
   isGridListing:boolean=true; //set boolean value to show/hide listing (grid/list)
   viewedPages:any=[]; //array of page number which have been reviewed by user
   currentPage:number =0;
@@ -40,8 +42,6 @@ export class ListingComponent implements OnInit {
   isAllExtriorColorSelected:boolean=false;
   isAllTrimSelected:boolean=false;
   yearFilterOption:string='';
-  startDateModel:any;
-  endDateModel:any;
   datesFilter:any = {};
   AllFilters = []
   
@@ -71,6 +71,11 @@ export class ListingComponent implements OnInit {
 
     //setting the page title
     this.titleService.setTitle();
+
+    this.dateFilterForm = this.formBuilder.group( {
+      startDate: [null, null],
+      endDate: [null, null]
+    });
 
     this.setPage(this._defaultPagination,'active');
     this.page.filters={}
@@ -177,6 +182,7 @@ export class ListingComponent implements OnInit {
           this.cars = pagedData.data
       });   
       this.commonUtilsService.hidePageLoader();
+      this.listingSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });
 
     //case error 
     },error => {
@@ -646,20 +652,27 @@ uncheckAllFetchRecords(option, filter):void{
    * @return  void
    */
   onStartDateSelected(event:any):void {
-    let currentDate = new Date();   
-    console.log('currentDate',currentDate);
-    this.ngbDateParserFormatter.parse(event.year + "-" + (event.month-1).toString() + "-" + (event.day));
+    let currentDate = new Date();      
+   // this.ngbDateParserFormatter.parse(event.year + "-" + (event.month-1).toString() + "-" + (event.day));
+    let formattedStartDate = new Date(event.year,event.month-1,event.day)
+    
 
-    this.datesFilter['start']  = new Date(event.year,event.month-1,event.day+1)   
-    this.datesFilter['startCurrent']  = new Date(event.year,event.month-1,event.day)       
-    this.datesFilter['transformedStartDate']  = (this.datesFilter['start']).toISOString();
 
-    if((this.datesFilter['startCurrent']).getTime() > (currentDate).getTime()){
-      this.startDateModel = null
-      this.endDateModel = null
-      this.commonUtilsService.onError('Start date should not greater than today.');  
-      return;      
-    }else if(!_.has(this.datesFilter, ['end'])){
+    
+
+    if((formattedStartDate).getTime() > (currentDate).getTime()){ 
+      this.dateFilterForm.patchValue({
+        startDate: null,        
+      });
+      this.commonUtilsService.onError('Start date should not be greater than today.'); 
+      return;
+    }else{
+      this.datesFilter['start']  = new Date(event.year,event.month-1,event.day+1)   
+      this.datesFilter['startCurrent']  = new Date(event.year,event.month-1,event.day)       
+      this.datesFilter['transformedStartDate']  = (this.datesFilter['start']).toISOString();
+    }
+   
+    if(_.has(this.datesFilter, ['start']) &&  !_.has(this.datesFilter, ['end'])){
       this.datesFilter['end']  = currentDate;
       this.datesFilter['endCurrent']  = currentDate
       this.datesFilter['transformedEndDate']  = (this.datesFilter['end']).toISOString();
@@ -674,7 +687,7 @@ uncheckAllFetchRecords(option, filter):void{
    */
   onEndDateSelected(event:any):void {
     
-    this.ngbDateParserFormatter.parse(event.year + "-" + (event.month-1).toString() + "-" + (event.day));
+    //this.ngbDateParserFormatter.parse(event.year + "-" + (event.month-1).toString() + "-" + (event.day));
 
     this.datesFilter['end']  = new Date(event.year,event.month-1,event.day+1)
     this.datesFilter['endCurrent']  = new Date(event.year,event.month-1,event.day)
@@ -694,7 +707,9 @@ uncheckAllFetchRecords(option, filter):void{
     else if(! _.has(this.datesFilter, ['end']))
       this.commonUtilsService.onError('Please select end date');
     else if(_.has(this.datesFilter, ['end']) && (this.datesFilter['endCurrent']).getTime() < (this.datesFilter['startCurrent']).getTime()){
-      this.endDateModel = null
+      this.dateFilterForm.patchValue({
+        endDate: null,        
+      });
       this.commonUtilsService.onError('End date should not less than start date');  
       
     }else{     
@@ -710,8 +725,10 @@ uncheckAllFetchRecords(option, filter):void{
   */
  clearDateFilters():void{
   if(_.has(this.datesFilter, ['start']) || _.has(this.datesFilter, ['end'])){
-    this.startDateModel = null
-    this.endDateModel = null
+    this.dateFilterForm.patchValue({
+      endDate: null,  
+      startDate: null,      
+    });
     this.page.filters['dates'] = this.datesFilter = {}
     this.viewedPages = [];  
     delete this.page.filters['dates']; 
