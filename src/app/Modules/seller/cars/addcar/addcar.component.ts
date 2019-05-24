@@ -394,30 +394,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
               if(fileExtension == "pdf"){
                 componentObj.base64StringFile = componentObj.base64StringFile.replace('data:application/pdf;base64,', '');
               }
-
-              /*if(fileExtension == "pdf"){   
-
-                let hello = componentObj.isPDFCorrupted(base64String, _.toLower(fileExtension));
-                console.log('asd', hello);
-                if(!hello){
-                  done('File is corrupted or invalid.');
-                  _this.removeFile(file);
-                  return false;
-                }
-
-                
-
-              }else  if(fileExtension == "png" || fileExtension == "jpg" || fileExtension == "jpeg"){ 
-
-                const isValidFile = componentObj.commonUtilsService.isFileCorrupted(base64String,_.toLower(fileExtension));
-
-                if(!isValidFile){
-                  done('File is corrupted or invalid.');
-                  _this.removeFile(file);
-                  return false;
-                } 
-
-              }  */
+              
               
              const isValidFile = componentObj.commonUtilsService.isFileCorrupted(base64String,_.toLower(fileExtension))              
               if(!isValidFile){
@@ -786,12 +763,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       }     
     };  
   }
-
-  private isPDFCorrupted(base64String, fileExtension) {    
-    return this.commonUtilsService.isPDFCorrupted(base64String, fileExtension)
-    .then(result => {console.log('result', result); return result; })
-    .catch(error => {console.log('error', error); return error; })      
-  }                
+               
 
   /**
    * remove Vehicle Image

@@ -61,7 +61,7 @@ const routes: Routes = [
     data: { title: 'Seller AddCar' }
   },
   {
-    path: 'editcar',
+    path: 'editcar/:_id',
     component: EditCarComponent,
     data: { title: 'Seller EditCar' }
   }

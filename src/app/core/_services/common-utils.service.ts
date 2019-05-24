@@ -64,29 +64,6 @@ export class CommonUtilsService {
     }
 
 
-  /**
-* To check the image validity for type pdf
-* @return boolean
-* @param base64string image base64 string 
-* @param type image type (pdf)
-*/
-  async isPDFCorrupted(base64string, type){
-
-  const pdfData = base64string.replace('data:application/pdf;base64,', '')
-
-  const params = { base64string : pdfData, fileExtension: type }
-
-  return await this.httpClient.post('common/checkPDFCorrupted', params).toPromise().then(this.extractData).catch(this.handleError);
- }  
-
-  private extractData(res: Response) {
-    return Promise.resolve(res);
-  }
-
-  private handleError(error: any): Promise<any> {
-    //console.error('An error occurred', error);
-    return Promise.reject(false);
-  }
   
   /**
   * Show confirmation popup before delete the record.
