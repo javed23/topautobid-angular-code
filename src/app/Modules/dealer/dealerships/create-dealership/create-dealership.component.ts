@@ -112,8 +112,6 @@ export class CreateDealershipComponent implements OnInit {
       maxFilesize: 2, // MB,
       dictDefaultMessage: 'Change Photo',
       previewsContainer: "#dealershipPreview",
-      resizeWidth: 125,
-      resizeHeight: 125,
       //createImageThumbnails:false,
       dictInvalidFileType: 'Only valid jpeg, jpg, png file is accepted.',
       dictFileTooBig: 'Maximum upload file size limit is 2MB',

@@ -211,8 +211,8 @@ product-listing  -->
 
                             <li [ngClass]="{ active: page.type=='active'}"><button
                                     (click)="onChangeListType('active')">Active</button></li>
-                            <li [ngClass]="{ active: page.type=='bids'}" ><button>Bids</button></li>
-                            <li [ngClass]="{ active: page.type=='purchased'}"><button>Purchased</button></li>
+                            <li [ngClass]="{ active: page.type=='bids'}"   (click)="onChangeListType('bids')"><button>Bids</button></li>
+                            <li [ngClass]="{ active: page.type=='purchased'}" (click)="onChangeListType('purchased')"><button>Purchased</button></li>
                         </ul>
                     </div>
                 </div>

@@ -50,9 +50,13 @@ import { CreateContactComponent } from './dealerships/create-contact/create-cont
 import { ListingComponent as CarsGridListComponent } from './cars/grid-list-view/listing.component';
 import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
 import { ContactRequestComponent } from './cars/contact-request/contact-request.component';
+
+
+//bids management components
 import { FilterComponent } from './bids/filter/filter.component';
 import { SortComponent } from './bids/sort/sort.component';
 import { ListingComponent as BidsListingComponent} from './bids/listing/listing.component';
+import { DateFilterComponent } from './bids/date-filter/date-filter.component';
 
 
 
@@ -107,7 +111,8 @@ let config = new AuthServiceConfig([
     ContactRequestComponent,
     FilterComponent,
     SortComponent,
-    BidsListingComponent
+    BidsListingComponent,
+    DateFilterComponent
   ],
   imports: [
     CommonModule,
