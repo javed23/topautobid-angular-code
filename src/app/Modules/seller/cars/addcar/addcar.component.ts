@@ -13,6 +13,7 @@ import { DropzoneComponent, DropzoneDirective, DropzoneConfigInterface } from 'n
 import { trigger, state, style, animate, transition } from '@angular/animations';
  //shared services
 import { AlertService, PageLoaderService } from '../../../../shared/_services'
+import Swal from 'sweetalert2';
 
  
 
@@ -62,7 +63,7 @@ export class AddCarComponent implements OnInit {
   breadcrumbs:any = [{page:'Home',link:''},{page:'New Car Listing',link:''}]
 
   // Smooth Scroll To Add Car Form Wizard
-  @ViewChild("contentSection") contentSection: ElementRef;
+  @ViewChild("addCarSection") addCarSection: ElementRef;
 
   // Array where we are going to do CRUD operations
   //vehicleImagesArray:any = [{Interior: []}, {Exterior: []}];
@@ -111,6 +112,7 @@ export class AddCarComponent implements OnInit {
   exteriorColor:string = "Black";
   interiorColor:string = "Black";
   vehicleImageCategoryOnSummary:string = "all";
+  base64StringFile:any;
 
   addVehicleSubscription: Subscription;
 
@@ -146,7 +148,7 @@ export class AddCarComponent implements OnInit {
   getModelByMakeIdArray:any = [];  
   private _secondKey:boolean= false;
   private _vehicleAftermarket:boolean= false;
-  private _vehicleOwnership:string = 'Salvage';
+  private _vehicleOwnership:string = '';
   private _vehicleConditionValue:string = 'Ready for resale without any reconditioning';
   private _cleanTitle:boolean= false;
   private _willingToDrive:boolean= false;
@@ -210,9 +212,9 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           vehicle_fuel_type: ['', Validators.compose([Validators.required])],
           vehicle_drive_type: ['', Validators.compose([Validators.required])],
           vehicle_interior_color: ['Black', Validators.compose([Validators.required])],
-          vehicle_interior_color_if_other_selected: [''],
+          vehicle_other_interior_color: [''],
           vehicle_exterior_color: ['Black', Validators.compose([Validators.required])],
-          vehicle_exterior_color_if_other_selected: [''],
+          vehicle_other_exterior_color: [''],
           vehicle_interior_material: ['', Validators.compose([Validators.required])],                
         }),    
     });
@@ -241,7 +243,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       }),      
       vehicle_ownership:this.formBuilder.group({        
         vehicle_clean_title : [false],
-        vehicle_ownership_value : ['Salvage'],
+        vehicle_ownership_value : ['', Validators.compose([Validators.required])],
         vehicle_ownership_description : ['']
             
       })
@@ -254,7 +256,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   */
   private vehicleCondition(){
     this.vehicleConditionWizard = this.formBuilder.group({      
-      vehicle_comments: ['', Validators.compose([Validators.required,Validators.minLength(10),Validators.maxLength(200)])],    
+      vehicle_comments: ['', Validators.compose([Validators.minLength(10),Validators.maxLength(200)])],    
       vehicle_condition:this.formBuilder.group({    
         vehicle_condition_value: ['Ready for resale without any reconditioning'],
         vehicle_condition_description: [''],
@@ -280,13 +282,16 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   private offerInHandsPopUp(){
     this.offerInHands = this.formBuilder.group({ 
       vehicle_finance_details:this.formBuilder.group({
-        vehicle_finance_bank: ['', Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50)])],
-        vehicle_pay_off: [0, Validators.compose([Validators.required, Validators.min(1)])],       
-        vehicle_offer_in_hands_price : [0, Validators.compose([Validators.required, Validators.min(1)])],
+        vehicle_finance_bank: ['', Validators.compose([Validators.minLength(2),Validators.maxLength(50)])],
+        vehicle_estimated_price: [0, Validators.compose([Validators.required, Validators.min(1)])],       
+        vehicle_pay_off: [0],       
+        vehicle_offer_in_hands_price : [0],
         vehicle_proof_image: this.formBuilder.array([]), 
       })      
     })
   }
+
+  
 
   /**
    * save Car in DB  
@@ -352,7 +357,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     autoReset: null,
     errorReset: null,
     cancelReset: null,
-    acceptedFiles: '.jpg, .png, .jpeg',
+    acceptedFiles: '.jpg, .png, .jpeg, .pdf',
     maxFilesize: 2, // MB,
     dictDefaultMessage: '<span class="button red">Upload Proof</span>',
     //previewsContainer: "#offerInHandsPreview",
@@ -383,13 +388,45 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           reader.onload = function(event) {  
                        
               let base64String = reader.result      
-              const fileExtension = (file.name).split('.').pop();
-              const isValidFile = componentObj.commonUtilsService.isImageCorrupted(base64String,_.toLower(fileExtension))              
+              let fileExtension = (file.name).split('.').pop();
+
+              componentObj.base64StringFile = reader.result;
+              if(fileExtension == "pdf"){
+                componentObj.base64StringFile = componentObj.base64StringFile.replace('data:application/pdf;base64,', '');
+              }
+
+              /*if(fileExtension == "pdf"){   
+
+                let hello = componentObj.isPDFCorrupted(base64String, _.toLower(fileExtension));
+                console.log('asd', hello);
+                if(!hello){
+                  done('File is corrupted or invalid.');
+                  _this.removeFile(file);
+                  return false;
+                }
+
+                
+
+              }else  if(fileExtension == "png" || fileExtension == "jpg" || fileExtension == "jpeg"){ 
+
+                const isValidFile = componentObj.commonUtilsService.isFileCorrupted(base64String,_.toLower(fileExtension));
+
+                if(!isValidFile){
+                  done('File is corrupted or invalid.');
+                  _this.removeFile(file);
+                  return false;
+                } 
+
+              }  */
+              
+             const isValidFile = componentObj.commonUtilsService.isFileCorrupted(base64String,_.toLower(fileExtension))              
               if(!isValidFile){
                 done('File is corrupted or invalid.');
                 _this.removeFile(file);
                 return false;
-              } 
+              }
+             
+
               componentObj.pageLoaderService.pageLoader(true);//start showing page loader
               done();             
                        
@@ -399,8 +436,11 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       init: function() { 
                 
         
-        this.on('sending', function(file, xhr, formData){          
+        this.on('sending', function(file, xhr, formData){     
+             
           formData.append('folder', 'OfferInHands');
+          formData.append('fileType', file.type);
+          formData.append('base64StringFile', componentObj.base64StringFile);
         });
         
 
@@ -416,7 +456,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           
           
           componentObj.zone.run(() => { 
-            componentObj.offerInHandsImagesArray.push(new FormControl({file_path : serverResponse.fileLocation, file_name : serverResponse.fileName, file_key : serverResponse.fileKey, file_category : 'offer_in_hands'}));
+            componentObj.offerInHandsImagesArray.push(new FormControl({file_path : serverResponse.fileLocation, file_name : serverResponse.fileName, file_key : serverResponse.fileKey, file_mimetype : serverResponse.fileMimeType, file_category : 'offer_in_hands'}));
           });
 
           this.removeFile(file);
@@ -451,7 +491,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     cancelReset: null,
     acceptedFiles: '.jpg, .png, .jpeg',
     maxFilesize: 2, // MB,
-    dictDefaultMessage: 'Click or drag images here to upload',
+    dictDefaultMessage: 'Click or Drag Images Here to Upload',
     //previewsContainer: "#vehicleAfterMarketPreview",
     addRemoveLinks: true,
     //resizeWidth: 125,
@@ -479,7 +519,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
         reader.onload = function(event) {             
             let base64String = reader.result      
             const fileExtension = (file.name).split('.').pop();
-            const isValidFile = componentObj.commonUtilsService.isImageCorrupted(base64String,_.toLower(fileExtension))              
+            const isValidFile = componentObj.commonUtilsService.isFileCorrupted(base64String,_.toLower(fileExtension))              
             if(!isValidFile){
               done('File is corrupted or invalid.');
               _this.removeFile(file);
@@ -552,7 +592,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       cancelReset: null,
       acceptedFiles: '.jpg, .png, .jpeg',
       maxFilesize: 2, // MB,
-      dictDefaultMessage: 'Click or drag images here to upload',
+      dictDefaultMessage: 'Click or Drag Images Here to Upload',
       //previewsContainer: "#vehicleConditionPreview",
       addRemoveLinks: true,
       //resizeWidth: 125,
@@ -579,7 +619,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           reader.onload = function(event) {             
               let base64String = reader.result      
               const fileExtension = (file.name).split('.').pop();
-              const isValidFile = componentObj.commonUtilsService.isImageCorrupted(base64String,_.toLower(fileExtension))              
+              const isValidFile = componentObj.commonUtilsService.isFileCorrupted(base64String,_.toLower(fileExtension))              
               if(!isValidFile){
                 done('File is corrupted or invalid.');
                 _this.removeFile(file);
@@ -651,7 +691,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       cancelReset: null,
       acceptedFiles: '.jpg, .png, .jpeg',
       maxFilesize: 2, // MB,
-      dictDefaultMessage: 'Click or drag images here to upload',
+      dictDefaultMessage: 'Click or Drag Images Here to Upload',
      // previewsContainer: "#vehicleImagesPreview",      
       addRemoveLinks: true,
       //resizeWidth: 125,
@@ -684,17 +724,20 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
        
           const reader = new FileReader();
           const _this = this
+         
+          
           reader.onload = function(event) {             
               let base64String = reader.result      
               const fileExtension = (file.name).split('.').pop();
-              const isValidFile = componentObj.commonUtilsService.isImageCorrupted(base64String,_.toLower(fileExtension))              
+
+              const isValidFile = componentObj.commonUtilsService.isFileCorrupted(base64String,_.toLower(fileExtension))              
               if(!isValidFile){
                 done('File is corrupted or invalid.');
                 _this.removeFile(file);
                 return false;
               } 
               componentObj.pageLoaderService.pageLoader(true);//start showing page loader
-              done();             
+              done();            
                        
           };
           reader.readAsDataURL(file); 
@@ -744,6 +787,12 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     };  
   }
 
+ /* private isPDFCorrupted(base64String, fileExtension) {    
+    return this.commonUtilsService.isPDFCorrupted(base64String, fileExtension)
+    .then(result => {console.log('result', result); return result; })
+    .catch(error => {console.log('error', error); return error; })      
+  }*/              
+
   /**
    * remove Vehicle Image
    * @param index index of the image array
@@ -781,6 +830,68 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
         });
   }  
   
+
+  /**
+  * Show confirmation popup before going to previous step.
+  * @return any
+  */
+  async isPreviousClicked() {
+    if(! await this.commonUtilsService.isPreviousConfirmed()) { 
+      this.isVehicleOptionSelected = true;        
+    }else{ 
+
+      this.vehicleOption.reset();
+      this.selectVehicleOption();
+
+      this.basicInfoWizard.reset(); 
+      this.basicInfo();          // Initialize Basic Info Wizard Fields 
+      
+      this.uploadVehicleImagesWizard.reset();
+      this.uploadVehicleImages();      
+      this.interiorImagesArray = [];
+      this.exteriorImagesArray = [];
+
+      while (this.vehicleImagesArray.length) {
+        this.vehicleImagesArray.removeAt(this.vehicleImagesArray.length-1);
+      }
+
+      this.aboutVehicleWizard.reset();
+      this.aboutVehicle();       // Initialize About Vehicle Wizard Fields
+
+      while (this.afterMarketImagesArray.length) {
+        this.afterMarketImagesArray.removeAt(this.afterMarketImagesArray.length-1);
+      }
+
+      this.vehicleConditionWizard.reset();
+      this.vehicleCondition();   // Initialize Vehicle Condition Wizard Fields
+
+      while (this.vehicleConditionImagesArray.length) {
+        this.vehicleConditionImagesArray.removeAt(this.vehicleConditionImagesArray.length-1);
+      }
+
+      this.pickupLocationWizard.reset();
+      this.pickUpLocation();     // Initialize Pickup Location Wizard Fields
+
+      this.offerInHands.reset();
+      this.offerInHandsPopUp(); 
+
+
+
+      this.isVehicleAftermarketSelected = false;
+      this.isVehicleCleanTitleSelected = false;
+      this.isWillingToDriveSelected = false;
+      this.isOtherSelected = false;
+      this.isVehicleConditionSelected = false;      
+      this.isSkipSubmit = false;
+      this.isOtherInteriorColorSelected = false;
+      this.isOtherExteriorColorSelected = false;
+
+      this.isVehicleOptionSelected = false; 
+      
+      this.scrollToSpecificDiv();
+      
+    }
+  }
 
   /**
   * get vehicle Image Category.
@@ -1069,12 +1180,12 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    */
   setExteriorColor(value: string): void {
     
-    const vehicleExteriorColorIfOtherSelected = this.basicInfoWizard.controls.basic_info.get('vehicle_exterior_color_if_other_selected');
+    const vehicleExteriorColorIfOtherSelected = this.basicInfoWizard.controls.basic_info.get('vehicle_other_exterior_color');
     vehicleExteriorColorIfOtherSelected.patchValue('');
     
     if(value == "Other"){
       this.isOtherExteriorColorSelected = true;
-      vehicleExteriorColorIfOtherSelected.setValidators(Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(20)]));
+      vehicleExteriorColorIfOtherSelected.setValidators(Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(20), Validators.pattern('^[a-zA-Z ]*$')] ));
       vehicleExteriorColorIfOtherSelected.updateValueAndValidity();
     }else{ 
       this.isOtherExteriorColorSelected = false;
@@ -1090,12 +1201,12 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    * @param value color 
    */
   setInteriorColor(value: string): void {
-    const vehicleInteriorColorIfOtherSelected = this.basicInfoWizard.controls.basic_info.get('vehicle_interior_color_if_other_selected');
+    const vehicleInteriorColorIfOtherSelected = this.basicInfoWizard.controls.basic_info.get('vehicle_other_interior_color');
     vehicleInteriorColorIfOtherSelected.patchValue('');
     
     if(value == "Other"){
       this.isOtherInteriorColorSelected = true;
-      vehicleInteriorColorIfOtherSelected.setValidators(Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(20)]));
+      vehicleInteriorColorIfOtherSelected.setValidators(Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(20), Validators.pattern('^[a-zA-Z ]*$')]));
       vehicleInteriorColorIfOtherSelected.updateValueAndValidity();
     }else{ 
       this.isOtherInteriorColorSelected = false;
@@ -1245,6 +1356,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    */
   toggleVehicleCleanTitle(event): void {  
     let vehicleOwnershipDescription = this.aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description');
+    let vehicleOwnershipValue = this.aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_value');
     vehicleOwnershipDescription.patchValue('');
     if ( event.target.checked ) {      
       this.isVehicleCleanTitleSelected = true; 
@@ -1254,7 +1366,9 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       this.isOtherSelected=false; 
       
       vehicleOwnershipDescription.clearValidators();        
-      vehicleOwnershipDescription.updateValueAndValidity();
+      vehicleOwnershipDescription.updateValueAndValidity(); 
+      vehicleOwnershipValue.clearValidators();        
+      vehicleOwnershipValue.updateValueAndValidity();
 
     }else{
       this.isVehicleCleanTitleSelected = false; 
@@ -1263,13 +1377,16 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
       if(this.vehicleOwnership == "Other"){
         this.isOtherSelected = true;        
-        vehicleOwnershipDescription.setValidators(Validators.compose([Validators.required,Validators.minLength(10),Validators.maxLength(50)]));        
+        vehicleOwnershipDescription.setValidators(Validators.compose([Validators.required,Validators.minLength(10),Validators.maxLength(200)]));        
         vehicleOwnershipDescription.updateValueAndValidity();
       }else{
         this.isOtherSelected = false;        
         vehicleOwnershipDescription.clearValidators();        
         vehicleOwnershipDescription.updateValueAndValidity();
-      }       
+      } 
+      
+      vehicleOwnershipValue.setValidators(Validators.compose([Validators.required]));        
+      vehicleOwnershipValue.updateValueAndValidity();
     }
     console.log(this.isOtherSelected);
     
@@ -1381,7 +1498,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     let willingToDriveHowManyMiles = this.pickupLocationWizard.controls['willing_to_drive_how_many_miles'];        
     if( event.target.checked ){
       this.isWillingToDriveSelected = true;
-      willingToDriveHowManyMiles.setValidators(Validators.compose([Validators.required,Validators.minLength(1),Validators.maxLength(2),Validators.pattern(/^-?(0|[1-9]\d*)?$/)]));
+      willingToDriveHowManyMiles.setValidators(Validators.compose([Validators.required,Validators.minLength(1),Validators.maxLength(3),Validators.pattern(/^-?(0|[1-9]\d*)?$/)]));
       
       willingToDriveHowManyMiles.updateValueAndValidity();
       this.willingToDrive = true;
@@ -1461,21 +1578,22 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   }; 
 
   /**
-   * smooth scroll to specific div* 
-   * @param direction * 
+   * smooth scroll to specific div*   
    */
-  scrollToSpecificDiv(direction: MovingDirection): void {   
-    this.contentSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" }); 
+  scrollToSpecificDiv(): void {   
+    this.addCarSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" }); 
   }
 
   ngOnInit() {  
-    this.contentSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });     
+    this.addCarSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });     
   }
 
   ngAfterViewInit(){    
     //this.yearRange = this.commonUtilsService.createYearRange();  
     this.colors = [{label:'Beige',value:'#F5F5DC'},{label:'Black',value:'#252627'},{label:'Brown',value:'#672E10'},{label:'Burgundy',value:'#75141C'},{label:'Charcoal Grey',value:'#757776'},{label:'Dark Blue',value:'#172356'},{label:'Dark Green',value:'#316241'},{label:'Gold',value:'#D6C17F'},{label:'Grey',value:'#808080'},{label:'Light Blue',value:'#5F7DC5'},{label:'Light Green',value:'#8E9F87'},{label:'Orange',value:'#FF9200'},{label:'Purple',value:'#6A4574'},{label:'Red',value:'#E32F43'},{label:'Silver',value:'#D4D9DC'},{label:'Tan',value:'#D2B48C'},{label:'White',value:'#F2F6F9'},{label:'Yellow',value:'#F8E81C'}];
     
+
+    //years range
     for (let i = 0; i < 2; i++) {
       this.yearRange.push({
         label: this.currentYear - i,

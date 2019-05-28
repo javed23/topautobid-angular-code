@@ -14,7 +14,6 @@ import * as _ from 'lodash';
 @Component({
   selector: 'app-car-bids',
   templateUrl: './car-bids.component.html',
-  styleUrls: ['./car-bids.component.css'],
   encapsulation: ViewEncapsulation.None
 })
 export class CarBidsComponent {

@@ -7,6 +7,7 @@ import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { untilDestroyed } from 'ngx-take-until-destroy';// unsubscribe from observables when the  component destroyed
 import { ToastrManager } from 'ng6-toastr-notifications';//toaster class
 import { DropzoneComponent, DropzoneDirective, DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
+import { NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 //import services
 
   //shared services
@@ -77,7 +78,7 @@ export class ListComponent implements OnInit, AfterViewInit {
   readonly title: string = 'Dealership Listing';
   readonly breadcrumbs: any[] = [{ page: 'Home', link: '/dealer/home' }, { page: 'Dealership Listing', link: '' }]
    
-  constructor(private http: HttpClient, private titleService:TitleService,private commonUtilsService:CommonUtilsService, private dealershipService: DealershipService, private pageLoaderService: PageLoaderService, private toastr: ToastrManager, private formBuilder: FormBuilder, private ngZone: NgZone) {
+  constructor( private ngbDateParserFormatter: NgbDateParserFormatter, private http: HttpClient, private titleService:TitleService,private commonUtilsService:CommonUtilsService, private dealershipService: DealershipService, private pageLoaderService: PageLoaderService, private toastr: ToastrManager, private formBuilder: FormBuilder, private ngZone: NgZone) {
     
     this.pageLoaderService.shouldPageLoad.subscribe((SholdPageRefresh: boolean) => {
      
@@ -146,53 +147,26 @@ export class ListComponent implements OnInit, AfterViewInit {
    * Populate the table with new data based on the page number
    * @param pageInfo The page to select  
    */
-  setPage(pageInfo) {    
-    
+  setPage(pageInfo) {      
    
     this.page.pageNumber = pageInfo.offset;
     this.page.size = pageInfo.pageSize;
-    //console.log('viewedPages',this.viewedPages);
-    /*if( _.includes(this.viewedPages, this.page.pageNumber))
-      return;
-    else    
-      this.viewedPages.push(this.page.pageNumber)*/
-
     if(!this.page.search){
-      this.pageLoaderService.setLoaderText(environment.MESSAGES.FETCHING_RECORDS);//setting loader text
-      this.pageLoaderService.pageLoader(true);//show page loader
+      this.commonUtilsService.showPageLoader();
     }
     
     this.dealershipService.listingDealershipOnDatable(this.page).subscribe(
+      //case success
       (pagedData) => {
       
       this.page = pagedData.page;
+      this.dealerships = pagedData.data;
+      console.log('this.dealerships',this.dealerships);   
+      this.commonUtilsService.hidePageLoader(); 
 
-      let dealerships = this.dealerships;
-      if (dealerships.length !== pagedData.page.totalElements) {
-        dealerships = Array.apply(null, Array(pagedData.page.totalElements));
-        
-        dealerships = dealerships.map((x, i) => this.dealerships[i]);
-      }
-
-      // calc start
-      const start = this.page.pageNumber * this.page.size;
-      
-      // set dealerships to our new dealerships
-      pagedData.data.map((x, i) => dealerships[i + start] = x);
-      this.dealerships = dealerships;
-      this.dealerships = [...this.dealerships];
-      console.log('this.dealerships',this.dealerships);
-   
-      this.pageLoaderService.pageLoader(false);//show page loader
-      this.pageLoaderService.setLoaderText('');//setting loader text
-    
-
+    //case error 
     },error => {
-
-      this.pageLoaderService.setLoaderText(environment.MESSAGES.ERROR_TEXT_LOADER);//setting loader text
-      this.pageLoaderService.pageLoader(false);//hide page loader
-      this.toastr.errorToastr(error, 'Oops!');//showing error toaster message
-
+      this.commonUtilsService.onError(error);
     });
   }
 
@@ -214,7 +188,6 @@ export class ListComponent implements OnInit, AfterViewInit {
   */
   public onLimitChange(limit: any): void {   
     this.viewedPages = [];
-    //console.log('viewedPages',this.viewedPages);
     this.currentPageLimit = this.defaultPagination.limit=this.defaultPagination.pageSize = parseInt(limit) 
     this.setPage(this.defaultPagination);
   }
@@ -230,70 +203,12 @@ export class ListComponent implements OnInit, AfterViewInit {
     this.page.sortProperty = sort.prop
     this.page.sortDirection = sort.dir   
     this.setPage(this.defaultPagination);  
-    
-    
-    this.page.pageNumber = 0
-    this.page.size =this.currentPageLimit
-   
-
-    if(!this.page.search){
-      this.pageLoaderService.setLoaderText(environment.MESSAGES.FETCHING_RECORDS);//setting loader text
-      this.pageLoaderService.pageLoader(true);//show page loader
-    }
-    
-    this.dealershipService.listingDealershipOnDatable(this.page).subscribe(
-      (pagedData) => {
-      
-      this.page = pagedData.page;
-
-      let dealerships = this.dealerships;
-      if (dealerships.length !== pagedData.page.totalElements) {
-        dealerships = Array.apply(null, Array(pagedData.page.totalElements));
-        
-        dealerships = dealerships.map((x, i) => this.dealerships[i]);
-      }
-      console.log('before sort',dealerships);
-      // calc start
-      const start = this.page.pageNumber * this.page.size;
-      
-      // set dealerships to our new dealerships
-      pagedData.data.map((x, i) => dealerships[i + start] = x);
-
-      /*const sort = event.sorts[0];
-      dealerships.sort((a, b) => {
-        return a[sort.prop].localeCompare(b[sort.prop]) * (sort.dir === 'desc' ? -1 : 1);
-      });*/
-      console.log('after sort',dealerships);
-      this.dealerships = dealerships;
-
-      
-
-      
-      this.dealerships = [...this.dealerships];
-      console.log('this.dealerships',this.dealerships);
-   
-      this.pageLoaderService.pageLoader(false);//show page loader
-      this.pageLoaderService.setLoaderText('');//setting loader text
-    
-
-    },error => {
-
-      this.pageLoaderService.setLoaderText(environment.MESSAGES.ERROR_TEXT_LOADER);//setting loader text
-      this.pageLoaderService.pageLoader(false);//hide page loader
-      this.toastr.errorToastr(error, 'Oops!');//showing error toaster message
-
-    });
-
-
-
   }
 
   /**
      * Remove/delete a dealership
      * @param  item array index     
-  */ 
-
-  
+  */   
  async delete(item){
 
     //confirm before deleting car
@@ -377,16 +292,39 @@ export class ListComponent implements OnInit, AfterViewInit {
    * @return  void
    */
   onStartDateSelected(event:any):void {
-    this.datesFilter['start']  = new Date(event.year,event.month-1,event.day+1)       
+    let currentDate = new Date();   
+    console.log('currentDate',currentDate);
+    this.ngbDateParserFormatter.parse(event.year + "-" + (event.month-1).toString() + "-" + (event.day));
+
+    this.datesFilter['start']  = new Date(event.year,event.month-1,event.day+1)   
+    this.datesFilter['startCurrent']  = new Date(event.year,event.month-1,event.day)       
     this.datesFilter['transformedStartDate']  = (this.datesFilter['start']).toISOString();
-    this.validateDateFilters();       
+
+    if((this.datesFilter['startCurrent']).getTime() > (currentDate).getTime()){
+      this.startDateModel = null
+      this.endDateModel = null
+      this.commonUtilsService.onError('Start date should not greater than today.');  
+      return;      
+    }else if(!_.has(this.datesFilter, ['end'])){
+      this.datesFilter['end']  = currentDate;
+      this.datesFilter['endCurrent']  = currentDate
+      this.datesFilter['transformedEndDate']  = (this.datesFilter['end']).toISOString();
+    }
+
+    this.validateDateFilters(); 
+    //return this.ngbDateParserFormatter.parse(startYear + "-" + startMonth.toString() + "-" + startDay);      
   }
   /**
    * Check date validations and filters records when select end date filter
    * @return  void
    */
-  onEndDateSelected(event:any):void {    
+  onEndDateSelected(event:any):void {
+    
+    this.ngbDateParserFormatter.parse(event.year + "-" + (event.month-1).toString() + "-" + (event.day));
+
     this.datesFilter['end']  = new Date(event.year,event.month-1,event.day+1)
+    this.datesFilter['endCurrent']  = new Date(event.year,event.month-1,event.day)
+    
     this.datesFilter['transformedEndDate']  = (this.datesFilter['end']).toISOString();
     this.validateDateFilters();        
   }
@@ -395,13 +333,16 @@ export class ListComponent implements OnInit, AfterViewInit {
   * To validate date filters
   * @return  void
   */
-  private validateDateFilters(){
-    
+  private validateDateFilters(){    
+
+
+
+
     if(! _.has(this.datesFilter, ['start']))
       this.commonUtilsService.onError('Please select start date');
     else if(! _.has(this.datesFilter, ['end']))
       this.commonUtilsService.onError('Please select end date');
-    else if(_.has(this.datesFilter, ['end']) && (this.datesFilter['end']).getTime() < (this.datesFilter['start']).getTime()){
+    else if(_.has(this.datesFilter, ['end']) && (this.datesFilter['endCurrent']).getTime() < (this.datesFilter['startCurrent']).getTime()){
       this.endDateModel = null
       this.commonUtilsService.onError('End date should not less than start date');  
       

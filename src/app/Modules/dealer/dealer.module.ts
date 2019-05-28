@@ -4,7 +4,8 @@ import { HTTP_INTERCEPTORS, HttpClientModule, HttpClient } from '@angular/common
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskModule } from 'ngx-mask'
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+
 import { ArchwizardModule } from 'angular-archwizard';
 import {
   DropzoneModule, DropzoneConfigInterface,
@@ -22,12 +23,15 @@ import { AuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider } from 'a
 //import microsoft module
 import { AdalService, AdalGuard, AdalInterceptor } from 'adal-angular4';
 
+
 //import enviorment file
 import { environment } from '../../../environments/environment';
 //import dealer routing 
 import { DealerRoutingModule } from './dealer-routing.module';
 //import shared module
 import { SharedModule } from '../../core/shared.module';
+
+import { CustomNgbDateParserFormatter } from '../../core/custom-ngbDateParserFormatter'
 
 //import components
 import { LoginComponent } from './login/login.component';
@@ -49,6 +53,9 @@ import { PurchasesListComponent } from './purchases/purchases-list/purchases-lis
 import { ListingComponent as CarsGridListComponent } from './cars/grid-list-view/listing.component';
 import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
 import { ContactRequestComponent } from './cars/contact-request/contact-request.component';
+import { FilterComponent } from './bids/filter/filter.component';
+import { SortComponent } from './bids/sort/sort.component';
+import { ListingComponent as BidsListingComponent} from './bids/listing/listing.component';
 
 
 
@@ -101,10 +108,13 @@ let config = new AuthServiceConfig([
     PurchasesListComponent,
     CarsGridListComponent,
     CarDetailPageComponent,
-    ContactRequestComponent
+    ContactRequestComponent,
+    FilterComponent,
+    SortComponent,
+    BidsListingComponent
   ]
   ,
- imports: [
+  imports: [
     CommonModule,
     DealerRoutingModule,
     CommonModule,
@@ -132,6 +142,10 @@ let config = new AuthServiceConfig([
     {
       provide: AuthServiceConfig,
       useFactory: provideConfig
+    },
+    {
+      provide: NgbDateParserFormatter, 
+      useFactory: () => new CustomNgbDateParserFormatter('longDate')
     }
   ],
 })

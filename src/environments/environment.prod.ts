@@ -3,7 +3,7 @@ export const environment = {
   API_ENDPOINT: 'http://54.245.128.14:3000',
   //WEB_ENDPOINT: 'http://localhost:4200',
   WEB_ENDPOINT: 'http://54.245.128.14',
- 
+  FILE_UPLOAD_API:"http://54.245.128.14:3000/api/common/imageUploadtoBucket",
   APP_NAME: 'TopAutoBid',
   DEFAULT_PROFILE: 'assets/images/default-user.png',
   DEFAULT_COUNTRY_CODE: '+1',
@@ -16,6 +16,10 @@ export const environment = {
     { value:48  },
     { value:96  },
   ],
+
+  //rating & review settings 
+  MAX_RATE_STARS:5,
+  
   //aws 
   AWS: {
     ACCESS_KEY: '',
@@ -80,6 +84,12 @@ export const environment = {
     DELETING_RECORD: 'Deleting Record...',//new
     CONTACT_ADDED: 'Legal Contact has been added successfully.',
     NO_RECORDS_FOUND: 'No Records Found.',
-    
+    CONTACT_REQUEST_SEND: 'Thanks! Email has been send successfully and our support team will contact you soon.',
+    PROFILE_UPDATE: 'Profile has been updated successfully.',
+    ATLEAST_ONE_DEALERSHIP:'Please add atleast one dealership.',
+    ATLEAST_ONE_CONTACT:'Please add atleast one legal contact',
+    SELECT_PRIMARY:'Please select primary contact.',
+    MAXIMUM_PRIMARY_CONTACT:'Primary contact can not be more than one.',
+    CAR_STATUS_CHANGED:'Status has been changed successfully.'
   }
 };

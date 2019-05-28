@@ -14,6 +14,7 @@ import { ListComponent as CarsTableComponent } from './cars/table-view/list.comp
 import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
 import { AddCarComponent } from './cars/addcar/addcar.component';
 import { CarBidsComponent } from './cars/car-bids/car-bids.component';
+import { RateReviewComponent } from './rate-review/rate-review.component';
 //importing guards
 import { SellerAuthGuardService } from '../../core/guards/seller-auth-guard.service';
 
@@ -86,6 +87,14 @@ const routes: Routes = [
     component: CarBidsComponent,
     data: { title: 'Seller Car Bids' }
   }
+  ,
+  {
+    path: 'rate-review',
+    component: RateReviewComponent,
+    data: { title: 'Seller Rate and Reviews' }
+  }
+
+  
 
 ];
 

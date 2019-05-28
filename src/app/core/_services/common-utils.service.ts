@@ -36,7 +36,7 @@ export class CommonUtilsService {
   * @param base64string image base64 string 
   * @param type image type (jpeg, png, jpg)
   */
-  public isImageCorrupted(base64string, type): boolean {
+  public isFileCorrupted(base64string, type): boolean {
 
     if (type == 'png') {
       console.log('get filetype', type)
@@ -52,33 +52,14 @@ export class CommonUtilsService {
 
       return true;
     }
+    else if(type=='pdf'){ 
+      return true;
+    }
     else if (type == 'jpeg' || type == 'jpg') {
       const imageDataJpeg = Array.from(atob(base64string.replace('data:image/jpeg;base64,', '')), c => c.charCodeAt(0))
       const imageCorrupted = ((imageDataJpeg[imageDataJpeg.length - 1] === 217) && (imageDataJpeg[imageDataJpeg.length - 2] === 255))
       return imageCorrupted;
     }
-  }
-
-  /**
-  * Show confirmation popup before delete the record.
-  * @return any
-  */
-  public isDeleteConfirmed(): any {
-
-    let isConfirmed = Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      type: 'warning',
-      showCancelButton: true,
-      allowOutsideClick: false,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-      return (result.value) ? true : false
-    })
-
-    return isConfirmed;
   }
 
   /**
@@ -199,6 +180,72 @@ export class CommonUtilsService {
         return response;
       })
   }
+
+  /**
+  * Show confirmation popup before going to previous step.
+  * @return any
+  */
+ public isPreviousConfirmed(): any {
+  let isConfirmed = Swal.fire({
+    title: 'Do you want to leave this page?',
+    text: "Changes you made may not be saved.",
+    type: 'warning',
+    showCancelButton: true,
+    allowOutsideClick: false,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Leave',
+    cancelButtonText: 'Stay'
+  }).then((result) => {
+   
+    return (result.value) ? true : false
+  })  
+  
+  return isConfirmed;
+}
+
+/**
+  * Show confirmation popup before delete the record.
+  * @return any
+  */
+ public isDeleteConfirmed(): any {
+
+  let isConfirmed = Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    type: 'warning',
+    showCancelButton: true,
+    allowOutsideClick: false,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    return (result.value) ? true : false
+  })
+
+  return isConfirmed;
+}
+
+
+
+  /**
+* To check the image validity for type pdf
+* @return boolean
+* @param base64string image base64 string 
+* @param type image type (pdf)
+*/
+public isPDFCorrupted(base64string, type): Observable<any> {
+
+  const pdfData = Array.from(atob(base64string.replace('data:application/pdf;base64,', '')), c => c.charCodeAt(0))
+
+  const params = { base64string : pdfData, fileExtension: type }
+  
+  return this.httpClient
+    .post('common/checkPDFCorrupted', params)
+    .map((response: Response) => {
+      return response;
+    })  
+ } 
 
 
 

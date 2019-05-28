@@ -9,12 +9,13 @@ declare let $: any;
   templateUrl: './contact-view.component.html',
   styleUrls: ['./contact-view.component.css']
 })
-export class ContactViewComponent implements OnInit {
+export class ContactViewComponent{
 
   @Input() isOpen: any;
   @Input() dealershipObject: any;
   @Output() onClose: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild('legalContactsSection') legalContactsSection :ElementRef;
+  
   constructor(private titleService:TitleService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -25,12 +26,14 @@ export class ContactViewComponent implements OnInit {
       $(this.legalContactsSection.nativeElement).modal({backdrop: 'static', keyboard: false, show: true}); 
 
   }
+  /**
+  * function to close the popup and emit response to onClose event
+  * @return void
+  */
   close() {
     this.isOpen = false
     this.onClose.emit(false);    
   }
-  ngOnInit() {
-    
-  }
+  
  
 }
