@@ -7,7 +7,6 @@
 
 
  <section #editCarSection class="accordian_listing">
-    
     <div [@AnimateList]>
       
         <aw-wizard #wizard class="step_col">    
@@ -666,7 +665,7 @@
                                                     <li>
                                                         <div class="Radio_BTN">
                                                                 <input type="radio" value="Ready For Resale Without Any Reconditioning" (click)="checkVehicleConditionRadioValue($event,'resale')" formControlName="vehicle_condition_value" id="resale">
-                                                                <label for="resale">Ready for resale without any reconditioning
+                                                                <label for="resale">Ready For Resale Without Any Reconditioning
 
                                                                 <span class="addition_info">(no odor, no mechanical/interiror/exterior damages - the overall vehicle is in good condition)</span>
                                                                 </label>
@@ -675,14 +674,14 @@
                                                     <li>
                                                         <div class="Radio_BTN">
                                                             <input type="radio" value="May Need Some Reconditioning" (click)="checkVehicleConditionRadioValue($event,'reconditioning')" formControlName="vehicle_condition_value" id="reconditioning">
-                                                            <label for="reconditioning">May need some reconditioning
+                                                            <label for="reconditioning">May Need Some Reconditioning
                                                                     <span class="addition_info">(moderate internal/external wear and tear however there is no mechanical damages)</span> </label>
                                                             </div> 
                                                     </li>
                                                     <li>
                                                         <div class="Radio_BTN">
                                                             <input type="radio" value="Needs Some Reconditioning But Yet Functional" (click)="checkVehicleConditionRadioValue($event,'functional')" formControlName="vehicle_condition_value" id="functional">
-                                                                <label for="functional">Needs some reconditioning but yet functional
+                                                                <label for="functional">Needs Some Reconditioning But Yet Functional
                                                                     <span class="addition_info">(moderate internal/external wear and tear and moderate mechanical damages)
                                                                         </span>
                                                                 </label>
@@ -691,7 +690,7 @@
                                                     <li>
                                                         <div class="Radio_BTN">
                                                             <input type="radio" value="Parts Only" (click)="checkVehicleConditionRadioValue($event,'parts')" formControlName="vehicle_condition_value" id="parts">
-                                                            <label for="parts">Parts only
+                                                            <label for="parts">Parts Only
                                                                     <!--span class="addition_info">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nostrum eveniet amet enim repudiandae</span-->
                                                             </label>
                                                             </div> 
@@ -975,7 +974,7 @@
                                         <div class="details_inner">
                                                 <h6>About Vehicle</h6>
                                                 <ul>
-                                                        <li><label>Has Second Key: </label><span>{{secondKey?'On':'Off'}}</span></li>                                            
+                                                        <li><label>Has Second Key: </label><span>{{secondKey?'ON':'OFF'}}</span></li>                                            
                                                         <li><label>Has Aftermarket Options: </label><span>{{vehicleAftermarket?'ON':'OFF'}}</span></li>                              
                                                         <li *ngIf="vehicleAftermarket"><label>Description: </label><span>{{vehicle_aftermarket_description?.value}}</span></li>                                    
                                                         <li *ngIf="vehicleAftermarket && (checkObjectLength(afterMarketImagesArray.value) > 0)"><label>Images: </label>
@@ -1363,7 +1362,7 @@
                                 <div class="col-lg-12 text-center">
                                         <div class="button_Submission mb-4">
                                                 <button class="button red d-inline-block width-auto boder0 mt-4" type="button" awPreviousStep>Previous Step</button>                                    
-                                                <button class="button red d-inline-block width-auto boder0 mt-4" (click)="onSubmitAddCar()" type="button" >Submit Car</button>		
+                                                <button class="button red d-inline-block width-auto boder0 mt-4" (click)="onSubmitEditCar()" type="button" >Update Car</button>		
                                             </div>
                                 </div>
                             </div>

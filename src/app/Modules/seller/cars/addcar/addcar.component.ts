@@ -149,7 +149,7 @@ export class AddCarComponent implements OnInit {
   private _secondKey:boolean= false;
   private _vehicleAftermarket:boolean= false;
   private _vehicleOwnership:string = '';
-  private _vehicleConditionValue:string = 'Ready for resale without any reconditioning';
+  private _vehicleConditionValue:string = 'Ready For Resale Without Any Reconditioning';
   private _cleanTitle:boolean= false;
   private _willingToDrive:boolean= false;
   private _vehiclePickedUp:boolean = false;
@@ -258,7 +258,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     this.vehicleConditionWizard = this.formBuilder.group({      
       vehicle_comments: ['', Validators.compose([Validators.minLength(10),Validators.maxLength(200)])],    
       vehicle_condition:this.formBuilder.group({    
-        vehicle_condition_value: ['Ready for resale without any reconditioning'],
+        vehicle_condition_value: ['Ready For Resale Without Any Reconditioning'],
         vehicle_condition_description: [''],
         vehicle_condition_images: this.formBuilder.array([]),
       })
