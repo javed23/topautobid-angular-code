@@ -87,6 +87,28 @@ export class UserAuthService {
       })
 
   }
+  sendDealerVerificationLink(postedData): Observable<any> {
+
+    return this.httpClient
+      .post('auth/dealer/sendVerificationLink', postedData)
+      .map((response:any) => {
+        return response;
+      })
+
+  }
+
+
+  sendSellerVerificationLink(postedData): Observable<any> {
+
+    return this.httpClient
+      .post('auth/seller/sendVerificationLink', postedData)
+      .map((response:any) => {
+        return response;
+      })
+
+  }
+
+  
   setMFA(postedData): Observable<any> {
 
     return this.httpClient

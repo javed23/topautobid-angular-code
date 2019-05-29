@@ -301,6 +301,7 @@ export class SignupComponent implements OnInit {
     }
     //set username  before signup
     let username = this.commonUtilService.getUsername(this.signUpFormStep1.value.emails[0].email);
+    console.log('the user name afer signup is ',username);
     this.signUpFormStep1.controls.username.setValue(username);
 
     this.pageLoaderService.pageLoader(true);//start showing page loader
@@ -326,9 +327,12 @@ export class SignupComponent implements OnInit {
           this.pageLoaderService.pageLoader(false);//hide page loader
 
           this.pageLoaderService.pageLoader(false);
-          this.toastr.successToastr(environment.MESSAGES.SIGNUP_SUCCESS, 'Success!');//showing success toaster
-          // this.router.navigate(['/dealer/login']);
-
+          console.log('the success is ')
+          this.toastr.successToastr('the verification link has been sent to your email id please verify the email!', 'Success!');//showing success toaster
+          
+          // setTimeout(function(){
+          this.router.navigate(['/dealer/login']);
+          // },4000)
         },
         error => {
 

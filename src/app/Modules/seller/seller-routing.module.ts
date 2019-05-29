@@ -14,6 +14,7 @@ import { ListComponent as CarsTableComponent } from './cars/table-view/list.comp
 import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
 import { AddCarComponent } from './cars/addcar/addcar.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
+import { AccountVerifyComponent } from './account-verify/account-verify.component';
 //importing guards
 import { SellerAuthGuardService } from '../../core/guards/seller-auth-guard.service';
 
@@ -78,7 +79,13 @@ const routes: Routes = [
     path: 'addcar',
     component: AddCarComponent,
     data: { title: 'Seller AddCar' }
-  }
+  },
+  {
+    path: 'account-verify/:id',
+    component: AccountVerifyComponent,
+    data: { title: 'Seller AddCar' }
+  },
+  
 
 ];
 

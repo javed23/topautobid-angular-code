@@ -32,7 +32,7 @@ export class VerifyEmailComponent implements OnInit {
 
 
   title: string = 'Seller Email Verification';
-  constructor(private router:Router,private pageLoaderService:PageLoaderService,private cognitoUserService: CognitoUserService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private authService: UserAuthService, private toasterService: ToastrManager) { }
+  constructor(private router: Router, private pageLoaderService: PageLoaderService, private cognitoUserService: CognitoUserService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private authService: UserAuthService, private toasterService: ToastrManager) { }
   @ViewChild("otpSection") otpSection: ElementRef;
   @ViewChild("multifactordiv") multifactordiv: ElementRef;
 
@@ -66,8 +66,8 @@ export class VerifyEmailComponent implements OnInit {
   }
 
 
-  toggleIsMultifactorVerification(value:any){
-   $(this.multifactordiv.nativeElement).slideToggle('slow');
+  toggleIsMultifactorVerification(value: any) {
+    $(this.multifactordiv.nativeElement).slideToggle('slow');
   }
 
 
@@ -91,17 +91,18 @@ export class VerifyEmailComponent implements OnInit {
   onSubmit() {
     let userSignup = {};
     if (this.multifactorOption == 'phone')
-      userSignup = _.pick(this.user, ['username', 'phones', 'name', 'cipher'])
+      return
+    // userSignup = _.pick(this.user, ['username', 'phones', 'name', 'cipher'])
 
     else if (this.multifactorOption == 'email')
       userSignup = _.pick(this.user, ['username', 'emails', 'name', 'cipher'])
 
 
 
-      this.pageLoaderService.pageLoader(true);//start showing page loader
-      this.pageLoaderService.setLoaderText('Regestring seller...');//setting loader text
-   
-      //saving the seller at aws user pool
+    this.pageLoaderService.pageLoader(true);//start showing page loader
+    this.pageLoaderService.setLoaderText('Regestring seller...');//setting loader text
+
+    //saving the seller at aws user pool
     this.cognitoUserService.signup(userSignup)
       .pipe(untilDestroyed(this))
       .subscribe(
@@ -110,7 +111,7 @@ export class VerifyEmailComponent implements OnInit {
           this.pageLoaderService.pageLoader(false);//hide page loader  
 
           this.otpVerificationForm.controls['Username'].setValue(response['username']);
-          this.toasterService.successToastr(environment.MESSAGES.VERIFICATION_PENDING, 'Success!',{maxShown:1});//showing success toaster
+          this.toasterService.successToastr(environment.MESSAGES.VERIFICATION_PENDING, 'Success!', { maxShown: 1 });//showing success toaster
 
         },
         error => {
@@ -192,10 +193,11 @@ export class VerifyEmailComponent implements OnInit {
 
     this.authService.setMFA({ userId: this.user._id, multifactorOption: this.multifactorOption }).subscribe((res: any) => {
       this.pageLoaderService.pageLoader(false);//start showing page loader
-      this.toasterService.successToastr('successfully updated the MFA!', 'Success!');
-     
+      this.toasterService.successToastr('successfully updated!', 'Success!');
+
       this.hidePopup();
-      
+      this.router.navigate(['/dealer/login']);
+
     }, error => {
       this.pageLoaderService.setLoaderText(environment.MESSAGES.ERROR_TEXT_LOADER);//setting loader text
       this.pageLoaderService.pageLoader(false);//hide page loader

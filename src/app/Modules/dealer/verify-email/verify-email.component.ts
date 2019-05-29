@@ -96,7 +96,8 @@ export class VerifyEmailComponent implements OnInit {
   onSubmit() {
     let userSignup = {};
     if (this.multifactorOption == 'phone')
-      userSignup = _.pick(this.user, ['username', 'phones', 'name', 'cipher'])
+    return
+      // userSignup = _.pick(this.user, ['username', 'phones', 'name', 'cipher'])
 
     else if (this.multifactorOption == 'email')
       userSignup = _.pick(this.user, ['username', 'emails', 'name', 'cipher'])
@@ -190,16 +191,19 @@ export class VerifyEmailComponent implements OnInit {
   }
 
 
-
+/**
+ * this function will set the multifector authentication
+ */
   private setMFA() {
     this.pageLoaderService.pageLoader(true);//start showing page loader
     this.pageLoaderService.setLoaderText('Updating  seller MFA...');//setting loader text
 
     this.authService.setDealerMFA({ userId: this.user._id, multifactorOption: this.multifactorOption }).subscribe((res: any) => {
       this.pageLoaderService.pageLoader(false);//start showing page loader
-      this.toasterService.successToastr('successfully updated the MFA!', 'Success!');
+      this.toasterService.successToastr('successfully updated!', 'Success!');
 
       this.hidePopup();
+      this.router.navigate(['/dealer/login']);
 
     }, error => {
       this.pageLoaderService.setLoaderText(environment.MESSAGES.ERROR_TEXT_LOADER);//setting loader text

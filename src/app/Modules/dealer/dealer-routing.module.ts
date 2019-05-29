@@ -8,7 +8,7 @@ import { SignupComponent } from './signup/signup.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
-
+import { AccountVerifyComponent } from './account-verify/account-verify.component';
 //cars management components
 import { ListComponent as CarsListComponent } from './cars/list/list.component';
 
@@ -70,6 +70,11 @@ const routes: Routes = [
     component: DealershipsListComponent, 
     data: { title: 'Dealerships listing' },
     canActivate: [DealerAuthGuardService]
+  },
+  {
+    path: 'account-verify/:id', 
+    component: AccountVerifyComponent, 
+    data: { title: 'Account verify' },
   }
 ];
 

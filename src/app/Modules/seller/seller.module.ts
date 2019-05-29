@@ -35,6 +35,7 @@ import { AddCarComponent } from './cars/addcar/addcar.component';
 import { CarViewComponent as CarDetailComponent} from './cars/car-detail-popup/car-view.component';
 import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
+import { AccountVerifyComponent } from './account-verify/account-verify.component';
 
 
 
@@ -72,7 +73,8 @@ let config = new AuthServiceConfig([
     CarsGridListComponent,
     CarDetailPageComponent,
     AddCarComponent,
-    VerifyEmailComponent
+    VerifyEmailComponent,
+    AccountVerifyComponent
   ],
   imports: [
     CommonModule,

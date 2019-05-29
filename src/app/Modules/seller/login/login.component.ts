@@ -77,7 +77,7 @@ export class LoginComponent implements OnInit {
   }
 
   //on login form submit
-  onSubmit() {
+  loginByOtp() {
     this.submitted = true;
 
     // stop here if form is invalid
@@ -157,7 +157,7 @@ export class LoginComponent implements OnInit {
             /*
             saving aws response to localstorage
             */
-            this.localLogin();//our local login function
+            // this.localLogin();//our local login function
 
             
           
@@ -171,11 +171,23 @@ export class LoginComponent implements OnInit {
   }
 
   //check login at our local system
-  localLogin(){
+  onSubmit(){
+    if(this.loginForm.invalid){
+      return 
+    }
     this.userAuthService.sellerLogin(this.loginForm.value)
       .pipe(untilDestroyed(this))
       .subscribe(
         (response) => { 
+
+            if(response.body.is_verified == false){
+              this.router.navigate(['/seller/account-verify/'+response.body._id]);
+            } else if(response.body.is_multifactor_authorized){
+              this.loginByOtp();
+              } 
+            
+            else{
+            
             this.toastr.successToastr(environment.MESSAGES.LOGIN_SUCCESS, 'Success!');//showing success toaster message
             console.log('x-auth-token:'+response.headers.get('x-auth-token'))
             //save to local storage
@@ -186,6 +198,7 @@ export class LoginComponent implements OnInit {
 
             this.userAuthService.isLoggedIn(true, 'Seller');//trigger loggedin observable         
             this.router.navigate(['/seller/home']);
+          }
           
         },
         error => {    
