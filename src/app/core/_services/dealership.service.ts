@@ -72,6 +72,13 @@ export class DealershipService {
         .map((response: any) => response )    
     }
 
+    //generate mongo db document unique id 
+    public generateID(): Observable<any> {
+
+      return this.httpClient.get('dealership/generateID')
+      .map((response: any) => response )    
+    }
+
     
 
 
