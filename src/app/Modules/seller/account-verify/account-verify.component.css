@@ -214,7 +214,11 @@ input:checked + .slider:before {
 .verify_inner button{
     cursor: pointer;
 }
-
+.verify_box {background: #f6f6f6;}
+.verify_box .section-title h6 {text-transform: uppercase;color: #222222;font-weight: 400;padding-top:30px;padding-bottom: 15px;}
+.verify_box .verify_inner {width: 100%;padding: 13%;}
+.verify_box .verify_inner .section-title h2 {padding: 10px 0px 15px 0px;}
+.verify_box .verify_inner .section-title .Resend_verification_link {color: #db2d2e;font-weight: 600;cursor: pointer;}
 @media screen and (max-width:767px){
     .verify_inner {
         width: 80%;

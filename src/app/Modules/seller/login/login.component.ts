@@ -12,15 +12,15 @@ import { GoogleLoginProvider, FacebookLoginProvider, LinkedInLoginProvider } fro
 
 //import services
 
-  //shared services
-  import { AlertService, PageLoaderService } from '../../../shared/_services'
+//shared services
+import { AlertService, PageLoaderService } from '../../../shared/_services'
 
-  //modules core services
-  import { UserAuthService, TitleService, CognitoUserService } from '../../../core/_services'
+//modules core services
+import { UserAuthService, TitleService, CognitoUserService } from '../../../core/_services'
 
-  import { environment } from '../../../../environments/environment'
+import { environment } from '../../../../environments/environment'
 
-  declare var $;
+declare var $;
 
 @Component({
   selector: 'app-login',
@@ -33,19 +33,19 @@ export class LoginComponent implements OnInit {
   title: string = 'Seller Login';
   breadcrumbs: any[] = [{ page: 'Home', link: '' }, { page: 'Login', link: '' }]
   loginForm: FormGroup;
-  loginOTPForm:FormGroup;
+  loginOTPForm: FormGroup;
   submitted: boolean = false;
   showOtpForm: boolean = false;
-  otpFormsubmitted:boolean = false;
+  otpFormsubmitted: boolean = false;
 
-  constructor( /*private authService: AuthService,*/ private route: ActivatedRoute, private cognitoUserService:CognitoUserService,private alertService: AlertService, private userAuthService: UserAuthService, private pageLoaderService: PageLoaderService, private formBuilder: FormBuilder, private router: Router, private titleService: TitleService, private toastr: ToastrManager) {
-    
+  constructor( /*private authService: AuthService,*/ private route: ActivatedRoute, private cognitoUserService: CognitoUserService, private alertService: AlertService, private userAuthService: UserAuthService, private pageLoaderService: PageLoaderService, private formBuilder: FormBuilder, private router: Router, private titleService: TitleService, private toastr: ToastrManager) {
+
     this.sellerLoginForm()
     this.topVerifyForm();
   }
 
 
-  ngOnInit() {  
+  ngOnInit() {
     //if seller/dealer loggedin then redirect
     this.userAuthService.checkLoginAndRedirect();
 
@@ -62,17 +62,17 @@ export class LoginComponent implements OnInit {
     //this.authService.signIn(FacebookLoginProvider.PROVIDER_ID).then(x => console.log(x));
   }
 
-  private sellerLoginForm(){
+  private sellerLoginForm() {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.email, Validators.required]],
       password: [null, [Validators.required]],
-      remember_me: [null]     
+      remember_me: [null]
     });
   }
 
-  private topVerifyForm(){
+  private topVerifyForm() {
     this.loginOTPForm = this.formBuilder.group({
-      code: [null, Validators.compose([Validators.required,Validators.minLength(6),Validators.maxLength(6),Validators.pattern('^[0-9 ]*$')])]      
+      code: [null, Validators.compose([Validators.required, Validators.minLength(6), Validators.maxLength(6), Validators.pattern('^[0-9 ]*$')])]
     })
   }
 
@@ -86,25 +86,25 @@ export class LoginComponent implements OnInit {
     }
     this.pageLoaderService.pageLoader(true);//show loader
     this.pageLoaderService.setLoaderText('Checking authorisation');//setting loader text
-    
+
     this.cognitoUserService.login(this.loginForm.value)
       .pipe(untilDestroyed(this))
       .subscribe(
         (response) => {
-            console.log('response',response);
-            this.pageLoaderService.pageLoader(false); //hide page loader
-            this.showOtpForm = response.mfaRequired;
-            this.pageLoaderService.pageLoader(false);//hide page loader
-            $(this.otpSection.nativeElement).modal({backdrop: 'static', keyboard: false, show: response.mfaRequired});
-            this.toastr.successToastr(environment.MESSAGES.OTP_RESEND, 'Success!'); //showing success toaster          
-         
+          console.log('response', response);
+          this.pageLoaderService.pageLoader(false); //hide page loader
+          this.showOtpForm = response.mfaRequired;
+          this.pageLoaderService.pageLoader(false);//hide page loader
+          $(this.otpSection.nativeElement).modal({ backdrop: 'static', keyboard: false, show: response.mfaRequired });
+          this.toastr.successToastr(environment.MESSAGES.OTP_RESEND, 'Success!'); //showing success toaster          
+
         },
-        error => {        
+        error => {
           this.pageLoaderService.pageLoader(false);//hide page loader      
           this.toastr.errorToastr(error, 'Oops!');//showing error toaster message
         });
   }
-  
+
   resendOTP() {
     this.submitted = true;
 
@@ -114,82 +114,83 @@ export class LoginComponent implements OnInit {
     }
     this.pageLoaderService.pageLoader(true);//show loader
     this.pageLoaderService.setLoaderText('Checking authorisation');//setting loader text
-    
+
     this.cognitoUserService.login(this.loginForm.value)
       .pipe(untilDestroyed(this))
       .subscribe(
         (response) => {
-            //console.log('response',response);
-            this.pageLoaderService.pageLoader(false); //hide page loader
-            this.showOtpForm = response.mfaRequired;
-            this.pageLoaderService.pageLoader(false);//hide page loader
-            
-            this.toastr.successToastr(environment.MESSAGES.OTP_RESEND, 'Success!'); //showing success toaster          
-         
+          //console.log('response',response);
+          this.pageLoaderService.pageLoader(false); //hide page loader
+          this.showOtpForm = response.mfaRequired;
+          this.pageLoaderService.pageLoader(false);//hide page loader
+
+          this.toastr.successToastr(environment.MESSAGES.OTP_RESEND, 'Success!'); //showing success toaster          
+
         },
-        error => {        
+        error => {
           this.pageLoaderService.pageLoader(false);//hide page loader      
           this.toastr.errorToastr(error, 'Oops!');//showing error toaster message
         });
   }
 
   //call on OTP form submit
-  public onSubmitOtp(){
+  public onSubmitOtp() {
     this.otpFormsubmitted = true;
 
     // stop here if form is invalid
     if (this.loginOTPForm.invalid) {
       return;
-    }   
+    }
 
     //confirm seller OTP code
-    this.cognitoUserService.confirmLoginOtp(this.loginOTPForm)      
+    this.cognitoUserService.confirmLoginOtp(this.loginOTPForm)
       .pipe(untilDestroyed(this))
       .subscribe(
         (response) => {
 
-            localStorage.setItem('aws-loggedinUser', JSON.stringify(response)) 
-            this.pageLoaderService.pageLoader(false);//hide page loader
-            
-            /* Hide OTP Form */
-            this.showOtpForm = false;
-            $(this.otpSection.nativeElement).modal('hide'); 
-            /*
-            saving aws response to localstorage
-            */
-            // this.localLogin();//our local login function
+          localStorage.setItem('aws-loggedinUser', JSON.stringify(response))
+          this.pageLoaderService.pageLoader(false);//hide page loader
 
-            
-          
-          
+          /* Hide OTP Form */
+          this.showOtpForm = false;
+          $(this.otpSection.nativeElement).modal('hide');
+          /*
+          saving aws response to localstorage
+          */
+          // this.localLogin();//our local login function
+
+
+
+
         },
-        error => {    
-          console.log('error otp');      
+        error => {
+          console.log('error otp');
           this.loginOTPForm.reset();
           this.toastr.errorToastr(error, 'Oops!');//showing error toaster message
         });
   }
 
   //check login at our local system
-  onSubmit(){
-    if(this.loginForm.invalid){
-      return 
+  onSubmit() {
+    if (this.loginForm.invalid) {
+      return
     }
     this.userAuthService.sellerLogin(this.loginForm.value)
       .pipe(untilDestroyed(this))
       .subscribe(
-        (response) => { 
+        (response) => {
 
-            if(response.body.is_verified == false){
-              this.router.navigate(['/seller/account-verify/'+response.body._id]);
-            } else if(response.body.is_multifactor_authorized){
-              this.loginByOtp();
-              } 
-            
-            else{
-            
+          if(response.body.is_verified == false) {
+            this.router.navigate(['/seller/account-verify/' + response.body._id]);
+          }
+          // } else if (response.body.is_multifactor_authorized) {
+          //   this.loginByOtp();
+          // }
+
+          else {
+
             this.toastr.successToastr(environment.MESSAGES.LOGIN_SUCCESS, 'Success!');//showing success toaster message
-            console.log('x-auth-token:'+response.headers.get('x-auth-token'))
+            console.log('x-auth-token:' + response.headers.get('x-auth-token'))
             //save to local storage
             localStorage.setItem('loggedinUser', JSON.stringify(response.body))
             localStorage.setItem('loggedinUserId', response.body._id)
@@ -199,14 +200,14 @@ export class LoginComponent implements OnInit {
             this.userAuthService.isLoggedIn(true, 'Seller');//trigger loggedin observable         
             this.router.navigate(['/seller/home']);
           }
-          
+
         },
-        error => {    
+        error => {
           this.toastr.errorToastr(error, 'Oops!');//showing error toaster message
         });
   }
 
- 
+
 
   // This method must be present, even if empty.
   ngOnDestroy() {

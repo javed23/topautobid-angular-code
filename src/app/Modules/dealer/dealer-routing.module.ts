@@ -10,10 +10,19 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { AccountVerifyComponent } from './account-verify/account-verify.component';
 //cars management components
-import { ListComponent as CarsListComponent } from './cars/list/list.component';
+
 
 //dealerships management components
-import { ListComponent as DealershipsListComponent } from './dealerships/list/list.component';
+import { ListComponent as DealershipsListComponent } from './dealerships/table-view/list.component';
+
+//cars management components
+import { ListingComponent as CarsGridListComponent } from './cars/grid-list-view/listing.component';
+import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
+
+//bids management components
+import { ListingComponent as BidsListingComponent} from './bids/listing/listing.component';
+
+
 
 //importing guards
 import { DealerAuthGuardService } from '../../core/guards/dealer-auth-guard.service'
@@ -58,13 +67,24 @@ const routes: Routes = [
     data: { title: 'Dealer Profile' },
     canActivate: [DealerAuthGuardService]
   },
+
   { 
-    path: 'car-list', 
-    component: CarsListComponent, 
-    data: { title: 'Cars listing' },
+    path: 'dealership-listing', 
+    component: DealershipsListComponent, 
+    data: { title: 'Dealerships listing' }
+  },
+  { 
+    path: 'car-listing', 
+    component: CarsGridListComponent, 
+    data: { title: "Dealer's Cars listing" },
+    /*canActivate: [DealerAuthGuardService]*/
+  }, 
+  { 
+    path: 'car-detail/:_id', 
+    component: CarDetailPageComponent, 
+    data: { title: "Car Details" },
     /*canActivate: [DealerAuthGuardService]*/
   },
-
   { 
     path: 'dealerships-list', 
     component: DealershipsListComponent, 
@@ -75,7 +95,12 @@ const routes: Routes = [
     path: 'account-verify/:id', 
     component: AccountVerifyComponent, 
     data: { title: 'Account verify' },
-  }
+  },{
+    path: 'bid-listing', 
+    component: BidsListingComponent, 
+    data: { title: "Cars Bids Listing" },
+    /*canActivate: [DealerAuthGuardService]*/
+  },
 ];
 
 @NgModule({

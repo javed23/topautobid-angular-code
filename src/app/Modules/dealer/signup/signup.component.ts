@@ -167,11 +167,15 @@ export class SignupComponent implements OnInit {
           )
         ])
       ],
-      state: [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')])],
-      city: [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')])],
-      zip: [null, Validators.compose([Validators.required, Validators.pattern('^[0-9]{5}$')])],
+      repassword: [null, Validators.compose([Validators.minLength(10),Validators.maxLength(50),Validators.required])],
+      state: ['', Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50),Validators.pattern('^[a-zA-Z ]*$')])],
+      city: [null, Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50),Validators.pattern('^[a-zA-Z ]*$')])],
+      zip: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])],
       verified: [true],
-      active: [true],
+      active: [true],     
+    },{
+      // check whether our password and confirm password match
+      validators: CustomValidators.passwordMatchValidator
     });
 
     this.signUpFormStep2 = this.formBuilder.group({
@@ -328,7 +332,7 @@ export class SignupComponent implements OnInit {
 
           this.pageLoaderService.pageLoader(false);
           console.log('the success is ')
-          this.toastr.successToastr('the verification link has been sent to your email id please verify the email!', 'Success!');//showing success toaster
+          this.toastr.successToastr('The account verification link has been sent to your email id. Kindly verify!', 'Success!');//showing success toaster
           
           // setTimeout(function(){
           this.router.navigate(['/dealer/login']);

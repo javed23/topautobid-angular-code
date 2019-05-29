@@ -2,7 +2,7 @@
 <ng-container *ngIf="errors && errors['notUnique']">{{errorPrefix}} is not unique.<br /></ng-container>
 <ng-container *ngIf="errors && errors['email']">Please enter a valid email.<br /></ng-container>
 <ng-container *ngIf="errors && errors['minlength']">Minimum length is {{minLength}}.<br /></ng-container>
-<ng-container *ngIf="errors && errors['maxlength']">Only {{maxLength}} characters allowed .<br /></ng-container>
+<ng-container *ngIf="errors && errors['maxlength']">Maximum length is {{maxLength}}.<br /></ng-container>
 <ng-container *ngIf="errors && errors['hasNumber']">Must contain at least 1 number.<br /></ng-container>
 <ng-container *ngIf="errors && errors['pattern']">{{patternError}}<br /></ng-container>
 
@@ -22,3 +22,7 @@
 <ng-container *ngIf="errors && errors['validFax']">Fax number is not valid.<br /></ng-container>
 <ng-container *ngIf="errors && errors['defaultFaxMaxSelected']">Default Fax must be max 1 selected.<br /></ng-container>
 <ng-container *ngIf="errors && errors['defaultFaxNotSelected']">Please select default Fax. <br /></ng-container>
+
+<!------ Added By Bhavnish --------->
+<ng-container *ngIf="errors && isPrice && errors['min']">{{errorPrefix}}should be minimum {{minAmount}}.<br /></ng-container>
+<ng-container *ngIf="errors && !isPrice && (errors['min'] || errors['max'])">{{errorPrefix}}must be between {{minValue}} to {{maxValue}}.<br /></ng-container>

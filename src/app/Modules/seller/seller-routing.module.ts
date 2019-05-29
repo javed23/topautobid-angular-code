@@ -70,11 +70,18 @@ const routes: Routes = [
     /*canActivate: [SellerAuthGuardService]*/
   },
   { 
-    path: 'car-detail/:_id', 
+    path: 'car-detail/:_id/:type', 
     component: CarDetailPageComponent, 
     data: { title: "Car Details" },
     /*canActivate: [SellerAuthGuardService]*/
   },
+  { 
+    path: 'car-detail/:_id', 
+    component: CarDetailPageComponent, 
+    data: { title: "Car Details" },
+    /*canActivate: [SellerAuthGuardService]*/
+  }, 
+
   {
     path: 'addcar',
     component: AddCarComponent,

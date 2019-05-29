@@ -1,4 +1,7 @@
-import { Component,SimpleChanges, ViewChild, OnInit, Input,  ElementRef } from '@angular/core';
+import { Component,SimpleChanges, ViewChild, Output, EventEmitter, OnInit, Input,  ElementRef } from '@angular/core';
+//modules core services
+import { TitleService  } from '../../../../core/_services'
+
 declare let $: any;
 
 @Component({
@@ -9,17 +12,24 @@ declare let $: any;
 export class DealershipViewComponent implements OnInit {
   @Input() isOpen: any;
   @Input() dealershipObject: any;
+  @Output() onClose: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild('contentSection') contentSection :ElementRef;
 
-  constructor() { }
+  constructor(private titleService:TitleService) { }
 
   ngOnInit() {
   }
 
+  close() {
+    this.isOpen = false
+    this.onClose.emit(false);    
+  }
   ngOnChanges(changes: SimpleChanges) {
+    //setting the page title
+    this.titleService.setTitle();
 
     if(this.isOpen)
-      $(this.contentSection.nativeElement).modal('show'); 
+      $(this.contentSection.nativeElement).modal({backdrop: 'static', keyboard: false, show: true}); 
 
   }
 

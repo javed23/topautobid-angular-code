@@ -297,7 +297,7 @@ export class SignupComponent implements OnInit {
           this.pageLoaderService.setLoaderText('Registered...');//setting loader text
           this.pageLoaderService.pageLoader(false);//hide page loader
 
-          this.toastr.successToastr('the verification link has been sent to your email id please verify email!', 'Success!');//showing success toaster
+          this.toastr.successToastr('The account verification link has been sent to your email id. Kindly verify!', 'Success!');//showing success toaster
           this.router.navigate(['/seller/login']);
           this.signupForm.reset();
           this.otpVerificationForm.reset();

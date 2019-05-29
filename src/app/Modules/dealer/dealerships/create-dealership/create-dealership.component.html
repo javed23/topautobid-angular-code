@@ -1,6 +1,6 @@
 <div class="modal fade" #contentSection id="newDealershipForm" tabindex="-1" role="dialog"
   aria-labelledby="newDealershipForm">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog mw-75 border-none  mx-auto" role="document">
     <div class="modal-content">
       <div class="modal-header bg-transparent pl-2">
         <h5 *ngIf="updateExistingDealership" class="modal-title" id="exampleModalLabel">Update dealership</h5>
@@ -82,7 +82,7 @@
                   </div>
                   <div class="register-form form-group col-md-12">
                     <label>Select State*</label>
-                    <div class="selected-box auto-hight">
+                    <div class="selected-box auto-hight w-100">
 
                       <select formControlName="state"
                         [ngClass]="{ 'is-invalid': (newDealershipForm.get('state').touched || submitted) && newDealershipForm.get('state').errors }">

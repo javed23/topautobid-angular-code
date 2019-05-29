@@ -50,6 +50,21 @@ export class VehicleService {
         })
     }
 
+    /**
+     * Add Your Vehicle
+     * @param vehicleData    Vehicle Details.
+     * @return        Observable<any>
+    */
+   addYourVehicle(vehicleData): Observable<any> {
+
+    return this.httpClient
+    .post('car/newCar', vehicleData)
+    .map((response: Response) => {
+        return response;
+    })
+
+}
+
     
     
 }

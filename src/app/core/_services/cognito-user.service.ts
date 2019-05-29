@@ -119,7 +119,7 @@ export class CognitoUserService {
                             //console.log('result',result)            
 
                             obs.next({ username: username });
-                            return;
+                             return;
 
                         });
 

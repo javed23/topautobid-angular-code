@@ -196,7 +196,7 @@ export class VerifyEmailComponent implements OnInit {
       this.toasterService.successToastr('successfully updated!', 'Success!');
 
       this.hidePopup();
-      this.router.navigate(['/dealer/login']);
+      this.router.navigate(['/seller/login']);
 
     }, error => {
       this.pageLoaderService.setLoaderText(environment.MESSAGES.ERROR_TEXT_LOADER);//setting loader text
