@@ -58,6 +58,8 @@ export class CreateDealershipComponent implements OnInit {
     //initalize new dealership form
     this.initalizeNewDealershipForm();
 
+    
+
     //fetching us states
     this.fetchStates();
 
@@ -68,8 +70,17 @@ export class CreateDealershipComponent implements OnInit {
     //setting the page title
     this.titleService.setTitle();
 
-    if (this.isOpen)
+    if (this.isOpen){
       $(this.contentSection.nativeElement).modal({ backdrop: 'static', keyboard: false, show: true });
+      this.dealershipService.generateID()     
+      .subscribe(
+        (response) => {   
+          //this.newDealershipForm.controls['_id'].setValue(response);
+        },error => {
+        //this.commonUtilsService.onError(error);      
+      });
+    }
+      
 
 
 
@@ -171,6 +182,7 @@ export class CreateDealershipComponent implements OnInit {
         })
         this.on('sending', function (file, xhr, formData) {
           formData.append('folder', 'Dealership');
+          formData.append('_id', componentObj.newDealershipForm.controls['_id'].value);
         });
 
         this.on("success", function (file, response) {        

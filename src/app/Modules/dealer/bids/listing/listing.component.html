@@ -20,6 +20,8 @@
 
           <div class="sorting-options-main">
 
+          <div *ngIf="sectionEnable=='list'" class="filter_opt">
+
             <div class="row sorting-options top_sorting">
               <div class="col-md-12">
                 <div class="ml-auto text-right product-listing ">
@@ -78,265 +80,233 @@
                 </div>
               </div>
             </div>
+
           </div>
 
 
+            <!--Filters-->
+          <div *ngIf="sectionEnable=='filter'" class="bid-section filter_by">
+              
+            <div class="d-flex">
+              <h3 class="d-inline-block">Filters</h3>
+              <div class="right_sec right_filter ml-auto">
+                  <div (click)="show('list')" class="list_view d-inline-block">
+                    <img src="/assets/images/list_view_icon.png" alt="list_view_icon" class="img-fluid">
+                  </div>
+                  <div (click)="show('sort')" class="sort_BTN d-inline-block">
+                    <img src="/assets/images/sort_icon.png" alt="sort_icon" class="img-fluid">
+                  </div>
+                  <div (click)="show('filter')" class="filter_BTN d-inline-block">
+                    <img src="/assets/images/filter_icon_grey.png" alt="filter_icon" class="img-fluid">
+                  </div>               
+              </div>
+            </div>
 
-          <!-- Data listing -->
-          <div *ngIf="sectionEnable=='list'" class="bid-section sidebar-widget">
-            <div class="product_list">
 
-              <ul>
-                <li>
+
+              <div class="filters_inner container">
+                <div class="top_filters">
                   <div class="row">
-                    <div class="col-md-12">
-                      <div class="product_head">
-                        <h2>Ford Mustang</h2>
+                    <div class="col-md-6 p-md-0">
+                      <div class="range_filter dark">
+                        <label for="year">Year</label>                        
+                        <div id="year-range"></div>  
+                        <input type="text" id="year"  class="years" readonly />
+                      </div>
+                    </div>
+                    <div class="col-md-6 p-md-0">
+                      <div class="range_filter ">
+                        <label for="milage">Milage</label>
+                        <div id="slider-range"></div>
+                        <input type="text" id="milage" readonly>
+                        <input type="text" class="bids" />
                       </div>
                     </div>
                   </div>
+                </div>
+                <div class="bottom_filter gray-form">
                   <div class="row">
                     <div class="col-md-4">
-                      <div class="product_info_left">
-                        <!-- Side Slider -->
+                      <div class="form-group">
+                        <label>Buying Radius</label>
+                        <input class="form-control placeholder" type="text" placeholder="Enter Radius In Miles">
                       </div>
                     </div>
-                    <div class="col-md-8">
-                      <div class="unordered-lists table-responsive text-center">
-                        <table class="table table-striped">
-                          <thead class="thead-dark">
-                            <tr>
-                              <th>Ref no</th>
-                              <th>Ref no</th>
-                              <th>Ref no</th>
-                              <th>Ref no</th>
-                              <th>Ref no</th>
-                              <th>Ref no</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>2018</td>
-                              <td>Jan</td>
-                              <td>03-06-2017 22:10 <span class="left_time">10 Hrs 15 min left</span></td>
-                              <td>VXI</td>
-                              <td>VXI</td>
-                              <td>VXI</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div class="submission_buttons text-right">
-                        <button class="button">Car Details</button>
-                        <button class="button">View All Bids</button>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Make</label>
+                        <div class="selected-box">
+                          <select class="selectpicker my_select">
+                            <option>Multiselect</option>
+                          </select>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </li>
-
-              </ul>
-              <!--table START-->
-
-
-
-              <!--table END-->
-            </div>
-            
-            
-
-          </div>
-
-
-          <!--Filters-->
-          <div *ngIf="sectionEnable=='sort'" class="bid-section filter_by">
-            <div class="section-title">
-              <h2>Filters</h2>
-              <div class="separator"></div>
-            </div>
-            <div class="filters_inner container">
-              <div class="top_filters">
-                <div class="row">
-                  <div class="col-md-6 p-md-0">
-                    <div class="range_filter dark">
-                      <label for="year">Year</label>
-                      <div id="slider-range"></div>
-                      <input type="text" id="year" readonly>
-                    </div>
-                  </div>
-                  <div class="col-md-6 p-md-0">
-                    <div class="range_filter ">
-                      <label for="milage">Milage</label>
-                      <div id="slider-range2"></div>
-                      <input type="text" id="milage" readonly>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="bottom_filter gray-form">
-                <div class="row">
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label>Buying Radius</label>
-                      <input class="form-control placeholder" type="text" placeholder="Enter Radius In Miles">
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label>Make</label>
-                      <div class="selected-box">
-                        <select class="selectpicker my_select">
-                          <option>Multiselect</option>
-                        </select>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Model</label>
+                        <div class="selected-box">
+                          <select class="selectpicker my_select">
+                            <option>Multiselect</option>
+                          </select>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label>Model</label>
-                      <div class="selected-box">
-                        <select class="selectpicker my_select">
-                          <option>Multiselect</option>
-                        </select>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Body Style</label>
+                        <div class="selected-box">
+                          <select class="selectpicker my_select">
+                            <option>Multiselect</option>
+                          </select>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label>Body Style</label>
-                      <div class="selected-box">
-                        <select class="selectpicker my_select">
-                          <option>Multiselect</option>
-                        </select>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Trims</label>
+                        <div class="selected-box">
+                          <select class="selectpicker my_select">
+                            <option>Multiselect</option>
+                          </select>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label>Trims</label>
-                      <div class="selected-box">
-                        <select class="selectpicker my_select">
-                          <option>Multiselect</option>
-                        </select>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Doors</label>
+                        <div class="selected-box">
+                          <select class="selectpicker my_select">
+                            <option>Multiselect</option>
+                          </select>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label>Doors</label>
-                      <div class="selected-box">
-                        <select class="selectpicker my_select">
-                          <option>Multiselect</option>
-                        </select>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Engine</label>
+                        <div class="selected-box">
+                          <select class="selectpicker my_select">
+                            <option>Multiselect</option>
+                          </select>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label>Engine</label>
-                      <div class="selected-box">
-                        <select class="selectpicker my_select">
-                          <option>Multiselect</option>
-                        </select>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Transmission</label>
+                        <div class="selected-box">
+                          <select class="selectpicker my_select">
+                            <option>Multiselect</option>
+                          </select>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label>Transmission</label>
-                      <div class="selected-box">
-                        <select class="selectpicker my_select">
-                          <option>Multiselect</option>
-                        </select>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Fual Type</label>
+                        <div class="selected-box">
+                          <select class="selectpicker my_select">
+                            <option>Multiselect</option>
+                          </select>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label>Fual Type</label>
-                      <div class="selected-box">
-                        <select class="selectpicker my_select">
-                          <option>Multiselect</option>
-                        </select>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Drive Type</label>
+                        <div class="selected-box">
+                          <select class="selectpicker my_select">
+                            <option>Multiselect</option>
+                          </select>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label>Drive Type</label>
-                      <div class="selected-box">
-                        <select class="selectpicker my_select">
-                          <option>Multiselect</option>
-                        </select>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Interior Colour</label>
+                        <div class="selected-box">
+                          <select class="selectpicker my_select">
+                            <option>Multiselect</option>
+                          </select>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label>Interior Colour</label>
-                      <div class="selected-box">
-                        <select class="selectpicker my_select">
-                          <option>Multiselect</option>
-                        </select>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Exterior Colour</label>
+                        <div class="selected-box">
+                          <select class="selectpicker my_select">
+                            <option>Multiselect</option>
+                          </select>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label>Exterior Colour</label>
-                      <div class="selected-box">
-                        <select class="selectpicker my_select">
-                          <option>Multiselect</option>
-                        </select>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Drive Type</label>
+                        <div class="selected-box">
+                          <select class="selectpicker my_select">
+                            <option>Multiselect</option>
+                          </select>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label>Drive Type</label>
-                      <div class="selected-box">
-                        <select class="selectpicker my_select">
-                          <option>Multiselect</option>
-                        </select>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Interior Colour</label>
+                        <div class="selected-box">
+                          <select class="selectpicker my_select">
+                            <option>Multiselect</option>
+                          </select>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label>Interior Colour</label>
-                      <div class="selected-box">
-                        <select class="selectpicker my_select">
-                          <option>Multiselect</option>
-                        </select>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Exterior Colour</label>
+                        <div class="selected-box">
+                          <select class="selectpicker my_select">
+                            <option>Multiselect</option>
+                          </select>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label>Exterior Colour</label>
-                      <div class="selected-box">
-                        <select class="selectpicker my_select">
-                          <option>Multiselect</option>
-                        </select>
+                    <div class="col-md-12">
+                      <div class="submission_buttons">
+                        <button class="button">Submit</button>
+                        <button class="button">Reset</button>
                       </div>
-                    </div>
-                  </div>
-                  <div class="col-md-12">
-                    <div class="submission_buttons">
-                      <button class="button">Submit</button>
-                      <button class="button">Reset</button>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          <!--Filter END-->
 
-          <!--Filter BY START-->
-          <div *ngIf="sectionEnable=='filter'" class="bid-section filter_by sort_by">
-            <div class="section-title">
-              <h2>SORT BY</h2>
-              <div class="separator"></div>
+          <!--Sort-->
+          <div *ngIf="sectionEnable=='sort'" class="bid-section filter_by sort_by">
+          <div class="d-flex">
+              <h3 class="d-inline-block">Sort By</h3>
+              
+            
+
+
+            <div class="right_sec right_filter ml-auto">
+                <div (click)="show('list')" class="list_view d-inline-block">
+                  <img src="/assets/images/list_view_icon.png" alt="list_view_icon" class="img-fluid">
+                </div>
+                <div (click)="show('sort')" class="sort_BTN d-inline-block">
+                  <img src="/assets/images/sort_icon.png" alt="sort_icon" class="img-fluid">
+                </div>
+                <div (click)="show('filter')" class="filter_BTN d-inline-block">
+                  <img src="/assets/images/filter_icon_grey.png" alt="filter_icon" class="img-fluid">
+                </div>
+
+              
+              </div>
             </div>
+           
             <div class="filters_inner container">
               <div class="bottom_filter gray-form">
                 <div class="row">
@@ -417,7 +387,230 @@
               </div>
             </div>
           </div>
-          <!--Filter BY END-->
+           <!--Sort End-->
+            
+          </div>
+
+
+
+          <!-- Data listing -->
+          <div *ngIf="sectionEnable=='list'" class="bid-section sidebar-widget">
+            <div class="product_list">
+
+              <ul>
+                <li>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="product_info_left">
+                          <div class="product_head"><h2>Ford Mustang</h2></div>
+                        <!-- Side Slider -->
+                        <ngx-gallery [options]="sliderOptions" [images]="sliderImages"></ngx-gallery>
+                      </div>
+                    </div>
+                    <div class="col-md-8">
+                      <div class="unordered-lists table-responsive text-center">
+                        <table class="table table-striped">
+                          <thead class="thead-dark">
+                            <tr>
+                              <th>Bidders</th>
+                              <th>Bids</th>
+                              <th>Bid time</th>
+                              <th>Location</th>
+                              <th>Contact</th>
+                              <th>Applied by</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>Anonymous</td>
+                              <td>$5000</td>
+                              <td>03-06-2017 22:10</td>
+                              <td>VXI</td>
+                              <td>VXI</td>
+                              <td>VXI</td>
+                            </tr>
+                            <tr>
+                                <td>My Company</td>
+                                <td>$4000</td>
+                                <td>03-06-2017 22:10</td>
+                                <td>ABC</td>
+                                <td>Mike</td>
+                                <td>Mike</td>
+                              </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="submission_buttons text-right">
+                        <button class="button">Car Details</button>
+                        <button class="button">View All Bids</button>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                    <div class="row">
+                      <div class="col-md-4">
+                        <div class="product_info_left">
+                            <div class="product_head"><h2>Ford Mustang</h2></div>
+                          <!-- Side Slider -->
+                          <ngx-gallery [options]="sliderOptions" [images]="sliderImages"></ngx-gallery>
+                        </div>
+                      </div>
+                      <div class="col-md-8">
+                        <div class="unordered-lists table-responsive text-center">
+                          <table class="table table-striped">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th>Bidders</th>
+                                <th>Bids</th>
+                                <th>Bid time</th>
+                                <th>Location</th>
+                                <th>Contact</th>
+                                <th>Applied by</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>Anonymous</td>
+                                <td>$5000</td>
+                                <td>03-06-2017 22:10</td>
+                                <td>VXI</td>
+                                <td>VXI</td>
+                                <td>VXI</td>
+                              </tr>
+                              <tr>
+                                  <td>My Company</td>
+                                  <td>$4000</td>
+                                  <td>03-06-2017 22:10</td>
+                                  <td>ABC</td>
+                                  <td>Mike</td>
+                                  <td>Mike</td>
+                                </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <div class="submission_buttons text-right">
+                          <button class="button">Car Details</button>
+                          <button class="button">View All Bids</button>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div class="product_info_left">
+                              <div class="product_head"><h2>Ford Mustang</h2></div>
+                            <!-- Side Slider -->
+                            <ngx-gallery [options]="sliderOptions" [images]="sliderImages"></ngx-gallery>
+                          </div>
+                        </div>
+                        <div class="col-md-8">
+                          <div class="unordered-lists table-responsive text-center">
+                            <table class="table table-striped">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Bidders</th>
+                                  <th>Bids</th>
+                                  <th>Bid time</th>
+                                  <th>Location</th>
+                                  <th>Contact</th>
+                                  <th>Applied by</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>Anonymous</td>
+                                  <td>$5000</td>
+                                  <td>03-06-2017 22:10</td>
+                                  <td>VXI</td>
+                                  <td>VXI</td>
+                                  <td>VXI</td>
+                                </tr>
+                                <tr>
+                                    <td>My Company</td>
+                                    <td>$4000</td>
+                                    <td>03-06-2017 22:10</td>
+                                    <td>ABC</td>
+                                    <td>Mike</td>
+                                    <td>Mike</td>
+                                  </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          <div class="submission_buttons text-right">
+                            <button class="button">Car Details</button>
+                            <button class="button">View All Bids</button>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                        <div class="row">
+                          <div class="col-md-4">
+                            <div class="product_info_left">
+                                <div class="product_head"><h2>Ford Mustang</h2></div>
+                              <!-- Side Slider -->
+                              <ngx-gallery [options]="sliderOptions" [images]="sliderImages"></ngx-gallery>
+                            </div>
+                          </div>
+                          <div class="col-md-8">
+                            <div class="unordered-lists table-responsive text-center">
+                              <table class="table table-striped">
+                                <thead class="thead-dark">
+                                  <tr>
+                                    <th>Bidders</th>
+                                    <th>Bids</th>
+                                    <th>Bid time</th>
+                                    <th>Location</th>
+                                    <th>Contact</th>
+                                    <th>Applied by</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td>Anonymous</td>
+                                    <td>$5000</td>
+                                    <td>03-06-2017 22:10</td>
+                                    <td>VXI</td>
+                                    <td>VXI</td>
+                                    <td>VXI</td>
+                                  </tr>
+                                  <tr>
+                                      <td>My Company</td>
+                                      <td>$4000</td>
+                                      <td>03-06-2017 22:10</td>
+                                      <td>ABC</td>
+                                      <td>Mike</td>
+                                      <td>Mike</td>
+                                    </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                            <div class="submission_buttons text-right">
+                              <button class="button">Car Details</button>
+                              <button class="button">View All Bids</button>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+
+              </ul>
+              <!--table START-->
+
+
+
+              <!--table END-->
+            </div>
+            
+            
+
+          </div>
+
+
+          
+
+          
 
         </div>
 
