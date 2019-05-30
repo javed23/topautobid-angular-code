@@ -90,6 +90,7 @@ export class EditCarComponent implements OnInit {
   isPickupLocationSubmitted:boolean = false;
   isVehicleOptionSubmitted:boolean = false;
   isOfferInHandsSubmitted:boolean = false;
+  disabled:boolean = false;
   
   
   isBasicInfoFieldsVisible:boolean = true;  
