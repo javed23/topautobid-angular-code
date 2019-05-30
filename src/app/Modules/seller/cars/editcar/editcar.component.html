@@ -6,88 +6,8 @@
 
 
 
- <section #addCarSection class="accordian_listing">
-    <div class="banner_col" *ngIf="!isVehicleOptionSelected">
-        <div class="banner_col_inner">
-            <div class="banner_col_inner_center">
-                <form [formGroup]="vehicleOption">
-                    <div class="container">
-                        <div class="row">
-                        <div class="col-md-10">
-                            <h2>Selling your car was never so easy</h2>
-                            <p class="highlight">Choose one of the options from below to get started.</p>
-                            <div class="formCenterCol" id="serach_box">
-                            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                                <li class="nav-item"> <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true" (click)="setVehicleOptionValue('VIN')">Look up vehicle by VIN or plate</a> </li>
-                                <li class="nav-item"> <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false" (click)="setVehicleOptionValue('Year')">Select Vehicle Year</a> </li>
-                                <li class="nav-item"> <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false" (click)="setVehicleOptionValue('Existing')">Select from Existing Vehicle</a> </li>
-                            </ul>
-                            <div class="tab-content" id="pills-tabContent">
-                            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                                <h5>Auto-fill My Vehicle Details</h5>
-                                <input type="text" #vin_number mask="A{17}" placeholder="Enter VIN or License Plate" [ngClass]="{ 'is-invalid': (vehicleOption.controls.vin_number.touched || isVehicleOptionSubmitted) && vehicleOption.controls.vin_number.errors }" formControlName="vin_number"/> 
-                                <p class="error_label" *ngIf="vehicleOption.controls.vin_number.touched || isVehicleConditionSubmitted">                      
-                                    <app-form-validation-errors minLength=17 maxLength=17 errorPrefix="VIN " [errors]="vehicleOption.controls.vin_number.errors"></app-form-validation-errors>   
-                                </p>
-                                                         
-                                <button class="grayBtn" type="button" [disabled]="vin_number.value.length != 17" (click)="validateVINNumber(vin.value)">Get My Car Details</button>
-                            </div>
-                                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                                    <h5>Select Vehicle Year</h5>
-                                    <div class="registrationyear category_Box">
-                                        <!--start-->
-                                        <ul>
-                                            <li *ngFor="let year of yearRange;">
-                                                <input (click)="setVehicleYear(year.value)" type="radio" formControlName="vehicle_year" value="{{year.value}}" id="new_{{year.value}}">
-                                                <label for="new_{{year.value}}">
-                                                    <span class="category category_name {{year.value}}">
-                                                            {{year.value}}
-                                                    </span>
-                                                </label>
-                                            </li>             
-                                                
-                                            <li>
-                                                <input type="radio" formControlName="vehicle_year" value="more" id="new_more" (click)="setVehicleYear('more')">
-                                                <label for="new_more">
-                                                    <span class="category category_name moreYear">
-                                                        More...
-                                                    </span>
-                                                </label>
-                                            </li>
-                                                
-                                        </ul> 
-                                        <!--end--> 
-                                        <input mask="0000" *ngIf="isMoreSelected" formControlName="vehicle_year_value" type="text" data-typeahead="sellCarModelYear" class="gs_ta" placeholder="Year" autocomplete="off"  [ngClass]="{ 'is-invalid': (vehicleOption.controls.vehicle_year_value.touched || isVehicleOptionSubmitted) && vehicleOption.controls.vehicle_year_value.errors }">
-                                        <p class="error_label" *ngIf="(vehicleOption.controls.vehicle_year_value.touched || isVehicleOptionSubmitted) ">                      
-                                            <app-form-validation-errors errorPrefix="Year " [isPrice]=false minValue={{minYear}}  maxValue={{maxYear}}  [errors]="vehicleOption.controls.vehicle_year_value.errors"></app-form-validation-errors>
-                                        </p>
-                                    </div>
-                                   <button class="grayBtn" type="button" [disabled]="vehicleOption.invalid" (click)="validateYearOption()">Get My Car Details</button> 
-                                </div>
-                                <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
-                                    <h5>Select from Existing Vehicle</h5>
-                                    
-                                        <input #existing_vehicle type="text" placeholder="VIN, Make, Model" [ngClass]="{ 'is-invalid': (vehicleOption.controls.existing_vehicle.touched || isVehicleOptionSubmitted) && vehicleOption.controls.existing_vehicle.errors }" formControlName="existing_vehicle"/> 
-
-                                        <p class="error_label" *ngIf="vehicleOption.controls.existing_vehicle.touched || isVehicleOptionSubmitted">                      
-                                            <app-form-validation-errors errorPrefix="Select from Existing Vehicle " [errors]="vehicleOption.controls.existing_vehicle.errors"></app-form-validation-errors>   
-                                        </p>
-                                   
-                                   
-                                    <button class="grayBtn" type="button" [disabled]="vehicleOption.invalid" (click)="validateExistingVehicle(existing_vehicle.value)">Get My Car Details</button>
-                                </div>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                </form>    
-            </div>
-        </div>
-    </div>
-
-
-    <div *ngIf="isVehicleOptionSelected" [@AnimateList]>
+ <section #editCarSection class="accordian_listing">
+    <div [@AnimateList]>
       
         <aw-wizard #wizard class="step_col">    
                 <aw-wizard-step stepTitle="Basic Info" (stepEnter)="scrollToSpecificDiv()" [canExit]="moveDirection.bind(this, basicInfoWizard.valid)">  
@@ -1054,7 +974,7 @@
                                         <div class="details_inner">
                                                 <h6>About Vehicle</h6>
                                                 <ul>
-                                                        <li><label>Has Second Key: </label><span>{{secondKey?'On':'Off'}}</span></li>                                            
+                                                        <li><label>Has Second Key: </label><span>{{secondKey?'ON':'OFF'}}</span></li>                                            
                                                         <li><label>Has Aftermarket Options: </label><span>{{vehicleAftermarket?'ON':'OFF'}}</span></li>                              
                                                         <li *ngIf="vehicleAftermarket"><label>Description: </label><span>{{vehicle_aftermarket_description?.value}}</span></li>                                    
                                                         <li *ngIf="vehicleAftermarket && (checkObjectLength(afterMarketImagesArray.value) > 0)"><label>Images: </label>
@@ -1252,37 +1172,37 @@
                 
                                             </ol>
                                             <ng-scrollbar #scrollable class="my-scrollbar">
-                                            <div *ngIf="vehicleImageCategoryOnSummary == 'all'" class="galler_box">
-                                                
-                                                    <div class="thumb" *ngFor="let interiorImage of interiorImagesArray; let interiorIndex = index;">
-                                                        <a href="javascript:void(0)">
-                                                            <img src="{{interiorImage.file_path}}" alt="" class="img-fluid">
-                                                        </a>
-                                                    </div> 
-                                                    <div class="thumb" *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
+                                                <div *ngIf="vehicleImageCategoryOnSummary == 'all'" class="galler_box">
+                                                    
+                                                        <div class="thumb" *ngFor="let interiorImage of interiorImagesArray; let interiorIndex = index;">
                                                             <a href="javascript:void(0)">
-                                                                <img src="{{exteriorImage.file_path}}" alt="" class="img-fluid">
+                                                                <img src="{{interiorImage.file_path}}" alt="" class="img-fluid">
                                                             </a>
-                                                        </div>                                                      
-                                                                                                        
-                                            </div>
-                                            <div *ngIf="vehicleImageCategoryOnSummary == 'interior'" class="galler_box">
-                                                
-                                                    <div class="thumb" *ngFor="let interiorImage of interiorImagesArray; let interiorIndex = index;">
-                                                        <a href="javascript:void(0)">
-                                                            <img src="{{interiorImage.file_path}}" alt="" class="img-fluid">
-                                                        </a>
-                                                    </div>                                                       
-                                                                                                        
-                                            </div>
-                                            <div class="galler_box" *ngIf="vehicleImageCategoryOnSummary == 'exterior'">
-                                                <div class="thumb" *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
-                                                    <a href="javascript:void(0)">
-                                                        <img src="{{exteriorImage.file_path}}" alt="" class="img-fluid">
-                                                    </a>
+                                                        </div> 
+                                                        <div class="thumb" *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
+                                                                <a href="javascript:void(0)">
+                                                                    <img src="{{exteriorImage.file_path}}" alt="" class="img-fluid">
+                                                                </a>
+                                                            </div>                                                      
+                                                                                                            
                                                 </div>
-                                            </div> 
-                                            </ng-scrollbar>
+                                                <div *ngIf="vehicleImageCategoryOnSummary == 'interior'" class="galler_box">
+                                                    
+                                                        <div class="thumb" *ngFor="let interiorImage of interiorImagesArray; let interiorIndex = index;">
+                                                            <a href="javascript:void(0)">
+                                                                <img src="{{interiorImage.file_path}}" alt="" class="img-fluid">
+                                                            </a>
+                                                        </div>                                                       
+                                                                                                            
+                                                </div>
+                                                <div class="galler_box" *ngIf="vehicleImageCategoryOnSummary == 'exterior'">
+                                                    <div class="thumb" *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
+                                                        <a href="javascript:void(0)">
+                                                            <img src="{{exteriorImage.file_path}}" alt="" class="img-fluid">
+                                                        </a>
+                                                    </div>
+                                                </div> 
+                                            </ng-scrollbar>    
                                         </div>
                 
                 
@@ -1444,7 +1364,7 @@
                                 <div class="col-lg-12 text-center">
                                         <div class="button_Submission mb-4">
                                                 <button class="button red d-inline-block width-auto boder0 mt-4" type="button" awPreviousStep>Previous Step</button>                                    
-                                                <button class="button red d-inline-block width-auto boder0 mt-4" (click)="onSubmitAddCar()" type="button" >Submit Car</button>		
+                                                <button class="button red d-inline-block width-auto boder0 mt-4" (click)="onSubmitEditCar()" type="button" >Update Car</button>		
                                             </div>
                                 </div>
                             </div>

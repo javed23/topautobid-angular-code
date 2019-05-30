@@ -169,7 +169,7 @@ ngb-datepicker-navigation-select select{
     min-width: 0% !important;
 }
 
-.datatable-row-center .datatable-header-cell:nth-child(2), .datatable-row-center .datatable-body-cell:nth-child(2) {
+/*.datatable-row-center .datatable-header-cell:nth-child(2), .datatable-row-center .datatable-body-cell:nth-child(2) {
     width: 180px!important;
 }
 .datatable-row-center .datatable-header-cell:nth-child(7), .datatable-row-center .datatable-body-cell:nth-child(7) {
@@ -178,7 +178,7 @@ ngb-datepicker-navigation-select select{
 
 .datatable-row-center .datatable-header-cell:nth-child(8), .datatable-row-center .datatable-body-cell:nth-child(8) {
     width: 150px!important;
-}
+}*/
 .ngx-pagination .current{
 
         padding: 8px 16px !important;

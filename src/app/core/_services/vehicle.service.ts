@@ -63,6 +63,29 @@ export class VehicleService {
         return response;
     })
 
+  }
+  /**
+     * Add Your Vehicle
+     * @param vehicleData    Vehicle Details.
+     * @return        Observable<any>
+    */
+   editYourVehicle(vehicleData): Observable<any> {
+
+    return this.httpClient
+    .post('car/editCar', vehicleData)
+    .map((response: Response) => {
+        return response;
+    })
+
+  }
+
+  public fetchAddress(): Observable<any> {
+    let key = '4a26c4bf-dcae-92b5-e8ee-0937ca13e1c1'
+    let token = 'DwDT9GApVGQdUlxLVHtB'
+    return this.httpClient.get('https://us-zipcode.api.smartystreets.com/lookup?auth-id='+key+'&auth-token='+token+'&zipcode=85297')
+        .map((response: any) => {         
+            return response;
+        })
 }
 
     
