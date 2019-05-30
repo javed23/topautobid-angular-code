@@ -13,7 +13,8 @@ import { ListingComponent as CarsGridListComponent } from './cars/grid-list-view
 import { ListComponent as CarsTableComponent } from './cars/table-view/list.component';
 import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
 import { AddCarComponent } from './cars/addcar/addcar.component';
-import {EditCarComponent} from './cars/editcar/editcar.component';
+import { EditCarComponent } from './cars/editcar/editcar.component';
+
 //importing guards
 import { SellerAuthGuardService } from '../../core/guards/seller-auth-guard.service';
 

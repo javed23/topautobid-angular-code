@@ -1251,6 +1251,7 @@
                                                 <li [ngClass]="{ 'active': vehicleImageCategoryOnSummary == 'exterior'}"><a (click)="showVehicleImagesOnSummary('exterior')" href="javascript:void(0)">Exterior</a></li>
                 
                                             </ol>
+                                            <ng-scrollbar #scrollable class="my-scrollbar">
                                             <div *ngIf="vehicleImageCategoryOnSummary == 'all'" class="galler_box">
                                                 
                                                     <div class="thumb" *ngFor="let interiorImage of interiorImagesArray; let interiorIndex = index;">
@@ -1281,6 +1282,7 @@
                                                     </a>
                                                 </div>
                                             </div> 
+                                            </ng-scrollbar>
                                         </div>
                 
                 

@@ -1171,36 +1171,38 @@
                                                 <li [ngClass]="{ 'active': vehicleImageCategoryOnSummary == 'exterior'}"><a (click)="showVehicleImagesOnSummary('exterior')" href="javascript:void(0)">Exterior</a></li>
                 
                                             </ol>
-                                            <div *ngIf="vehicleImageCategoryOnSummary == 'all'" class="galler_box">
-                                                
-                                                    <div class="thumb" *ngFor="let interiorImage of interiorImagesArray; let interiorIndex = index;">
-                                                        <a href="javascript:void(0)">
-                                                            <img src="{{interiorImage.file_path}}" alt="" class="img-fluid">
-                                                        </a>
-                                                    </div> 
-                                                    <div class="thumb" *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
+                                            <ng-scrollbar #scrollable class="my-scrollbar">
+                                                <div *ngIf="vehicleImageCategoryOnSummary == 'all'" class="galler_box">
+                                                    
+                                                        <div class="thumb" *ngFor="let interiorImage of interiorImagesArray; let interiorIndex = index;">
                                                             <a href="javascript:void(0)">
-                                                                <img src="{{exteriorImage.file_path}}" alt="" class="img-fluid">
+                                                                <img src="{{interiorImage.file_path}}" alt="" class="img-fluid">
                                                             </a>
-                                                        </div>                                                      
-                                                                                                        
-                                            </div>
-                                            <div *ngIf="vehicleImageCategoryOnSummary == 'interior'" class="galler_box">
-                                                
-                                                    <div class="thumb" *ngFor="let interiorImage of interiorImagesArray; let interiorIndex = index;">
-                                                        <a href="javascript:void(0)">
-                                                            <img src="{{interiorImage.file_path}}" alt="" class="img-fluid">
-                                                        </a>
-                                                    </div>                                                       
-                                                                                                        
-                                            </div>
-                                            <div class="galler_box" *ngIf="vehicleImageCategoryOnSummary == 'exterior'">
-                                                <div class="thumb" *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
-                                                    <a href="javascript:void(0)">
-                                                        <img src="{{exteriorImage.file_path}}" alt="" class="img-fluid">
-                                                    </a>
+                                                        </div> 
+                                                        <div class="thumb" *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
+                                                                <a href="javascript:void(0)">
+                                                                    <img src="{{exteriorImage.file_path}}" alt="" class="img-fluid">
+                                                                </a>
+                                                            </div>                                                      
+                                                                                                            
                                                 </div>
-                                            </div> 
+                                                <div *ngIf="vehicleImageCategoryOnSummary == 'interior'" class="galler_box">
+                                                    
+                                                        <div class="thumb" *ngFor="let interiorImage of interiorImagesArray; let interiorIndex = index;">
+                                                            <a href="javascript:void(0)">
+                                                                <img src="{{interiorImage.file_path}}" alt="" class="img-fluid">
+                                                            </a>
+                                                        </div>                                                       
+                                                                                                            
+                                                </div>
+                                                <div class="galler_box" *ngIf="vehicleImageCategoryOnSummary == 'exterior'">
+                                                    <div class="thumb" *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
+                                                        <a href="javascript:void(0)">
+                                                            <img src="{{exteriorImage.file_path}}" alt="" class="img-fluid">
+                                                        </a>
+                                                    </div>
+                                                </div> 
+                                            </ng-scrollbar>    
                                         </div>
                 
                 

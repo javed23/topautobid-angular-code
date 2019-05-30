@@ -191,6 +191,21 @@ public changeCarStatus(carData): Observable<any> {
         .map((response: any) => response)
 }
 
+/**
+ * Fetch car details
+ * @param carObject    car object to fetch from database.
+ * @return        Observable<any>
+*/
+public fetchCarDetails(carIdObject): Observable<any> {
+
+    return this.httpClient.post('car/carDetail', carIdObject)
+        .map((response: any) => {
+            //let car = new Car(response);
+            //console.log('car detail', car);
+            return response;
+        })
+}
+
 
 
 

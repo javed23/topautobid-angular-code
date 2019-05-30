@@ -165,6 +165,8 @@ export class AddCarComponent implements OnInit {
 
 constructor( private zone:NgZone, private cognitoUserService:CognitoUserService, private location: Location, private alertService: AlertService, private vehicleService: VehicleService, private userAuthService: UserAuthService, private pageLoaderService: PageLoaderService, private formBuilder: FormBuilder, private titleService: TitleService, private commonUtilsService: CommonUtilsService, private toastr: ToastrManager, private router: Router) { 
 
+   
+
   this.selectVehicleOption(); // Initialize Vehicle Option Fields 
   this.basicInfo();          // Initialize Basic Info Wizard Fields 
   this.uploadVehicleImages(); // Initialize Vehicle Images Wizard Fields
@@ -186,6 +188,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   */
   private selectVehicleOption(){
     this.vehicleOption = this.formBuilder.group({
+      _id: [null],
       vin_number: [''],
       seller_id: ['5cd170562688321559f12f32'],
       vehicle_year: [''],
@@ -306,11 +309,19 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       vehicleYear.setValue(this.vehicleOption.controls.vehicle_year_value.value);
     }
 
-    if(this.isSkipSubmit){
+    /*if(this.isSkipSubmit){
       this.offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').setValue(0);
       while (this.offerInHandsImagesArray.length) {
         this.offerInHandsImagesArray.removeAt(this.offerInHandsImagesArray.length-1);
       }
+    } */
+
+
+    if(this.offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').value == null){
+      this.offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').setValue(0);
+    }
+    if(this.offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').value == null){
+      this.offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').setValue(0);
     }
 
     // Merge Category Image Array    
@@ -765,12 +776,6 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   }
                
 
- /* private isPDFCorrupted(base64String, fileExtension) {    
-    return this.commonUtilsService.isPDFCorrupted(base64String, fileExtension)
-    .then(result => {console.log('result', result); return result; })
-    .catch(error => {console.log('error', error); return error; })      
-  }*/              
-
   /**
    * remove Vehicle Image
    * @param index index of the image array
@@ -880,19 +885,26 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   }
 
 
-  /**
+   /**
    * get Models By Make Name
    * @param makeName selected make name from dropdown
    * @return  array(models)
    */
   getModelsByMake(makeName){ 
 
+    let vehicleModelControl = this.basicInfoWizard.controls.basic_info.get('vehicle_model');
+    let vehicleTrimControl = this.basicInfoWizard.controls.basic_info.get('vehicle_trim');
+    vehicleModelControl.setValue(''); vehicleTrimControl.disable(); vehicleTrimControl.setValue('');   this.trims = [];
+
     if(makeName == ""){ 
-      this.basicInfoWizard.controls.basic_info.get('vehicle_model').disable();
+      vehicleModelControl.disable(); vehicleModelControl.setValue(''); this.models = [];
+      vehicleTrimControl.disable(); vehicleTrimControl.setValue('');  this.trims = [];
       return;
     }else{ 
-      this.basicInfoWizard.controls.basic_info.get('vehicle_model').enable(); 
-    }   
+      vehicleModelControl.enable(); 
+    }  
+    
+   
 
     this.models = this.makes.find(x => x.name === makeName).models;     
   }
@@ -902,12 +914,13 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    * @param makeName selected make name from dropdown
    * @return  array(trim)
    */
-  getTrimsByModel(modelName){    
+  getTrimsByModel(modelName){  
+    let vehicleTrimControl = this.basicInfoWizard.controls.basic_info.get('vehicle_trim');  
     if(modelName == ""){
-      this.basicInfoWizard.controls.basic_info.get('vehicle_trim').disable()
+      vehicleTrimControl.disable(); vehicleTrimControl.setValue(''); this.trims = [];
       return;
     }else{
-      this.basicInfoWizard.controls.basic_info.get('vehicle_trim').enable();
+      vehicleTrimControl.enable();
     }
     this.trims = this.models.find(x => x.name === modelName).trims;  
   }
@@ -1563,7 +1576,16 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   }
 
   ngOnInit() {  
-    this.addCarSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });     
+    this.addCarSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });   
+    this.vehicleService.fetchAddress()
+      .subscribe(
+      (response) => { 
+   
+      },
+      error => {
+        
+        this.commonUtilsService.onError(error);
+      });  
   }
 
   ngAfterViewInit(){    
