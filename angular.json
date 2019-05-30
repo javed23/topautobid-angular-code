@@ -37,7 +37,8 @@
               "src/assets/css/developer.css",
               "src/assets/css/responsive.css",              
               "src/styles.css",
-              "src/assets/css/css-loader.css"
+              "src/assets/css/css-loader.css",
+              "src/assets/css/ngx-datatable.css"
             ],
             "scripts": [
               "src/assets/js/jquery-3.3.1.min.js",
@@ -48,7 +49,7 @@
               "src/assets/js/jquery.appear.js",
               "src/assets/js/counter/jquery.countTo.js",
               "src/assets/js/owl-carousel/owl.carousel.min.js",
-              "src/assets/js/select/jquery-select.js",
+            
               "src/assets/js/magnific-popup/jquery.magnific-popup.min.js",
               "src/assets/revolution/js/jquery.themepunch.tools.min.js",
               "src/assets/js/isotope/isotope.pkgd.min.js",
@@ -98,7 +99,6 @@
           "builder": "@angular-devkit/build-angular:dev-server",         
           "options": {
             "browserTarget": "topAutoBid:build",
-            /*"host": "172.31.24.176",*/
             "host": "localhost",
             "port": 4200
           },

@@ -168,11 +168,15 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           )
         ])
       ],
-      state: [null, Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50),Validators.pattern('^[a-zA-Z ]*$')])],
+      repassword: [null, Validators.compose([Validators.minLength(10),Validators.maxLength(50),Validators.required])],
+      state: ['', Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50),Validators.pattern('^[a-zA-Z ]*$')])],
       city: [null, Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50),Validators.pattern('^[a-zA-Z ]*$')])],
       zip: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])],
       verified: [true],
       active: [true],     
+    },{
+      // check whether our password and confirm password match
+      validators: CustomValidators.passwordMatchValidator
     });
 
     this.signUpFormStep2 = this.formBuilder.group({    

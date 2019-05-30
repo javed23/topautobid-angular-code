@@ -1,0 +1,310 @@
+<!--=================================
+ breadcrumbs and inner-intro -->
+
+<app-breadcrumbs [pageTitle]="title" [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+
+
+<!--=================================
+ blog  -->
+
+<section class="blog page-section-ptb pad-b-30">
+    <div class="container">
+        <div class="row ">
+            <div class="col-md-12 d-flex">
+                <a routerLink="/seller/addcar" class="createNew ml-auto"><i class="fa fa-plus-circle"
+                        aria-hidden="true"></i> Create New</a>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="blog-sidebar">
+
+
+
+                    <div class="sorting-options-main">
+                        <div class="row sorting-options top_sorting">
+                            <div class="col-md-12 d-flex">
+                                <div class="change-view-button">
+                                    <a class="active" title="Back to Grid View" routerLink="/seller/car-listing"><i
+                                            class="fa fa-th"></i></a>
+                                </div>
+
+
+                                <div class="ml-auto text-right product-listing">
+
+
+
+                                    <div class="price-search">
+                                        <div class="search">
+                                            <i class="fa fa-search"></i>
+                                            <input type="search" class="form-control placeholder"
+                                                (input)="onSearch($event.target.value)"
+                                                placeholder="Type Make, Model, Trim etc..">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+
+                        </div>
+
+
+                        <div class="row blog-sidebar listing_outer">
+
+
+
+
+
+
+
+                            <div class="col-md-12 d-flex">
+
+                                <div class="sidebar-widget mb-0">
+                                    <div class="tags">
+
+                                        <ul>
+                                            <li [ngClass]="{ active: page.type=='all'}"> <button
+                                                    (click)="onChangeListType('all')">All</button></li>
+
+                                            <li [ngClass]="{ active: page.type=='active'}"><button
+                                                    (click)="onChangeListType('active')">Active</button></li>
+                                            <li [ngClass]="{ active: page.type=='inactive'}"><button
+                                                    (click)="onChangeListType('inactive')">Inactive</button></li>
+                                            <li [ngClass]="{ active: page.type=='sold'}"><button
+                                                    (click)="onChangeListType('sold')">Sold</button></li>
+                                            <li [ngClass]="{ active: page.type=='archived'}"><button
+                                                    (click)="onChangeListType('archived')">Archived</button></li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="right_sec ml-auto">
+
+                                    <form [formGroup]="dateFilterForm" class="d-inline-block"> 
+                                        <div class="input-group date_filters_start d-inline-block">
+                                            <input readonly formControlName="startDate"  class="form-control" (dateSelect)="onStartDateSelected($event)" type="text" (click)="startDate.toggle()" placeholder="Start date"
+                                                ngbDatepicker #startDate="ngbDatepicker">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-secondary calendar" (click)="startDate.toggle()"
+                                                    type="button"><span><i class="fa fa-calendar"
+                                                            aria-hidden="true"></i></span></button>
+                                            </div>
+                                        </div>
+                                     
+                                        <div class="input-group date_filters_start d-inline-block">
+                                            <input readonly formControlName="endDate" class="form-control" type="text" (dateSelect)="onEndDateSelected($event)" (click)="endDate.toggle()" placeholder="End date"
+                                                ngbDatepicker #endDate="ngbDatepicker">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-secondary calendar" (click)="endDate.toggle()"
+                                                    type="button"><span><i class="fa fa-calendar"
+                                                            aria-hidden="true"></i></span></button>
+                                            </div>
+                                        </div>
+                                
+                                
+                                        <div (click)="clearDateFilters()" data-toggle="tooltip" title="Reset Date Filter" class="clear_inputs d-inline-block">
+                                            <i class="fa fa-refresh" aria-hidden="true"></i>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <div class="unordered-lists table-responsive text-center">
+                            <ngx-datatable #listingTable class="bootstrap" [rows]="cars"
+                                [columns]="[{name:'Year'},{name:'Make'},{name:'Model'},{name:'Trim'},{name:'Listed'},{name:'Status'},{name:'Bids'}]"
+                                [sorts]="[{prop: 'created_at', dir: 'desc'}]" [columnMode]="'force'" [headerHeight]="50"
+                                [footerHeight]="80" [externalPaging]="true" [count]="page.totalElements"
+                                [offset]="page.pageNumber" [limit]="page.size" [rowHeight]="55" (sort)="onSort($event)"
+                                (page)="setPage($event,'all')">
+
+                                <ngx-datatable-row-detail [rowHeight]="100" #myDetailRow
+                                    (toggle)="onDetailToggle($event)">
+                                    <ng-template let-row="row" let-expanded="expanded"
+                                        ngx-datatable-row-detail-template>
+
+                                        <div class="row_detail col-md-12">
+                                            <div class="row_detail_inner">
+                                               
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="vehicle_table_details">
+                                                            
+                                                            <div class="table-responsive">
+                                                                <table class="table table-bordered">
+                                                                  <tr>
+                                                                      <td><span class="head">Trim:</span><span class="value">{{row.trim}}</span></td>
+                                                                      <td><span class="head">Body:</span><span class="value">{{row.body_style}}</span></td>
+                                                                  </tr>  
+                                                                  <tr>
+                                                                    <td><span class="head">Engine:</span><span class="value">{{row.engine}}</span></td>
+                                                                    <td><span class="head">Transmission:</span><span class="value">{{row.transmission}}</span></td>
+                                                                </tr>   
+                                                                <tr>
+                                                                    <td><span class="head">Interior Material:</span><span class="value">{{row.interior_material}}</span></td>
+                                                                    <td><span class="head">Fuel Type:</span><span class="value">{{row.fuel_type}}</span></td>
+                                                                </tr> 
+                                                                <tr>
+                                                                    <td><span class="head">Interior Color:</span><span class="value">{{row.interior_color}}</span></td>
+                                                                    <td><span class="head">Exterior Color:</span><span class="value">{{row.exterior_color}}</span></td>
+                                                                </tr>                                                           
+                                                                           
+                                                                </table>
+                                                              </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                              
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </ngx-datatable-row-detail>
+
+                                <ngx-datatable-column [width]="50" [sortable]="false" [resizeable]="false"
+                                    [draggable]="false" >
+                                    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                                        <a href="javascript:void(0)" [class.datatable-icon-right]="!expanded"
+                                            [class.datatable-icon-down]="expanded" title="Expand/Collapse Row"
+                                            (click)="toggleExpandRow(row)">
+                                        </a>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column [resizeable]="false"
+                                [draggable]="false"  name="year" [sortable]="true">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                        {{ row.year }}
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+                                <ngx-datatable-column [resizeable]="false"
+                                [draggable]="false"  name="make" [sortable]="true">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                        {{ row.make }}
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column [resizeable]="false"
+                                [draggable]="false"  name="model" [sortable]="true">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                        {{ row.model }}
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+                                <ngx-datatable-column [resizeable]="false"
+                                [draggable]="false"  name="bids" prop="best_bid" [sortable]="true">
+                                    <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
+                                        <!-- $<b>0.00</b> -->
+                                        <b>{{row?.best_bid | currency:'USD':true:'2.2-2'}} </b>
+                                        <span *ngIf="row?.bids" class="left_bids">                  
+
+                                            <button (click)="show(row?._id)" >See all ({{row?.bids}}) bids</button></span>
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+                                <ngx-datatable-column [resizeable]="false"
+                                [draggable]="false"  name="Rating" prop="car_bids" [sortable]="false">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                        <ngb-rating [readonly]="true" aria-labelledby="Rating & Review" [max]="5"
+                                            [rate]="4">
+                                        </ngb-rating>
+                                        <span class="rating-number">(5/5)</span>
+
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+                                <ngx-datatable-column [resizeable]="false"
+                                [draggable]="false"  name="Miles" prop="miles" [sortable]="true">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                        {{ row.miles | number}}
+                                        <!--<span class="left_time">10 Hrs 15 min left</span>-->
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+                                <ngx-datatable-column [resizeable]="false"
+                                [draggable]="false"  name="Created At" prop="created_at" [sortable]="true">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                        {{ row.created_at | date:'MMM d y h:mm'}}
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column [resizeable]="false"
+                                [draggable]="false"  name="Action" [sortable]="false">
+                                    <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
+
+                                        <span class="actions">
+                                            <!--<button type="button" (click)="show(rowIndex, 'car-view')">
+                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                            </button>-->
+                                            <a title="Car Detail" routerLink="/seller/car-detail/{{row._id}}/dashboard"><i
+                                                    class="fa fa-eye"></i></a>
+
+                                            <button title="Delete Car" type="button" (click)="delete(row)">
+                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                            </button>
+
+                                            <button title="Deactivate Car" *ngIf="row.type=='active'" type="button" (click)="changeCarStatus(row,'inactive')">
+                                                <img src="/assets/images/car_active.png">
+                                            </button>
+                                            <button title="Activate Car" *ngIf="row.type !='active'" type="button" (click)="changeCarStatus(row,'active')">
+                                                <img src="/assets/images/car_inactive.png">
+                                            </button>
+                                            <button title="Unarchive Car" *ngIf="row.type=='archived'" type="button" (click)="changeCarStatus(row,'active')">
+                                                <img src="/assets/images/car_archive.png">
+                                            </button>
+                                            <button title="Archive Car" *ngIf="(row.type=='active' || row.type=='inactive') && row.type!='archived'" type="button" (click)="changeCarStatus(row,'archived')">
+                                                <img src="/assets/images/car_unarchive.png">
+                                            </button>
+                                        </span>
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+
+                                <ngx-datatable-footer>
+                                    <ng-template ngx-datatable-footer-template let-rowCount="rowCount"
+                                        let-pageSize="pageSize" let-selectedCount="selectedCount" let-curPage="curPage"
+                                        let-offset="offset" let-isVisible="isVisible">
+                                        <div class="pagination_outer d-flex">
+                                            <div class="showing_records">
+                                                Showing <div class="selected-box number_records">
+                                                    <select class="selectpicker my_select" id="per-page"
+                                                        (change)="onLimitChange($event.target.value)">
+                                                        <option *ngFor="let option of pageLimitOptions"
+                                                            [value]="option.value"
+                                                            [selected]="option.value == currentPageLimit">
+                                                            {{ option.value }}
+                                                        </option>
+                                                    </select>
+                                                </div> records on page
+                                            </div>
+                                            <div class="ml-auto">
+                                                <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+                                                    [pagerRightArrowIcon]="'datatable-icon-right'"
+                                                    [pagerPreviousIcon]="'datatable-icon-prev'"
+                                                    [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage"
+                                                    [size]="pageSize" [count]="rowCount"
+                                                    [hidden]="!((rowCount / pageSize) > 1)"
+                                                    (change)="listingTable.onFooterPage($event)">
+                                                </datatable-pager>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </ngx-datatable-footer>
+                            </ngx-datatable>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!--=================================
+blog -->

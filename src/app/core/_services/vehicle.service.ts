@@ -55,15 +55,15 @@ export class VehicleService {
      * @param vehicleData    Vehicle Details.
      * @return        Observable<any>
     */
-    addYourVehicle(vehicleData): Observable<any> {
+   addYourVehicle(vehicleData): Observable<any> {
 
-        return this.httpClient
-        .post('car/newCar', vehicleData)
-        .map((response: Response) => {
-            return response;
-        })
+    return this.httpClient
+    .post('car/newCar', vehicleData)
+    .map((response: Response) => {
+        return response;
+    })
 
-    }
+}
 
     
     

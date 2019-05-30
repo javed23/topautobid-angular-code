@@ -9,9 +9,11 @@ import { ProfileComponent } from './profile/profile.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 //cars management components
-import { ListComponent as CarsListComponent } from './cars/list/list.component';
+import { ListingComponent as CarsGridListComponent } from './cars/grid-list-view/listing.component';
+import { ListComponent as CarsTableComponent } from './cars/table-view/list.component';
+import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
 import { AddCarComponent } from './cars/addcar/addcar.component';
-import { EditCarComponent } from './cars/editcar/editcar.component';
+import {EditCarComponent} from './cars/editcar/editcar.component';
 //importing guards
 import { SellerAuthGuardService } from '../../core/guards/seller-auth-guard.service';
 
@@ -50,11 +52,30 @@ const routes: Routes = [
     canActivate: [SellerAuthGuardService]
   },
   { 
-    path: 'car-list', 
-    component: CarsListComponent, 
-    data: { title: "Seller's Cars listing" },
-    canActivate: [SellerAuthGuardService]
+    path: 'car-dashboard', 
+    component: CarsTableComponent, 
+    data: { title: "Seller's Cars Dashboard" },
+    /*canActivate: [SellerAuthGuardService]*/
   },
+  { 
+    path: 'car-listing', 
+    component: CarsGridListComponent, 
+    data: { title: "Seller's Cars listing" },
+    /*canActivate: [SellerAuthGuardService]*/
+  },
+  { 
+    path: 'car-detail/:_id/:type', 
+    component: CarDetailPageComponent, 
+    data: { title: "Car Details" },
+    /*canActivate: [SellerAuthGuardService]*/
+  },
+  { 
+    path: 'car-detail/:_id', 
+    component: CarDetailPageComponent, 
+    data: { title: "Car Details" },
+    /*canActivate: [SellerAuthGuardService]*/
+  }, 
+
   {
     path: 'addcar',
     component: AddCarComponent,

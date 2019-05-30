@@ -4,17 +4,19 @@
     <div class="modal-content">
       <div class="modal-header bg-transparent pl-2">
         <h5 class="modal-title" id="exampleModalLabel">DEALERSHIP INFORMATION</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" (click)="close()" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      
       <div class="modal-body">
         <div class="row">
           <div class="col-md-12 text-center">
+          
             <div class="upload-profile-photo">
               <img *ngIf="dealershipObject?.profile_pic" title="Dealership Avatar" class="img-fluid"
                 src="{{dealershipObject?.profile_pic}}">
-              <img *ngIf="dealershipObject?.profile_pic" title="Default Dealership Avatar" class="img-fluid"
+              <img *ngIf="! dealershipObject?.profile_pic" title="Default Dealership Avatar" class="img-fluid"
                 src="/assets/images/default-user.png">
 
             </div>
@@ -55,13 +57,13 @@
           <div class="Car_details row mt-1">
             <div class="col-md-4">
               <ul class="">
-                <li><strong>Address Line 1 -</strong>{{dealershipObject?.mainaddressline1}}</li>
+                <li><strong>Address Line 1 -</strong> {{dealershipObject?.mainaddressline1}}</li>
               </ul>
             </div>
 
             <div class="col-md-4">
               <ul class="">
-                <li><strong>Address Line 2 -</strong>{{dealershipObject?.mainaddressline2}}</li>
+                <li><strong>Address Line 2 -</strong> {{dealershipObject?.mainaddressline2}}</li>
               </ul>
             </div>
 
@@ -126,8 +128,8 @@
                       <td>{{contact.title}}</td>
                       <td *ngFor="let email of contact.emails"><span *ngIf="email.default">{{ email.email }}</span></td>
                       <td *ngFor="let phone of contact.phones"><span
-                          *ngIf="phone.default">{{ phone.country_code }}{{ phone.phone }}</span></td>
-                      <td *ngFor="let fax of contact.faxs"><span *ngIf="fax.default">{{ fax.number }}</span></td>
+                          *ngIf="phone.default">{{ phone.country_code }} {{phone.phone | mask: '(000) 000-0000'}}</span></td>
+                      <td *ngFor="let fax of contact.faxs"><span *ngIf="fax.default">{{ fax.country_code }} {{ fax.number | mask: '(000) 000-0000'}}</span></td>
                       <td *ngIf="contact.default_legal_contact">Yes</td>
                       <td *ngIf="!contact.default_legal_contact">No</td>
                     </tr>

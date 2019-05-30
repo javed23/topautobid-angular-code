@@ -288,17 +288,11 @@ POTENZA.revolutionSlider = function (jQuery) {
   POTENZA.priceslider = function () {
    if($(".price-slide").exists()) {
         //$("#slider-range,#slider-range-2").slider({
-        $("#slider-range").slider({
+        $("#price-range").slider({
             range: true,
-            min: 1,
-            max: 1000,
-            values: [50, 300],
-            slide: function(event, ui) {
-              console.log('id:',this.id)
-                var min = ui.values[0],
-                    max = ui.values[1];
-                    $('#' + this.id).siblings( "label" ).find('.bids').val("$" + min + " - $" + max)                   
-            }
+            min: 100,
+            max: 100000,
+            values: [100, 100000]            
         });
     }
   }
@@ -309,13 +303,7 @@ POTENZA.revolutionSlider = function (jQuery) {
              range: true,
              min: 2010,
              max: 2018,
-             values: [2010, 2018],
-             slide: function(event, ui) {
-               console.log('id:',this.id)
-                 var min = ui.values[0],
-                     max = ui.values[1];
-                     $('#' + this.id).siblings( "label" ).find('.years').val( min + "-" + max)                   
-             }
+             values: [2010, 2018]            
          });
      }
    }
@@ -409,7 +397,7 @@ POTENZA.revolutionSlider = function (jQuery) {
             asNavFor: '.Product_nav'
           });
         $('.Product_nav').slick({
-          slidesToShow: 5,
+          slidesToShow: 4,
           slidesToScroll: 1,
           asNavFor: '.Full_view',
           dots: false,
@@ -418,6 +406,27 @@ POTENZA.revolutionSlider = function (jQuery) {
         });
       }
   }
+
+  POTENZA.slicksliderRecent = function () {
+    if ($(".slider-slick").exists()) {
+        $('.slider-for').slick({
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          arrows: true,
+          asNavFor: '.slider-nav'
+        });
+      $('.slider-nav').slick({
+        slidesToShow: 5,
+        slidesToScroll: 1,
+        asNavFor: '.slider-for',
+        dots: false,
+        centerMode: true,
+        focusOnSelect: true
+      });
+    }
+}
+
+
 
     /*************************
         NiceScroll
@@ -710,6 +719,7 @@ POTENZA.toggleFilters = function () {
         POTENZA.Isotope(),
         POTENZA.masonry();
         POTENZA.toggleFilters();
+        POTENZA.slicksliderRecent();
         
     });
 

@@ -765,6 +765,12 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   }
                
 
+ /* private isPDFCorrupted(base64String, fileExtension) {    
+    return this.commonUtilsService.isPDFCorrupted(base64String, fileExtension)
+    .then(result => {console.log('result', result); return result; })
+    .catch(error => {console.log('error', error); return error; })      
+  }*/              
+
   /**
    * remove Vehicle Image
    * @param index index of the image array

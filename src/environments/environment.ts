@@ -7,22 +7,27 @@ export const environment = {
   API_ENDPOINT: 'http://54.245.128.14:3000',
   //WEB_ENDPOINT: 'http://localhost:4200',
   WEB_ENDPOINT: 'http://54.245.128.14',
- 
+  FILE_UPLOAD_API:"http://54.245.128.14:3000/api/common/imageUploadtoBucket",
   APP_NAME: 'TopAutoBid',
   DEFAULT_PROFILE: 'assets/images/default-user.png',
   DEFAULT_COUNTRY_CODE: '+1',
-  DEFAULT_RECORDS_LIMIT: 10,
+  DEFAULT_RECORDS_LIMIT: 6,
+  DEFAULT_PAGES_PAGINATION: 5, //Defines the maximum number of page links to display
   DEFAULT_PAGE_LIMIT_OPTIONS: [  
-    { value:5   },
-    { value:10  },
-    { value:25  },
-    { value:50  },
-    { value:100  },
+    { value:6   },
+    { value:12  },
+    { value:24  },
+    { value:48  },
+    { value:96  },
   ],
+
+  //rating & review settings 
+  MAX_RATE_STARS:5,
+  
   //aws 
   AWS: {
-    ACCESS_KEY: 'AKIAJFK6YJMR4P23VEDA',
-    SECRET_KEY: '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',
+    ACCESS_KEY: '',
+    SECRET_KEY: '',
     REGION: 'us-west-2',
     BUCEKT_NAME: 'topautobid-dev',
     COGNITO: {
@@ -79,13 +84,20 @@ export const environment = {
     FETCHING_RECORDS: 'Fetching Data...',
     RECORD_DELETED: 'Record has been deleted successfully.',
     DEALERSHIP_ADDED: 'Dealership has been added successfully.',
-    DELETING_RECORD: 'Deleting Record...',
-
-    // Added By Bhavnish
+    DEALERSHIP_UPDATED: 'Dealership has been updated successfully.',
+    DELETING_RECORD: 'Deleting Record...',//new
+    CONTACT_ADDED: 'Legal Contact has been added successfully.',
     NO_RECORDS_FOUND: 'No Records Found.',
-    
+    CONTACT_REQUEST_SEND: 'Thanks! Email has been send successfully and our support team will contact you soon.',
+    PROFILE_UPDATE: 'Profile has been updated successfully.',
+    ATLEAST_ONE_DEALERSHIP:'Please add atleast one dealership.',
+    ATLEAST_ONE_CONTACT:'Please add atleast one legal contact',
+    SELECT_PRIMARY:'Please select primary contact.',
+    MAXIMUM_PRIMARY_CONTACT:'Primary contact can not be more than one.',
+    CAR_STATUS_CHANGED:'Status has been changed successfully.'
   }
 };
+
 
 /*
  * For easier debugging in development mode, you can import the following file
