@@ -91,8 +91,8 @@ export class VerifyEmailComponent implements OnInit {
   onSubmit() {
     let userSignup = {};
     if (this.multifactorOption == 'phone')
-      return
-    // userSignup = _.pick(this.user, ['username', 'phones', 'name', 'cipher'])
+      // return
+    userSignup = _.pick(this.user, ['username','emails', 'phones', 'name', 'cipher'])
 
     else if (this.multifactorOption == 'email')
       userSignup = _.pick(this.user, ['username', 'emails', 'name', 'cipher'])

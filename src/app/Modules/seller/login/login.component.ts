@@ -183,9 +183,9 @@ export class LoginComponent implements OnInit {
           if(response.body.is_verified == false) {
             this.router.navigate(['/seller/account-verify/' + response.body._id]);
           }
-          // } else if (response.body.is_multifactor_authorized) {
-          //   this.loginByOtp();
-          // }
+           else if (response.body.is_multifactor_authorized) {
+            this.loginByOtp();
+          }
 
           else {
 
