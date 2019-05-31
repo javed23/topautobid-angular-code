@@ -143,7 +143,7 @@ export class AddCarComponent implements OnInit {
   @ViewChild(DropzoneComponent) componentRef?: DropzoneComponent;
   @ViewChild(DropzoneDirective) directiveRef?: DropzoneDirective;  
 
-  
+  private _vehicleLocation:any = {}
   getMakeByYearArray:any = [];
   getModelByMakeIdArray:any = [];  
   private _secondKey:boolean= false;
@@ -183,6 +183,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
 }
 
+
   /**
   * Initialize Basic Info Wizard Fields.
   */
@@ -218,7 +219,8 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           vehicle_other_interior_color: [''],
           vehicle_exterior_color: ['Black', Validators.compose([Validators.required])],
           vehicle_other_exterior_color: [''],
-          vehicle_interior_material: ['', Validators.compose([Validators.required])],                
+          vehicle_interior_material: ['', Validators.compose([Validators.required])],  
+          location:[null]              
         }),    
     });
   }
@@ -336,7 +338,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
     var mergeVehicleData = Object.assign(this.vehicleOption.value, this.basicInfoWizard.value, this.uploadVehicleImagesWizard.value, this.aboutVehicleWizard.value, this.vehicleConditionWizard.value, this.pickupLocationWizard.value, this.offerInHands.value);
 
-    //console.log(mergeVehicleData);
+    console.log(mergeVehicleData);
 
     this.commonUtilsService.showPageLoader('Saving Your Car...');
 
@@ -956,7 +958,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
     let vehicleMakeControl = this.basicInfoWizard.controls.basic_info.get('vehicle_make');
     let vehicleModelControl = this.basicInfoWizard.controls.basic_info.get('vehicle_model');
-    let vehicleTrimControl = this.basicInfoWizard.controls.basic_info.get('vehicle_trim');
+    let vehicleTrimControl = this.basicInfoWizard.controls.basic_info.get('vehicle_trim');  
 
     if(year == ''){ 
       vehicleMakeControl.disable(); this.makes = [];
@@ -1576,17 +1578,57 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   }
 
   ngOnInit() {  
+
+    let zipcodeFormControl = this.basicInfoWizard.controls.basic_info.get('vehicle_zip');
+    zipcodeFormControl.valueChanges    
+    .subscribe(zipcode => {      
+      (zipcode.length==5)?this.fetchCityStateOfZipcode(zipcode):''
+    });
+
+
     this.addCarSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });   
-    this.vehicleService.fetchAddress()
+    
+  }
+
+  /**
+   * private function to fetch city and state information of entered zipcode
+   * @param zipcode number(entered zipcode from clientside)
+   * @return  void
+  */
+  private fetchCityStateOfZipcode(zipcode):void{
+    this.vehicleService.fetchCityStateOfZipcode(zipcode)
       .subscribe(
       (response) => { 
-   
+        if(!_.has(response,['status'])){
+          let cityState = response[0]['city_states'][0]        
+          cityState['coordinates'] = [response[0]['zipcodes'][0]['longitude'],response[0]['zipcodes'][0]['latitude']]            
+          this.vehicleLocation =  cityState    
+        }else{
+          this.commonUtilsService.onError('Could not fetch city, state data for zipcode.');
+        }       
       },
-      error => {
-        
-        this.commonUtilsService.onError(error);
+      error => {        
+        this.commonUtilsService.onError('Could not fetch city, state data for zipcode.');
       });  
   }
+
+  /**
+  * get vehicle to be picked up value.
+  * @return  any
+  */
+ get vehicleLocation(): any {
+  return this._vehicleLocation;
+}
+
+/**
+* set vehicle to be picked up value.
+* @param vehicleLocation  object of key:value
+*/
+set vehicleLocation(vehicleLocation: any){
+  this._vehicleLocation = vehicleLocation;  
+  this.basicInfoWizard.controls.basic_info.get('location').patchValue(this._vehicleLocation); 
+  console.log('form value location',this.basicInfoWizard.controls.basic_info.get('location').value)
+}
 
   ngAfterViewInit(){    
     //this.yearRange = this.commonUtilsService.createYearRange();  

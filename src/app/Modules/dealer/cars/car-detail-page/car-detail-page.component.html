@@ -263,8 +263,16 @@ car-details -->
             <div id="tab5" class="tabcontent">
               <ul class="car_details_tab">
                   <li>
-                    <span class="head">Zipcode</span>
-                    <span class="value">{{carDetail?.zipcode }}</span>
+                      <span class="head">Zipcode</span>
+                      <span class="value">{{carDetail?.zipcode }}</span>
+                  </li>
+                  <li>
+                      <span class="head">City</span>
+                      <span class="value">{{carDetail?.location?.city }}</span>
+                  </li>
+                  <li>
+                      <span class="head">State</span>
+                      <span class="value">{{carDetail?.location?.state }}({{carDetail?.location?.state_abbreviation }})</span>
                   </li>
                   <li>
                       <span class="head">Willing to drive</span>

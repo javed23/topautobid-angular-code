@@ -24,6 +24,11 @@ export class VehicleService {
 
     constructor(private httpClient: HttpClient, private router: Router) {}
 
+    createAuthorizationHeader(headers: Headers) {
+      headers.append('accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'); 
+      headers.append('accept-encoding', 'gzip, deflate, br')
+      headers.append('accept-language', 'en-GB,en-US;q=0.9,en;q=0.8')
+    }
     public getDataByVIN(vin): Observable<any | false> {
         return this.httpClient
         .get(apiURL+'decodevinvaluesextended/'+vin+'?format=json')
@@ -76,17 +81,22 @@ export class VehicleService {
     .map((response: Response) => {
         return response;
     })
-
   }
 
-  public fetchAddress(): Observable<any> {
-    let key = '4a26c4bf-dcae-92b5-e8ee-0937ca13e1c1'
-    let token = 'DwDT9GApVGQdUlxLVHtB'
-    return this.httpClient.get('https://us-zipcode.api.smartystreets.com/lookup?auth-id='+key+'&auth-token='+token+'&zipcode=85297')
+  /**
+   * Fetch city, state information of zipcode
+   * @param zipcode    Vehicle zipcode.
+   * @return        Observable<any>
+  */
+  public fetchCityStateOfZipcode(zipcode): Observable<any> {  
+    
+    let url = `${environment.ADDRESS_API.ENDPOINT}/lookup?auth-id=${environment.ADDRESS_API.KEY}&auth-token=${environment.ADDRESS_API.TOKEN}&zipcode=${zipcode}`;
+
+    return this.httpClient.get(url)
         .map((response: any) => {         
             return response;
         })
-}
+  }
 
     
     

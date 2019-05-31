@@ -35,10 +35,10 @@ export class CarService {
                 let start = page.pageNumber * page.size;
                 for (let i in response.records) {
                     let jsonObj = response.records[i];
-                    console.log('jsonObj', jsonObj);
+                    //console.log('jsonObj', jsonObj);
                     let car = new Car(jsonObj);
 
-                    console.log('created object', car);
+                   // console.log('created object', car);
                     pagedData.data.push(car);
                 }
                 pagedData.page = page;
@@ -98,10 +98,10 @@ export class CarService {
                 let start = page.pageNumber * page.size;
                 for (let i in response.records) {
                     let jsonObj = response.records[i];
-                    console.log('jsonObj', jsonObj);
+                    //console.log('jsonObj', jsonObj);
                     let car = new Car(jsonObj);
 
-                    console.log('created object', car);
+                    //console.log('created object', car);
                     pagedData.data.push(car);
                 }
                 pagedData.page = page;
@@ -131,7 +131,7 @@ export class CarService {
         return this.httpClient.post('car/carDetail', carIdObject)
             .map((response: any) => {
                 let car = new Car(response);
-                console.log('car detail', car);
+                //console.log('car detail', car);
                 return car;
             })
     }

@@ -87,25 +87,27 @@ export class ListingComponent implements OnInit {
 
   ngOnInit() {
      //calling filters form initlization method
-     this.initalizeFilterForm();
+    this.initalizeFilterForm();
+    let componentRefrence = this
+    $.getJSON(`${environment.VEHICLE_STATS_API.ENDPOINT}/?callback=?`, {cmd:"getYears"}, function(data) {    
+      let years = data.Years;      
+      for (let i = years.min_year; i <= years.max_year; i++) {       
+        componentRefrence.yearsRange.push({
+          label: i,
+          value: i
+        });
+      } 
+    });
+
   }
 /**
 * component life cycle default method, runs after view page initlization
 * @return void
 */
   ngAfterViewInit():void {  
-    let currentYear = new Date().getFullYear();  
-    //initalize the price & year slider on view page
-      
+    //initalize the price & year slider on view page      
     POTENZA.featurelist()
-    this.onApplyingFilters()    
-    for (var i = 0; i < 2; i++) {
-      this.yearsRange.push({
-        label: currentYear - i,
-        value: currentYear - i
-      });
-    }
-   // this.yearsRange = this.commonUtilsService.createYearRange();    
+    this.onApplyingFilters()     
   }
 
 /**

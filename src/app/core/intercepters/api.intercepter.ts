@@ -13,7 +13,7 @@ export class ApiIntercepter implements HttpInterceptor {
     if (!(request.url).includes('i18n') && !(request.url).includes('smartystreets')) {
       apiReq = request.clone({ url: environment.API_ENDPOINT + '/api/' + `${request.url}` });
     }
-    console.log('apiReq',apiReq)
+   
     return next.handle(apiReq);
 
   }
