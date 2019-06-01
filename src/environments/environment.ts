@@ -21,6 +21,15 @@ export const environment = {
     { value:96  },
   ],
 
+  ADDRESS_API:{
+    ENDPOINT:'https://us-zipcode.api.smartystreets.com',
+    KEY: '4931092145880524',
+    TOKEN: 'DwDT9GApVGQdUlxLVHtB',
+  },
+  VEHICLE_STATS_API:{
+    ENDPOINT:'https://www.carqueryapi.com/api/0.3',    
+  },
+
   //rating & review settings 
   MAX_RATE_STARS:5,
   
