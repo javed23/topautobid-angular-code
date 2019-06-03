@@ -17,6 +17,7 @@ import { environment } from '../../../../environments/environment'
 
 //import custom validators
 import { CustomValidators } from '../../../core/custom-validators';
+import { log } from 'util';
 
 declare var $;
 
@@ -113,21 +114,20 @@ export class ForgotPasswordComponent implements OnInit {
     }
     this.pageLoaderService.pageLoader(true);
     this.pageLoaderService.setLoaderText(environment.MESSAGES.CHECKING_INFO_LOADER_TEXT);//setting loader text
-
+    
     //saving the dealer at aws user pool
-    this.cognitoUserService.forgotPassword(this.forgotPasswordForm.value)     
+    this.userAuthService.dealerForgotPassword(this.forgotPasswordForm.value)     
       .pipe(untilDestroyed(this))
       .subscribe(
         (response) => {          
-          //console.log('response',response)
-          this.verificationPopup(); //open verification popup
+          console.log('response',response)
 
           this.pageLoaderService.pageLoader(false);//hide page loader       
   
           //console.log('otpVerificationForm',this.otpVerificationForm.value)
           //this.pageLoaderService.setLoaderText('Registered...');//setting loader text  
-
-          this.toastr.successToastr(environment.MESSAGES.VERIFICATION_FORGOT_PASSWORD, 'Success!');//showing success toaster
+        this.forgotPasswordForm.reset();
+          this.toastr.successToastr('Forget password instruction has been sent to your email', 'Success!');//showing success toaster
           
         },
         error => {

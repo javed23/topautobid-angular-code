@@ -1,0 +1,14 @@
+.sidebar_content {
+    color: #363636;
+    background: none;
+}
+.product-listing ul.list-group .checkbox label{
+    padding-left: 0px; 
+}
+.btn_active{
+    color:#db2d2e;
+}
+
+.product-listing ul.list-group .checkbox label button {
+    text-align: left;
+}

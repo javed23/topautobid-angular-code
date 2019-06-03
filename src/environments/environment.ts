@@ -8,6 +8,15 @@ export const environment = {
   API_ENDPOINT: 'http://localhost:3000',
   //WEB_ENDPOINT: 'http://localhost:4200',
   WEB_ENDPOINT: 'http://54.245.128.14',
+  ADDRESS_API:{
+    ENDPOINT:'https://us-zipcode.api.smartystreets.com',
+    KEY: '4931089270045671',
+    TOKEN: 'DwDT9GApVGQdUlxLVHtB',
+  },
+  VEHICLE_STATS_API:{
+    ENDPOINT:'https://www.carqueryapi.com/api/0.3',    
+  },
+ 
   FILE_UPLOAD_API:"http://54.245.128.14:3000/api/common/imageUploadtoBucket",
   APP_NAME: 'TopAutoBid',
   DEFAULT_PROFILE: 'assets/images/default-user.png',

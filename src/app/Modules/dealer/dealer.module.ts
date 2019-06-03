@@ -47,7 +47,7 @@ import { CreateDealershipComponent } from './dealerships/create-dealership/creat
 import { CreateContactComponent } from './dealerships/create-contact/create-contact.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { AccountVerifyComponent } from './account-verify/account-verify.component';
-
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 //cars management components
 import { ListingComponent as CarsGridListComponent } from './cars/grid-list-view/listing.component';
 import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
@@ -116,7 +116,8 @@ let config = new AuthServiceConfig([
     FilterComponent,
     SortComponent,
     BidsListingComponent,
-    DateFilterComponent
+    DateFilterComponent,
+    ResetPasswordComponent
   ],
   imports: [
     CommonModule,

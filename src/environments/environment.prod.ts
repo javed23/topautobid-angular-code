@@ -3,6 +3,15 @@ export const environment = {
   API_ENDPOINT: 'http://54.245.128.14:3000',
   //WEB_ENDPOINT: 'http://localhost:4200',
   WEB_ENDPOINT: 'http://54.245.128.14',
+  ADDRESS_API:{
+    ENDPOINT:'https://us-zipcode.api.smartystreets.com',
+    KEY: '4931089270045671',
+    TOKEN: 'DwDT9GApVGQdUlxLVHtB',
+  },
+  VEHICLE_STATS_API:{
+    ENDPOINT:'https://www.carqueryapi.com/api/0.3',    
+  },
+ 
   FILE_UPLOAD_API:"http://54.245.128.14:3000/api/common/imageUploadtoBucket",
   APP_NAME: 'TopAutoBid',
   DEFAULT_PROFILE: 'assets/images/default-user.png',
@@ -22,8 +31,8 @@ export const environment = {
   
   //aws 
   AWS: {
-    ACCESS_KEY: '',
-    SECRET_KEY: '',
+    ACCESS_KEY: 'AKIAUGU7PKGK2DTCJVPA',
+    SECRET_KEY: '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',
     REGION: 'us-west-2',
     BUCEKT_NAME: 'topautobid-dev',
     COGNITO: {

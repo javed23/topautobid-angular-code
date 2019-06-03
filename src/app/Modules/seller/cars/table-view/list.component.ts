@@ -364,8 +364,8 @@ onSort(event) {
       //manually create a data object which have the car unique id and seller id 
       const data =  {
         id:item._id,
-        //seller_id:localStorage.getItem('loggedinUserId')    
-        seller_id:"5cd170562688321559f12f32"
+        seller_id:localStorage.getItem('loggedinUserId')    
+        // seller_id:"5cd170562688321559f12f32"
           
       } 
 

@@ -14,6 +14,7 @@ import { ArchwizardModule } from 'angular-archwizard';
 import { CurrencyMaskModule } from "ng2-currency-mask";
 import { NgxGalleryModule } from 'ngx-gallery';
 
+
 //import enviorment file
 import { environment } from '../../../environments/environment';
 
@@ -36,7 +37,8 @@ import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.c
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { AccountVerifyComponent } from './account-verify/account-verify.component';
 import { ContactRequestComponent } from './cars/contact-request/contact-request.component';
-
+import { EditCarComponent } from './cars/editcar/editcar.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -72,7 +74,9 @@ let config = new AuthServiceConfig([
     AddCarComponent,
     VerifyEmailComponent,
     AccountVerifyComponent,
-    ContactRequestComponent
+    EditCarComponent,
+    ContactRequestComponent,
+    ResetPasswordComponent
   ],
   
   imports: [

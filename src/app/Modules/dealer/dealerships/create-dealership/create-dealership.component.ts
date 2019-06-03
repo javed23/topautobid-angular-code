@@ -225,8 +225,8 @@ export class CreateDealershipComponent implements OnInit {
       zip: [null, Validators.compose([Validators.required, Validators.pattern('^[0-9]{5}$')])],
       profile_pic: [null],
       _id: [null],
-      //dealer_id: [localStorage.getItem('loggedinUserId')],
-      dealer_id: "5ca1e88f9dac60394419c0bc"
+      dealer_id: [localStorage.getItem('loggedinUserId')],
+      // dealer_id: "5ca1e88f9dac60394419c0bc"
 
     });
   }
@@ -237,8 +237,8 @@ export class CreateDealershipComponent implements OnInit {
       this.submitted = true;
       return;
     }
-    //this.newDealershipForm.get('dealer_id').setValue(localStorage.getItem('loggedinUserId'))
-    this.newDealershipForm.get('dealer_id').setValue('5ca1e88f9dac60394419c0bc')    
+    this.newDealershipForm.get('dealer_id').setValue(localStorage.getItem('loggedinUserId'))
+    // this.newDealershipForm.get('dealer_id').setValue('5ca1e88f9dac60394419c0bc')    
     this.dealershipsItems.push(
       this.newDealershipForm.value
     );   

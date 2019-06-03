@@ -78,6 +78,28 @@ export class UserAuthService {
 
   }
 
+  verifySellerToken(postedData): Observable<any> {
+
+    return this.httpClient
+      .post('seller/verifyToken', postedData)
+      .map((response:any) => {
+        return response;
+      })
+
+  }
+
+  verifyDealerToken(postedData): Observable<any> {
+
+    return this.httpClient
+      .post('dealer/verifyToken', postedData)
+      .map((response:any) => {
+        return response;
+      })
+
+  }
+
+  
+
   verifyEmail(postedData): Observable<any> {
 
     return this.httpClient
