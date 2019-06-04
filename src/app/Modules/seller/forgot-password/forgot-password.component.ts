@@ -127,7 +127,7 @@ export class ForgotPasswordComponent implements OnInit {
   
           console.log('otpVerificationForm',this.otpVerificationForm.value)
           //this.pageLoaderService.setLoaderText('Registered...');//setting loader text       
-          this.toastr.successToastr('Password Reset Instruction has been sent to your email', 'Success!');//showing success toaster
+          this.toastr.successToastr(environment.MESSAGES.FORGOT_PASSWORD_SUCCESS, 'Success!');//showing success toaster
           
         },
         error => {

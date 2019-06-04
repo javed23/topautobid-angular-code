@@ -68,6 +68,8 @@ export const environment = {
   MESSAGES: {
     LOGIN_SUCCESS:'Authorised & Loggedin successfully.',
     LOGOUT_SUCCESS:'Logout successfully.',
+    FORGOT_PASSWORD_SUCCESS:'Forget password instruction has been sent to your email',
+    RESEND_VERIFICATION_SUCCESS:'The verification link has been resent to your email successfully. Please Check your email.',
     VERIFICATION_PENDING:'Verification Code has been sent to your mobile number. Please verify your account.',
     SIGNUP_SUCCESS:'Congratulations!! Your account has been verified successfully and is ready to use.',
     SUCCESS_ADD: 'Has been added successfully.',

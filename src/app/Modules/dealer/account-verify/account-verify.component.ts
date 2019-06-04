@@ -48,7 +48,7 @@ export class AccountVerifyComponent implements OnInit {
       .pipe(untilDestroyed(this))
       .subscribe((response: any) => {
 
-        this.toasterService.successToastr('The verification link has been resent to your email successfully. Please Check your email.','Success')
+        this.toasterService.successToastr(environment.MESSAGES.RESEND_VERIFICATION_SUCCESS,'Success')
 
       }, (error) => {
         // this.router.navigate(['/seller/login'])
