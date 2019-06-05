@@ -1784,6 +1784,16 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       (zipcode.length==5)?this.fetchCityStateOfZipcode(zipcode):''
     });
 
+
+    //Existing Vehicle
+    let exstingVehicleFormControl = this.vehicleOption.controls.existing_vehicle;
+    exstingVehicleFormControl.valueChanges
+      .debounceTime(200)
+      .distinctUntilChanged()
+      .switchMap((query) =>  this._apiService.search(query))
+      .subscribe( result => {  if (result.status === 400) { return; } else { this.results = result.json().artists.items; }
+    });
+
     this.addCarSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });     
   }
 

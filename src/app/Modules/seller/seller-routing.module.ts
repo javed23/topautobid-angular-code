@@ -14,6 +14,7 @@ import { ListComponent as CarsTableComponent } from './cars/table-view/list.comp
 import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
 import { AddCarComponent } from './cars/addcar/addcar.component';
 import { EditCarComponent } from './cars/editcar/editcar.component';
+import { ExistingVehicleComponent } from './cars/existing-vehicle/existing-vehicle.component';
 
 //importing guards
 import { SellerAuthGuardService } from '../../core/guards/seller-auth-guard.service';
@@ -86,6 +87,11 @@ const routes: Routes = [
     path: 'editcar/:_id',
     component: EditCarComponent,
     data: { title: 'Seller EditCar' }
+  },
+  {
+    path: 'existing-vehicle/:_id',
+    component: ExistingVehicleComponent,
+    data: { title: 'Seller Existing Vehicle' }
   }
 
 ];

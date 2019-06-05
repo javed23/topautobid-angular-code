@@ -41,9 +41,9 @@ declare let POTENZA:any;
 
 
 @Component({
-  selector: 'app-editcar',
-  templateUrl: './editcar.component.html',
-  styleUrls: ['./editcar.component.css'],
+  selector: 'app-existing-vehicle',
+  templateUrl: './existing-vehicle.component.html',
+  styleUrls: ['./existing-vehicle.component.css'],
   encapsulation: ViewEncapsulation.None,
   animations: [
     trigger('AnimateList', [
@@ -54,19 +54,16 @@ declare let POTENZA:any;
     ])
    ]
 })
-export class EditCarComponent implements OnInit {
+export class ExistingVehicleComponent implements OnInit {
   // Offer In Hands Popup
   @ViewChild("offerInHandsSection") offerInHandsSection: ElementRef;
 
   // Define Page Title and Breadcrumbs
   title:string = 'Edit Car';
-  breadcrumbs: any = [{ page: 'Home', link: '' }, { page: 'Car Listing', link: '/seller/car-listing' }, { page: 'Edit Car', link: '' }]
-
-
-
+  breadcrumbs:any = [{page:'Home',link:''},{page:'Dashboard',link:'/seller/car-dashboard'},{page:'Edit Car',link:''}]
 
   // Smooth Scroll To Add Car Form Wizard
-  @ViewChild("editCarSection") editCarSection: ElementRef;
+  @ViewChild("existingVehicleSection") existingVehicleSection: ElementRef;
 
   // Array where we are going to do CRUD operations
   //vehicleImagesArray:any = [{Interior: []}, {Exterior: []}];
@@ -76,7 +73,7 @@ export class EditCarComponent implements OnInit {
   getVehicleYear:string = "";
   
 
-  // EditCar Form Group Wizard
+  // existingVehicle Form Group Wizard
   vehicleOption: FormGroup;
   basicInfoWizard: FormGroup;
   uploadVehicleImagesWizard: FormGroup;
@@ -186,10 +183,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   this.vehicleAfterConditionDropzoneInit(); //initalize dropzone library
   this.offerInHandsDropzoneInit(); //initalize dropzone library 
 
-  //checking the type to change breadcrumbs
-  if ('type' in this.activatedRoute.snapshot.params) {
-    this.breadcrumbs = [{ page: 'Home', link: '' }, { page: "Dashboard", link: '/seller/car-dashboard' }, { page: 'Edit Car', link: '' }]
-  }
+  
  
 
 }
@@ -310,7 +304,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   /**
    * save Car in DB  
    */
-  onSubmitEditCar(): void {
+  onSubmitexistingVehicle(): void {
 
 
 
@@ -365,7 +359,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       (response) => { 
         this.router.navigate(['/seller/car-listing']);
 
-        this.commonUtilsService.onSuccess('Vehicle has been updated successfully.');
+        this.commonUtilsService.onSuccess('Vehicle has been added successfully.');
       },
       error => {
         
@@ -963,7 +957,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
            }); 
          }
          this.aboutVehicleWizard.controls.vehicle_ownership.patchValue(response.vehicle_ownership);
-         this.checkVehicleOwnershipRadioValue(response.vehicle_ownership.vehicle_ownership_value, response.vehicle_ownership.vehicle_clean_title);
+         this.checkVehicleOwnershipRadioValue(response.vehicle_ownership.vehicle_ownership_value);
 
          // Vehicle Condition Wizard
          this.vehicleConditionWizard.controls.vehicle_comments.patchValue(response.vehicle_comments);
@@ -1831,7 +1825,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       vehicleOwnershipValue.setValidators(Validators.compose([Validators.required]));        
       vehicleOwnershipValue.updateValueAndValidity();
     }
-    //console.log('isOtherSelected', this.isOtherSelected);
+    //console.log(this.isOtherSelected);
     
   }
 
@@ -1871,15 +1865,14 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
   /**
    * check vehicle ownership value
-   * @param vehicleCleanTitle values
    * @param vehicleOwnership values
    */
-  checkVehicleOwnershipRadioValue(vehicleOwnership: string, vehicleCleanTitle): void { 
+  checkVehicleOwnershipRadioValue(vehicleOwnership: string): void { 
 
     let vehicleOwnershipDescription = this.aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description');
     
     if(vehicleOwnership == "Other"){
-        (vehicleCleanTitle)?this.isOtherSelected = false: this.isOtherSelected = true;         
+        this.isOtherSelected = true;        
         vehicleOwnershipDescription.setValidators(Validators.compose([Validators.required,Validators.minLength(10),Validators.maxLength(200)]));        
         vehicleOwnershipDescription.updateValueAndValidity();
       }else{
@@ -2056,12 +2049,12 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    * smooth scroll to specific div*   
    */
   scrollToSpecificDiv(): void {   
-    this.editCarSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" }); 
+    this.existingVehicleSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" }); 
   }
 
   ngOnInit() {  
     this.fetchVehicleDetails(); //fetch vehcile details
-    this.editCarSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });     
+    this.existingVehicleSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });     
   }
 
   ngAfterViewInit(){  

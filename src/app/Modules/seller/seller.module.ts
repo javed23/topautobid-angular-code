@@ -36,6 +36,7 @@ import { AddCarComponent } from './cars/addcar/addcar.component';
 import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
 import { ContactRequestComponent } from './cars/contact-request/contact-request.component';
 import { EditCarComponent } from './cars/editcar/editcar.component';
+import { ExistingVehicleComponent } from './cars/existing-vehicle/existing-vehicle.component';
 
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -70,7 +71,7 @@ let config = new AuthServiceConfig([
     CarsTableComponent,
     CarsGridListComponent,
     CarDetailPageComponent,
-    AddCarComponent,
+    ExistingVehicleComponent,
     ContactRequestComponent
   ],
   
