@@ -35,7 +35,7 @@
                                                 <label>Make*</label>
                                                 <select #vehicle_make (change)="getModelsByMake(vehicle_make.value)" class="simple_select selectpicker" formControlName="vehicle_make" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_make').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_make').errors }">
                                                     <option value="">Select Make</option>
-                                                    <option *ngFor="let make of makes;" value="{{make.name}}">{{make.name}}</option>
+                                                    <option *ngFor="let make of makes;" value="{{make.make_display}}">{{make.make_display}}</option>
                                                 </select>
                                                 <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_make').touched || isBasicInfoSubmitted">                      
                                                     <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="Make " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_make').errors"></app-form-validation-errors>   
@@ -55,7 +55,7 @@
                                                 <label>Model*</label>
                                                 <select class="simple_select selectpicker" #vehicle_model (change)="getTrimsByModel(vehicle_model.value)" formControlName="vehicle_model" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_model').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_model').errors }">
                                                         <option value="">Select Model</option>
-                                                        <option *ngFor="let model of models;" value="{{model.name}}">{{model.name}}</option> 
+                                                        <option *ngFor="let model of models;" value="{{model.model_name}}">{{model.model_name}}</option> 
                                                 </select>
                                                 <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_model').touched || isBasicInfoSubmitted">                      
                                                         <app-form-validation-errors errorPrefix="Vehicle Model " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_model').errors"></app-form-validation-errors>   
@@ -71,9 +71,9 @@
 
                                     <div class="f_width">       
                                             <label>Trim*</label>
-                                            <select class="simple_select selectpicker" #vehicle_trim formControlName="vehicle_trim" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_trim').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_trim').errors }">
+                                            <select class="simple_select selectpicker" (change)="getAllVehicleDetails($event)" #vehicle_trim formControlName="vehicle_trim" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_trim').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_trim').errors }">
                                             <option value="">Select Trim</option>
-                                            <option *ngFor="let trim of trims;" value="{{trim.name}}">{{trim.name}}</option> 
+                                            <option *ngFor="let trim of trims;" [attr.data-modelId]="trim.model_id" value="{{trim.model_trim}}">{{trim.model_trim}}</option> 
                                             </select>
                                             <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_trim').touched || isBasicInfoSubmitted">                      
                                             <app-form-validation-errors errorPrefix="Trim " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_trim').errors"></app-form-validation-errors>   
@@ -98,10 +98,11 @@
                                         <div class="f_width">
                                                 <label>Engine*</label>                                        
 
-                                                <select class="simple_select selectpicker" #vehicle_engine formControlName="vehicle_engine" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_engine').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_engine').errors }">
+                                                <input type="text" class="simple_select form-control placeholder" #vehicle_engine formControlName="vehicle_engine" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_engine').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_engine').errors }" />
+                                                <!--select class="simple_select selectpicker" #vehicle_engine formControlName="vehicle_engine" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_engine').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_engine').errors }">
                                                         <option value="">Select Engine</option>
                                                         <option *ngFor="let engine of engines;" value="{{engine.name}}">{{engine.name}}</option> 
-                                                    </select> 
+                                                    </select --> 
 
                                                 <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_engine').touched || isBasicInfoSubmitted">                      
                                                     <app-form-validation-errors errorPrefix="Engine " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_engine').errors"></app-form-validation-errors>   
@@ -113,10 +114,11 @@
                                             <div class="f_width">
         
                                                     <label>Transmission*</label>
-                                                    <select class="simple_select selectpicker" #vehicle_transmission formControlName="vehicle_transmission" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_transmission').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_transmission').errors }">
+                                                    <input type="text" class="simple_select form-control placeholder" #vehicle_transmission formControlName="vehicle_transmission" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_transmission').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_transmission').errors }" />
+                                                    <!--select class="simple_select selectpicker" #vehicle_transmission formControlName="vehicle_transmission" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_transmission').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_transmission').errors }">
                                                             <option value="">Select Transmission</option>
                                                             <option *ngFor="let transmission of transmissions;" value="{{transmission.name}}">{{transmission.name}}</option> 
-                                                        </select>
+                                                        </select-->
                                                     <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_transmission').touched || isBasicInfoSubmitted">                      
                                                         <app-form-validation-errors  errorPrefix="Transmission " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_transmission').errors"></app-form-validation-errors>   
                                                     </p>
@@ -128,10 +130,12 @@
                                     
                                                 <div class="f_width">
                                                     <label>Doors*</label>
-                                                    <select class="simple_select selectpicker" #vehicle_doors formControlName="vehicle_doors" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_doors').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_doors').errors }">
+                                                    <input type="text" class="simple_select form-control placeholder" #vehicle_doors formControlName="vehicle_doors" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_doors').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_doors').errors }" />
+
+                                                    <!--select class="simple_select selectpicker" #vehicle_doors formControlName="vehicle_doors" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_doors').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_doors').errors }">
                                                             <option value="">Select Doors</option>
                                                             <option *ngFor="let door of doors;" value="{{door.name}}">{{door.name}}</option> 
-                                                        </select>
+                                                        </select-->
                                                         <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_doors').touched || isBasicInfoSubmitted">                      
                                                             <app-form-validation-errors errorPrefix="Doors " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_doors').errors"></app-form-validation-errors>   
                                                         </p>			
@@ -140,10 +144,12 @@
                                         
                                                 <div class="f_width">
                                                     <label>Body Style*</label>
-                                                    <select class="simple_select selectpicker" #vehicle_body_type formControlName="vehicle_body_type" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_body_type').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_body_type').errors }">
+
+                                                    <input type="text" class="simple_select form-control placeholder" #vehicle_body_type formControlName="vehicle_body_type" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_body_type').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_body_type').errors }" />
+                                                    <!--select class="simple_select selectpicker" #vehicle_body_type formControlName="vehicle_body_type" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_body_type').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_body_type').errors }">
                                                             <option value="">Select Body Style</option>
                                                             <option *ngFor="let bodyStyle of bodyStyles;" value="{{bodyStyle.name}}">{{bodyStyle.name}}</option> 
-                                                        </select>
+                                                        </select-->
                                                     <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_body_type').touched || isBasicInfoSubmitted">                      
                                                         <app-form-validation-errors errorPrefix="Body Style " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_body_type').errors"></app-form-validation-errors>   
                                                         </p> 
@@ -152,10 +158,11 @@
                                                 <div class="f_width">
                                                                 
                                                     <label>Fuel Type*</label>
-                                                    <select class="simple_select selectpicker" #vehicle_fuel_type formControlName="vehicle_fuel_type" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_fuel_type').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_fuel_type').errors }">
+                                                    <input type="text" class="simple_select form-control placeholder" #vehicle_fuel_type formControlName="vehicle_fuel_type" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_fuel_type').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_fuel_type').errors }" />
+                                                    <!--select class="simple_select selectpicker" #vehicle_fuel_type formControlName="vehicle_fuel_type" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_fuel_type').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_fuel_type').errors }">
                                                             <option value="">Select Fuel Type</option>
                                                             <option *ngFor="let fuelType of fuelTypes;" value="{{fuelType.name}}">{{fuelType.name}}</option> 
-                                                        </select>
+                                                        </select-->
                                                     <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_fuel_type').touched || isBasicInfoSubmitted">                      
                                                         <app-form-validation-errors errorPrefix="Fuel Type " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_fuel_type').errors"></app-form-validation-errors>   
                                                     </p>
@@ -164,10 +171,13 @@
                                         
                                                 <div class="f_width">
                                                     <label>Drive Type*</label>
-                                                    <select class="simple_select selectpicker" #vehicle_drive_type formControlName="vehicle_drive_type" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_drive_type').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_drive_type').errors }">
+
+                                                    <input type="text" class="simple_select form-control placeholder" #vehicle_drive_type formControlName="vehicle_drive_type" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_drive_type').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_drive_type').errors }" />
+                                                    <!--select class="simple_select selectpicker" #vehicle_drive_type formControlName="vehicle_drive_type" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_drive_type').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_drive_type').errors }">
                                                         <option value="">Select Drive Type</option>
                                                         <option *ngFor="let driveType of driveTypes;" value="{{driveType.name}}">{{driveType.name}}</option> 
-                                                    </select>
+                                                    </select-->
+                                                    
                                                     <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_drive_type').touched || isBasicInfoSubmitted">                      
                                                         <app-form-validation-errors errorPrefix="Drive Type " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_drive_type').errors"></app-form-validation-errors>   
                                                     </p>			
@@ -534,25 +544,25 @@
                                                     <ol class="ownership_btns">
                                                     <li>
                                                         <div class="Radio_BTN">
-                                                            <input id="Salvage" type="radio" value="Salvage" formControlName="vehicle_ownership_value" (click)="checkVehicleOwnershipRadioValue('Salvage')">
+                                                            <input id="Salvage" type="radio" value="Salvage" formControlName="vehicle_ownership_value" (click)="checkVehicleOwnershipRadioValue('Salvage', cleanTitle)">
                                                             <label for="Salvage">Salvage</label>
                                                         </div>
                                                     </li>
                                                     <li>
                                                         <div class="Radio_BTN">
-                                                            <input id="TMU" type="radio" value="TMU" formControlName="vehicle_ownership_value" (click)="checkVehicleOwnershipRadioValue('TMU')">
+                                                            <input id="TMU" type="radio" value="TMU" formControlName="vehicle_ownership_value" (click)="checkVehicleOwnershipRadioValue('TMU', cleanTitle)">
                                                             <label for="TMU">TMU</label>
                                                         </div>    
                                                     </li>
                                                     <li>
                                                         <div class="Radio_BTN">
-                                                                <input id="Lemon" type="radio" value="Lemon Law" formControlName="vehicle_ownership_value" (click)="checkVehicleOwnershipRadioValue('Lemon Law')">
+                                                                <input id="Lemon" type="radio" value="Lemon Law" formControlName="vehicle_ownership_value" (click)="checkVehicleOwnershipRadioValue('Lemon Law', cleanTitle)">
                                                             <label for="Lemon">Lemon Law</label>
                                                         </div>    
                                                     </li>
                                                     <li>
                                                         <div class="Radio_BTN">
-                                                            <input id="Other" type="radio" value="Other" formControlName="vehicle_ownership_value" (click)="checkVehicleOwnershipRadioValue('Other')">
+                                                            <input id="Other" type="radio" value="Other" formControlName="vehicle_ownership_value" (click)="checkVehicleOwnershipRadioValue('Other', cleanTitle)">
                                                             <label for="Other">Other</label>
                                                         </div>    
 

@@ -911,16 +911,13 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
     vehicleModelControl.setValue(''); 
 
-    vehicleTrimControl.disable(); vehicleTrimControl.setValue('');   _this.trims = [];
+    _this.resetTrimControl();
 
-    _this.vehicleService.getAllVehicleDetails(this.basicInfoDetails).subscribe(
-      (response) => {      
-        _this.basicInfoWizard.controls.basic_info.patchValue(response);
-      
-      },error => { });
+    _this.emptyBasicInfoFields();
 
     if(makeName == ""){ 
-      vehicleModelControl.disable();  _this.models = [];
+      _this.resetModelControl();
+      _this.resetTrimControl();
       return;
     }else{ 
       vehicleModelControl.enable(); 
@@ -939,14 +936,9 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   
         }else{
          
-          vehicleModelControl.disable(); vehicleModelControl.setValue(''); _this.models = [];
-          vehicleTrimControl.disable(); vehicleTrimControl.setValue('');  _this.trims = [];
-
-          _this.vehicleService.getAllVehicleDetails(this.basicInfoDetails).subscribe(
-            (response) => {      
-              _this.basicInfoWizard.controls.basic_info.patchValue(response);
-            
-            },error => { });
+          _this.resetModelControl();
+          _this.resetTrimControl();
+          _this.emptyBasicInfoFields();
           
         }
 
@@ -967,30 +959,23 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     let vehicleYear = _this.vehicleOption.controls.vehicle_year;
 
     if(vehicleYear.value == "more"){
-      this.getVehicleYear = this.vehicleOption.controls.vehicle_year_value.value;
+      _this.getVehicleYear = _this.vehicleOption.controls.vehicle_year_value.value;
     }else{
-      this.getVehicleYear = vehicleYear.value;
+      _this.getVehicleYear = vehicleYear.value;
     }
 
     let vehicleTrimControl = _this.basicInfoWizard.controls.basic_info.get('vehicle_trim');  
 
-    _this.vehicleService.getAllVehicleDetails(this.basicInfoDetails).subscribe(
-      (response) => {      
-        _this.basicInfoWizard.controls.basic_info.patchValue(response);
-      
-      },error => { });
+    _this.emptyBasicInfoFields();
 
     if(modelName == ""){
-      vehicleTrimControl.disable(); vehicleTrimControl.setValue(''); _this.trims = [];      
-
-      
-      
+      _this.resetTrimControl();      
       return;
     }else{
       vehicleTrimControl.enable();
     }
 
-    $.getJSON("https://www.carqueryapi.com/api/0.3/?callback=?", {cmd:"getTrims", year:this.getVehicleYear, model:modelName}, function(response) {
+    $.getJSON("https://www.carqueryapi.com/api/0.3/?callback=?", {cmd:"getTrims", year:_this.getVehicleYear, model:modelName}, function(response) {
         //The 'data' variable contains all response data.    
        console.log('response', response);
         if(response.Trims.length > 0){
@@ -999,7 +984,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           _this.trims = response.Trims;                
   
         }else{         
-          vehicleTrimControl.disable(); vehicleTrimControl.setValue('');  _this.trims = [];          
+          _this.resetTrimControl();          
         }
 
     });
@@ -1019,11 +1004,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
 
     if(selectedTrim.value==""){
-      _this.vehicleService.getAllVehicleDetails(this.basicInfoDetails).subscribe(
-        (response) => {      
-          _this.basicInfoWizard.controls.basic_info.patchValue(response);
-        
-        },error => { });
+      _this.emptyBasicInfoFields();
     }
 
     
@@ -1083,11 +1064,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       vehicleModelControl.disable(); this.models = [];
       vehicleTrimControl.disable(); this.trims = [];
 
-      this.vehicleService.getAllVehicleDetails(this.basicInfoDetails).subscribe(
-      (response) => {      
-        _this.basicInfoWizard.controls.basic_info.patchValue(response);
-
-      },error => { });
+      this.emptyBasicInfoFields();
 
       return;
     }
@@ -1110,11 +1087,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           vehicleModelControl.disable(); _this.models = [];
           vehicleTrimControl.disable(); _this.trims = []; 
           
-          _this.vehicleService.getAllVehicleDetails(this.basicInfoDetails).subscribe(
-            (response) => {      
-              _this.basicInfoWizard.controls.basic_info.patchValue(response);
-            
-            },error => { });
+          _this.emptyBasicInfoFields();
           
   
         }else{
@@ -1718,11 +1691,11 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           cityState['longitude'] = response[0]['zipcodes'][0]['longitude']         
           this.vehicleLocation =  cityState    
         }else{
-          // this.commonUtilsService.onError('Could not fetch city, state data for zipcode.');
+          this.commonUtilsService.onError('Could not fetch city, state data for zipcode.');
         }       
       },
       error => {        
-        // this.commonUtilsService.onError('Could not fetch city, state data for zipcode.');
+        this.commonUtilsService.onError('Could not fetch city, state data for zipcode.');
       });  
   }
 
@@ -1739,17 +1712,45 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   * @param vehicleLocation  object of key:value
   */
   set vehicleLocation(vehicleLocation: any){
-  this._vehicleLocation = vehicleLocation;  
-  this.basicInfoWizard.controls.basic_info.get('location').patchValue(this._vehicleLocation); 
-  console.log('form value location',this.basicInfoWizard.controls.basic_info.get('location').value)
+    this._vehicleLocation = vehicleLocation;  
+    this.basicInfoWizard.controls.basic_info.get('location').patchValue(this._vehicleLocation); 
+    console.log('form value location',this.basicInfoWizard.controls.basic_info.get('location').value)
   }
+
+  /**
+  * empty basic Info Fields.
+  */
+  emptyBasicInfoFields():void{
+
+    this.vehicleService.getAllVehicleDetails(this.basicInfoDetails).subscribe(
+      (response) => {      
+        this.basicInfoWizard.controls.basic_info.patchValue(response);
+      
+      },error => { });
+  }
+
+  /**
+  * Reset Trim Control
+  */
+  resetTrimControl():void{
+    let vehicleTrimControl = this.basicInfoWizard.controls.basic_info.get('vehicle_trim');
+    vehicleTrimControl.disable(); vehicleTrimControl.setValue('');  this.trims = [];
+  }
+
+  /**
+  * Reset Trim Control
+  */
+  resetModelControl():void{
+    let vehicleModelControl = this.basicInfoWizard.controls.basic_info.get('vehicle_model');
+    vehicleModelControl.disable(); vehicleModelControl.setValue('');  this.models = [];
+  }
+
 
   /**
   * set check object array length.
   * @param object
   *  @return number
   */
-
   public checkObjectLength(object): number{
     return Object.keys(object).length;
   }

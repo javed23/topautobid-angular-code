@@ -106,7 +106,13 @@ const routes: Routes = [
     component: EditCarComponent,
     data: { title: 'Seller EditCar' }
   }
+,
 
+ {  
+  path: 'editcar/:_id/:type',
+  component: EditCarComponent,
+  data: { title: 'Seller EditCar' }
+}
 ];
 
 @NgModule({
