@@ -1,6 +1,7 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone, ElementRef, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbDateAdapter, NgbDateStruct, NgbDateNativeAdapter } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateAdapter, NgbDateStruct, NgbDateParserFormatter, NgbDateNativeAdapter } from '@ng-bootstrap/ng-bootstrap';
+
 
 //modules services, models and enviornment file
 import { TitleService, CarService, CommonUtilsService  } from '../../../../core/_services'
@@ -19,9 +20,11 @@ import * as _ from 'lodash';
   styleUrls: ['./listing.component.css'],
 })
 export class ListingComponent implements OnInit {
+  @ViewChild("listingSection") listingSection: ElementRef;
   page = new Page(); //object of Page type
   cars = new Array<Car>() //array of Car type 
   filtersForm:FormGroup;
+  dateFilterForm:FormGroup;
   isGridListing:boolean=true; //set boolean value to show/hide listing (grid/list)
   viewedPages:any=[]; //array of page number which have been reviewed by user
   currentPage:number =0;
@@ -40,8 +43,7 @@ export class ListingComponent implements OnInit {
   isAllExtriorColorSelected:boolean=false;
   isAllTrimSelected:boolean=false;
   yearFilterOption:string='';
-  startDateModel:any;
-  endDateModel:any;
+ 
   datesFilter:any = {};
   AllFilters = []
   
@@ -65,15 +67,22 @@ export class ListingComponent implements OnInit {
   readonly breadcrumbs: any[] = [{ page: 'Home', link: '/seller/home' }, { page: 'Car Listing', link: '' }]
 
 
-  constructor(private commonUtilsService:CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private ngZone: NgZone, private titleService:TitleService) {
+  constructor(private ngbDateParserFormatter: NgbDateParserFormatter, private commonUtilsService:CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private ngZone: NgZone, private titleService:TitleService) {
     //fetching the data with default settings
     this.currentPage = 0
 
     //setting the page title
     this.titleService.setTitle();
+    
+    this.dateFilterForm = this.formBuilder.group( {
+      startDate: [null, null],
+      endDate: [null, null]
+    });
 
     this.setPage(this._defaultPagination,'all');
     this.page.filters={}
+
+    
   }
 
   ngOnInit() {
@@ -89,8 +98,9 @@ export class ListingComponent implements OnInit {
     //initalize the price & year slider on view page
       
     POTENZA.featurelist()
-    this.onApplyingFilters()    
-    for (var i = 0; i < 2; i++) {
+    this.onApplyingFilters() 
+
+    for (var i = 0; i < 15; i++) {
       this.yearsRange.push({
         label: currentYear - i,
         value: currentYear - i
@@ -161,12 +171,7 @@ export class ListingComponent implements OnInit {
     this.page.type = type;
     this.page.pageNumber = page.offset;
     this.page.size = page.pageSize;
-
-    //Do not fetch page data if page is already clicked and paginated
-    /*if( _.includes(this.viewedPages, this.page.pageNumber))
-      return;
-    else    
-      this.viewedPages.push(this.page.pageNumber)*/
+  
 
     //Do not show page loader if fetching results using search
     if(!this.page.search){
@@ -183,7 +188,7 @@ export class ListingComponent implements OnInit {
           this.cars = pagedData.data
       });   
       this.commonUtilsService.hidePageLoader();
-
+      this.listingSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });//scroll the page to defined section 
     //case error 
     },error => {
       this.commonUtilsService.onError(error);
@@ -264,11 +269,11 @@ export class ListingComponent implements OnInit {
 * set year.
 * @param year    string(year range) which is selected by user.
 */
-  set year(year: string) {
-    this._year = year;
-    console.log('this._year',this._year)
-    this.filtersForm.controls['years'].patchValue(this._year);  
-  }
+set year(year: string) {
+  this._year = year;
+  console.log('this._year',this._year)
+  this.filtersForm.controls['years'].patchValue(this._year);  
+}
 
 /**
 * get & set method of private property named price.
@@ -295,6 +300,7 @@ get price(): string {
  * @return  void
 */
 setFilters(option,filter):void{
+  delete this.page.filters[filter]; //for single selection
   let options = (_.has(this.page.filters, [filter]))? this.page.filters[filter]:[];   
   let index = options.indexOf(option);
   (index>=0)?_.pullAt(options, [index])  : options.push(option)     
@@ -320,9 +326,18 @@ setFilters(option,filter):void{
   console.log(this.page.filters);
 }
 
+/**
+ * Customize the filters array object
+ * @return  any
+*/
 CustomizeFiltersObject() : any {
   return Object.keys(this.page.filters);  
 }
+
+/**
+ * Remove filter
+ * @return  void
+*/
 removeFilter(event){
   
   console.log(event.target.dataset.key,typeof event.target.dataset.value);
@@ -347,9 +362,17 @@ removeFilter(event){
 */
   vehicleStatisticsByYear(option, filter):void{
     this.setFilters(option,filter)
+    let componentRefrence = this
+    $.getJSON(`${environment.VEHICLE_STATS_API.ENDPOINT}/?callback=?`, {cmd:"getMakes", year:this.page.filters[filter][0]}, function(data) {
 
+    
+      componentRefrence.makes = data.Makes
+      componentRefrence.currentPage = 0
+      componentRefrence.setPage(componentRefrence._defaultPagination,componentRefrence.page.type); 
+   });
+   
     //hit api to fetch data
-    this.commonUtilsService.getVehicleStatisticsByMultipleyear({ year: this.page.filters[filter]}).subscribe(
+   /*this.commonUtilsService.getVehicleStatisticsByMultipleyear({ year: this.page.filters[filter]}).subscribe(
       //case success
     (response) => { 
       let makes = []; 
@@ -365,7 +388,7 @@ removeFilter(event){
     //case error 
     },error => {    
       this.commonUtilsService.onError(error);
-    });
+    });*/
   }
 
 
@@ -378,8 +401,17 @@ removeFilter(event){
 vehicleStatisticsByMake(option, filter):void{
   this.setFilters(option,filter)  
 
+  let componentRefrence = this
+  $.getJSON(`${environment.VEHICLE_STATS_API.ENDPOINT}/?callback=?`, {cmd:"getModels", make:this.page.filters[filter][0],year:this.page.filters['year'][0],sold_in_us:1}, function(data) {
+
+    console.log('Models',data.Models);
+    componentRefrence.models = data.Models
+    componentRefrence.currentPage = 0
+    componentRefrence.setPage(componentRefrence._defaultPagination,componentRefrence.page.type); 
+  });
+
   //hit api to fetch data
-  this.commonUtilsService.getVehicleStatisticsByMultiplemake({ make: this.page.filters[filter]}).subscribe(
+  /*this.commonUtilsService.getVehicleStatisticsByMultiplemake({ make: this.page.filters[filter]}).subscribe(
     //case success
   (response) => { 
     let models = []; 
@@ -398,7 +430,7 @@ vehicleStatisticsByMake(option, filter):void{
   //case error 
   },error => {    
     this.commonUtilsService.onError(error);
-  });
+  });*/
 }
 
 
@@ -412,8 +444,22 @@ vehicleStatisticsByMake(option, filter):void{
 vehicleStatisticsByModel(option, filter):void{
   this.setFilters(option,filter)
 
+  let componentRefrence = this
+  $.getJSON(`${environment.VEHICLE_STATS_API.ENDPOINT}/?callback=?`, {cmd:"getTrims", model:this.page.filters[filter][0],make:this.page.filters['make'][0],min_year:this.page.filters['year'][0],sold_in_us:1}, function(data) {
+    componentRefrence.trims = []
+    let allTrims = [];
+    (data.Trims).forEach(element => {     
+     if(allTrims.indexOf(element.model_trim)==-1){
+      allTrims.push(element.model_trim);
+      (componentRefrence.trims).push(element)
+     }      
+    });    
+    componentRefrence.currentPage = 0
+    componentRefrence.setPage(componentRefrence._defaultPagination,componentRefrence.page.type); 
+  });
+
   //hit api to fetch data
-  this.commonUtilsService.getVehicleStatisticsByMultiplemodel({ model: this.page.filters[filter]}).subscribe(
+  /*this.commonUtilsService.getVehicleStatisticsByMultiplemodel({ model: this.page.filters[filter]}).subscribe(
     //case success
   (response) => { 
     let trims = []; 
@@ -434,7 +480,7 @@ vehicleStatisticsByModel(option, filter):void{
   //case error 
   },error => {    
     this.commonUtilsService.onError(error);
-  });
+  });*/
 }
 
 /**
@@ -622,8 +668,8 @@ uncheckAllFetchRecords(option, filter):void{
   //manually create a data object which have the car unique id and seller id 
   const data =  {
     id:item._id,
-    //seller_id:localStorage.getItem('loggedinUserId')      .
-    seller_id:'5cd170562688321559f12f32' 
+    seller_id:localStorage.getItem('loggedinUserId')      
+    // seller_id:'5cd170562688321559f12f32' 
     
   } 
 
@@ -648,21 +694,53 @@ uncheckAllFetchRecords(option, filter):void{
     });
 }  
 
+  
+
 /**
    * Check date validations and filters records when select start date filter
    * @return  void
    */
   onStartDateSelected(event:any):void {
-    this.datesFilter['start']  = new Date(event.year,event.month-1,event.day+1)       
-    this.datesFilter['transformedStartDate']  = (this.datesFilter['start']).toISOString();
-    this.validateDateFilters();       
+    let currentDate = new Date();      
+   // this.ngbDateParserFormatter.parse(event.year + "-" + (event.month-1).toString() + "-" + (event.day));
+    let formattedStartDate = new Date(event.year,event.month-1,event.day)
+    
+
+
+    
+
+    if((formattedStartDate).getTime() > (currentDate).getTime()){ 
+      this.dateFilterForm.patchValue({
+        startDate: null,        
+      });
+      this.commonUtilsService.onError('Start date should not be greater than today.'); 
+      return;
+    }else{
+      this.datesFilter['start']  = new Date(event.year,event.month-1,event.day+1)   
+      this.datesFilter['startCurrent']  = new Date(event.year,event.month-1,event.day)       
+      this.datesFilter['transformedStartDate']  = (this.datesFilter['start']).toISOString();
+    }
+   
+    if(_.has(this.datesFilter, ['start']) &&  !_.has(this.datesFilter, ['end'])){
+      this.datesFilter['end']  = currentDate;
+      this.datesFilter['endCurrent']  = currentDate
+      this.datesFilter['transformedEndDate']  = (this.datesFilter['end']).toISOString();
+    }
+
+    this.validateDateFilters(); 
+    //return this.ngbDateParserFormatter.parse(startYear + "-" + startMonth.toString() + "-" + startDay);      
   }
   /**
    * Check date validations and filters records when select end date filter
    * @return  void
    */
-  onEndDateSelected(event:any):void {    
+  onEndDateSelected(event:any):void {
+    
+    //this.ngbDateParserFormatter.parse(event.year + "-" + (event.month-1).toString() + "-" + (event.day));
+
     this.datesFilter['end']  = new Date(event.year,event.month-1,event.day+1)
+    this.datesFilter['endCurrent']  = new Date(event.year,event.month-1,event.day)
+    
     this.datesFilter['transformedEndDate']  = (this.datesFilter['end']).toISOString();
     this.validateDateFilters();        
   }
@@ -677,9 +755,11 @@ uncheckAllFetchRecords(option, filter):void{
       this.commonUtilsService.onError('Please select start date');
     else if(! _.has(this.datesFilter, ['end']))
       this.commonUtilsService.onError('Please select end date');
-    else if(_.has(this.datesFilter, ['end']) && (this.datesFilter['end']).getTime() < (this.datesFilter['start']).getTime()){
-      this.endDateModel = null
-      this.commonUtilsService.onError('End date should not less than start date');  
+    else if(_.has(this.datesFilter, ['end']) && (this.datesFilter['endCurrent']).getTime() < (this.datesFilter['startCurrent']).getTime()){   
+      this.dateFilterForm.patchValue({
+        endDate: null,        
+      });
+      this.commonUtilsService.onError('End date should not be less than start date');  
       
     }else{     
       this.page.filters['dates'] = this.datesFilter;
@@ -694,8 +774,10 @@ uncheckAllFetchRecords(option, filter):void{
   */
  clearDateFilters():void{
   if(_.has(this.datesFilter, ['start']) || _.has(this.datesFilter, ['end'])){
-    this.startDateModel = null
-    this.endDateModel = null
+    this.dateFilterForm.patchValue({
+      endDate: null,  
+      startDate: null,      
+    });
     this.page.filters['dates'] = this.datesFilter = {}
     this.viewedPages = [];  
     delete this.page.filters['dates']; 

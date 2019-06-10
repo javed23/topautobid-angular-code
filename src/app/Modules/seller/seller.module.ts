@@ -4,7 +4,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule, HttpClient } from '@angular/common/http';
 import { SocialLoginModule } from 'angularx-social-login';
 import { AuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { NgxMaskModule } from 'ngx-mask'
 import { DropzoneModule, DropzoneConfigInterface, DROPZONE_CONFIG } from 'ngx-dropzone-wrapper';
 import { NgScrollbarModule } from 'ngx-scrollbar';
@@ -12,10 +12,13 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxPaginationModule } from 'ngx-pagination'; 
 import { ArchwizardModule } from 'angular-archwizard';
 import { CurrencyMaskModule } from "ng2-currency-mask";
+import { NgxGalleryModule } from 'ngx-gallery';
 
 
 //import enviorment file
 import { environment } from '../../../environments/environment';
+
+import { CustomNgbDateParserFormatter } from '../../core/custom-ngbDateParserFormatter'
 
 //importing components
 import { SellerRoutingModule } from './seller-routing.module';
@@ -29,11 +32,13 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 //cars management components
 import { ListingComponent as CarsGridListComponent } from './cars/grid-list-view/listing.component';
 import { ListComponent as CarsTableComponent } from './cars/table-view/list.component';
-import { CarBidsComponent } from './cars/car-bids/car-bids.component';
-import { FiltersComponent } from './cars/filters/filters.component';
 import { AddCarComponent } from './cars/addcar/addcar.component';
 import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
-
+import { VerifyEmailComponent } from './verify-email/verify-email.component';
+import { AccountVerifyComponent } from './account-verify/account-verify.component';
+import { ContactRequestComponent } from './cars/contact-request/contact-request.component';
+import { EditCarComponent } from './cars/editcar/editcar.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -64,11 +69,14 @@ let config = new AuthServiceConfig([
     ProfileComponent, 
     ForgotPasswordComponent,
     CarsTableComponent,
-    CarBidsComponent,
-    FiltersComponent,
     CarsGridListComponent,
     CarDetailPageComponent,
-    AddCarComponent
+    AddCarComponent,
+    VerifyEmailComponent,
+    AccountVerifyComponent,
+    EditCarComponent,
+    ContactRequestComponent,
+    ResetPasswordComponent
   ],
   
   imports: [
@@ -85,8 +93,11 @@ let config = new AuthServiceConfig([
     NgxDatatableModule,
     NgxPaginationModule,
     CurrencyMaskModule,
-    ArchwizardModule
+    ArchwizardModule,
+    NgxGalleryModule
+
   ],
+
   providers: [
     {
       provide: AuthServiceConfig,
@@ -95,6 +106,10 @@ let config = new AuthServiceConfig([
     {
       provide: DROPZONE_CONFIG,
       useValue: DEFAULT_DROPZONE_CONFIG
+    },
+    {
+      provide: NgbDateParserFormatter, 
+      useFactory: () => new CustomNgbDateParserFormatter('longDate')
     }
   ],
 })

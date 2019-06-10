@@ -4,13 +4,16 @@ import { HTTP_INTERCEPTORS, HttpClientModule, HttpClient } from '@angular/common
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskModule } from 'ngx-mask'
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+
 import { ArchwizardModule } from 'angular-archwizard';
 import { DropzoneModule, DropzoneConfigInterface,
   DROPZONE_CONFIG } from 'ngx-dropzone-wrapper';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxPaginationModule } from 'ngx-pagination'; 
+import { NgxGalleryModule } from 'ngx-gallery';
+
 
 //import social login modules
 import { SocialLoginModule } from 'angularx-social-login';
@@ -18,12 +21,15 @@ import { AuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider } from 'a
 //import microsoft module
 import { AdalService, AdalGuard, AdalInterceptor } from 'adal-angular4';
 
+
 //import enviorment file
 import { environment } from '../../../environments/environment';
 //import dealer routing 
 import { DealerRoutingModule } from './dealer-routing.module';
 //import shared module
 import { SharedModule } from '../../core/shared.module';
+
+import { CustomNgbDateParserFormatter } from '../../core/custom-ngbDateParserFormatter'
 
 //import components
 import { LoginComponent } from './login/login.component';
@@ -39,6 +45,22 @@ import { ContactViewComponent } from './dealerships/contact-view/contact-view.co
 import { DealershipViewComponent } from './dealerships/dealership-view/dealership-view.component';
 import { CreateDealershipComponent } from './dealerships/create-dealership/create-dealership.component';
 import { CreateContactComponent } from './dealerships/create-contact/create-contact.component';
+import { VerifyEmailComponent } from './verify-email/verify-email.component';
+import { AccountVerifyComponent } from './account-verify/account-verify.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+//cars management components
+import { ListingComponent as CarsGridListComponent } from './cars/grid-list-view/listing.component';
+import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
+import { ContactRequestComponent } from './cars/contact-request/contact-request.component';
+
+
+//bids management components
+import { FilterComponent } from './bids/filter/filter.component';
+import { SortComponent } from './bids/sort/sort.component';
+import { ListingComponent as BidsListingComponent} from './bids/listing/listing.component';
+import { DateFilterComponent } from './bids/date-filter/date-filter.component';
+
+
 
 //facebook, google authentication configuration
 /*const fbLoginOptions: LoginOpt = {
@@ -85,7 +107,17 @@ let config = new AuthServiceConfig([
     ContactViewComponent,
     DealershipViewComponent,
     CreateDealershipComponent,
-    CreateContactComponent
+    CreateContactComponent,
+    VerifyEmailComponent,
+    AccountVerifyComponent  ,  
+    CarsGridListComponent,
+    CarDetailPageComponent,
+    ContactRequestComponent,
+    FilterComponent,
+    SortComponent,
+    BidsListingComponent,
+    DateFilterComponent,
+    ResetPasswordComponent
   ],
   imports: [
     CommonModule,
@@ -101,7 +133,9 @@ let config = new AuthServiceConfig([
     ArchwizardModule,
     NgScrollbarModule,
     NgxDatatableModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    NgxGalleryModule
+
   ],
   providers: [
     AdalService,
@@ -113,6 +147,10 @@ let config = new AuthServiceConfig([
     {
       provide: AuthServiceConfig,
       useFactory: provideConfig
+    },
+    {
+      provide: NgbDateParserFormatter, 
+      useFactory: () => new CustomNgbDateParserFormatter('longDate')
     }
   ],
 })
