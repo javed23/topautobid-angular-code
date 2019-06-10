@@ -8,10 +8,18 @@ import 'rxjs/add/observable/from.js';
 import { IntervalObservable } from 'rxjs/observable/IntervalObservable';
 import { environment } from '../../../environments/environment';
 
+import { Vehicle } from "../../core/_models";
 import * as _ from 'lodash';
 
 
-const apiURL:string = 'https://vpic.nhtsa.dot.gov/api/vehicles/';
+const apiURL:string = 'https://www.carqueryapi.com/api/0.3/?callback=getData';
+
+const headers = new HttpHeaders();
+headers.set('Access-Control-Allow-Origin', 'http://localhost:4200');
+headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+headers.set('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+headers.set('Access-Control-Allow-Credentials', 'true');
+headers.set('Content-Type', 'application/json');
 
 @Injectable({
     providedIn: 'root'
@@ -24,11 +32,6 @@ export class VehicleService {
 
     constructor(private httpClient: HttpClient, private router: Router) {}
 
-    createAuthorizationHeader(headers: Headers) {
-      headers.append('accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'); 
-      headers.append('accept-encoding', 'gzip, deflate, br')
-      headers.append('accept-language', 'en-GB,en-US;q=0.9,en;q=0.8')
-    }
     public getDataByVIN(vin): Observable<any | false> {
         return this.httpClient
         .get(apiURL+'decodevinvaluesextended/'+vin+'?format=json')
@@ -37,12 +40,13 @@ export class VehicleService {
         })
     }
 
-    public getAllMakesByYear(year, Manufacturer): Observable<any | false> {       
+    public getAllMakesByYear(data): Observable<any | false> {   
+              
         return this.httpClient
-        .get(apiURL+'GetMakesForManufacturerAndYear/'+Manufacturer+'?year='+year+'&format=json')
-        //.get(apiURL+'/getallmakes?format=json')
-        .map((response: Response) => {           
-          return response;
+        .get(apiURL+'&cmd=getMakes&year='+data.year, {headers: headers, responseType: 'text'})
+        .map((response) => {      
+            console.log('getMakes', response);     
+          //return response;
         })
     }
     
@@ -81,6 +85,24 @@ export class VehicleService {
     .map((response: Response) => {
         return response;
     })
-  }   
+
+  }
+
+     /**
+     * Fetch car details
+     * @param carObject    car object to fetch from database.
+     * @return        Observable<any>
+    */
+    getAllVehicleDetails(response): Observable<any>{
+       
+        return Observable.create(obs => {        
+            let vehicle = new Vehicle(response);   
+            obs.next(vehicle);
+            return;
+                
+        });
+
+    }
+    
     
 }

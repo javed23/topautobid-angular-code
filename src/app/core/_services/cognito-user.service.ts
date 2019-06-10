@@ -13,6 +13,7 @@ import { ListUsersRequest } from 'aws-sdk/clients/cognitoidentityserviceprovider
 import { environment } from '../../../environments/environment';
 import { CognitoUtils } from './cognito-utils.service';
 import * as _ from 'lodash';
+import { addAllToArray } from '@angular/core/src/render3/util';
 
 let cognitoUser = null
 let username = null
@@ -27,13 +28,13 @@ export class CognitoUserService {
     userPool: CognitoUserPool;
 
     constructor(private http: HttpClient, private router: Router) {
-       
+
         this.cognitoAdminService = new AWS.CognitoIdentityServiceProvider({
             accessKeyId: environment.AWS.ACCESS_KEY,
             secretAccessKey: environment.AWS.SECRET_KEY,
             region: environment.AWS.REGION
         });
-        this.userPool = CognitoUtils.getUserPool();      
+        this.userPool = CognitoUtils.getUserPool();
     }
 
     private getUserData(username: string) {
@@ -45,7 +46,7 @@ export class CognitoUserService {
     private getUsername(email: string) {
         //username = email?String(_.dropRight((email).split('@'))):''; 
         username = email.substring(0, email.lastIndexOf("."))
-        return String(username.replace("@","_"));
+        return String(username.replace("@", "_"));
     }
 
     public login(formData): Observable<any | false> {
@@ -57,226 +58,233 @@ export class CognitoUserService {
 
         return Observable.create(obs => {
             cognitoUser.authenticateUser(authenticationDetails, {
-                mfaRequired () {                 
-                  obs.next({ mfaRequired:true });                 
-                  return;
-                },                
-                onFailure (err) {   
-                    if(err.code == 'UserNotConfirmedException'){                        
+                mfaRequired() {
+                    obs.next({ mfaRequired: true });
+                    return;
+                },
+                onFailure(err) {
+                    if (err.code == 'UserNotConfirmedException') {
                         obs.error('Your account is registered but not confirmed so please follow signup process again and confirm the account.');
                         return;
-                    }          
+                    }
                     obs.error(err.message);
                     return;
-                 
+
                 }
-              });
-        });
-    }  
-    
-
-    public signup(newUser: any): Observable<Object> {
-        return Observable.create(obs => {
-          
-            const phoneNumber = newUser.phones[0].country_code+newUser.phones[0].phone;
-            const userObject = {
-                name:newUser.name.first_name,
-                middle_name:newUser.name.last_name,
-                email: newUser.emails[0].email,
-                phone_number:phoneNumber,
-                updated_at:new Date().getTime()/1000
-            }
-            
-            //console.log('userObj',userObject)
-            const attrs = CognitoUtils.createNewUserAttributes(userObject);
-            //console.log('attrs',attrs)               
-            username = this.getUsername(userObject.email) //(userObject.email)?String(_.dropRight((userObject.email).split('@'))):'';        
-            cognitoUser = new CognitoUser(this.getUserData(username));
-            //console.log('username',username)
-            //console.log('cognitoUser',cognitoUser)
-            
-            this.userPool.signUp(username, newUser.password, attrs, [], (err, result) => {
-                    if (err) {
-                        console.error(err);
-                        //console.log('code',err['code'])
-                        if(err['code'] == 'UsernameExistsException') { 
-                            //console.log('resendConfirmationCode');
-                            //this.resendSignupOTP();
-                            cognitoUser.resendConfirmationCode((err, result) => {
-                                if (err) {
-                                    //console.log('err',err);
-                                    obs.error(err.message);
-                                    return;
-                                }
-                                //console.log('result',result)            
-                               
-                                obs.next({ username:username });
-                                return;                 
-                            
-                            });   
-
-                        }else{
-                            obs.error(err.message);
-                            return;
-                        }
-                        
-                        
-                    }
-                    //console.log(result)                    
-                    //localStorage.setItem('aws-user', JSON.stringify(data))
-                    obs.next({ username:username });
-                    return;                 
-                
             });
         });
     }
 
-    resendSignupOTP(): Observable<Object>{
-       
-        return Observable.create(obs => {        
+
+    public signup(newUser: any): Observable<Object> {
+        return Observable.create(obs => {
+
+            // const phoneNumber = newUser.phones[0].country_code + newUser.phones[0].phone;
+            console.log('the user is ',newUser)
+            const userObject = {
+                name: newUser.name.first_name,
+                middle_name: newUser.name.last_name,
+                updated_at: new Date().getTime() / 1000
+            };
+
+            //check MFA on the basis of user 
+            if ('phones' in newUser)
+                userObject['phone_number'] = newUser.phones[0].country_code + newUser.phones[0].phone;
+            if ('emails' in newUser)
+                userObject['email'] = newUser.emails[0].email;
+
+            console.log('the object is ',userObject);
+            //console.log('userObj',userObject)
+            const attrs = CognitoUtils.createNewUserAttributes(userObject);
+            //console.log('attrs',attrs)               
+            // username = this.getUsername(userObject.email) //(userObject.email)?String(_.dropRight((userObject.email).split('@'))):'';        
+            username = newUser.username;
+            cognitoUser = new CognitoUser(this.getUserData(username));
+            //console.log('username',username)
+            //console.log('cognitoUser',cognitoUser)
+
+            this.userPool.signUp(username, newUser.cipher, attrs, [], (err, result) => {
+                if (err) {
+                    console.error(err);
+                    //console.log('code',err['code'])
+                    if (err['code'] == 'UsernameExistsException') {
+                        //console.log('resendConfirmationCode');
+                        //this.resendSignupOTP();
+                        cognitoUser.resendConfirmationCode((err, result) => {
+                            if (err) {
+                                //console.log('err',err);
+                                obs.error(err.message);
+                                return;
+                            }
+                            //console.log('result',result)            
+
+                            obs.next({ username: username });
+                             return;
+
+                        });
+
+                    } else {
+                        obs.error(err.message);
+                        return;
+                    }
+
+
+                }
+                //console.log(result)                    
+                //localStorage.setItem('aws-user', JSON.stringify(data))
+                obs.next({ username: username });
+                return;
+
+            });
+        });
+    }
+
+    resendSignupOTP(): Observable<Object> {
+
+        return Observable.create(obs => {
             //const username = 'sandeep.may86'//(formData.email)?String(_.dropRight((formData.email).split('@'))):''; 
             //cognitoUser = new CognitoUser(this.getUserData(username));
             console.log('resendSignupOTP');
             cognitoUser.resendConfirmationCode((err, result) => {
                 if (err) {
-                    console.log('err',err);
+                    console.log('err', err);
                     obs.error(err.message);
                     return;
                 }
-                console.log('result',result)            
-               
+                console.log('result', result)
+
                 obs.next(result);
-                return;                 
-            
-            });        
+                return;
+
+            });
         });
 
     }
 
-   
+
     //to verify the seller login OTP
-    public confirmLoginOtp(params: any): Observable<Object> {   
+    public confirmLoginOtp(params: any): Observable<Object> {
 
-        return Observable.create(obs => {        
-            
-            cognitoUser.sendMFACode( params.controls['code'].value, {
+        return Observable.create(obs => {
 
-                onSuccess (response) {
+            cognitoUser.sendMFACode(params.controls['code'].value, {
+
+                onSuccess(response) {
 
                     obs.next(response);
-                    return;                
+                    return;
                 },
-                onFailure (err) {
-                  
+                onFailure(err) {
+
                     obs.error(err.message);
                     return;
-             
+
                 }
-            })         
+            })
         });
 
-        
+
     }
 
     //to verify the seller signup OTP
-    public confirmSignupOtp(params: any): Observable<Object> {        
+    public confirmSignupOtp(params: any): Observable<Object> {
         return Observable.create(obs => {
-            
-            this.cognitoAdminService.confirmSignUp(params, function(err, result) {
+
+            this.cognitoAdminService.confirmSignUp(params, function (err, result) {
                 if (err) {
-                  
+
                     console.log('otp err', err); // an error occurred
                     //console.error(err);
                     //obs.next(false);
                     obs.error(err.message);
                     return;
 
-                }else{
+                } else {
                     // successful response
                     console.log(result);
                     obs.next(result);
-                    return; 
+                    return;
                 }
-                       
+
             });
-        });        
-    }  
+        });
+    }
     //forgot password
-    
-    public forgotPassword(formData): Observable<Object> {        
+
+    public forgotPassword(formData): Observable<Object> {
         return Observable.create(obs => {
-            username = this.getUsername(formData.email) 
+            username = this.getUsername(formData.email)
             cognitoUser = new CognitoUser(this.getUserData(username));
 
             cognitoUser.forgotPassword({
-                
-                onFailure: function(err) {                    
+
+                onFailure: function (err) {
                     console.log('forgot password error', err); // an error occurred                   
                     obs.error(err.message);
                     return;
                 },
                 inputVerificationCode() {
-                    obs.next({ showOtpForm:true });
+                    obs.next({ showOtpForm: true });
                     return;
                     /*var verificationCode = prompt('Please input verification code ' ,'');
                     var newPassword = prompt('Enter new password ' ,'');
                     cognitoUser.confirmPassword(verificationCode, newPassword, this);*/
                 }
             });
-            
-        });        
-    } 
-    
-    //to verify the seller/dealer login OTP
-    public confirmForgotPasswordOtp(params: any): Observable<Object> {   
-        console.log('params',params);
-        return Observable.create(obs => {        
-            
-            cognitoUser.confirmPassword( params.controls['ConfirmationCode'].value, params.controls['password'].value, {
 
-                onSuccess (response) {
-                    console.log('response',response);
+        });
+    }
+
+    //to verify the seller/dealer login OTP
+    public confirmForgotPasswordOtp(params: any): Observable<Object> {
+        console.log('params', params);
+        return Observable.create(obs => {
+
+            cognitoUser.confirmPassword(params.controls['ConfirmationCode'].value, params.controls['password'].value, {
+
+                onSuccess(response) {
+                    console.log('response', response);
                     obs.next(response);
-                    return;                
+                    return;
                 },
-                onFailure (err) {
-                    console.log('err',err);
+                onFailure(err) {
+                    console.log('err', err);
                     obs.error(err.message);
                     return;
-             
+
                 }
-            })         
+            })
         });
 
-        
+
     }
     //to delete the seller/dealer
-    public deleteUser(params: any): Observable<Object> {        
-        return Observable.create(obs => {          
+    public deleteUser(params: any): Observable<Object> {
+        return Observable.create(obs => {
 
             let newparams = {
                 UserPoolId: environment.AWS.COGNITO.UserPoolId,
                 Username: params,
             };
 
-            this.cognitoAdminService.adminDeleteUser(newparams, function(err, response) {
+            this.cognitoAdminService.adminDeleteUser(newparams, function (err, response) {
                 if (err) { // error response
                     obs.error(err.message);
                     return;
                 }
-                else  {
+                else {
                     obs.next(response);
                     return; // successful response
                 }
-            });      
+            });
 
-        });        
+        });
     }
 
-    
-    
-    signout(){
-        cognitoUser.signOut()        
+
+
+    signout() {
+        cognitoUser.signOut()
     }
-    
+
 }

@@ -22,8 +22,8 @@ export class CarService {
 
     public listingCars(page: Page): Observable<PagedData<Car>> {
 
-        //page['seller_id'] = localStorage.getItem('loggedinUserId') 
-        page['seller_id'] = '5cd170562688321559f12f32'
+        page['seller_id'] = localStorage.getItem('loggedinUserId') 
+        // page['seller_id'] = '5cd170562688321559f12f32'
         return this.httpClient.post('car/listingCars', page)
             .map((response: any) => {
 
@@ -54,8 +54,8 @@ export class CarService {
 
     public listingCarsOnDatable(page: Page): Observable<PagedData<Car>> {
 
-        //page['seller_id'] = localStorage.getItem('loggedinUserId') 
-        page['seller_id'] = '5cd170562688321559f12f32'
+        page['seller_id'] = localStorage.getItem('loggedinUserId') 
+        // page['seller_id'] = '5cd170562688321559f12f32'
         return this.httpClient.post('car/listingCarsOnDatable', page)
             .map((response: any) => {
 
@@ -84,8 +84,8 @@ export class CarService {
     */
     public listingDealersCars(page: Page): Observable<PagedData<Car>> {
 
-        //page['dealer_id'] = localStorage.getItem('loggedinUserId')   
-        page['dealer_id'] = '5ca1e88f9dac60394419c0bc'
+        page['dealer_id'] = localStorage.getItem('loggedinUserId')   
+        // page['dealer_id'] = '5ca1e88f9dac60394419c0bc'
 
         return this.httpClient.post('car/listingDealersCars', page)
             .map((response: any) => {
@@ -163,7 +163,8 @@ export class CarService {
 * @return        Observable<any>
 */
   public ratingReviewByDealer(ratingReview): Observable<any> {
-    ratingReview['dealer_id'] = '5ca1e88f9dac60394419c0bc'
+      
+    ratingReview['dealer_id'] = localStorage.getItem('loggedinUserId') 
     return this.httpClient.post('car/ratingReviewByDealer', ratingReview)
         .map((response: any) => response)
 }
@@ -175,7 +176,8 @@ export class CarService {
 * @return        Observable<any>
 */
 public ratingReviewBySeller(ratingReview): Observable<any> {
-    ratingReview['seller_id'] = '5ca1e88f9dac60394419c0bc'
+    ratingReview['seller_id'] = localStorage.getItem('loggedinUserId')
+    // ratingReview['seller_id'] = '5ca1e88f9dac60394419c0bc'
     return this.httpClient.post('car/ratingReviewBySeller', ratingReview)
         .map((response: any) => response)
 }

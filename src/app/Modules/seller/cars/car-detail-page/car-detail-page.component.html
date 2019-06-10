@@ -271,7 +271,7 @@ car-details -->
                 </li>
                 <li>
                     <span class="head">State</span>
-                    <span class="value">{{carDetail?.location?.state }}({{carDetail?.location?.state_abbreviation }})</span>
+                    <span class="value" *ngIf="carDetail.location?.state.length>0">{{carDetail?.location?.state }}({{carDetail?.location?.state_abbreviation }})</span>
                 </li>
                   
                 <li>

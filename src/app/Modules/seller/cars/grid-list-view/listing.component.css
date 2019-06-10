@@ -12,3 +12,15 @@
 .product-listing ul.list-group .checkbox label button {
     text-align: left;
 }
+
+.car-item .car-overlay-banner ul {
+    top: 50%;
+}
+.car-item .car-overlay-banner ul li {
+
+    margin: 0 3px;
+}
+.car-item .car-overlay-banner ul li a{
+    line-height: 31px;
+    cursor: pointer;
+}

@@ -17,7 +17,7 @@
       <div class="col-md-10">
          <div class="section-title">
            <span>Welcome to </span>
-           <h2>the Cardealer online</h2>
+           <h2>the TopAutoBid online</h2>
            <div class="separator"></div>
          </div>
       </div>
@@ -398,7 +398,7 @@
                     <div class="form-group col-md-12 calendar_col">
                         
                         <label>Date*</label>
-                        <input class="form-control" type="text" (click)="d.toggle()" placeholder="dd.mm.yyyy" ngbDatepicker #d="ngbDatepicker" name="availabilitydate" formControlName="availabilitydate" [ngClass]="{ 'is-invalid': (signUpFormStep3.controls.availabilitydate.touched || step3submitted) && signUpFormStep3.get('availabilitydate').errors }">
+                        <input class="form-control" type="text" (click)="d.toggle()" placeholder="mm.dd.yyyy" ngbDatepicker #d="ngbDatepicker" name="availabilitydate" formControlName="availabilitydate" [ngClass]="{ 'is-invalid': (signUpFormStep3.controls.availabilitydate.touched || step3submitted) && signUpFormStep3.get('availabilitydate').errors }">
                         <button class="btn btn-outline-secondary d-none calendar" (click)="d.toggle()" type="date"></button>
 
                         <!--<input class="datepicker" data-date-format="mm/dd/yyyy"> -->

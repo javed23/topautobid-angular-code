@@ -34,8 +34,11 @@ import { ListingComponent as CarsGridListComponent } from './cars/grid-list-view
 import { ListComponent as CarsTableComponent } from './cars/table-view/list.component';
 import { AddCarComponent } from './cars/addcar/addcar.component';
 import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
+import { VerifyEmailComponent } from './verify-email/verify-email.component';
+import { AccountVerifyComponent } from './account-verify/account-verify.component';
 import { ContactRequestComponent } from './cars/contact-request/contact-request.component';
 import { EditCarComponent } from './cars/editcar/editcar.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -69,8 +72,11 @@ let config = new AuthServiceConfig([
     CarsGridListComponent,
     CarDetailPageComponent,
     AddCarComponent,
+    VerifyEmailComponent,
+    AccountVerifyComponent,
     EditCarComponent,
-    ContactRequestComponent
+    ContactRequestComponent,
+    ResetPasswordComponent
   ],
   
   imports: [

@@ -586,7 +586,7 @@ i.fa-caret-down {position: absolute;font-size: 18px;right:5%;top: 30%;color: #BA
 .detail_body .tabs>li.active>a:after {background: #000;}
 .detail_body .galler_box {display: flex;flex-wrap: wrap;margin: 10px 0 90px 0;max-height: 560px;}
 /*----------------------------*/
-.galler_box .thumb {width: 126px;margin-right: 8px;margin-bottom: 4px;margin-top: 4px;height: 106px;}
+.galler_box .thumb {width: 125px;margin-right: 8px;margin-bottom: 4px;margin-top: 4px;height: 106px;}
 .galler_box .thumb img {width: 100%;height: 100%;object-fit: cover;}
 /*----------------------------*/
 .pdf_download {display: inline-block;vertical-align: middle;color: #424856;}

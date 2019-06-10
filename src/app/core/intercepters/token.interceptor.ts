@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 
 
 @Injectable()
+
 export class TokenInterceptor implements HttpInterceptor {
   constructor() { }
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
