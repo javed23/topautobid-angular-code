@@ -32,13 +32,15 @@ product-listing  -->
               <ul class="list-group">
                 <li class="list-group-item">
                   <a href="#">Year</a>
+                  
                   <ul>   
                           
                     <li *ngFor="let year of yearsRange;"><span class="checkbox">
                         <label>
-                          <!--<input type="checkbox" [checked]="yearsRange.indexOf(year) >= 0" value="{{year.value}}" (change)="vehicleStatisticsByYear(year, $event)">-->
+                          <!-- <input type="checkbox"  [checked]="year.checked" value="{{year.value}}" (change)="vehicleStatisticsByYear(year.value,'year')"> {{year.value}}-->
 
-                          <input type="checkbox"  [checked]="year.checked" value="{{year.value}}" (change)="vehicleStatisticsByYear(year.value,'year')"> {{year.value}}
+                         
+                          <button type="button" [ngClass]="{btn_active: (page?.filters?.year == year.value)}" (click)="vehicleStatisticsByYear(year.value,'year')" href="javascript:void(0)" class="sidebar_content">{{year.value}}</button>
                         </label>
                       </span></li> 
                   </ul>  
@@ -55,7 +57,11 @@ product-listing  -->
                     <li *ngFor="let make of makes">
                       <span class="checkbox">
                         <label>
-                          <input type="checkbox" [checked]="make.checked" value="{{make.name}}" (change)="vehicleStatisticsByMake(make.name, 'make')"> {{make.name}}
+                          <button type="button" [ngClass]="{btn_active: (page?.filters?.make == make.make_display)}" (click)="vehicleStatisticsByMake(make.make_display, 'make')" href="javascript:void(0)" class="sidebar_content">{{make.make_display}}</button>
+
+                          <!--
+                            <input type="checkbox" [checked]="make.checked" value="{{make.make_display}}" (change)="vehicleStatisticsByMake(make.make_display, 'make')"> {{make.make_display}}
+                          -->
                         </label>
                       </span></li>                    
                   </ul>
@@ -72,7 +78,11 @@ product-listing  -->
                       <li *ngFor="let model of models">
                         <span class="checkbox">
                           <label>
-                            <input type="checkbox" [checked]="model.checked" value="{{model.name}}" (change)="vehicleStatisticsByModel(model.name,'model')"> {{model.name}}
+                           
+                           <!-- <input type="checkbox" [checked]="model.checked" value="{{model.name}}" (change)="vehicleStatisticsByModel(model.name,'model')"> {{model.name}}-->
+
+                            <button type="button" [ngClass]="{btn_active: (page?.filters?.model == model.model_name)}"  (click)="vehicleStatisticsByModel(model.model_name, 'model')" href="javascript:void(0)" class="sidebar_content">{{model.model_name}}</button>
+                            
                           </label>
                         </span></li>                    
                     </ul>
@@ -89,7 +99,10 @@ product-listing  -->
                   <li *ngFor="let trim of trims">
                     <span class="checkbox">
                       <label>
-                        <input type="checkbox" [checked]="trim.checked"  value="{{trim.name}}" (change)="uncheckAllFetchRecords(trim.name, 'trim')"> {{trim.name}}
+                       <!--
+                        <input type="checkbox" [checked]="trim.checked"  value="{{trim.name}}" (change)="uncheckAllFetchRecords(trim.name, 'trim')"> {{trim.name}} 
+                       --> 
+                       <button [ngClass]="{btn_active: (page?.filters?.trim == trim.model_trim)}" type="button" (click)="uncheckAllFetchRecords(trim.model_trim, 'trim')" href="javascript:void(0)" class="sidebar_content">{{trim.model_trim}} </button>
                       </label>
                     </span></li>                    
                 </ul>
@@ -107,7 +120,10 @@ product-listing  -->
                   <li *ngFor="let bodyStyle of bodyStyles">
                     <span class="checkbox">
                       <label>
-                        <input type="checkbox" [checked]="bodyStyle.checked" value="{{bodyStyle.name}}" (change)="uncheckAllFetchRecords(bodyStyle.name, 'body_style')"> {{bodyStyle.name}}
+                        <!--
+                          <input type="checkbox" [checked]="bodyStyle.checked" value="{{bodyStyle.name}}" (change)="uncheckAllFetchRecords(bodyStyle.name, 'body_style')"> {{bodyStyle.name}}
+                        -->
+                        <button type="button" [ngClass]="{btn_active: (page?.filters?.body_style == bodyStyle.name)}" (click)="uncheckAllFetchRecords(bodyStyle.name, 'body_style')" href="javascript:void(0)" class="sidebar_content">{{bodyStyle.name}} </button>
                       </label>
                     </span></li>                    
                 </ul>
@@ -123,7 +139,10 @@ product-listing  -->
                   <li *ngFor="let transmission of transmissions">
                     <span class="checkbox">
                       <label>
-                        <input type="checkbox" [checked]="transmission.checked" value="{{transmission.name}}" (change)="uncheckAllFetchRecords(transmission.name, 'transmission')"> {{transmission.name}}
+                        <!--
+                          <input type="checkbox" [checked]="transmission.checked" value="{{transmission.name}}" (change)="uncheckAllFetchRecords(transmission.name, 'transmission')"> {{transmission.name}}
+                        -->
+                        <button type="button" [ngClass]="{btn_active: (page?.filters?.transmission == transmission.name)}" (click)="uncheckAllFetchRecords(transmission.name, 'transmission')" href="javascript:void(0)" class="sidebar_content">{{transmission.name}} </button>
                       </label>
                     </span></li>                    
                 </ul>
@@ -139,7 +158,12 @@ product-listing  -->
                   <li *ngFor="let exteriorColor of exteriorColors">
                     <span class="checkbox">
                       <label>
-                        <input type="checkbox" [checked]="exteriorColor.checked" value="{{exteriorColor.label}}" (change)="uncheckAllFetchRecords(exteriorColor.label, 'exterior_color')"> <span [ngStyle]="{'background': exteriorColor.value}"  class="color_circle"></span> {{exteriorColor.label}} 
+                        
+                        <!--
+                          <input type="checkbox" [checked]="exteriorColor.checked" value="{{exteriorColor.label}}" (change)="uncheckAllFetchRecords(exteriorColor.label, 'exterior_color')"> <span [ngStyle]="{'background': exteriorColor.value}"  class="color_circle"></span> {{exteriorColor.label}} 
+                        -->
+
+                        <button type="button" [ngClass]="{btn_active: (page?.filters?.exterior_color == exteriorColor.label)}" (click)="uncheckAllFetchRecords(exteriorColor.label, 'exterior_color')" href="javascript:void(0)" class="sidebar_content">{{exteriorColor.label}} </button>
                       </label>
                     </span></li>                    
                 </ul>
@@ -153,9 +177,15 @@ product-listing  -->
                       </label>
                     </span></li>-->
                   <li *ngFor="let interiorColor of interiorColors">
+                 
                     <span class="checkbox">
                       <label>
+                       <!--
                         <input class="interior_color" [checked]="interiorColor.checked" type="checkbox" value="{{interiorColor.label}}" (change)="uncheckAllFetchRecords(interiorColor.label, 'interior_color')">  <span [ngStyle]="{'background': interiorColor.value}"  class="color_circle"></span> {{interiorColor.label}}
+
+                       --> 
+              
+                       <button [ngClass]="{btn_active: (page?.filters?.interior_color == interiorColor.label)}" type="button" (click)="uncheckAllFetchRecords(interiorColor.label, 'interior_color')" href="javascript:void(0)" class="sidebar_content">{{interiorColor.label}} </button>
                       </label>
                     </span></li>                    
                 </ul>

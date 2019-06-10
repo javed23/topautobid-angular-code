@@ -87,27 +87,26 @@ export class ListingComponent implements OnInit {
 
   ngOnInit() {
      //calling filters form initlization method
-    this.initalizeFilterForm();
-    let componentRefrence = this
-    $.getJSON(`${environment.VEHICLE_STATS_API.ENDPOINT}/?callback=?`, {cmd:"getYears"}, function(data) {    
-      let years = data.Years;      
-      for (let i = years.min_year; i <= years.max_year; i++) {       
-        componentRefrence.yearsRange.push({
-          label: i,
-          value: i
-        });
-      } 
-    });
-
+     this.initalizeFilterForm();
   }
 /**
 * component life cycle default method, runs after view page initlization
 * @return void
 */
   ngAfterViewInit():void {  
-    //initalize the price & year slider on view page      
+    let currentYear = new Date().getFullYear();  
+    //initalize the price & year slider on view page
+      
     POTENZA.featurelist()
-    this.onApplyingFilters()     
+    this.onApplyingFilters() 
+
+    for (var i = 0; i < 15; i++) {
+      this.yearsRange.push({
+        label: currentYear - i,
+        value: currentYear - i
+      });
+    }
+   // this.yearsRange = this.commonUtilsService.createYearRange();    
   }
 
 /**
@@ -301,6 +300,7 @@ get price(): string {
  * @return  void
 */
 setFilters(option,filter):void{
+  delete this.page.filters[filter]; //for single selection
   let options = (_.has(this.page.filters, [filter]))? this.page.filters[filter]:[];   
   let index = options.indexOf(option);
   (index>=0)?_.pullAt(options, [index])  : options.push(option)     
@@ -362,9 +362,17 @@ removeFilter(event){
 */
   vehicleStatisticsByYear(option, filter):void{
     this.setFilters(option,filter)
+    let componentRefrence = this
+    $.getJSON(`${environment.VEHICLE_STATS_API.ENDPOINT}/?callback=?`, {cmd:"getMakes", year:this.page.filters[filter][0]}, function(data) {
 
+    
+      componentRefrence.makes = data.Makes
+      componentRefrence.currentPage = 0
+      componentRefrence.setPage(componentRefrence._defaultPagination,componentRefrence.page.type); 
+   });
+   
     //hit api to fetch data
-    this.commonUtilsService.getVehicleStatisticsByMultipleyear({ year: this.page.filters[filter]}).subscribe(
+   /*this.commonUtilsService.getVehicleStatisticsByMultipleyear({ year: this.page.filters[filter]}).subscribe(
       //case success
     (response) => { 
       let makes = []; 
@@ -380,7 +388,7 @@ removeFilter(event){
     //case error 
     },error => {    
       this.commonUtilsService.onError(error);
-    });
+    });*/
   }
 
 
@@ -393,8 +401,17 @@ removeFilter(event){
 vehicleStatisticsByMake(option, filter):void{
   this.setFilters(option,filter)  
 
+  let componentRefrence = this
+  $.getJSON(`${environment.VEHICLE_STATS_API.ENDPOINT}/?callback=?`, {cmd:"getModels", make:this.page.filters[filter][0],year:this.page.filters['year'][0],sold_in_us:1}, function(data) {
+
+    console.log('Models',data.Models);
+    componentRefrence.models = data.Models
+    componentRefrence.currentPage = 0
+    componentRefrence.setPage(componentRefrence._defaultPagination,componentRefrence.page.type); 
+  });
+
   //hit api to fetch data
-  this.commonUtilsService.getVehicleStatisticsByMultiplemake({ make: this.page.filters[filter]}).subscribe(
+  /*this.commonUtilsService.getVehicleStatisticsByMultiplemake({ make: this.page.filters[filter]}).subscribe(
     //case success
   (response) => { 
     let models = []; 
@@ -413,7 +430,7 @@ vehicleStatisticsByMake(option, filter):void{
   //case error 
   },error => {    
     this.commonUtilsService.onError(error);
-  });
+  });*/
 }
 
 
@@ -427,8 +444,22 @@ vehicleStatisticsByMake(option, filter):void{
 vehicleStatisticsByModel(option, filter):void{
   this.setFilters(option,filter)
 
+  let componentRefrence = this
+  $.getJSON(`${environment.VEHICLE_STATS_API.ENDPOINT}/?callback=?`, {cmd:"getTrims", model:this.page.filters[filter][0],make:this.page.filters['make'][0],min_year:this.page.filters['year'][0],sold_in_us:1}, function(data) {
+    componentRefrence.trims = []
+    let allTrims = [];
+    (data.Trims).forEach(element => {     
+     if(allTrims.indexOf(element.model_trim)==-1){
+      allTrims.push(element.model_trim);
+      (componentRefrence.trims).push(element)
+     }      
+    });    
+    componentRefrence.currentPage = 0
+    componentRefrence.setPage(componentRefrence._defaultPagination,componentRefrence.page.type); 
+  });
+
   //hit api to fetch data
-  this.commonUtilsService.getVehicleStatisticsByMultiplemodel({ model: this.page.filters[filter]}).subscribe(
+  /*this.commonUtilsService.getVehicleStatisticsByMultiplemodel({ model: this.page.filters[filter]}).subscribe(
     //case success
   (response) => { 
     let trims = []; 
@@ -449,7 +480,7 @@ vehicleStatisticsByModel(option, filter):void{
   //case error 
   },error => {    
     this.commonUtilsService.onError(error);
-  });
+  });*/
 }
 
 /**
