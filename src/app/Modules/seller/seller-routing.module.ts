@@ -15,6 +15,10 @@ import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.c
 import { AddCarComponent } from './cars/addcar/addcar.component';
 import { CarBidsComponent } from './cars/car-bids/car-bids.component';
 import { RateReviewComponent } from './rate-review/rate-review.component';
+import { VerifyEmailComponent } from './verify-email/verify-email.component';
+import { AccountVerifyComponent } from './account-verify/account-verify.component';
+import { EditCarComponent } from './cars/editcar/editcar.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 //importing guards
 import { SellerAuthGuardService } from '../../core/guards/seller-auth-guard.service';
 
@@ -36,14 +40,24 @@ const routes: Routes = [
     data: { title: 'Seller Signup' }
   },
   {
+    path: 'verify-email/:token',
+    component: VerifyEmailComponent,
+    data: { title: 'Seller Email Verify' }
+  },
+  {
+    path: 'reset-password/:token',
+    component: ResetPasswordComponent,
+    data: { title: 'Seller Reset Pasword' }
+  },
+  {
     path: 'forgot-password',
     component: ForgotPasswordComponent,
     data: { title: 'Seller Forgot Pasword' }
   },
   {
     path: 'home',
-    component: HomeComponent,
-    data: { title: 'Seller Dashboard' },
+    component: CarsGridListComponent,
+    data: { title: "Seller's Cars listing" },
     canActivate: [SellerAuthGuardService]
   },
   {
@@ -52,34 +66,40 @@ const routes: Routes = [
     data: { title: 'Seller Profile' },
     canActivate: [SellerAuthGuardService]
   },
-  { 
-    path: 'car-dashboard', 
-    component: CarsTableComponent, 
+  {
+    path: 'car-dashboard',
+    component: CarsTableComponent,
     data: { title: "Seller's Cars Dashboard" },
-    /*canActivate: [SellerAuthGuardService]*/
+    canActivate: [SellerAuthGuardService]
   },
-  { 
-    path: 'car-listing', 
-    component: CarsGridListComponent, 
+  {
+    path: 'car-listing',
+    component: CarsGridListComponent,
     data: { title: "Seller's Cars listing" },
-    /*canActivate: [SellerAuthGuardService]*/
+    canActivate: [SellerAuthGuardService]
   },
-  { 
-    path: 'car-detail/:_id/:type', 
-    component: CarDetailPageComponent, 
+  {
+    path: 'car-detail/:_id/:type',
+    component: CarDetailPageComponent,
     data: { title: "Car Details" },
-    /*canActivate: [SellerAuthGuardService]*/
+    canActivate: [SellerAuthGuardService]
   },
-  { 
-    path: 'car-detail/:_id', 
-    component: CarDetailPageComponent, 
+  {
+    path: 'car-detail/:_id',
+    component: CarDetailPageComponent,
     data: { title: "Car Details" },
-    /*canActivate: [SellerAuthGuardService]*/
-  }, 
+    canActivate: [SellerAuthGuardService]
+  },
 
   {
     path: 'addcar',
     component: AddCarComponent,
+    data: { title: 'Seller AddCar' },
+    canActivate: [SellerAuthGuardService]
+  },
+  {
+    path: 'account-verify/:id',
+    component: AccountVerifyComponent,
     data: { title: 'Seller AddCar' }
   },
   {
@@ -93,9 +113,20 @@ const routes: Routes = [
     component: RateReviewComponent,
     data: { title: 'Seller Rate and Reviews' }
   }
+  ,
+  {
 
-  
+    path: 'editcar/:_id',
+    component: EditCarComponent,
+    data: { title: 'Seller EditCar' }
+  }
+  ,
 
+  {
+    path: 'editcar/:_id/:type',
+    component: EditCarComponent,
+    data: { title: 'Seller EditCar' }
+  }
 ];
 
 @NgModule({

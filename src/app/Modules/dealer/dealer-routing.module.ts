@@ -10,6 +10,10 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { PurchasesListComponent } from './purchases/purchases-list/purchases-list.component';
 //cars management components
 // import { ListComponent as CarsListComponent } from './cars/list/list.component';
+import { VerifyEmailComponent } from './verify-email/verify-email.component';
+import { AccountVerifyComponent } from './account-verify/account-verify.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+//cars management components
 
 
 //dealerships management components
@@ -51,9 +55,20 @@ const routes: Routes = [
     data: { title: 'Dealer Forgot Pasword' }
   },
   {
+    path: 'reset-password/:token',
+    component: ResetPasswordComponent,
+    data: { title: 'Dealer Reset Pasword' }
+  },
+
+  {
+    path: 'verify-email/:token',
+    component: VerifyEmailComponent,
+    data: { title: 'Dealer Verify Email' }
+  },
+  {
     path: 'home',
-    component: HomeComponent,
-    data: { title: 'Dealer Dashboard' },
+    component: CarsGridListComponent,
+    data: { title: "Dealer's Cars listing" },
     canActivate: [DealerAuthGuardService]
   },
   {
@@ -66,29 +81,41 @@ const routes: Routes = [
   {
     path: 'dealership-listing',
     component: DealershipsListComponent,
-    data: { title: 'Dealerships listing' }
+    data: { title: 'Dealerships listing' },
+    canActivate: [DealerAuthGuardService]
   },
   {
     path: 'car-listing',
     component: CarsGridListComponent,
     data: { title: "Dealer's Cars listing" },
     /*canActivate: [DealerAuthGuardService]*/
+    canActivate: [DealerAuthGuardService]
   },
   {
     path: 'car-detail/:_id',
     component: CarDetailPageComponent,
     data: { title: "Car Details" },
-    /*canActivate: [DealerAuthGuardService]*/
+    canActivate: [DealerAuthGuardService]
   },
   {
     path: 'purchases',
     component: PurchasesListComponent,
     data: { title: 'My Purchases' },
+  },{
+    path: 'dealerships-list',
+    component: DealershipsListComponent,
+    data: { title: 'Dealerships listing' },
+    canActivate: [DealerAuthGuardService]
+  },
+  {
+    path: 'account-verify/:id',
+    component: AccountVerifyComponent,
+    data: { title: 'Account verify' },
   }, {
     path: 'bid-listing',
     component: BidsListingComponent,
     data: { title: "Cars Bids Listing" },
-    /*canActivate: [DealerAuthGuardService]*/
+    canActivate: [DealerAuthGuardService]
   },
 ];
 

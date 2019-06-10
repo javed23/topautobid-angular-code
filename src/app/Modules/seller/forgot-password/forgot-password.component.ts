@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import 'rxjs/add/operator/catch';
 import { ToastrManager } from 'ng6-toastr-notifications';//toaster class
 import { untilDestroyed } from 'ngx-take-until-destroy';// unsubscribe from observables when the  component destroyed
@@ -17,6 +17,7 @@ import { environment } from '../../../../environments/environment'
 
 //import custom validators
 import { CustomValidators } from '../../../core/custom-validators';
+import { error } from '@angular/compiler/src/util';
 
 declare var $;
 
@@ -38,8 +39,8 @@ export class ForgotPasswordComponent implements OnInit {
   otpVerificationForm:FormGroup;
   showOtpForm: boolean = false;
   otpFormsubmitted: boolean = false;
-  
-  constructor(private alertService: AlertService, private userAuthService: UserAuthService, private pageLoaderService: PageLoaderService, private formBuilder: FormBuilder, private titleService: TitleService, private router: Router, private cognitoUserService:CognitoUserService, private toastr: ToastrManager) {
+  authToken:any;
+  constructor(private activatedRoute:ActivatedRoute, private alertService: AlertService, private userAuthService: UserAuthService, private pageLoaderService: PageLoaderService, private formBuilder: FormBuilder, private titleService: TitleService, private router: Router, private cognitoUserService:CognitoUserService, private toastr: ToastrManager) {
 
     this.initForgotPasswordForm();
     this.initOTPVerifyForm();
@@ -49,6 +50,8 @@ export class ForgotPasswordComponent implements OnInit {
 
    //if seller/dealer loggedin then redirect
    this.userAuthService.checkLoginAndRedirect();
+
+   
 
    //setting the page title
    this.titleService.setTitle();
@@ -112,12 +115,11 @@ export class ForgotPasswordComponent implements OnInit {
     this.pageLoaderService.setLoaderText('Checking email...');//setting loader text
 
     //saving the seller at aws user pool
-    this.cognitoUserService.forgotPassword(this.forgotPasswordForm.value)     
+    this.userAuthService.sellerForgotPassword(this.forgotPasswordForm.value)     
       .pipe(untilDestroyed(this))
       .subscribe(
         (response) => {          
           console.log('response',response)
-          this.verificationPopup(); //open verification popup
 
           this.pageLoaderService.pageLoader(false);//hide page loader       
          
@@ -125,7 +127,7 @@ export class ForgotPasswordComponent implements OnInit {
   
           console.log('otpVerificationForm',this.otpVerificationForm.value)
           //this.pageLoaderService.setLoaderText('Registered...');//setting loader text       
-          this.toastr.successToastr(environment.MESSAGES.OTP_RESEND, 'Success!');//showing success toaster
+          this.toastr.successToastr(environment.MESSAGES.FORGOT_PASSWORD_SUCCESS, 'Success!');//showing success toaster
           
         },
         error => {

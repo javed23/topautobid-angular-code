@@ -58,6 +58,8 @@ export class CreateDealershipComponent implements OnInit {
     //initalize new dealership form
     this.initalizeNewDealershipForm();
 
+    
+
     //fetching us states
     this.fetchStates();
 
@@ -68,8 +70,17 @@ export class CreateDealershipComponent implements OnInit {
     //setting the page title
     this.titleService.setTitle();
 
-    if (this.isOpen)
+    if (this.isOpen){
       $(this.contentSection.nativeElement).modal({ backdrop: 'static', keyboard: false, show: true });
+      this.dealershipService.generateID()     
+      .subscribe(
+        (response) => {   
+          //this.newDealershipForm.controls['_id'].setValue(response);
+        },error => {
+        //this.commonUtilsService.onError(error);      
+      });
+    }
+      
 
 
 
@@ -112,8 +123,6 @@ export class CreateDealershipComponent implements OnInit {
       maxFilesize: 2, // MB,
       dictDefaultMessage: 'Change Photo',
       previewsContainer: "#dealershipPreview",
-      resizeWidth: 125,
-      resizeHeight: 125,
       //createImageThumbnails:false,
       dictInvalidFileType: 'Only valid jpeg, jpg, png file is accepted.',
       dictFileTooBig: 'Maximum upload file size limit is 2MB',
@@ -173,6 +182,7 @@ export class CreateDealershipComponent implements OnInit {
         })
         this.on('sending', function (file, xhr, formData) {
           formData.append('folder', 'Dealership');
+          formData.append('_id', componentObj.newDealershipForm.controls['_id'].value);
         });
 
         this.on("success", function (file, response) {        
@@ -215,8 +225,8 @@ export class CreateDealershipComponent implements OnInit {
       zip: [null, Validators.compose([Validators.required, Validators.pattern('^[0-9]{5}$')])],
       profile_pic: [null],
       _id: [null],
-      //dealer_id: [localStorage.getItem('loggedinUserId')],
-      dealer_id: "5ca1e88f9dac60394419c0bc"
+      dealer_id: [localStorage.getItem('loggedinUserId')],
+      // dealer_id: "5ca1e88f9dac60394419c0bc"
 
     });
   }
@@ -227,8 +237,8 @@ export class CreateDealershipComponent implements OnInit {
       this.submitted = true;
       return;
     }
-    //this.newDealershipForm.get('dealer_id').setValue(localStorage.getItem('loggedinUserId'))
-    this.newDealershipForm.get('dealer_id').setValue('5ca1e88f9dac60394419c0bc')    
+    this.newDealershipForm.get('dealer_id').setValue(localStorage.getItem('loggedinUserId'))
+    // this.newDealershipForm.get('dealer_id').setValue('5ca1e88f9dac60394419c0bc')    
     this.dealershipsItems.push(
       this.newDealershipForm.value
     );   
@@ -277,6 +287,18 @@ export class CreateDealershipComponent implements OnInit {
     this.resetForm();
   }
 
+  // update content of newely added dealership
+  updateNewDealership() { 
+    
+
+    if(this.newDealershipForm.invalid) {
+      return;
+    } 
+    this.dealershipsItems[this.updatedItem] = this.newDealershipForm.value;   
+    this.IsForUpdate = false;
+    this.resetForm(); 
+  } 
+  
   // To delete specific dealership  
   async deleteNewDealership(index) {
     //confirm before deleting car

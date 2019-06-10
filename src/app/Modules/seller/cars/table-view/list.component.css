@@ -15,3 +15,6 @@
 .row_detail_inner > .row {
     padding: 13px 2px;
 }
+.datatable-row-center  .datatable-body-cell:nth-child(7) {
+    width: 100px!important;
+}

@@ -14,6 +14,7 @@ import { ArchwizardModule } from 'angular-archwizard';
 import { CurrencyMaskModule } from "ng2-currency-mask";
 import { NgxGalleryModule } from 'ngx-gallery';
 
+
 //import enviorment file
 import { environment } from '../../../environments/environment';
 
@@ -33,11 +34,16 @@ import { ListingComponent as CarsGridListComponent } from './cars/grid-list-view
 import { ListComponent as CarsTableComponent } from './cars/table-view/list.component';
 import { AddCarComponent } from './cars/addcar/addcar.component';
 import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
+import { VerifyEmailComponent } from './verify-email/verify-email.component';
+import { AccountVerifyComponent } from './account-verify/account-verify.component';
 import { ContactRequestComponent } from './cars/contact-request/contact-request.component';
 import { CarBidsComponent } from './cars/car-bids/car-bids.component';
 import { RateReviewComponent } from './rate-review/rate-review.component';
 
 //loader components
+import { EditCarComponent } from './cars/editcar/editcar.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   acceptedFiles: '.jpg, .png, .jpeg',
@@ -72,7 +78,12 @@ let config = new AuthServiceConfig([
     AddCarComponent,
     ContactRequestComponent,
     CarBidsComponent,
-    RateReviewComponent
+    RateReviewComponent,
+    VerifyEmailComponent,
+    AccountVerifyComponent,
+    EditCarComponent,
+    ContactRequestComponent,
+    ResetPasswordComponent
   ],
   
   imports: [
@@ -93,6 +104,7 @@ let config = new AuthServiceConfig([
     NgxGalleryModule
 
   ],
+
   providers: [
     {
       provide: AuthServiceConfig,

@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, ViewChild,  } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from 'ngx-gallery';
 
@@ -8,7 +8,9 @@ import { PagedData, Car, Page } from "../../../../core/_models";
 import { environment } from '../../../../../environments/environment'
 
 
-
+declare let jQuery: any;
+declare let $: any;
+declare let POTENZA: any;
 
 @Component({
   selector: 'app-listing',
@@ -16,12 +18,12 @@ import { environment } from '../../../../../environments/environment'
   styleUrls: ['./listing.component.css']
 })
 export class ListingComponent implements OnInit {
+  sectionEnable:string='list'
+  sliderOptions: NgxGalleryOptions[];
+  sliderImages: NgxGalleryImage[];
 
   page = new Page(); //object of Page type  
   cars = new Array<Car>() //array of Car type 
-
-  sliderOptions: NgxGalleryOptions[];
-  sliderImages: NgxGalleryImage[];
 
   currentPageLimit: number = environment.DEFAULT_RECORDS_LIMIT  
   private _defaultPagination = {
@@ -31,88 +33,79 @@ export class ListingComponent implements OnInit {
     pageSize: this.currentPageLimit
   }
   //title and breadcrumbs
-  readonly title: string = 'Car Listing';
-  readonly breadcrumbs: any[] = [{ page: 'Home', link: '/dealer/home' }, { page: 'Car Listing', link: '' }]
+  readonly title: string = 'Bid Listing'
+  readonly breadcrumbs: any[] = [{ page: 'Home', link: '/dealer/home' }, { page: 'Bid Listing', link: '' }]
 
 
-  constructor(private commonUtilsService:CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private ngZone: NgZone, private titleService:TitleService) {
+  constructor(private commonUtilsService:CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private titleService:TitleService) {
  
 
     //setting the page title
     this.titleService.setTitle();
 
-    this.fetchCarListing();   
+    this.setPage(this._defaultPagination);  
   }
 
-  private fetchCarListing(){
-   
-  
+  setPage(page) {
     this.page.size = this.currentPageLimit,
     //hit api to fetch data
-    this.carService.listingDealersCars(this.page).subscribe(
-    //case success
-      (pagedData) => {          
-      this.ngZone.run( () => {
-          this.page = pagedData.page;
-          this.cars = pagedData.data
-          console.log('Cars',this.cars);
-          /*this.cars.car_images.forEach(element => {
-            this.sliderImages.push(
-              {
-                small: element.file_path,
-                medium: element.file_path,
-                big: element.file_path,
-                label:element.file_category
-            }
-            )
-          });*/
-      });   
-      this.commonUtilsService.hidePageLoader();
+    this.carService.listingCarsOnDatable(this.page).subscribe(
 
+      //case success
+      (pagedData) => {      
+      
+      this.page = pagedData.page;
+     
+      //this.cars =  pagedData.data; 
+      this.cars =  [...pagedData.data];   
+
+      this.commonUtilsService.hidePageLoader();
     //case error 
     },error => {
       this.commonUtilsService.onError(error);
     });
-
   }
 
-  private sliderinit():void{
-    this.sliderOptions = [
-      {
-          width: '100%',
-          height: '365px',     
-          imageAnimation: NgxGalleryAnimation.Slide,
-          imageArrowsAutoHide:true,          
-          thumbnailsArrows:true,
-          thumbnailsColumns:5,
-          thumbnailMargin: 2,
-          thumbnailsPercent:20,
-          imageInfinityMove:true,
-          thumbnailsAutoHide:true,
-          closeIcon:'fa fa-times'
-         
-      },
-      // max-width 800
-      {
-          breakpoint: 800,
-          width: '100%',
-          height: '600px',
-          imagePercent: 80,
-          thumbnailsMargin: 20,
-          thumbnailMargin: 20,
-           
-      },
-      // max-width 400
-      {
-          breakpoint: 400,
-          preview: false
-      }
-    ];  
-    this.sliderImages = [];
+  show(type){
+    this.sectionEnable = type
+    console.log('sectionEnable',this.sectionEnable);
   }
 
-  
+  /**
+ * Private function to initalize slider 
+ * @return  void
+*/
+private sliderinit():void{
+  this.sliderOptions = [
+    { "image": false, "height": "190px","thumbnailsColumns": 1,
+    "previewCloseOnClick": true, "previewCloseOnEsc": true,"width": "100%" },
+    { "breakpoint": 500, "width": "300px", "height": "300px", }
+  ];  
+ 
+  this.sliderImages = [
+    {
+        small: 'assets/images/bg/cars/small/01.jpg',
+        medium: 'assets/images/bg/cars/small/01.jpg',
+        big: 'assets/images/bg/cars/bg/01.jpg',
+    },
+    {
+      small: 'assets/images/bg/cars/small/02.jpg',
+      medium: 'assets/images/bg/cars/small/02.jpg',
+      big: 'assets/images/bg/cars/bg/02.jpg',
+    },
+    {
+      small: 'assets/images/bg/cars/small/03.jpg',
+      medium: 'assets/images/bg/cars/small/03.jpg',
+      big: 'assets/images/bg/cars/bg/03.jpg',
+    }
+];
+}
+
   ngOnInit() {
+    this.sliderinit()
+
+    POTENZA.priceslider()
+      POTENZA.yearslider()
   }
 
 }

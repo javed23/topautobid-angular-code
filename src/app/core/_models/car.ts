@@ -38,10 +38,13 @@ export class Car {
     willing_to_drive_how_many_miles:any;
     vehicle_to_be_picked_up:any
     vehicle_has_second_key:any
-
-
-
-
+    is_vehicle_aftermarket:any
+    vehicle_aftermarket:any
+    vehicle_ownership:any
+    clean_title:any
+    vehicle_finance:any
+    location:any
+    
     constructor(object) {
         console.log('object', object['basic_info']);
         this._id = object._id;       
@@ -79,5 +82,12 @@ export class Car {
         this.willing_to_drive_how_many_miles = object.willing_to_drive_how_many_miles
         this.vehicle_to_be_picked_up = (object.vehicle_to_be_picked_up)?'Yes':'No';
         this.vehicle_has_second_key = (object.vehicle_has_second_key)?'Yes':'No';
+        this.is_vehicle_aftermarket = (object.is_vehicle_aftermarket)?'Yes':'No';        
+        this.vehicle_aftermarket = (object.vehicle_aftermarket)
+        this.vehicle_ownership = object.vehicle_ownership
+        this.vehicle_finance = object.vehicle_finance_details
+        this.clean_title = (object.vehicle_ownership.vehicle_clean_title)?'Yes':'No';
+        this.location =    object.basic_info.location 
+        
     }
 }

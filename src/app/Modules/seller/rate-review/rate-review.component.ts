@@ -13,6 +13,7 @@ import { Page, Purchase } from "../../../core/_models";
 import { Router, ActivatedRoute } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import * as _ from 'lodash';
+import { log } from 'util';
 declare let $: any;
 @Component({
   selector: 'app-rate-review',
@@ -28,6 +29,11 @@ export class RateReviewComponent implements OnInit {
   bidEndDate: any;
   datesFilter: any = {};
   carId: any;
+  car:any;
+  buyerRating ={
+    rating:0,
+    review:''
+  }
   //title and breadcrumbs
   readonly title: string = 'Car Bid Listing';
   readonly breadcrumbs: any[] = [{ page: 'Home', link: '/dealer/home' }, { page: 'Car Bid Listing', link: '' }];
@@ -43,6 +49,7 @@ export class RateReviewComponent implements OnInit {
     offset: 0,
     pageSize: this.currentPageLimit
   }
+  @ViewChild("ratingModal") ratingModal: ElementRef;
   ngOnInit() {
     this.setPage(this._defaultPagination)
   }
@@ -126,7 +133,6 @@ export class RateReviewComponent implements OnInit {
     this.sellerService.getSellerRatingList(this.page).subscribe(pagedData => {
       this.page = pagedData.page;
       this.bids = pagedData.data;
-      console.log('the data is', pagedData);
     },
       error => {
         this.toastr.errorToastr(error, 'Oops!');//showing error toaster message
@@ -157,4 +163,30 @@ export class RateReviewComponent implements OnInit {
   }
 
 
+/**
+ * Open Rating modal to rate buyer
+ * @param car sold car object
+ */
+  giveRating(car:any){
+    this.car= car;
+    this.buyerRating.rating = this.car.rating_given;
+    this.buyerRating.review = this.car.review_given;
+    $(this.ratingModal.nativeElement).modal({ backdrop: 'static', keyboard: false, show: true });
+  
+  }
+
+/**
+ * save the buyer rating by seller
+ */
+  public saveDealerRating(){
+   this.buyerRating['car_id']= this.car._id;
+   this.sellerService.saveDealerRating(this.buyerRating).subscribe(response=>{
+
+    this.toastr.successToastr('Updated Successfully!','Success!');
+    $(this.ratingModal.nativeElement).modal('hide');
+    this.setPage(this._defaultPagination);
+   },error=>{
+      this.toastr.errorToastr(error, 'Oops!');//showing error toaster message
+   })
+  }
 }

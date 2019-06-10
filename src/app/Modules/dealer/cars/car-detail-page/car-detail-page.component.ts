@@ -21,6 +21,7 @@ export class CarDetailPageComponent implements OnInit {
 
   carDetail: any;
   isImageFilterEnable:Boolean = false
+  isCategoryHaveThumbnail:boolean=true
   selectedCategories: any= [] 
   isOpen:boolean=false;
 
@@ -41,14 +42,7 @@ export class CarDetailPageComponent implements OnInit {
       (response) => {
         this.carDetail = response     
         this.carDetail.car_images.forEach(element => {
-          this.sliderImages.push(
-            {
-              small: element.file_path,
-              medium: element.file_path,
-              big: element.file_path,
-              label:element.file_category
-          }
-          )
+          this.pushElement(element);
         });
         this.commonUtilsService.hidePageLoader();
        
@@ -78,6 +72,19 @@ export class CarDetailPageComponent implements OnInit {
     this.isImageFilterEnable = (this.isImageFilterEnable)?false:true
     
   }
+/**
+ * Function to push element
+ * @param   element array element 
+ * @return  void
+*/
+private pushElement(element): void {
+  this.sliderImages.push({
+    small: element.file_path,
+    medium: element.file_path,
+    big: element.file_path,
+    label: element.file_category
+  })
+}
 
 /**
  * Function to filter image in slider
@@ -90,27 +97,15 @@ export class CarDetailPageComponent implements OnInit {
     if(this.selectedCategories.length){
       this.carDetail.car_images.forEach(element => {
         if(_.includes(this.selectedCategories,element.file_category)){
-          this.sliderImages.push(
-            {
-              small: element.file_path,
-              medium: element.file_path,
-              big: element.file_path,
-              label:element.file_category
-          }
-          )
+          this.pushElement(element);
         }        
       });
+      if(this.sliderImages.length<=0)
+        this.isCategoryHaveThumbnail = false
     }
     else{
       this.carDetail.car_images.forEach(element => {
-        this.sliderImages.push(
-          {
-            small: element.file_path,
-            medium: element.file_path,
-            big: element.file_path,
-            label:element.file_category
-        }
-        )
+        this.pushElement(element);
       });
     }
   }

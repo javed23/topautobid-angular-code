@@ -68,6 +68,87 @@ export class UserAuthService {
       })
 
   }
+  verifyDealerEmail(postedData): Observable<any> {
+
+    return this.httpClient
+      .post('auth/dealer/verifyEmail', postedData)
+      .map((response:any) => {
+        return response;
+      })
+
+  }
+
+  verifySellerToken(postedData): Observable<any> {
+
+    return this.httpClient
+      .post('seller/verifyToken', postedData)
+      .map((response:any) => {
+        return response;
+      })
+
+  }
+
+  verifyDealerToken(postedData): Observable<any> {
+
+    return this.httpClient
+      .post('dealer/verifyToken', postedData)
+      .map((response:any) => {
+        return response;
+      })
+
+  }
+
+  
+
+  verifyEmail(postedData): Observable<any> {
+
+    return this.httpClient
+      .post('auth/seller/verifyEmail', postedData)
+      .map((response:any) => {
+        return response;
+      })
+
+  }
+  sendDealerVerificationLink(postedData): Observable<any> {
+
+    return this.httpClient
+      .post('auth/dealer/sendVerificationLink', postedData)
+      .map((response:any) => {
+        return response;
+      })
+
+  }
+
+
+  sendSellerVerificationLink(postedData): Observable<any> {
+
+    return this.httpClient
+      .post('auth/seller/sendVerificationLink', postedData)
+      .map((response:any) => {
+        return response;
+      })
+
+  }
+
+  
+  setMFA(postedData): Observable<any> {
+
+    return this.httpClient
+      .post('auth/seller/setMFA', postedData)
+      .map((response:any) => {
+        return response;
+      })
+
+  }
+  setDealerMFA(postedData): Observable<any> {
+
+    return this.httpClient
+      .post('auth/dealer/setMFA', postedData)
+      .map((response:any) => {
+        return response;
+      })
+
+  }
   sellerProfile(postedData): Observable<any> {
 
     return this.httpClient
