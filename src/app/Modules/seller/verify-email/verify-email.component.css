@@ -195,7 +195,7 @@ input:checked + .slider:before {
 
 .verify_inner .collapseable_box ul li label {
     font-weight: normal!important;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
     font-size: 14px!important;
 }
 
