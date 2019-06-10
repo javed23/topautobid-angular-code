@@ -1682,7 +1682,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    * @return  void
   */
   private fetchCityStateOfZipcode(zipcode):void{
-    this.vehicleService.fetchCityStateOfZipcode(zipcode)
+    this.commonUtilsService.fetchCityStateOfZipcode(zipcode)
       .subscribe(
       (response) => { 
         if(!_.has(response,['status'])){

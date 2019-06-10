@@ -7,7 +7,10 @@ import { of, Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { ToastrManager } from 'ng6-toastr-notifications';//toaster class
 import { untilDestroyed } from 'ngx-take-until-destroy';// unsubscribe from observables when the  component destroyed
-declare var $;
+declare let $;
+
+//import Lodash
+import * as _ from 'lodash';
 
 //import services
 
@@ -48,7 +51,7 @@ export class SignupComponent implements OnInit {
     ]
   }
 
-
+  private _sellerLocation:any = {}
   title: string = 'Seller Signup';
   showOtpForm: boolean = false;
   breadcrumbs: any[] = [{ page: 'Home', link: '' }, { page: 'Signup', link: '' }]
@@ -58,11 +61,65 @@ export class SignupComponent implements OnInit {
   otpFormsubmitted: boolean = false;
   registeredSellerid: string;
 
-  constructor(private commonUtilService: CommonUtilsService, private zone: NgZone, private cognitoUserService: CognitoUserService, private location: Location, private alertService: AlertService, private userAuthService: UserAuthService, private pageLoaderService: PageLoaderService, private formBuilder: FormBuilder, private titleService: TitleService, private toastr: ToastrManager, private router: Router) {
+  constructor(private commonUtilsService: CommonUtilsService, private zone: NgZone, private cognitoUserService: CognitoUserService, private location: Location, private alertService: AlertService, private userAuthService: UserAuthService, private pageLoaderService: PageLoaderService, private formBuilder: FormBuilder, private titleService: TitleService, private toastr: ToastrManager, private router: Router) {
 
     this.buildSignupForm();    //form building calling function
     this.otpVerifyForm();
+
+
+    let zipcodeFormControl = this.signupForm.controls.location.get('zipcode');
+    zipcodeFormControl.valueChanges    
+    .subscribe(zipcode => {  
+      this.signupForm.controls.location.get('state').patchValue(''); 
+      this.signupForm.controls.location.get('city').patchValue(''); 
+      (zipcode.length==5)?this.fetchCityStateOfZipcode(zipcode):''
+    });
+    
   }
+
+  /**
+   * private function to fetch city and state information of entered zipcode
+   * @param zipcode number(entered zipcode from clientside)
+   * @return  void
+  */
+ private fetchCityStateOfZipcode(zipcode):void{
+  this.commonUtilsService.fetchCityStateOfZipcode(zipcode)
+    .subscribe(
+    (response) => { 
+      console.log(!_.has(response[0],['status']))
+      if(!_.has(response[0],['status'])){
+        console.log(response)
+        let cityState = response[0]['city_states'][0]        
+        cityState['coordinates'] = [response[0]['zipcodes'][0]['longitude'],response[0]['zipcodes'][0]['latitude']]            
+        this.sellerLocation =  cityState    
+      }else{
+        this.commonUtilsService.onError('Could not fetch city, state data for zipcode.');
+      }       
+    },
+    error => {        
+      this.commonUtilsService.onError('Could not fetch city, state data for zipcode.');
+    });  
+}
+
+/**
+  * get vehicle to be picked up value.
+  * @return  any
+  */
+ get sellerLocation(): any {
+  return this._sellerLocation;
+}
+
+/**
+* set vehicle to be picked up value.
+* @param vehicleLocation  object of key:value
+*/
+set sellerLocation(sellerLocation: any){
+  this._sellerLocation = sellerLocation;  
+  this.signupForm.get('location').patchValue(this._sellerLocation); 
+  console.log('form value location',this.signupForm.get('location').value)
+}
+
+
 
   private otpVerifyForm() {
     this.otpVerificationForm = this.formBuilder.group({
@@ -77,11 +134,17 @@ export class SignupComponent implements OnInit {
       //sellerId:[null],
       username: [null],
       name: this.formBuilder.group({
-        prefix: ['Mr.'],
-        first_name: [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')])],
-        last_name: [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')])],
+        prefix: [''],
+        first_name: [null, Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50),Validators.pattern('^[a-zA-Z ]*$')])],
+        last_name: [null, Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50),Validators.pattern('^[a-zA-Z ]*$')])],
 
       }),
+      location:this.formBuilder.group({
+        zipcode: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])],
+        state: [null],
+        city: [null],
+
+      }),   
       phones: this.formBuilder.array([], Validators.required),
       emails: this.formBuilder.array([], Validators.required),
       password: [
@@ -216,9 +279,9 @@ export class SignupComponent implements OnInit {
 
     this.pageLoaderService.pageLoader(true);//start showing page loader
     this.pageLoaderService.setLoaderText('Registering seller...');//setting loader text
-
+   
     //saving the seller at aws user pool
-    this.cognitoUserService.signup(this.signupForm.value)
+    /*this.cognitoUserService.signup(this.signupForm.value)     
       .pipe(untilDestroyed(this))
       .subscribe(
         (response) => {
@@ -240,7 +303,7 @@ export class SignupComponent implements OnInit {
           this.pageLoaderService.pageLoader(false);//hide page loader
           this.toastr.errorToastr(error, 'Oops!');//showing error toaster message
 
-        });
+        });*/
   }
 
   private showPopup() {
@@ -287,7 +350,7 @@ export class SignupComponent implements OnInit {
       return;
     }
     //generate user name from email and set in the signup form  
-    let username = this.commonUtilService.getUsername(this.signupForm.value.emails[0].email);
+    let username = this.commonUtilsService.getUsername(this.signupForm.value.emails[0].email);
     this.signupForm.controls.username.setValue(username);
     this.userAuthService.sellerSignup(this.signupForm.value)
       .subscribe(

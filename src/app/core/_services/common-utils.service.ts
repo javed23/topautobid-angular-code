@@ -260,6 +260,21 @@ public isPDFCorrupted(base64string, type): Observable<any> {
     })  
  } 
 
+/**
+   * Fetch city, state information of zipcode
+   * @param zipcode    Vehicle zipcode.
+   * @return        Observable<any>
+  */
+ public fetchCityStateOfZipcode(zipcode): Observable<any> {  
+    
+  let url = `${environment.ADDRESS_API.ENDPOINT}/lookup?auth-id=${environment.ADDRESS_API.KEY}&auth-token=${environment.ADDRESS_API.TOKEN}&zipcode=${zipcode}`;
+
+  return this.httpClient.get(url)
+      .map((response: any) => {         
+          return response;
+      })
+}
+
 
 
 
