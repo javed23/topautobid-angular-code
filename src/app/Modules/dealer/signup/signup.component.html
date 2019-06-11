@@ -32,8 +32,9 @@
               <form [formGroup]="signUpFormStep1">
               <div formGroupName="name" class="row">
                 <div class="form-group col-md-4">
-                  <label>Prefix*</label>
+                  <label>Prefix</label>
                   <select formControlName="prefix" name="prefix">
+                      <option value="">Select</option>
                     <option value="Mr.">Mr.</option>
                     <option value="Mrs.">Mrs.</option>
                     <option value="Ms.">Ms.</option>                
@@ -199,7 +200,7 @@
               
               <div class="form-group">
                 <div>
-                  <label for="one">By signing up, you are agree with the <a routerLink="/web/user-agreement"> User
+                  <label for="one" class="text-capitalize">By signing up, you are agree with the <a routerLink="/web/user-agreement"> User
                       Agreement </a> & <a routerLink="/web/privacy-policy"> Privacy Policy</a></label>
                 </div>
               </div>

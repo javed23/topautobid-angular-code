@@ -27,7 +27,7 @@
            <div class="gray-form">
  
              <div formGroupName="name" class="row">
-               <div class="form-group col-md-4">
+               <!-- <div class="form-group col-md-4">
                  <label>Prefix</label>
                  <select formControlName="prefix">
                     <option value="">Select Prefix</option>
@@ -35,7 +35,7 @@
                    <option value="Mrs.">Mrs.</option>
                    <option value="Ms.">Ms.</option>
                  </select>
-               </div>
+               </div> -->
  
                <div class="form-group col-md-4">
                  <label>Your Name*</label>
@@ -55,28 +55,7 @@
  
              </div>
 
-             <div formGroupName="location" class="row">
-                <div class="form-group col-md-4">
-                  <label>Zipcode*</label>
-                  <input  mask="00000" class="form-control" type="text" placeholder="Enter Zipcode" formControlName="zipcode" [ngClass]="{ 'is-invalid': (signupForm.controls.location.get('zipcode').touched || submitted) && signupForm.controls.location.get('zipcode').errors }">
-                  <p class="error_msg" *ngIf="signupForm.controls.location.get('zipcode').touched || submitted">                      
-                      <app-form-validation-errors minLength=2 maxLength=5 errorPrefix="Zip " patternError="Must enter valid zip code." [errors]="signupForm.controls.location.get('zipcode').errors"></app-form-validation-errors>   
-                  </p>
-                </div>
-  
-                <div class="form-group col-md-4">
-                  <label>State</label>
-                  <input  readonly class="form-control" type="text" placeholder="State" formControlName="state">
-                  
-                </div>
-  
-                <div class="form-group col-md-4">
-                  <label>City</label>
-                  <input readonly class="form-control" type="text" placeholder="City" formControlName="city">
-                  
-                </div>
-  
-              </div>
+       
  
              <div class="form-group">
                <label>Email *</label>
@@ -112,6 +91,28 @@
                  </div>
                </div>
              </div>
+             <div formGroupName="location" class="row">
+                <div class="form-group col-md-4">
+                  <label>Zipcode*</label>
+                  <input  mask="00000" class="form-control" type="text" placeholder="Enter Zipcode" formControlName="zipcode" [ngClass]="{ 'is-invalid': (signupForm.controls.location.get('zipcode').touched || submitted) && signupForm.controls.location.get('zipcode').errors }">
+                  <p class="error_msg" *ngIf="signupForm.controls.location.get('zipcode').touched || submitted">                      
+                      <app-form-validation-errors minLength=2 maxLength=5 errorPrefix="Zip " patternError="Must enter valid zip code." [errors]="signupForm.controls.location.get('zipcode').errors"></app-form-validation-errors>   
+                  </p>
+                </div>
+  
+                <div class="form-group col-md-4">
+                  <label>State</label>
+                  <input  readonly class="form-control" type="text" placeholder="State" formControlName="state">
+                  
+                </div>
+  
+                <div class="form-group col-md-4">
+                  <label>City</label>
+                  <input readonly class="form-control" type="text" placeholder="City" formControlName="city">
+                  
+                </div>
+  
+              </div>
  
              <div class="form-group">
                <label>Password* </label>
@@ -135,7 +136,7 @@
  
              <div class="form-group">
                <div>
-                 <label for="one">By signing up, you are agree with the <a routerLink="/web/user-agreement"> User
+                 <label for="one" class="text-capitalize">By signing up, you are agree with the <a routerLink="/web/user-agreement"> User
                      Agreement </a> & <a routerLink="/web/privacy-policy"> Privacy Policy</a></label>
                </div>
              </div>

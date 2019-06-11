@@ -93,10 +93,12 @@ export class SignupComponent implements OnInit {
         cityState['coordinates'] = [response[0]['zipcodes'][0]['longitude'],response[0]['zipcodes'][0]['latitude']]            
         this.sellerLocation =  cityState    
       }else{
+        this.signupForm.controls.location.get('zipcode').patchValue(''); 
         this.commonUtilsService.onError('Could not fetch city, state data for zipcode.');
       }       
     },
     error => {        
+      this.signupForm.controls.location.get('zipcode').patchValue(''); 
       this.commonUtilsService.onError('Could not fetch city, state data for zipcode.');
     });  
 }

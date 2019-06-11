@@ -97,7 +97,7 @@ export class CommonUtilsService {
   public onError(message): void {
     this.pageLoaderService.setLoaderText(environment.MESSAGES.ERROR_TEXT_LOADER);//setting loader text
     this.pageLoaderService.pageLoader(false);//hide page loader
-    this.toastrManager.errorToastr(message, 'Oops!');//showing error toaster message  
+    this.toastrManager.errorToastr(message, 'Oops!',{maxShown:1});//showing error toaster message  
   }
 
   /**
