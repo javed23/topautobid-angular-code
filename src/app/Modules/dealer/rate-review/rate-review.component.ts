@@ -4,10 +4,8 @@ import { Bid } from '../../../core/_models'
 import { ToastrManager, ToastrModule } from 'ng6-toastr-notifications';//toaster class
 
 
-//shared services
-import { AlertService, PageLoaderService } from '../../../shared/_services'
 //import DealerService 
-import { TitleService, SellerService, CommonUtilsService } from '../../../core/_services';
+import { TitleService, DealerService, CommonUtilsService } from '../../../core/_services';
 //import models
 import { Page, Purchase } from "../../../core/_models";
 import { Router, ActivatedRoute } from '@angular/router';
@@ -16,7 +14,6 @@ import * as _ from 'lodash';
 import { log } from 'util';
 declare let $: any;
 @Component({
-  
   selector: 'app-rate-review',
   templateUrl: './rate-review.component.html',
   styleUrls: ['./rate-review.component.css'],
@@ -31,7 +28,7 @@ export class RateReviewComponent implements OnInit {
   datesFilter: any = {};
   carId: any;
   car:any;
-  buyerRating ={
+  sellerRating ={
     rating:0,
     review:''
   }
@@ -42,7 +39,7 @@ export class RateReviewComponent implements OnInit {
   //Defined records limit and records limit options
   currentPageLimit: number = environment.DEFAULT_RECORDS_LIMIT
   readonly pageLimitOptions = environment.DEFAULT_PAGE_LIMIT_OPTIONS
-  constructor(private sellerService: SellerService, private toastr: ToastrManager, private commonUtilsService: CommonUtilsService) { }
+  constructor(private dealerService: DealerService, private toastr: ToastrManager, private commonUtilsService: CommonUtilsService) { }
   //default pagination settings
   private _defaultPagination = {
     count: 0,
@@ -131,7 +128,7 @@ export class RateReviewComponent implements OnInit {
   setPage(pageInfo): void {
     this.page.pageNumber = pageInfo.offset;
     this.page.size = pageInfo.pageSize;
-    this.sellerService.getSellerRatingList(this.page).subscribe(pagedData => {
+    this.dealerService.getDealerRatingList(this.page).subscribe(pagedData => {
       this.page = pagedData.page;
       this.bids = pagedData.data;
     },
@@ -170,8 +167,8 @@ export class RateReviewComponent implements OnInit {
  */
   giveRating(car:any){
     this.car= car;
-    this.buyerRating.rating = this.car.rating_given;
-    this.buyerRating.review = this.car.review_given;
+    this.sellerRating.rating = this.car.rating_given;
+    this.sellerRating.review = this.car.review_given;
     $(this.ratingModal.nativeElement).modal({ backdrop: 'static', keyboard: false, show: true });
   
   }
@@ -179,9 +176,9 @@ export class RateReviewComponent implements OnInit {
 /**
  * save the buyer rating by seller
  */
-  public saveDealerRating(){
-   this.buyerRating['car_id']= this.car._id;
-   this.sellerService.saveDealerRating(this.buyerRating).subscribe(response=>{
+  public saveSellerRating(){
+   this.sellerRating['car_id']= this.car._id;
+   this.dealerService.saveSellerRating(this.sellerRating).subscribe(response=>{
 
     this.toastr.successToastr('Updated Successfully!','Success!');
     $(this.ratingModal.nativeElement).modal('hide');

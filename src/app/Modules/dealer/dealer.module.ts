@@ -48,7 +48,7 @@ import { DealershipViewComponent } from './dealerships/dealership-view/dealershi
 import { CreateDealershipComponent } from './dealerships/create-dealership/create-dealership.component';
 import { CreateContactComponent } from './dealerships/create-contact/create-contact.component';
 import { PurchasesListComponent } from './purchases/purchases-list/purchases-list.component';
-
+import {RateReviewComponent} from './rate-review/rate-review.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { AccountVerifyComponent } from './account-verify/account-verify.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
@@ -122,7 +122,8 @@ let config = new AuthServiceConfig([
     SortComponent,
     BidsListingComponent,
     DateFilterComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    RateReviewComponent
   ]
   ,
 

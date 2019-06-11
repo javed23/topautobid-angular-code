@@ -192,7 +192,7 @@ export class CarService {
 */
   public ratingReviewByDealer(ratingReview): Observable<any> {
       
-    ratingReview['dealer_id'] = localStorage.getItem('loggedinUserId') 
+    ratingReview['seller_id'] = localStorage.getItem('loggedinUserId') 
     return this.httpClient.post('car/ratingReviewByDealer', ratingReview)
         .map((response: any) => response)
 }

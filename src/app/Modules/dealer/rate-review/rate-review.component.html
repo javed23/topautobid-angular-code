@@ -69,7 +69,7 @@
 
             <div class="unordered-lists table-responsive text-center">
               <ngx-datatable #listingTable class="bootstrap" [rows]="bids"
-                [columns]="[{name:'Year'},{name:'Make'},{name:'Model'},{name:'Listed Date'},{name:'Sold Date'},{name:'Sold to'},{name:'Rating Received'},{name:'Rating Given'}]"
+                [columns]="[{name:'Year'},{name:'Make'},{name:'Model'},{name:'Listed Date'},{name:'Purchase Date'},{name:'Purchase From'},{name:'Rating Given'},{name:'Rating Received'}]"
                 [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'"
                 [externalPaging]="true" [externalSorting]="true" [count]="page.totalElements" [offset]="page.pageNumber"
                 [limit]="page.size" (page)='setPage($event)' (sort)="sortCallback($event)">
@@ -94,22 +94,22 @@
                     {{ row?.created_on | date}}
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Sold Date" prop="sold_date" [sortable]="true" [resizeable]="false"
+                <ngx-datatable-column name="Purchase Date" prop="purchase_date" [sortable]="true" [resizeable]="false"
                   [draggable]="false">
                   <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
-                    {{ row?.sold_date | date}}
+                    {{ row?.purchase_date | date}}
                   </ng-template>
                 </ngx-datatable-column>
 
-                <ngx-datatable-column name="Sold to" prop="sold_to" [sortable]="true" [resizeable]="false"
+                <ngx-datatable-column name="Purchase From" prop="purchase_from" [sortable]="true" [resizeable]="false"
                   [draggable]="false">
                   <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
-                    {{ row?.sold_to}}
+                    {{ row?.purchase_from}}
                   </ng-template>
                 </ngx-datatable-column>
 
 
-
+             
                 <ngx-datatable-column name="Rating Given" prop="rating_given" [sortable]="false" [resizeable]="false"
                   [draggable]="false">
                   <ng-template let-row="row" ngx-datatable-cell-template>
@@ -120,26 +120,27 @@
                       <span class="rating-number">({{row?.rating_given}}/5)</span>
                     </ng-container>
                     <ng-container *ngIf="!row.rating_given > 0">
-                      <span (click)="giveRating(row)"><a>Pending</a></span>
+                      <span (click)="giveRating(row)">Pending</span>
+  
                     </ng-container>
                   </ng-template>
                 </ngx-datatable-column>
 
                 <ngx-datatable-column name="Rating Received" prop="rating_received" [sortable]="false"
-                  [resizeable]="false" [draggable]="false">
-                  <ng-template let-row="row" ngx-datatable-cell-template>
-                    <ng-container *ngIf="row?.rating_received > 0">
-                      <ngb-rating [readonly]="true" aria-labelledby="Rating & Review" [max]="5"
-                        [rate]="row?.rating_received">
-                      </ngb-rating>
-                      <span class="rating-number">({{row?.rating_received}}/5)</span>
-                    </ng-container>
-                    <ng-container *ngIf="!row?.rating_received > 0">
-                      <span>Given Rating</span>
-                    </ng-container>
+                [resizeable]="false" [draggable]="false">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  <ng-container *ngIf="row?.rating_received > 0">
+                    <ngb-rating [readonly]="true" aria-labelledby="Rating & Review" [max]="5"
+                      [rate]="row?.rating_received">
+                    </ngb-rating>
+                    <span class="rating-number">({{row?.rating_received}}/5)</span>
+                  </ng-container>
+                  <ng-container *ngIf="!row.rating_received > 0">
+                  <span>Given Rating</span> 
+                  </ng-container>
 
-                  </ng-template>
-                </ngx-datatable-column>
+                </ng-template>
+              </ngx-datatable-column>
 
                 <ngx-datatable-footer>
                   <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
@@ -176,54 +177,53 @@
   </div>
 
 
-
+ 
 
 </section>
-<div class="modal fade bd-example-modal-lg feedback-modal_rating" #ratingModal id="ratingModal" tabindex="-1"
-  role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-
+<div class="modal fade bd-example-modal-lg feedback-modal_rating" #ratingModal id="ratingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+   
   <div class="modal-dialog mw-55 border-none  mx-auto" role="document">
-
+   
     <div class="modal-content p-0">
-
+     
       <div class="modal-header feedback-header_bg">
         <h5 class="modal-title text-white" id="exampleModalLabel">Please Rate Buyer</h5>
         <button type="button" class="close text-white opac-1" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-
+      
       <div class="modal-body p-4">
         <div class="row pt-3">
-          <div class="col-md-4 text-center">
-            <div class="upload-profile-photo">
-              <img class="img-fluid" src="../../../../assets/images/person.jpg">
+            <div class="col-md-4 text-center">
+               <div class="upload-profile-photo">
+                    <img class="img-fluid" src="../../../../assets/images/person.jpg">
+               </div>
+               <div class="buyer-name-rating w-100">
+               <p>{{car?.sold_to}}</p>
+               </div>
             </div>
-            <div class="buyer-name-rating w-100">
-              <p>{{car?.sold_to}}</p>
+            <div class="col-md-8">
+                <div class="feedback-buyer-description">
+                    <h5>${{car?.price}}</h5>
+                    <h5>{{car?.vehicle_model}}</h5>
+                    <div class="rating-starts-section">
+                      <ngb-rating [readonly]="false" aria-labelledby="Rating & Review" [max]="5"
+                      [rate]="sellerRating?.rating" [(ngModel)]="sellerRating.rating">
+                    </ngb-rating>
+                    </div>
+                    <div class="form-group">
+                    <label for="buyer-rating">Enter Your Feedback</label>
+                    <textarea class="form-control" id="buyer-rating" rows="3" [(ngModel)]="sellerRating.review"></textarea>
+                    <a class="button red" (click)="saveSellerRating()"> Submit </a>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="col-md-8">
-            <div class="feedback-buyer-description">
-              <h5>${{car?.price}}</h5>
-              <h5>{{car?.vehicle_model}}</h5>
-              <div class="rating-starts-section">
-                <ngb-rating [readonly]="false" aria-labelledby="Rating & Review" [max]="5" [rate]="buyerRating?.rating"
-                  [(ngModel)]="buyerRating.rating">
-                </ngb-rating>
-              </div>
-              <div class="form-group">
-                <label for="buyer-rating">Enter Your Feedback</label>
-                <textarea class="form-control" id="buyer-rating" rows="3" [(ngModel)]="buyerRating.review"></textarea>
-                <a class="button red" (click)="saveDealerRating()"> Submit </a>
-              </div>
-            </div>
-          </div>
+        </div>    
         </div>
-      </div>
     </div>
-
-
+    
+    
 
   </div>
 </div>
