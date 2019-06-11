@@ -108,8 +108,12 @@
   
                 <div class="form-group col-md-4">
                   <label>City</label>
-                  <input readonly class="form-control" type="text" placeholder="City" formControlName="city">
+                  <input *ngIf="cities.length<=1" readonly class="form-control" type="text" placeholder="City" formControlName="city">
                   
+                  <select *ngIf="cities.length >1" formControlName="city">
+                    
+                    <option *ngFor="let cityObject of cities" value="{{cityObject.city}}">{{cityObject.city}}</option>
+                  </select>
                 </div>
   
               </div>

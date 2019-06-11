@@ -52,6 +52,7 @@ export class SignupComponent implements OnInit {
   }
 
   private _sellerLocation:any = {}
+  cities:any =[]
   title: string = 'Seller Signup';
   showOtpForm: boolean = false;
   breadcrumbs: any[] = [{ page: 'Home', link: '' }, { page: 'Signup', link: '' }]
@@ -89,6 +90,7 @@ export class SignupComponent implements OnInit {
       console.log(!_.has(response[0],['status']))
       if(!_.has(response[0],['status'])){
         console.log(response)
+        this.cities = response[0]['city_states'];
         let cityState = response[0]['city_states'][0]        
         cityState['coordinates'] = [response[0]['zipcodes'][0]['longitude'],response[0]['zipcodes'][0]['latitude']]            
         this.sellerLocation =  cityState    
