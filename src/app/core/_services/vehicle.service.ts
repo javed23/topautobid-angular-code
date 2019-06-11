@@ -88,17 +88,7 @@ export class VehicleService {
 
   }
 
-    public fetchAddress(): Observable<any> {
-        let key = '4a26c4bf-dcae-92b5-e8ee-0937ca13e1c1'
-        let token = 'DwDT9GApVGQdUlxLVHtB'
-        return this.httpClient.get('https://us-zipcode.api.smartystreets.com/lookup?auth-id='+key+'&auth-token='+token+'&zipcode=85297')
-            .map((response: any) => {         
-                return response;
-            })
-    }
-
-
-    /**
+     /**
      * Fetch car details
      * @param carObject    car object to fetch from database.
      * @return        Observable<any>

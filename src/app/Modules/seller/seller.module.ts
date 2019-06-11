@@ -33,10 +33,13 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { ListingComponent as CarsGridListComponent } from './cars/grid-list-view/listing.component';
 import { ListComponent as CarsTableComponent } from './cars/table-view/list.component';
 import { AddCarComponent } from './cars/addcar/addcar.component';
+import { AddNewCarComponent } from './cars/addnewcar/addnewcar.component';
 import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
+import { VerifyEmailComponent } from './verify-email/verify-email.component';
+import { AccountVerifyComponent } from './account-verify/account-verify.component';
 import { ContactRequestComponent } from './cars/contact-request/contact-request.component';
 import { EditCarComponent } from './cars/editcar/editcar.component';
-import { ExistingVehicleComponent } from './cars/existing-vehicle/existing-vehicle.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -71,8 +74,13 @@ let config = new AuthServiceConfig([
     CarsTableComponent,
     CarsGridListComponent,
     CarDetailPageComponent,
-    ExistingVehicleComponent,
-    ContactRequestComponent
+    AddCarComponent,
+    AddNewCarComponent,
+    VerifyEmailComponent,
+    AccountVerifyComponent,
+    EditCarComponent,
+    ContactRequestComponent,
+    ResetPasswordComponent
   ],
   
   imports: [

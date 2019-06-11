@@ -221,8 +221,8 @@ export class ListComponent implements OnInit, AfterViewInit {
     }
     //console.log(item)
     //console.log('id',item._id)
-   // let data = { id:item._id, dealer_id:[localStorage.getItem('loggedinUserId')], }
-   let data = { id:item._id, dealer_id:"5ca1e88f9dac60394419c0bc" }
+   let data = { id:item._id, dealer_id:localStorage.getItem('loggedinUserId'), }
+  //  let data = { id:item._id, dealer_id:"5ca1e88f9dac60394419c0bc" }
    
     this.dealershipService.removeDealership(data).subscribe(
       (response) => {

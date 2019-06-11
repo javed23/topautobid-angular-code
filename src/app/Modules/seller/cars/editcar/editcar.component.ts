@@ -93,7 +93,7 @@ export class EditCarComponent implements OnInit {
   isPickupLocationSubmitted:boolean = false;
   isVehicleOptionSubmitted:boolean = false;
   isOfferInHandsSubmitted:boolean = false;
-  
+  disabled:boolean=false
   
   isBasicInfoFieldsVisible:boolean = true;  
   isMoreSelected:boolean = false;
@@ -201,7 +201,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     this.vehicleOption = this.formBuilder.group({
       _id: [this.activatedRoute.snapshot.params._id],
       vin_number: [''],
-      seller_id: ['5cd170562688321559f12f32'],
+      seller_id: [localStorage.getItem('loggedinUserId')],
       vehicle_year: [''],
       vehicle_year_value: [''],
       existing_vehicle: [''],

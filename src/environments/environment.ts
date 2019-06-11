@@ -4,9 +4,19 @@
 
 export const environment = {
   production: false,
-  API_ENDPOINT: 'http://54.245.128.14:3000',
+   API_ENDPOINT: 'http://54.245.128.14:3000',
+  //API_ENDPOINT: 'http://localhost:3000',
   //WEB_ENDPOINT: 'http://localhost:4200',
   WEB_ENDPOINT: 'http://54.245.128.14',
+  ADDRESS_API:{
+    ENDPOINT:'https://us-zipcode.api.smartystreets.com',
+    KEY: '4931089270045671',
+    TOKEN: 'DwDT9GApVGQdUlxLVHtB',
+  },
+  VEHICLE_STATS_API:{
+    ENDPOINT:'https://www.carqueryapi.com/api/0.3',    
+  },
+ 
   FILE_UPLOAD_API:"http://54.245.128.14:3000/api/common/imageUploadtoBucket",
   APP_NAME: 'TopAutoBid',
   DEFAULT_PROFILE: 'assets/images/default-user.png',
@@ -21,14 +31,6 @@ export const environment = {
     { value:96  },
   ],
 
-  ADDRESS_API:{
-    ENDPOINT:'https://us-zipcode.api.smartystreets.com',
-    KEY: '4931092145880524',
-    TOKEN: 'DwDT9GApVGQdUlxLVHtB',
-  },
-  VEHICLE_STATS_API:{
-    ENDPOINT:'https://www.carqueryapi.com/api/0.3',    
-  },
 
   //rating & review settings 
   MAX_RATE_STARS:5,
@@ -67,6 +69,8 @@ export const environment = {
   MESSAGES: {
     LOGIN_SUCCESS:'Authorised & Loggedin successfully.',
     LOGOUT_SUCCESS:'Logout successfully.',
+    FORGOT_PASSWORD_SUCCESS:'Forget password instruction has been sent to your email',
+    RESEND_VERIFICATION_SUCCESS:'The verification link has been resent to your email successfully. Please Check your email.',
     VERIFICATION_PENDING:'Verification Code has been sent to your mobile number. Please verify your account.',
     SIGNUP_SUCCESS:'Congratulations!! Your account has been verified successfully and is ready to use.',
     SUCCESS_ADD: 'Has been added successfully.',

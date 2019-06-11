@@ -192,7 +192,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     this.vehicleOption = this.formBuilder.group({
       _id: [null],
       vin_number: [''],
-      seller_id: ['5cd170562688321559f12f32'],
+      seller_id: [localStorage.getItem('loggedinUserId')],
       vehicle_year: [''],
       vehicle_year_value: [''],
       existing_vehicle: [''],
@@ -1782,16 +1782,6 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     zipcodeFormControl.valueChanges    
     .subscribe(zipcode => {      
       (zipcode.length==5)?this.fetchCityStateOfZipcode(zipcode):''
-    });
-
-
-    //Existing Vehicle
-    let exstingVehicleFormControl = this.vehicleOption.controls.existing_vehicle;
-    exstingVehicleFormControl.valueChanges
-      .debounceTime(200)
-      .distinctUntilChanged()
-      .switchMap((query) =>  this._apiService.search(query))
-      .subscribe( result => {  if (result.status === 400) { return; } else { this.results = result.json().artists.items; }
     });
 
     this.addCarSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });     

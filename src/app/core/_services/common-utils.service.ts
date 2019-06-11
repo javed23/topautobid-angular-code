@@ -181,6 +181,19 @@ export class CommonUtilsService {
       })
   }
 
+/**
+ * 
+ * @param email user email for signup
+ * @return username
+ */
+
+  public getUsername(email: string): string {
+    //username = email?String(_.dropRight((email).split('@'))):''; 
+    let username = email.substring(0, email.lastIndexOf("."))
+    return String(username.replace("@", "_"));
+  }
+
+  
   /**
   * Show confirmation popup before going to previous step.
   * @return any

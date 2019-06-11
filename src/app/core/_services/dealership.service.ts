@@ -22,8 +22,8 @@ export class DealershipService {
 
     public listingDealershipOnDatable(page: Page): Observable<PagedData<Dealership>> {
         
-      //page['dealer_id'] = localStorage.getItem('loggedinUserId')       
-      page['dealer_id'] = "5ca1e88f9dac60394419c0bc"
+      page['dealer_id'] = localStorage.getItem('loggedinUserId')       
+      // page['dealer_id'] = "5ca1e88f9dac60394419c0bc"
       console.log('page options',page);
       return this.httpClient.post('dealership/listingDealershipOnDatable', page)
       .map((response: any) => {
