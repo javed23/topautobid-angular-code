@@ -97,7 +97,7 @@ export class CommonUtilsService {
   public onError(message): void {
     this.pageLoaderService.setLoaderText(environment.MESSAGES.ERROR_TEXT_LOADER);//setting loader text
     this.pageLoaderService.pageLoader(false);//hide page loader
-    this.toastrManager.errorToastr(message, 'Oops!');//showing error toaster message  
+    this.toastrManager.errorToastr(message, 'Oops!',{maxShown:1});//showing error toaster message  
   }
 
   /**
@@ -259,6 +259,21 @@ public isPDFCorrupted(base64string, type): Observable<any> {
       return response;
     })  
  } 
+
+/**
+   * Fetch city, state information of zipcode
+   * @param zipcode    Vehicle zipcode.
+   * @return        Observable<any>
+  */
+ public fetchCityStateOfZipcode(zipcode): Observable<any> {  
+    
+  let url = `${environment.ADDRESS_API.ENDPOINT}/lookup?auth-id=${environment.ADDRESS_API.KEY}&auth-token=${environment.ADDRESS_API.TOKEN}&zipcode=${zipcode}`;
+
+  return this.httpClient.get(url)
+      .map((response: any) => {         
+          return response;
+      })
+}
 
 
 

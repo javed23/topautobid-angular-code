@@ -698,8 +698,10 @@ button {
 }
 
 .product_info_left ngx-gallery-thumbnails {margin-top:0px !important;}
-
-
+.section-title h2{ text-transform: capitalize; }
+.form-group > label {
+    text-transform: capitalize;
+}
 
 @media screen and (max-width:767px) {
     .range_filter {
