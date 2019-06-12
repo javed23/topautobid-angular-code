@@ -136,11 +136,11 @@ export class SignupComponent implements OnInit {
 
 
     //change on zipcode at dealership
-    let dealershipZipcodeFormControl = this.signUpFormStep1.controls.location.get('zipcode');
+    let dealershipZipcodeFormControl = this.signUpFormStep2.get('dealerships').get('location').get('zipcode');
     dealershipZipcodeFormControl.valueChanges    
     .subscribe(zipcode => {  
-      this.signUpFormStep1.controls.location.get('state').patchValue(''); 
-      this.signUpFormStep1.controls.location.get('city').patchValue(''); 
+      this.signUpFormStep2.get('dealerships').get('location').get('state').patchValue(''); 
+      this.signUpFormStep2.get('dealerships').get('location').get('city').patchValue(''); 
       (zipcode.length==5)?this.fetchCityStateOfDealershipZipcode(zipcode):''
     });
 

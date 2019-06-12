@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild,  } from '@angular/core';
+import { Component,  OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from 'ngx-gallery';
 
@@ -15,9 +15,12 @@ declare let POTENZA: any;
 @Component({
   selector: 'app-listing',
   templateUrl: './listing.component.html',
-  styleUrls: ['./listing.component.css']
+  styleUrls: ['./listing.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ListingComponent implements OnInit {
+  @ViewChild('listingTable') listingTable;
+
   sectionEnable:string='list'
   sliderOptions: NgxGalleryOptions[];
   sliderImages: NgxGalleryImage[];
@@ -26,6 +29,7 @@ export class ListingComponent implements OnInit {
   cars = new Array<Car>() //array of Car type 
 
   currentPageLimit: number = environment.DEFAULT_RECORDS_LIMIT  
+  readonly pageLimitOptions = environment.DEFAULT_PAGE_LIMIT_OPTIONS
   private _defaultPagination = {
     count: 0,
     limit: this.currentPageLimit,
@@ -47,6 +51,7 @@ export class ListingComponent implements OnInit {
   }
 
   setPage(page) {
+    this.page.pageNumber = 0,
     this.page.size = this.currentPageLimit,
     //hit api to fetch data
     this.carService.listingCarsOnDatable(this.page).subscribe(
@@ -77,7 +82,7 @@ export class ListingComponent implements OnInit {
 */
 private sliderinit():void{
   this.sliderOptions = [
-    { "image": false, "height": "190px","thumbnailsColumns": 1,
+    { "image": false, "height": "90px","thumbnailsColumns": 1,
     "previewCloseOnClick": true, "previewCloseOnEsc": true,"width": "100%" },
     { "breakpoint": 500, "width": "300px", "height": "300px", }
   ];  

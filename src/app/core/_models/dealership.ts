@@ -30,9 +30,9 @@ export class Dealership {
         this.dealershipnumber  =  object.dealershipnumber;
         this.mainaddressline1  =  object.mainaddressline1;
         this.mainaddressline2  =  object.mainaddressline2;
-        this.city  =  object.city;
-        this.state  =  object.state;
-        this.zip  =  object.zip;
+        this.city  =  object.location.city;
+        this.state  =  object.location.state;
+        this.zip  =  object.location.zipcode;
         this.dealer_id  =  object.dealer_id;
         this.profile_pic = object.profile_pic;
         this.created_at = object.created_at
