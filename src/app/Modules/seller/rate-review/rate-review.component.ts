@@ -36,8 +36,8 @@ export class RateReviewComponent implements OnInit {
     review:''
   }
   //title and breadcrumbs
-  readonly title: string = 'Car Bid Listing';
-  readonly breadcrumbs: any[] = [{ page: 'Home', link: '/dealer/home' }, { page: 'Car Bid Listing', link: '' }];
+  readonly title: string = 'Rate & Review';
+  readonly breadcrumbs: any[] = [{ page: 'Home', link: '/dealer/home' }, { page: 'Rate and Review', link: '' }];
 
   //Defined records limit and records limit options
   currentPageLimit: number = environment.DEFAULT_RECORDS_LIMIT
@@ -181,6 +181,7 @@ export class RateReviewComponent implements OnInit {
  */
   public saveDealerRating(){
    this.buyerRating['car_id']= this.car._id;
+   this.buyerRating['dealer_id'] = this.car.dealer_id;
    this.sellerService.saveDealerRating(this.buyerRating).subscribe(response=>{
 
     this.toastr.successToastr('Updated Successfully!','Success!');

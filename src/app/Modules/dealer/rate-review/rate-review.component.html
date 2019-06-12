@@ -120,7 +120,7 @@
                       <span class="rating-number">({{row?.rating_given}}/5)</span>
                     </ng-container>
                     <ng-container *ngIf="!row.rating_given > 0">
-                      <span (click)="giveRating(row)">Pending</span>
+                      <span (click)="giveRating(row)"><a class="underLine">Pending</a></span>
   
                     </ng-container>
                   </ng-template>
@@ -187,7 +187,7 @@
     <div class="modal-content p-0">
      
       <div class="modal-header feedback-header_bg">
-        <h5 class="modal-title text-white" id="exampleModalLabel">Please Rate Buyer</h5>
+        <h5 class="modal-title text-white" id="exampleModalLabel">Please Rate Seller</h5>
         <button type="button" class="close text-white opac-1" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -200,7 +200,7 @@
                     <img class="img-fluid" src="../../../../assets/images/person.jpg">
                </div>
                <div class="buyer-name-rating w-100">
-               <p>{{car?.sold_to}}</p>
+               <p>{{car?.purchase_from}}</p>
                </div>
             </div>
             <div class="col-md-8">

@@ -18,6 +18,7 @@ import { RateReviewComponent } from './rate-review/rate-review.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { AccountVerifyComponent } from './account-verify/account-verify.component';
 import { EditCarComponent } from './cars/editcar/editcar.component';
+import {ChangePasswordComponent} from  './change-password/change-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 //importing guards
 import { SellerAuthGuardService } from '../../core/guards/seller-auth-guard.service';
@@ -54,6 +55,11 @@ const routes: Routes = [
     component: ForgotPasswordComponent,
     data: { title: 'Seller Forgot Pasword' }
   },
+  {
+    path: 'change-password',
+    component: ChangePasswordComponent    ,
+    data: { title: 'Seller change Pasword' }
+      },
   {
     path: 'home',
     component: CarsGridListComponent,

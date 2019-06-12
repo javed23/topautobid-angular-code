@@ -44,8 +44,9 @@
 
             <div formGroupName="name" class="row">
               <div class="form-group col-md-4">
-                <label>Prefix*</label>
+                <label>Prefix</label>
                 <select formControlName="prefix">
+                  <option value="">Select</option>
                   <option value="Mr.">Mr.</option>
                   <option value="Mrs.">Mrs.</option>
                   <option value="Ms.">Ms.</option>
@@ -137,7 +138,7 @@
             </div>
             <div class="row">
               <div class="form-group col-md-12">
-                <a href="#" class="change-password-link">Change Password</a>
+                <a routerLink="/seller/change-password" class="change-password-link">Change Password</a>
               </div>
             </div>
 

@@ -39,6 +39,7 @@ import { AccountVerifyComponent } from './account-verify/account-verify.componen
 import { ContactRequestComponent } from './cars/contact-request/contact-request.component';
 import { CarBidsComponent } from './cars/car-bids/car-bids.component';
 import { RateReviewComponent } from './rate-review/rate-review.component';
+import {ChangePasswordComponent} from  './change-password/change-password.component';
 
 //loader components
 import { EditCarComponent } from './cars/editcar/editcar.component';
@@ -83,7 +84,8 @@ let config = new AuthServiceConfig([
     AccountVerifyComponent,
     EditCarComponent,
     ContactRequestComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    ChangePasswordComponent
   ],
   
   imports: [

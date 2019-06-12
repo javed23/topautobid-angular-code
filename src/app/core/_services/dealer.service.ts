@@ -20,8 +20,8 @@ export class DealerService {
 
     public getPurchaseList(page: Page): Observable<any> {
 
-        //page['seller_id'] = localStorage.getItem('loggedinUserId') 
-        page['dealer_id'] = '5ca1e88f9dac60394419c0bc'
+        page['dealer_id'] = localStorage.getItem('loggedinUserId') 
+        // page['dealer_id'] = '5ca1e88f9dac60394419c0bc'
         return this.httpClient.post('dealer/getPurchaseList', page)
             .map((response: any) => {
                 console.log('response', response);

@@ -749,12 +749,14 @@ uncheckAllFetchRecords(option, filter):void{
       this.setPage(this._defaultPagination,this.page.type);
     }
   }
+  
 
   /**
   * To clear date filters(inputs)
   * @return  void
   */
- clearDateFilters():void{
+
+  clearDateFilters():void{
   if(_.has(this.datesFilter, ['start']) || _.has(this.datesFilter, ['end'])){
     this.dateFilterForm.patchValue({
       endDate: null,  
@@ -767,6 +769,7 @@ uncheckAllFetchRecords(option, filter):void{
   }  
   
 }
+
 /**
   * To choose the option from year dropdown from leftside filters
   * @return  void

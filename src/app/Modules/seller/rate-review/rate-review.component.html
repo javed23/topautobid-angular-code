@@ -120,7 +120,7 @@
                       <span class="rating-number">({{row?.rating_given}}/5)</span>
                     </ng-container>
                     <ng-container *ngIf="!row.rating_given > 0">
-                      <span (click)="giveRating(row)"><a>Pending</a></span>
+                      <span (click)="giveRating(row)"><a class="underLine">Pending</a></span>
                     </ng-container>
                   </ng-template>
                 </ngx-datatable-column>

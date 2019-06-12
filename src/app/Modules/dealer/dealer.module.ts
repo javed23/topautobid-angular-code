@@ -51,6 +51,7 @@ import { PurchasesListComponent } from './purchases/purchases-list/purchases-lis
 import {RateReviewComponent} from './rate-review/rate-review.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { AccountVerifyComponent } from './account-verify/account-verify.component';
+import {ChangePasswordComponent} from  './change-password/change-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 //cars management components
 import { ListingComponent as CarsGridListComponent } from './cars/grid-list-view/listing.component';
@@ -123,7 +124,8 @@ let config = new AuthServiceConfig([
     BidsListingComponent,
     DateFilterComponent,
     ResetPasswordComponent,
-    RateReviewComponent
+    RateReviewComponent,
+    ChangePasswordComponent
   ]
   ,
 

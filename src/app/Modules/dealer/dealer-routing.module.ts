@@ -1,4 +1,4 @@
-import { NgModule, Component } from '@angular/core';
+ import { NgModule, Component } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 //importing components
@@ -13,6 +13,7 @@ import { PurchasesListComponent } from './purchases/purchases-list/purchases-lis
 // import { ListComponent as CarsListComponent } from './cars/list/list.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { AccountVerifyComponent } from './account-verify/account-verify.component';
+import {ChangePasswordComponent} from  './change-password/change-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 //cars management components
 
@@ -54,6 +55,11 @@ const routes: Routes = [
     path: 'forgot-password',
     component: ForgotPasswordComponent,
     data: { title: 'Dealer Forgot Pasword' }
+  },
+  {
+    path: 'change-password',
+    component: ChangePasswordComponent,
+    data: { title: 'Dealer Change Pasword' }
   },
   {
     path: 'reset-password/:token',
