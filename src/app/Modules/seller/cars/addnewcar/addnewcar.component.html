@@ -7,164 +7,94 @@
 
 
  <section #addNewCarSection class="accordian_listing">
-    <!--div class="banner_col" *ngIf="!isVehicleOptionSelected">
-        <div class="banner_col_inner">
-            <div class="banner_col_inner_center">
-                <form [formGroup]="vehicleOption">
-                    <div class="container">
-                        <div class="row">
-                        <div class="col-md-10">
-                            <h2>Selling your car was never so easy</h2>
-                            <p class="highlight">Choose one of the options from below to get started.</p>
-                            <div class="formCenterCol" id="serach_box">
-                            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                                <li class="nav-item"> <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true" (click)="setVehicleOptionValue('VIN')">Look up vehicle by VIN or plate</a> </li>
-                                <li class="nav-item"> <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false" (click)="setVehicleOptionValue('Year')">Select Vehicle Year</a> </li>
-                                <li class="nav-item"> <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false" (click)="setVehicleOptionValue('Existing')">Select from Existing Vehicle</a> </li>
-                            </ul>
-                            <div class="tab-content" id="pills-tabContent">
-                            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                                <h5>Auto-fill My Vehicle Details</h5>
-                                <input type="text" #vin_number mask="A{17}" placeholder="Enter VIN or License Plate" [ngClass]="{ 'is-invalid': (vehicleOption.controls.vin_number.touched || isVehicleOptionSubmitted) && vehicleOption.controls.vin_number.errors }" formControlName="vin_number"/> 
-                                <p class="error_label" *ngIf="vehicleOption.controls.vin_number.touched || isVehicleConditionSubmitted">                      
-                                    <app-form-validation-errors minLength=17 maxLength=17 errorPrefix="VIN " [errors]="vehicleOption.controls.vin_number.errors"></app-form-validation-errors>   
-                                </p>
-                                                         
-                                <button class="grayBtn" type="button" [disabled]="vin_number.value.length != 17" (click)="validateVINNumber(vin.value)">Get My Car Details</button>
-                            </div>
-                                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                                    <h5>Select Vehicle Year</h5>
-                                    <div class="registrationyear category_Box">
-                                        
-                                        <ul>
-                                            <li *ngFor="let year of yearRange;">
-                                                <input (click)="setVehicleYear(year.value)" type="radio" formControlName="vehicle_year" value="{{year.value}}" id="new_{{year.value}}">
-                                                <label for="new_{{year.value}}">
-                                                    <span class="category category_name {{year.value}}">
-                                                            {{year.value}}
-                                                    </span>
-                                                </label>
-                                            </li>             
-                                                
-                                            <li>
-                                                <input type="radio" formControlName="vehicle_year" value="more" id="new_more" (click)="setVehicleYear('more')">
-                                                <label for="new_more">
-                                                    <span class="category category_name moreYear">
-                                                        More...
-                                                    </span>
-                                                </label>
-                                            </li>
-                                                
-                                        </ul> 
-                                         
-                                        <input mask="0000" *ngIf="isMoreSelected" formControlName="vehicle_year_value" type="text" data-typeahead="sellCarModelYear" class="gs_ta" placeholder="Year" autocomplete="off"  [ngClass]="{ 'is-invalid': (vehicleOption.controls.vehicle_year_value.touched || isVehicleOptionSubmitted) && vehicleOption.controls.vehicle_year_value.errors }">
-                                        <p class="error_label" *ngIf="(vehicleOption.controls.vehicle_year_value.touched || isVehicleOptionSubmitted) ">                      
-                                            <app-form-validation-errors errorPrefix="Year " [isPrice]=false minValue={{minYear}}  maxValue={{maxYear}}  [errors]="vehicleOption.controls.vehicle_year_value.errors"></app-form-validation-errors>
-                                        </p>
-                                    </div>
-                                   <button class="grayBtn" type="button" [disabled]="vehicleOption.invalid" (click)="validateYearOption()">Get My Car Details</button> 
-                                </div>
-                                <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
-                                    <h5>Select from Existing Vehicle</h5>
-                                    
-                                        <input #existing_vehicle type="text" id="existing_vehicle" placeholder="VIN, Make, Model" [ngClass]="{ 'is-invalid': (vehicleOption.controls.existing_vehicle.touched || isVehicleOptionSubmitted) && vehicleOption.controls.existing_vehicle.errors }" formControlName="existing_vehicle"/> 
-
-
-                                        <ul class="filter-select">
-                                            <li *ngFor="let result of results" class="filter-select-list">
-                                                <p class="artist-name">{{result.name}}</p>
-                                            </li>
-                                           
-                                        </ul>
-
-                                        <p class="error_label" *ngIf="vehicleOption.controls.existing_vehicle.touched || isVehicleOptionSubmitted">                      
-                                            <app-form-validation-errors errorPrefix="Select from Existing Vehicle " [errors]="vehicleOption.controls.existing_vehicle.errors"></app-form-validation-errors>   
-                                        </p>
-                                   
-                                   
-                                    <button class="grayBtn" type="button" [disabled]="vehicleOption.invalid" (click)="validateExistingVehicle(existing_vehicle.value)">Get My Car Details</button>
-                                </div>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                </form>    
-            </div>
-        </div>
-    </div-->
-
-    <div class="banner_col" *ngIf="isVehicleOptionSelected">
+    
+    <div class="banner_col" *ngIf="!isVehicleOptionSelected">
             <div class="banner_col_inner">
               <div class="banner_col_inner_center">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-md-10">
-                      <h2>Selling your car was never so easy</h2>
-                      <p class="highlight">Choose one of the options from below to get started.</p>
-                      <div class="formCenterCol" id="serach_box">
-        
-                        <section class="tab-content" id="pills-tabContent">
-                           <div class="section-title">
-                               <h5>Find Your Car</h5>
-                               <div class="separator"></div>
-                           </div>
-                            
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                       <label for="">Car Location Zipcode</label>
-                                        <input type="text" value="" placeholder="90006">
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                      <label for="">State</label>
-                                       <input type="text" value="California " disabled>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                       <label for="">City</label>
-                                        <input type="text" value="Los Angeles " disabled>
-                                    </div>
-                                </div>
+                <form [formGroup]="vehicleOption">  
+                    <div class="container">
+                    <div class="row">
+                        <div class="col-md-10">
+                        <h2>Selling your car was never so easy</h2>
+                        <p class="highlight">Choose one of the options from below to get started.</p>
+                        <div class="formCenterCol" id="serach_box">
+            
+                            <section class="tab-content" id="pills-tabContent">
+                            <div class="section-title">
+                                <h5>Find Your Car</h5>
+                                <div class="separator"></div>
+                            </div>
                                 
-                                 <div class="col-md-12">
-                                   <div class="radio_buttons">
-                                    <div class="form-group">
-                                       <input type="radio" name="car_SRC" id="vin" checked>
-                                       <label for="vin">VIN</label>
+                                <div formGroupName="vehicle_location" class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                        <label for="">Car Location Zipcode</label>
+                                            <input type="text" formControlName="zipcode" value="" placeholder="">
+                                        </div>
                                     </div>
-                                     <div class="form-group">
-                                       <input type="radio" name="car_SRC" id="licence_plate">
-                                       <label for="licence_plate">Licence Plate</label>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                        <label for="">State</label>
+                                        <input type="text" formControlName="state" value="" placeholder="State" readonly>
+                                        </div>
                                     </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                        <label for="">City</label>
+                                            <input *ngIf="cities.length <= 1" readonly class="form-control" type="text" placeholder="City" formControlName="city">
+                    
+                                            <select class="simple_select selectpicker" *ngIf="cities.length > 1" formControlName="city">
+                                                <option *ngFor="let cityObject of cities" value="{{cityObject.city}}">{{cityObject.city}}</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div> 
-                                
-                                <div class="col-md-12">
-                                    <div class="form-group gray_box">
-                                        <input type="text" value="" placeholder="Enter VIN Number">
+                                <div class="row">   
+                                    <div class="col-md-12">
+                                    <div class="radio_buttons">
+                                        <div class="form-group">
+                                        <input type="radio" name="car_SRC" id="vin" checked>
+                                        <label for="vin">VIN</label>
+                                        </div>
+                                        <div class="form-group">
+                                        <input type="radio" name="car_SRC" id="licence_plate">
+                                        <label for="licence_plate">Licence Plate</label>
+                                        </div>
+                                        </div>
+                                    </div> 
+                                    
+                                    <div class="col-md-12">
+                                        <div class="form-group gray_box">
+                                            <input #vin_number type="text" value="" formControlName="vin_number" placeholder="Enter VIN Number">
+                                                                                        
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 text-center">
+                                        <button class="grayBtn" type="button" [disabled]="vin_number.value.length != 17" (click)="getVehicleDetailsByVIN(vin_number.value)">Find My Car</button>
+                                    </div>
+                                    <div class="col-md-12">
+                                        {{vehicleMakeLabel}}
+                                        {{vehicleModelLabel}}
+                                        {{vehicleYearLabel}}
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <button class="grayBtn" type="button" [disabled]="vehicleOption.invalid" (click)="validateVINNumber(vehicleModelLabel)">Yes, this is my car</button>
+                                            <a href="javascript:void(0)" class="grayBtn">No, It is not</a>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <a href="javascript:void(0)" class="grayBtn">Get My Car Details</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                      </div>
+                            </section>
+                        </div>
+                        </div>
                     </div>
-                  </div>
-                </div>
+                    </div>
+                </form>
               </div>
             </div>
-          </div>
+    </div>
 
-
-    <div *ngIf="!isVehicleOptionSelected" [@AnimateList]>
+    <div *ngIf="isVehicleOptionSelected" [@AnimateList]>
       
         <aw-wizard #wizard class="step_col">    
                 <aw-wizard-step stepTitle="Basic Info" (stepEnter)="scrollToSpecificDiv()" [canExit]="moveDirection.bind(this, basicInfoWizard.valid)">  
@@ -176,55 +106,22 @@
                                     <div class="row">
                                         <div class="form-group col-md-6">
                                         <h4>Vehicle Info</h4>
-                                        <div class="f_width">       
-                                            <label>Where is this Car Currently Located?*</label>
-                                            <input #vehicle_zip mask="00000" type="text" class="simple_select form-control placeholder" placeholder="ZIP" formControlName="vehicle_zip" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_zip').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_zip').errors }">
-        
-                                            <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_zip').touched || isBasicInfoSubmitted">                      
-                                                <app-form-validation-errors minLength=2 maxLength=5 errorPrefix="Zip " patternError="Must enter valid zip code." [errors]="basicInfoWizard.controls.basic_info.get('vehicle_zip').errors"></app-form-validation-errors>   
-                                            </p>
-                                        </div>
-
-
-
-                                        <div class="f_width">       
-                                                
-                                                <label>Make*</label>
-                                                <select #vehicle_make (change)="getModelsByMake(vehicle_make.value)" class="simple_select selectpicker" formControlName="vehicle_make" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_make').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_make').errors }">
-                                                    <option value="">Select Make</option>
-                                                    <option *ngFor="let make of makes;" value="{{make.make_display}}">{{make.make_display}}</option>
-                                                </select>
-                                                <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_make').touched || isBasicInfoSubmitted">                      
-                                                    <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="Make " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_make').errors"></app-form-validation-errors>   
-                                                    </p>
-                                                
-
-
-                                            </div>
-
-
-
-
-
-                                        <div class="f_width">       
-                                                
-
-                                                <label>Model*</label>
-                                                <select class="simple_select selectpicker" #vehicle_model (change)="getTrimsByModel(vehicle_model.value)" formControlName="vehicle_model" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_model').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_model').errors }">
-                                                        <option value="">Select Model</option>
-                                                        <option *ngFor="let model of models;" value="{{model.model_name}}">{{model.model_name}}</option> 
-                                                </select>
-                                                <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_model').touched || isBasicInfoSubmitted">                      
-                                                        <app-form-validation-errors errorPrefix="Vehicle Model " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_model').errors"></app-form-validation-errors>   
-                                                </p>
-
-
-                                            </div>
-
-
-
-
-
+                                    <div class="f_width">       
+                                        <label>Where is this Car Currently Located?*</label>
+                                        <input #vehicle_zip mask="00000" type="text" class="simple_select form-control placeholder" placeholder="ZIP" formControlName="vehicle_zip" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_zip').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_zip').errors }">
+    
+                                        <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_zip').touched || isBasicInfoSubmitted">                      
+                                            <app-form-validation-errors minLength=2 maxLength=5 errorPrefix="Zip " patternError="Must enter valid zip code." [errors]="basicInfoWizard.controls.basic_info.get('vehicle_zip').errors"></app-form-validation-errors>   
+                                        </p>
+                                    </div>
+                                    <div class="f_width">       
+                                        <label>Make*</label> 
+                                        {{vehicleMakeLabel}}                                     
+                                    </div>
+                                    <div class="f_width"> 
+                                        <label>Model*</label>    
+                                        {{vehicleModelLabel}}                                      
+                                    </div>
 
                                     <div class="f_width">       
                                             <label>Trim*</label>
@@ -547,8 +444,8 @@
                                                         <h6>Your Vehicle info</h6>
                                                     <ul>
                                                         <li><label>ZIP: </label><span>{{vehicle_zip.value}}</span></li>
-                                                        <li><label>Make: </label><span>{{vehicle_make.value}}</span></li>
-                                                        <li><label>Model: </label><span>{{vehicle_model.value}}</span></li>
+                                                        <li><label>Make: </label><span>{{vehicleMakeLabel}}</span></li>
+                                                        <li><label>Model: </label><span>{{vehicleModelLabel}}</span></li>
                                                         <li><label>Trim: </label><span>{{vehicle_trim.value}}</span></li>
                                                         <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>
                                                         <li><label>Body Style: </label><span>{{vehicle_body_type.value}}</span></li>
@@ -766,8 +663,8 @@
                                             <h6>Your Vehicle info</h6>
                                         <ul>
                                             <li><label>ZIP: </label><span>{{vehicle_zip.value}}</span></li>
-                                            <li><label>Make: </label><span>{{vehicle_make.value}}</span></li>
-                                            <li><label>Model: </label><span>{{vehicle_model.value}}</span></li>
+                                            <li><label>Make: </label><span>{{vehicleMakeLabel}}</span></li>
+                                            <li><label>Model: </label><span>{{vehicleModelLabel}}</span></li>
                                             <li><label>Trim: </label><span>{{vehicle_trim.value}}</span></li>
                                             <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>
                                             <li><label>Body Style: </label><span>{{vehicle_body_type.value}}</span></li>
@@ -959,8 +856,8 @@
                                                         <h6>Your Vehicle info</h6>
                                                         <ul>
                                                             <li><label>ZIP: </label><span>{{vehicle_zip.value}}</span></li>
-                                                            <li><label>Make: </label><span>{{vehicle_make.value}}</span></li>
-                                                            <li><label>Model: </label><span>{{vehicle_model.value}}</span></li>
+                                                            <li><label>Make: </label><span>{{vehicleMakeLabel}}</span></li>
+                                                            <li><label>Model: </label><span>{{vehicleModelLabel}}</span></li>
                                                             <li><label>Trim: </label><span>{{vehicle_trim.value}}</span></li>
                                                             <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>
                                                             <li><label>Body Style: </label><span>{{vehicle_body_type.value}}</span></li>
@@ -1095,8 +992,8 @@
                                             <h6>Your Vehicle info</h6>
                                             <ul>
                                                 <li><label>ZIP: </label><span>{{vehicle_zip.value}}</span></li>
-                                                <li><label>Make: </label><span>{{vehicle_make.value}}</span></li>
-                                                <li><label>Model: </label><span>{{vehicle_model.value}}</span></li>
+                                                <li><label>Make: </label><span>{{vehicleMakeLabel}}</span></li>
+                                                <li><label>Model: </label><span>{{vehicleModelLabel}}</span></li>
                                                 <li><label>Trim: </label><span>{{vehicle_trim.value}}</span></li>
                                                 <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>
                                                 <li><label>Body Style: </label><span>{{vehicle_body_type.value}}</span></li>
@@ -1301,8 +1198,8 @@
                                         <div class="detail_body">
                                             <ul>
                                                 <li><span class="label">ZIP : </span><span class="value">{{vehicle_zip?.value}}</span></li>
-                                                <li><span class="label">Make : </span><span class="value">{{vehicle_make?.value}}</span></li>
-                                                <li><span class="label">Model : </span><span class="value">{{vehicle_model?.value}}</span></li>
+                                                <li><span class="label">Make : </span><span class="value">{{vehicleMakeLabel}}</span></li>
+                                                <li><span class="label">Model : </span><span class="value">{{vehicleModelLabel}}</span></li>
                                                 <li><span class="label">Trim : </span><span class="value">{{vehicle_trim?.value}}</span></li>
                                                 <li><span class="label">Mileage : </span><span class="value">{{vehicle_mileage?.value}}</span></li>
                                                 <li><span class="label">Body Style : </span><span class="value">{{vehicle_body_type?.value}}</span></li>

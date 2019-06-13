@@ -516,7 +516,7 @@ h3 {padding-bottom:15px;}
 }
 /*---------------------------*/
 .formCenterCol input[type="text"]:focus {border:1px solid #db2d2e;}
-.formCenterCol select {font-size:14px; color:#7B7B7B; border:1px solid #F0F0F0; padding:20px; border-radius:0px; width:400px; background:#F0F0F0; margin:10px 0px 20px 0px;}
+.formCenterCol select {font-size:14px; color:#7B7B7B; border:1px solid #F0F0F0; padding:18px; border-radius:0px; width:400px; background:#F0F0F0; margin:3px 0px 20px 0px;}
 /*---------------------------*/
 ul#pills-tab {margin:0px -1px;}
 .nav-pills .nav-item {width:33.33%; text-align:center; }

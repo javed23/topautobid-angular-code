@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ToastrManager } from 'ng6-toastr-notifications';//toaster class
 
 //import shared services
@@ -9,6 +9,17 @@ import { PageLoaderService } from '../../shared/_services'
 import { environment } from '../../../environments/environment'
 
 import Swal from 'sweetalert2'
+
+
+
+ 
+
+const apiURL:string = 'https://vpic.nhtsa.dot.gov/api/vehicles/';
+
+let headers: HttpHeaders = new HttpHeaders();
+headers = headers.append('Accept', 'application/json');
+headers = headers.append('Content-Type', 'application/json');
+headers = headers.append('Access-Control-Allow-Methods', 'GET, POST');
 
 @Injectable()
 export class CommonUtilsService {
@@ -273,6 +284,19 @@ public isPDFCorrupted(base64string, type): Observable<any> {
       .map((response: any) => {         
           return response;
       })
+}
+
+/**
+   * Fetch make, model, year of vin
+   * @param vin    Vehicle Vin Number
+   * @return       Observable<any>
+  */
+public fetchVehicleDetailsByVIN(vin): Observable<any | false> {
+  return this.httpClient
+    .get(apiURL+'decodevinvaluesextended/'+vin+'?format=json', {headers})
+    .map((response: any) => {           
+      return response;
+  })
 }
 
 

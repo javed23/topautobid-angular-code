@@ -14,12 +14,6 @@ import * as _ from 'lodash';
 
 const apiURL:string = 'https://www.carqueryapi.com/api/0.3/?callback=getData';
 
-const headers = new HttpHeaders();
-headers.set('Access-Control-Allow-Origin', 'http://localhost:4200');
-headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-headers.set('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-headers.set('Access-Control-Allow-Credentials', 'true');
-headers.set('Content-Type', 'application/json');
 
 @Injectable({
     providedIn: 'root'
@@ -43,7 +37,7 @@ export class VehicleService {
     public getAllMakesByYear(data): Observable<any | false> {   
               
         return this.httpClient
-        .get(apiURL+'&cmd=getMakes&year='+data.year, {headers: headers, responseType: 'text'})
+        .get(apiURL+'&cmd=getMakes&year='+data.year)
         .map((response) => {      
             console.log('getMakes', response);     
           //return response;

@@ -118,6 +118,8 @@ export class AddNewCarComponent implements OnInit {
   addVehicleSubscription: Subscription;
 
   private setVehicleReferenceDefaultValue: string = "VIN";    // set Default Vehicle Reference Radio Button Value
+
+  cities:any =[]
   makes = [];  
   models = [];
   trims = [];
@@ -131,6 +133,12 @@ export class AddNewCarComponent implements OnInit {
   exteriorColors= [{name: "Black"}, {name: "Blue"}, {name: "Brown"}, {name: "Grey"}, {name: "Red"}, {name: "Silver"}];
   interiorMaterials= [{name: "Faux Leather"}, {name: "Brushed Nylon"}, {name: "Nylon Fabric"}];
   basicInfoDetails= {model_doors: "", model_engine_cyl: "", model_transmission_type: "", model_engine_fuel: "", model_drive: "", model_body: ""};
+
+
+  vehicleMakeLabel ="";
+  vehicleModelLabel ="";
+  vehicleYearLabel ="";
+  vehicleTrimLabel ="";
  
 
   // Declare DropZone Variables  
@@ -181,9 +189,17 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   this.vehicleAfterMarketDropzoneInit(); //initalize dropzone library
   this.vehicleAfterConditionDropzoneInit(); //initalize dropzone library
   this.offerInHandsDropzoneInit(); //initalize dropzone library 
- 
 
+
+  // Fetch State City by code
+  let zipcodeFormControl = this.vehicleOption.controls.vehicle_location.get('zipcode');
+  zipcodeFormControl.valueChanges.subscribe(zipcode => {  
+      this.vehicleOption.controls.vehicle_location.get('state').patchValue(''); 
+      this.vehicleOption.controls.vehicle_location.get('city').patchValue(''); 
+      (zipcode.length==5)?this.fetchCityStateOfZipcode(zipcode):this.resetVehicleLocationControl();
+  });
 }
+  
 
   /**
   * Initialize Basic Info Wizard Fields.
@@ -191,11 +207,14 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   private selectVehicleOption(){
     this.vehicleOption = this.formBuilder.group({
       _id: [null],
-      vin_number: [''],
       seller_id: [localStorage.getItem('loggedinUserId')],
-      vehicle_year: [''],
-      vehicle_year_value: [''],
-      existing_vehicle: [''],
+      vin_number: [''],            
+      vehicle_year: [''],    
+      vehicle_location:this.formBuilder.group({
+        zipcode: ['', Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])],     
+        state: [''],
+        city: ['']
+      })      
     });
   }
 
@@ -303,22 +322,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    * save Car in DB  
    */
   onSubmitAddNewCar(): void {
-
-
-
-    //check Vehicle Year Value
-    const vehicleYear = this.vehicleOption.controls.vehicle_year;
-    if(vehicleYear.value == "more"){
-      vehicleYear.setValue(this.vehicleOption.controls.vehicle_year_value.value);
-    }
-
-    /*if(this.isSkipSubmit){
-      this.offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').setValue(0);
-      while (this.offerInHandsImagesArray.length) {
-        this.offerInHandsImagesArray.removeAt(this.offerInHandsImagesArray.length-1);
-      }
-    } */
-
+   
 
     if(this.offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').value == null){
       this.offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').setValue(0);
@@ -894,15 +898,13 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    * @return  array(models)
    */
   getModelsByMake(makeName){ 
+    
 
     const _this = this;
     let vehicleYear = _this.vehicleOption.controls.vehicle_year;
 
-    if(vehicleYear.value == "more"){
-      this.getVehicleYear = this.vehicleOption.controls.vehicle_year_value.value;
-    }else{
-      this.getVehicleYear = vehicleYear.value;
-    }
+    this.getVehicleYear = vehicleYear.value;
+   
 
 
 
@@ -927,7 +929,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
     $.getJSON("https://www.carqueryapi.com/api/0.3/?callback=?", {cmd:"getModels", year:this.getVehicleYear, make:makeName}, function(response) {
         //The 'data' variable contains all response data.    
-        //console.log('models',response);
+        console.log('models',response);
 
         if(response.Models.length > 0){
           
@@ -955,41 +957,69 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    */
   getTrimsByModel(modelName){  
 
-    const _this = this;
-    let vehicleYear = _this.vehicleOption.controls.vehicle_year;
+    const _this = this;    
 
-    if(vehicleYear.value == "more"){
-      _this.getVehicleYear = _this.vehicleOption.controls.vehicle_year_value.value;
-    }else{
-      _this.getVehicleYear = vehicleYear.value;
-    }
+    let vehicleYear = _this.vehicleOption.controls.vehicle_year;
+    _this.getVehicleYear = vehicleYear.value;
+   
 
     let vehicleTrimControl = _this.basicInfoWizard.controls.basic_info.get('vehicle_trim');  
 
-    _this.emptyBasicInfoFields();
+   /* _this.emptyBasicInfoFields();
 
     if(modelName == ""){
       _this.resetTrimControl();      
       return;
     }else{
       vehicleTrimControl.enable();
-    }
+    } */
+
+    _this.commonUtilsService.showPageLoader();
 
     $.getJSON("https://www.carqueryapi.com/api/0.3/?callback=?", {cmd:"getTrims", year:_this.getVehicleYear, model:modelName}, function(response) {
-        //The 'data' variable contains all response data.    
-       console.log('response', response);
+
+       
         if(response.Trims.length > 0){
+
+          _this.isVehicleOptionSelected = true;
           
           vehicleTrimControl.enable(); 
           _this.trims = response.Trims;                
   
-        }else{         
-          _this.resetTrimControl();          
+        }else{     
+
+          _this.isVehicleOptionSelected = false;
+               
+          _this.resetTrimControl();     
+
         }
 
+        _this.commonUtilsService.hidePageLoader();
+
     });
+
     
     //this.trims = this.models.find(x => x.name === modelName).trims;  
+  }
+
+
+  /**
+   * validate VIN Details.   
+   * @return  array(vehicle details)   
+   */
+  validateVINNumber(modelName){
+
+    this.isVehicleOptionSubmitted = true;   
+
+    if(this.vehicleOption.invalid) {
+      this.isVehicleOptionSelected = false;
+      return;
+    }
+
+    
+    this.getTrimsByModel(modelName);
+      
+    
   }
 
 
@@ -1025,28 +1055,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    
     
   }
-
-  /**
-   * validate Year Option.   
-   * @return  array(vehicle details)   
-   */
-  validateYearOption(){
-    this.isVehicleOptionSubmitted = true;   
-
-    if(this.vehicleOption.invalid) {
-      this.isVehicleOptionSelected = false;
-      return;
-    }
-
-    const vehicleYear = this.vehicleOption.controls.vehicle_year;
-    if(vehicleYear.value == "more"){
-      this.getVehicleYear = this.vehicleOption.controls.vehicle_year_value.value;
-    }else{
-      this.getVehicleYear = vehicleYear.value;
-    }
-      
-    this.getVehicleStatisticsByYear(this.getVehicleYear);
-  }
+ 
 
   /**
    * get Vehicles(Makes, Models, Trim...) By Year
@@ -1277,24 +1286,6 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     $(this.offerInHandsSection.nativeElement).modal({backdrop: 'static', keyboard: false});
   }
 
-  
-
-  /**
-   * check vehicle year if more selected
-   * @param value if more selected 
-   */
-  setVehicleYear(value: string): void {
-    const vehicleYearValue = this.vehicleOption.controls.vehicle_year_value;
-    if(value == "more"){
-      this.isMoreSelected = true;
-      vehicleYearValue.setValidators(Validators.compose([Validators.required,Validators.min(this.minYear), Validators.max(this.maxYear)]));
-      vehicleYearValue.updateValueAndValidity();
-    }else{
-      this.isMoreSelected = false;
-      vehicleYearValue.clearValidators();
-      vehicleYearValue.updateValueAndValidity();
-    }   
-  }
 
   /**
    * check exterior color
@@ -1338,46 +1329,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     this.interiorColor = value; 
   }
   
-  /**
-   * check which vehicle option is selected
-   * @param value vehicle refrence value 
-   */
-  setVehicleOptionValue(value: string): void {    
-    const vehicleYear = this.vehicleOption.controls.vehicle_year;
-    const vehicleVIN = this.vehicleOption.controls.vin_number;
-    const existingVehicle = this.vehicleOption.controls.existing_vehicle;
-
-      if(value == "Year"){    
-        vehicleYear.setValidators([Validators.required]);
-        vehicleYear.updateValueAndValidity();
-        vehicleVIN.clearValidators();
-        vehicleVIN.updateValueAndValidity();
-        existingVehicle.clearValidators();
-        existingVehicle.updateValueAndValidity();
-      }
-
-      if(value == "Existing"){
-        existingVehicle.setValidators([Validators.required]);
-        existingVehicle.updateValueAndValidity();
-        vehicleVIN.clearValidators();
-        vehicleVIN.updateValueAndValidity();
-        vehicleYear.clearValidators();
-        vehicleYear.updateValueAndValidity();
-      }
-
-      if(value == "VIN"){
-        vehicleVIN.setValidators([Validators.required]);        
-        vehicleVIN.updateValueAndValidity();
-        vehicleYear.clearValidators();
-        vehicleYear.updateValueAndValidity();
-        existingVehicle.clearValidators();
-        existingVehicle.updateValueAndValidity();
-      }
-
-      this.setVehicleReferenceDefaultValue = name;  
-
-  } 
-
+  
   /**
    * check vehicle Image Category is selected
    * @param  vehicleCategory refrence value 
@@ -1676,84 +1628,163 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   }
 
 
+
+
+  /**
+   * get Vehicle Details By VIN
+  */
+  getVehicleDetailsByVIN(vin_number){
+    const _this = this;
+    _this.commonUtilsService.showPageLoader();
+
+    $.ajax({
+
+      url: "https://vpic.nhtsa.dot.gov/api/vehicles/decodevinvaluesextended/"+vin_number+"?format=json",
+      type: "GET",
+      dataType: "json",
+      success: function(response)
+      {
+        console.log('result', response);
+        if(response.Results[0].Make == ""){
+          _this.commonUtilsService.onError(environment.MESSAGES.NO_RECORDS_FOUND);
+        }else{
+
+          let vehicleYearControl = _this.vehicleOption.controls.vehicle_year;
+          let vehicleMakeControl = _this.basicInfoWizard.controls.basic_info.get('vehicle_make');
+          let vehicleModelControl = _this.basicInfoWizard.controls.basic_info.get('vehicle_model');
+          let vehicleTrimControl = _this.basicInfoWizard.controls.basic_info.get('vehicle_trim');
+
+          vehicleYearControl.patchValue(response.Results[0].ModelYear);
+          vehicleMakeControl.patchValue(response.Results[0].Make);
+          vehicleModelControl.patchValue(response.Results[0].Model);
+          vehicleTrimControl.patchValue(response.Results[0].Trim);
+
+          _this.vehicleMakeLabel = response.Results[0].Make;
+          _this.vehicleModelLabel = response.Results[0].Model;
+          _this.vehicleYearLabel = response.Results[0].ModelYear;
+          
+        }
+        
+        _this.commonUtilsService.hidePageLoader();
+      },
+      error: function(xhr, ajaxOptions, thrownError)
+      {
+        _this.commonUtilsService.onError(environment.MESSAGES.NO_RECORDS_FOUND);
+        _this.commonUtilsService.hidePageLoader();
+        console.log(xhr.status);
+        console.log(thrownError);
+      }
+
+    });
+   
+  }
+
+
+  /**
+   * private function to fetch make, mode, trim and year by VIN
+   * @param vin_number number(entered vin number from clientside)
+   * @return  void
+  */
+  private fetchVehicleDetailsByVIN(vin_number):void{    
+
+    /*this.commonUtilsService.fetchVehicleDetailsByVIN(vin_number)
+    .subscribe(
+    (response) => {       
+          console.log(response);   
+    },
+    error => {        
+      console.log(error);
+    });  */
+  }
+
   /**
    * private function to fetch city and state information of entered zipcode
    * @param zipcode number(entered zipcode from clientside)
    * @return  void
   */
-  private fetchCityStateOfZipcode(zipcode):void{
-    this.vehicleService.fetchCityStateOfZipcode(zipcode)
-      .subscribe(
-      (response) => { 
-        if(!_.has(response,['status'])){
-          let cityState = response[0]['city_states'][0]        
-          cityState['latitude'] = response[0]['zipcodes'][0]['latitude']
-          cityState['longitude'] = response[0]['zipcodes'][0]['longitude']         
-          this.vehicleLocation =  cityState    
-        }else{
-          this.commonUtilsService.onError('Could not fetch city, state data for zipcode.');
-        }       
-      },
-      error => {        
+ private fetchCityStateOfZipcode(zipcode):void{
+  this.commonUtilsService.fetchCityStateOfZipcode(zipcode)
+    .subscribe(
+    (response) => {       
+      if(!_.has(response[0],['status'])){
+        console.log(response)
+        this.cities = response[0]['city_states'];
+        let cityState = response[0]['city_states'][0]        
+        cityState['coordinates'] = [response[0]['zipcodes'][0]['longitude'],response[0]['zipcodes'][0]['latitude']]            
+        this.vehicleLocation =  cityState    
+      }else{
+        this.vehicleOption.controls.vehicle_location.get('zipcode').patchValue('');                  
         this.commonUtilsService.onError('Could not fetch city, state data for zipcode.');
-      });  
-  }
+      }       
+    },
+    error => {        
+      this.vehicleOption.controls.vehicle_location.get('zipcode').patchValue(''); 
+      this.commonUtilsService.onError('Could not fetch city, state data for zipcode.');
+    });  
+}
 
-  /**
+ /**
   * get vehicle to be picked up value.
   * @return  any
   */
-  get vehicleLocation(): any {
+ get vehicleLocation(): any {
   return this._vehicleLocation;
-  }
+}
 
-  /**
-  * set vehicle to be picked up value.
-  * @param vehicleLocation  object of key:value
-  */
-  set vehicleLocation(vehicleLocation: any){
-    this._vehicleLocation = vehicleLocation;  
-    this.basicInfoWizard.controls.basic_info.get('location').patchValue(this._vehicleLocation); 
-    console.log('form value location',this.basicInfoWizard.controls.basic_info.get('location').value)
-  }
+/**
+* set vehicle to be picked up value.
+* @param vehicleLocation  object of key:value
+*/
+set vehicleLocation(vehicleLocation: any){
+  this._vehicleLocation = vehicleLocation;  
+  this.vehicleOption.get('vehicle_location').patchValue(this._vehicleLocation);  
+}
 
-  /**
-  * empty basic Info Fields.
-  */
-  emptyBasicInfoFields():void{
+/**
+* Reset Vehicle Location Control
+*/
+resetVehicleLocationControl():void{
+  this.cities = [];
+  this.vehicleOption.get('vehicle_location').patchValue('');
+}
 
-    this.vehicleService.getAllVehicleDetails(this.basicInfoDetails).subscribe(
-      (response) => {      
-        this.basicInfoWizard.controls.basic_info.patchValue(response);
-      
-      },error => { });
-  }
+/**
+* empty basic Info Fields.
+*/
+emptyBasicInfoFields():void{
 
-  /**
-  * Reset Trim Control
-  */
-  resetTrimControl():void{
-    let vehicleTrimControl = this.basicInfoWizard.controls.basic_info.get('vehicle_trim');
-    vehicleTrimControl.disable(); vehicleTrimControl.setValue('');  this.trims = [];
-  }
+  this.vehicleService.getAllVehicleDetails(this.basicInfoDetails).subscribe(
+    (response) => {      
+      this.basicInfoWizard.controls.basic_info.patchValue(response);
+    
+    },error => { });
+}
 
-  /**
-  * Reset Trim Control
-  */
-  resetModelControl():void{
-    let vehicleModelControl = this.basicInfoWizard.controls.basic_info.get('vehicle_model');
-    vehicleModelControl.disable(); vehicleModelControl.setValue('');  this.models = [];
-  }
+/**
+* Reset Trim Control
+*/
+resetTrimControl():void{
+  let vehicleTrimControl = this.basicInfoWizard.controls.basic_info.get('vehicle_trim');
+  vehicleTrimControl.disable(); vehicleTrimControl.setValue('');  this.trims = [];
+}
+
+/**
+* Reset Trim Control
+*/
+resetModelControl():void{
+  let vehicleModelControl = this.basicInfoWizard.controls.basic_info.get('vehicle_model');
+  vehicleModelControl.disable(); vehicleModelControl.setValue('');  this.models = [];
+}
 
 
-  /**
-  * set check object array length.
-  * @param object
-  *  @return number
-  */
-  public checkObjectLength(object): number{
-    return Object.keys(object).length;
-  }
+/**
+* set check object array length.
+* @param object
+*  @return number
+*/
+public checkObjectLength(object): number{
+  return Object.keys(object).length;
+}
 
 
   /**
@@ -1777,13 +1808,6 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   }
 
   ngOnInit() {  
-
-    let zipcodeFormControl = this.basicInfoWizard.controls.basic_info.get('vehicle_zip');
-    zipcodeFormControl.valueChanges    
-    .subscribe(zipcode => {      
-      (zipcode.length==5)?this.fetchCityStateOfZipcode(zipcode):''
-    });
-
     this.addNewCarSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });     
   }
 

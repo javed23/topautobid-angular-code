@@ -10,7 +10,7 @@ export class ApiIntercepter implements HttpInterceptor {
     //console.log('API_ENDPOINT:' + environment.API_ENDPOINT)
     let apiReq = request.clone({ url: `${request.url}` });
    
-    if (!(request.url).includes('i18n') && !(request.url).includes('smartystreets') && !(request.url).includes('carqueryapi')) {
+    if (!(request.url).includes('i18n') && !(request.url).includes('vpic') && !(request.url).includes('smartystreets') && !(request.url).includes('carqueryapi')) {
       apiReq = request.clone({ url: environment.API_ENDPOINT + '/api/' + `${request.url}` });
     }
    
