@@ -172,7 +172,7 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('x-auth-token', response.headers.get('x-auth-token'))
 
           this.userAuthService.isLoggedIn(true, 'Dealer');//trigger loggedin observable         
-          this.router.navigate(['/dealer/home']);
+          this.router.navigate(['/dealer/dashboard']);
 
         }
         },

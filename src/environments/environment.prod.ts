@@ -2,7 +2,8 @@ export const environment = {
   production: true,
   API_ENDPOINT: 'http://54.245.128.14:3000',
   //WEB_ENDPOINT: 'http://localhost:4200',
-  WEB_ENDPOINT: 'http://54.245.128.14',
+  // WEB_ENDPOINT: 'http://54.245.128.14',
+  WEB_ENDPOINT: 'http://52.34.203.60',
   ADDRESS_API:{
     ENDPOINT:'https://us-zipcode.api.smartystreets.com',
     KEY: '17135398116542866',

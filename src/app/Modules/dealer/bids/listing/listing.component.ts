@@ -28,6 +28,7 @@ export class ListingComponent implements OnInit {
   dealerShips:any;
   bidForm:FormGroup;
   legalContacts:any =[];
+  car:any;
   page = new Page(); //object of Page type  
   cars = new Array<Car>() //array of Car type 
 
@@ -240,7 +241,8 @@ export class ListingComponent implements OnInit {
  */ 
   placeBid(car:any){
     this.getAllDealShips();
-    console.log('the car is is',car._id)
+    console.log('the car is is',car)
+    this.car = car;
     this.bidForm.patchValue({
       car_id:car._id
     })

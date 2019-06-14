@@ -628,11 +628,11 @@
 
             <div class="col-md-12">
               <div class="search_result">
-                Suggested Price $5000
+                Suggested Price ${{car?.vehicle_finance_details?.vehicle_offer_in_hands_price}}
               </div>
 
               <div class="selected-box auto-hight form-group w-100">
-                <label for="">Assign a DealerShip</label>
+                <label for="">Assign a DealerShip*</label>
                 <select
                   [ngClass]="{ 'is-invalid': (bidForm.controls.dealership_id.touched || submitted) && bidForm.get('dealership_id').errors }"
                   class="margin-top42 my_select w-100 d-block" (change)="selectStore($event.target.value)"
@@ -648,7 +648,7 @@
               </div>
 
               <div class="selected-box auto-hight form-group w-100">
-                <label for="">Assign Legal Contact</label>
+                <label for="">Assign Legal Contact*</label>
                 <select class="margin-top42 my_select w-100 d-block" formControlName="legal_contact"
                   [ngClass]="{ 'is-invalid': (bidForm.controls.legal_contact.touched || submitted) && bidForm.get('legal_contact').errors }">
 
@@ -663,7 +663,7 @@
               </div>
 
               <div class="selected-box auto-hight form-group w-100">
-                <label for="">Bid Price</label>
+                <label for="">Bid Price*</label>
                 <input type="text" prefix=" $" mask="000000"
                   [ngClass]="{ 'is-invalid': (bidForm.controls.price.touched || submitted) && bidForm.get('price').errors }"
                   class="form-control w-100 d-block my_select" formControlName="price">
