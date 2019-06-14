@@ -630,7 +630,7 @@
                   [ngClass]="{ 'is-invalid': (bidForm.controls.dealership_id.touched || submitted) && bidForm.get('dealership_id').errors }"
                   class="margin-top42 my_select w-100 d-block" (change)="selectStore($event.target.value)"
                   formControlName="dealership_id">
-                  <option value="" selected>Select the store</option>
+                  <option disabled selected value="">Select the store</option>
                   <option *ngFor="let d of dealerShips;let i = index;" value="{{d._id}}">{{d?.legalcoroporationname}}
                   </option>
                 </select>
@@ -650,7 +650,7 @@
                     {{lc?.name?.last_name}}</option>
                 </select>
                 <p *ngIf="bidForm.controls.legal_contact.touched || submitted">
-                  <app-form-validation-errors errorPrefix="Legal Contact "
+                  <app-form-validation-errors errorPrefix="legal contact "
                     [errors]="bidForm.get('legal_contact').errors"></app-form-validation-errors>
                 </p>
               </div>
@@ -661,7 +661,7 @@
                   [ngClass]="{ 'is-invalid': (bidForm.controls.price.touched || submitted) && bidForm.get('price').errors }"
                   class="form-control w-100 d-block my_select" formControlName="price">
                 <p *ngIf="bidForm.controls.price.touched || submitted">
-                  <app-form-validation-errors errorPrefix="Legal Contact " [errors]="bidForm.get('price').errors">
+                  <app-form-validation-errors errorPrefix="bid price " [errors]="bidForm.get('price').errors">
                   </app-form-validation-errors>
                 </p>
               </div>

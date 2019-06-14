@@ -59,8 +59,8 @@ export class ListingComponent implements OnInit {
   private dealerBidForm() {
     this.bidForm = this.formBuilder.group({
       car_id:[null,Validators.required],
-      dealership_id: [null, [ Validators.required]],
-      legal_contact: [null, [Validators.required]],
+      dealership_id: ['', [ Validators.required]],
+      legal_contact: ['', [Validators.required]],
       price: [null,[Validators.required,Validators.pattern(/^\d+$/)]]
     });
   }
@@ -251,6 +251,8 @@ export class ListingComponent implements OnInit {
 
     this.dealerService.placeBid(this.bidForm.value).pipe(untilDestroyed(this)).subscribe(response=>{
     this.commonUtilsService.onSuccess('The Bid has been Applied SuccessFully!');
+     this.bidForm.reset();
+
     $(this.bidModal.nativeElement).modal('hide');
     this.setPage(this._defaultPagination);
     },error=>{
@@ -269,6 +271,13 @@ export class ListingComponent implements OnInit {
     else this.legalContacts = [];
   }
 
+
+/**
+ * will invoke on the discard of the bid
+ */
+  finishFunction(){
+  this.bidForm.reset();
+  }
   toggleExpandRow(row) {
     this.listingTable.rowDetail.toggleExpandRow(row);
   }
