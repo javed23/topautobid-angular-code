@@ -33,7 +33,7 @@ export class ChangePasswordComponent implements OnInit {
 
   //define the component properties
   title: string = 'Seller Change Password';
-  breadcrumbs: any[] = [{ page: 'Home', link: '#' }, { page: 'Profile', link: '/seller/seller-profile' }, { page: 'Change password', link: '' }]
+  breadcrumbs: any[] = [{ page: 'Home', link: '/seller/home' }, { page: 'Profile', link: '/seller/seller-profile' }, { page: 'Change password', link: '' }]
   changePasswordForm: FormGroup;
   submitted: boolean = false;
   otpVerificationForm: FormGroup;

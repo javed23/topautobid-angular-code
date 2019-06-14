@@ -28,6 +28,7 @@ export class ListingComponent implements OnInit {
   dealerShips:any;
   bidForm:FormGroup;
   legalContacts:any =[];
+  car:any;
   page = new Page(); //object of Page type  
   cars = new Array<Car>() //array of Car type 
 
@@ -171,7 +172,23 @@ export class ListingComponent implements OnInit {
 
   };
 
+  /**
+    * move the car from wishlist of the dealer 
+    * @param $carId    carId is car id to hide the car
+    */
+   moveFromWishList(carId: any) {
 
+    this.carService.moveCarFromWishList({ carId: carId }).pipe(untilDestroyed(this)).subscribe(response => {
+      this.commonUtilsService.onSuccess('Your car has been moved from wislist');
+      this.setPage(this._defaultPagination);
+
+    }, error => {
+      this.commonUtilsService.onError(error)
+    })
+
+  };
+
+  
 
   /**
     * save the car in hide list
@@ -194,7 +211,7 @@ export class ListingComponent implements OnInit {
     */
    unhideCar(carId: any) {
     this.carService.unhideCar({ carId: carId }).pipe(untilDestroyed(this)).subscribe(response => {
-      this.commonUtilsService.onSuccess('Your car has been hidden');
+      this.commonUtilsService.onSuccess('Your car has been unhide');
       this.setPage(this._defaultPagination);
     }, error => {
       this.commonUtilsService.onError(error)
@@ -224,7 +241,8 @@ export class ListingComponent implements OnInit {
  */ 
   placeBid(car:any){
     this.getAllDealShips();
-    console.log('the car is is',car._id)
+    console.log('the car is is',car)
+    this.car = car;
     this.bidForm.patchValue({
       car_id:car._id
     })

@@ -8,11 +8,14 @@
 <section class="blog page-section-ptb pad-b-30">
   <div class="container">
     <div class="row">
+
       <div class="col-md-12">
+        <h3 class="left_tittle">Bids on - {{bids[0]?.car?.vehicle_year}} {{bids[0]?.car?.basic_info?.vehicle_make}} {{bids[0]?.car?.basic_info?.vehicle_model}}</h3>
         <div class="listing_outer blog-sidebar">
           <div class="sorting-options-main">
             <div class="row blog-sidebar listing_outer">
               <div class="col-md-12 d-flex">
+                
                 <div class="product-listing">
                   <div class="price-search">
                     <div class="search">
@@ -84,7 +87,7 @@
                 <ngx-datatable-column name="Bid Date" prop="bid_date" [sortable]="true" [resizeable]="false"
                 [draggable]="false">
                   <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
-                    {{ row?.bid_date | date:'dd-MM-yyyy h:mm' }}
+                    {{ row?.bid_date | date:'MM-dd-yyyy h:mm' }}
                   </ng-template>
                 </ngx-datatable-column>
 

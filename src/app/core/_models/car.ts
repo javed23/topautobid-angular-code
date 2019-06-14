@@ -45,6 +45,7 @@ export class Car {
     vehicle_finance:any
     location:any;
     dealers_bids:any;
+    vehicle_finance_details:any;
     
     constructor(object) {
         console.log('object', object['basic_info']);
@@ -90,6 +91,7 @@ export class Car {
         this.clean_title = (object.vehicle_ownership.vehicle_clean_title)?'Yes':'No';
         this.location =    object.basic_info.location 
         this.dealers_bids = object.dealers_bids;
+        this.vehicle_finance_details = object.vehicle_finance_details
         
     }
 }
