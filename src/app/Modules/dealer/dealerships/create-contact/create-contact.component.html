@@ -28,8 +28,9 @@
                   <div class="gray-form">
                     <div formGroupName="name" class="row">
                       <div class="form-group col-md-4">
-                        <label>Prefix*</label>
+                        <label>Prefix</label>
                         <select formControlName="prefix">
+                          <option value="">Select Prefix</option>
                           <option value="Mr.">Mr.</option>
                           <option value="Mrs.">Mrs.</option>
                           <option value="Ms.">Ms.</option>
@@ -37,7 +38,7 @@
                       </div>
 
                       <div class="form-group col-md-4">
-                        <label>Your Name*</label>
+                        <label>First Name*</label>
                         <input class="form-control" type="text" placeholder="Your Name" formControlName="first_name"
                           [ngClass]="{ 'is-invalid': (newLegalContactForm.controls.name.get('first_name').touched || submitted) && newLegalContactForm.controls.name.get('first_name').errors }">
                         <p *ngIf="newLegalContactForm.controls.name.get('first_name').touched || submitted">
@@ -224,42 +225,42 @@
                         </p>
                       </div>
                     </div>
-                    <div class="row">
-                      <div class="form-group col-md-6">
-                        <label>City*</label>
-                        <input class="form-control" type="text" placeholder="City" name="city" formControlName="city"
-                          [ngClass]="{ 'is-invalid': (newLegalContactForm.controls.city.touched || submitted) && newLegalContactForm.get('city').errors }">
-                        <p *ngIf="newLegalContactForm.controls.city.touched || submitted">
-                          <app-form-validation-errors errorPrefix="City " patternError="Must enter valid city."
-                            minLength=2 maxLength=50 [errors]="newLegalContactForm.get('city').errors">
-                          </app-form-validation-errors>
-                        </p>
-                      </div>
-                      <div class="form-group col-md-6">
-                        <label>State*</label>
-                        <select formControlName="state"
-                          [ngClass]="{ 'is-invalid': (newLegalContactForm.controls.state.touched || submitted) && newLegalContactForm.get('state').errors }">
 
-                          <option *ngFor="let state of states"
-                            value="{{ state.abbreviation?state.name:state.abbreviation }}">{{state.name}}</option>
-                        </select>
-                        <p *ngIf="newLegalContactForm.controls.state.touched || submitted">
-                          <app-form-validation-errors errorPrefix="State " minLength=2 maxLength=50
-                            [errors]="newLegalContactForm.get('state').errors"></app-form-validation-errors>
-                        </p>
-                      </div>
+
+
+                    <div formGroupName="location">
+                        <div class="row">
+                          <div class="form-group col-md-12">
+                            <label>Zipcode*</label>
+                            <input  mask="00000" class="form-control" type="text" placeholder="Enter Zipcode" formControlName="zipcode" [ngClass]="{ 'is-invalid': (newLegalContactForm.controls.location.get('zipcode').touched || submitted) && newLegalContactForm.controls.location.get('zipcode').errors }">
+                            <p class="error_msg" *ngIf="newLegalContactForm.controls.location.get('zipcode').touched || submitted">                      
+                                <app-form-validation-errors minLength=2 maxLength=5 errorPrefix="Zip " patternError="Must enter valid zip code." [errors]="newLegalContactForm.controls.location.get('zipcode').errors"></app-form-validation-errors>   
+                            </p>
+                          </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>State*</label>
+                                <input  readonly class="form-control" type="text" placeholder="State" formControlName="state" [ngClass]="{ 'is-invalid': (newLegalContactForm.controls.location.get('state').touched || submitted) && newLegalContactForm.controls.location.get('state').errors }">  
+                                <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="State " [errors]="newLegalContactForm.controls.location.get('state').errors"></app-form-validation-errors>                
+                              </div>              
+                              <div class="form-group col-md-6">
+                                <label>City*</label>
+                                <input *ngIf="cities.length<=1" readonly class="form-control" type="text" placeholder="City" formControlName="city" [ngClass]="{ 'is-invalid': (newLegalContactForm.controls.location.get('city').touched || submitted) && newLegalContactForm.controls.location.get('city').errors }">
+                                <select *ngIf="cities.length >1" formControlName="city" [ngClass]="{ 'is-invalid': (newLegalContactForm.controls.location.get('city').touched || submitted) && newLegalContactForm.controls.location.get('city').errors }">
+                                  
+                                  <option *ngFor="let cityObject of cities" value="{{cityObject.city}}">{{cityObject.city}}</option>
+                                </select>
+                                <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="City " [errors]="newLegalContactForm.controls.location.get('city').errors"></app-form-validation-errors>
+                              </div>
+                        </div>
+                        
+          
                     </div>
-                    <div class="row">
-                      <div class="form-group col-md-12">
-                        <label>Zip*</label>
-                        <input mask="00000" class="form-control" type="text" placeholder="Zip" formControlName="zip"
-                          [ngClass]="{ 'is-invalid': (newLegalContactForm.controls.zip.touched || submitted) && newLegalContactForm.get('zip').errors }">
-                        <p *ngIf="newLegalContactForm.controls.zip.touched || submitted">
-                          <app-form-validation-errors minLength=2 maxLength=50 patternError="Must enter valid zip code."
-                            errorPrefix="Zip " [errors]="newLegalContactForm.get('zip').errors">
-                          </app-form-validation-errors>
-                        </p>
-                      </div>
+
+
+                    
+                    <div class="row">                      
                       <div class="remember-checkbox">
                         <input type="checkbox" formControlName="default_legal_contact" id="default_legal_contact">
                         <label for="default_legal_contact">Make Primary Contact</label>
@@ -298,7 +299,7 @@
                             <span class="text-white d-block"><b>{{data.title}}</b></span>
                             <address>
                               {{data.address_1}} {{data.address_2}}, <br>
-                              {{data.city}}, {{data.state}} - {{data.zip}}
+                              {{data.location.city}}, {{data.location.state}} - {{data.location.zipcode}}
                             </address>
                             <div class="actions">
                               <button type="button"><i class="fa fa-pencil" (click)="editNewLegalContact(i)"

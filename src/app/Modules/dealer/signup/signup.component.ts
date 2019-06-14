@@ -26,9 +26,9 @@ import { environment } from '../../../../environments/environment'
 import * as _ from 'lodash';
 
 
-declare var jQuery: any;
-declare var $: any;
-declare var POTENZA: any;
+declare let jQuery: any;
+declare let $: any;
+declare let POTENZA: any;
 
 
 export class MyItems {
@@ -79,8 +79,8 @@ export class SignupComponent implements OnInit {
   time = { hour: 13, minute: 30, second: 0 };
   spinners = true;
   meridian = false;
-
-
+  private _dealerLocation:any = {}
+  private _dealershipLocation:any = {}
 
 
   // SignUp Form
@@ -95,14 +95,15 @@ export class SignupComponent implements OnInit {
 
   signupSubscription: Subscription;
   usPhonePattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$";
-
+  
 
   // two factor Authentication
   showOtpForm: boolean = false;
   otpVerificationForm: FormGroup;
   otpFormsubmitted: boolean = false;
   registeredSellerid: string;
-
+  cities:any = []
+  dealershipCities:any = []
   //define default emails and phones formArrayName 
   step1data = {
     phones: [
@@ -124,7 +125,119 @@ export class SignupComponent implements OnInit {
   constructor(private zone: NgZone,private commonUtilService:CommonUtilsService, private cognitoUserService: CognitoUserService, private location: Location, private alertService: AlertService, private userAuthService: UserAuthService, private pageLoaderService: PageLoaderService, private formBuilder: FormBuilder, private titleService: TitleService, private toastr: ToastrManager, private router: Router) {
     this.buildSignupForm();    //Sign Up Wizard
     this.otpVerifyForm();
+
+    let zipcodeFormControl = this.signUpFormStep1.controls.location.get('zipcode');
+    zipcodeFormControl.valueChanges    
+    .subscribe(zipcode => {  
+      this.signUpFormStep1.controls.location.get('state').patchValue(''); 
+      this.signUpFormStep1.controls.location.get('city').patchValue(''); 
+      (zipcode.length==5)?this.fetchCityStateOfZipcode(zipcode):''
+    });
+
+
+    //change on zipcode at dealership
+    let dealershipZipcodeFormControl = this.signUpFormStep2.get('dealerships').get('location').get('zipcode');
+    dealershipZipcodeFormControl.valueChanges    
+    .subscribe(zipcode => {  
+      this.signUpFormStep2.get('dealerships').get('location').get('state').patchValue(''); 
+      this.signUpFormStep2.get('dealerships').get('location').get('city').patchValue(''); 
+      (zipcode.length==5)?this.fetchCityStateOfDealershipZipcode(zipcode):''
+    });
+
   }
+
+/**
+ * private function to fetch city and state information of entered zipcode
+ * @param zipcode number(entered zipcode from clientside)
+ * @return  void
+*/
+ private fetchCityStateOfZipcode(zipcode):void{
+  this.commonUtilService.fetchCityStateOfZipcode(zipcode)
+    .subscribe(
+    (response) => { 
+      console.log(!_.has(response[0],['status']))
+      if(!_.has(response[0],['status'])){
+        console.log(response)
+        this.cities = response[0]['city_states'];
+        let cityState = response[0]['city_states'][0]       
+        cityState['coordinates'] = [response[0]['zipcodes'][0]['longitude'],response[0]['zipcodes'][0]['latitude']]            
+        this.dealerLocation =  cityState
+
+      }else{
+        this.signUpFormStep1.controls.location.get('zipcode').patchValue(''); 
+        this.commonUtilService.onError('Could not fetch city, state data for zipcode.');
+      }       
+    },
+    error => {        
+      this.signUpFormStep1.controls.location.get('zipcode').patchValue(''); 
+      this.commonUtilService.onError('Could not fetch city, state data for zipcode.');
+    });  
+}
+
+/**
+ * private function to fetch city and state information of entered zipcode
+ * @param zipcode number(entered zipcode from clientside)
+ * @return  void
+*/
+private fetchCityStateOfDealershipZipcode(zipcode):void{
+  this.commonUtilService.fetchCityStateOfZipcode(zipcode)
+    .subscribe(
+    (response) => { 
+      console.log(!_.has(response[0],['status']))
+      if(!_.has(response[0],['status'])){
+        console.log(response)
+        this.dealershipCities = response[0]['city_states'];
+        let cityState = response[0]['city_states'][0]       
+        cityState['coordinates'] = [response[0]['zipcodes'][0]['longitude'],response[0]['zipcodes'][0]['latitude']]            
+        this.dealershipLocation =  cityState
+
+      }else{
+        this.signUpFormStep2.get('dealerships').get('location').get('zipcode').patchValue(''); 
+        this.commonUtilService.onError('Could not fetch city, state data for zipcode.');
+      }       
+    },
+    error => {        
+      this.signUpFormStep2.get('dealerships').get('location').get('zipcode').patchValue(''); 
+      this.commonUtilService.onError('Could not fetch city, state data for zipcode.');
+    });  
+}
+
+/**
+  * get vehicle to be picked up value.
+  * @return  any
+  */
+ get dealerLocation(): any {
+  return this._dealerLocation;
+}
+
+/**
+* set vehicle to be picked up value.
+* @param dealerLocation  object of key:value
+*/
+set dealerLocation(dealerLocation: any){
+  this._dealerLocation = dealerLocation;  
+  this.signUpFormStep1.get('location').patchValue(this._dealerLocation); 
+  console.log('form value location',this.signUpFormStep1.get('location').value)
+}
+
+
+/**
+  * get vehicle to be picked up value.
+  * @return  any
+  */
+ get dealershipLocation(): any {
+  return this._dealershipLocation;
+}
+
+/**
+* set vehicle to be picked up value.
+* @param dealershipLocation  object of key:value
+*/
+set dealershipLocation(dealershipLocation: any){
+  this._dealershipLocation = dealershipLocation;  
+  this.signUpFormStep2.get('dealerships').get('location').patchValue(this._dealershipLocation); 
+  console.log('form value location',this.signUpFormStep2.get('dealerships').get('location').value)
+}
 
 
   // Signup WIZARD
@@ -168,9 +281,15 @@ export class SignupComponent implements OnInit {
         ])
       ],
       repassword: [null, Validators.compose([Validators.minLength(10),Validators.maxLength(50),Validators.required])],
-      state: ['', Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50),Validators.pattern('^[a-zA-Z ]*$')])],
+     /* state: ['', Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50),Validators.pattern('^[a-zA-Z ]*$')])],
       city: [null, Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50),Validators.pattern('^[a-zA-Z ]*$')])],
-      zip: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])],
+      zip: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])],*/
+      location:this.formBuilder.group({
+        zipcode: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])],
+        state: ['', [Validators.required]],
+        city: ['', [Validators.required]],
+
+      }), 
       verified: [true],
       active: [true],     
     },{
@@ -184,13 +303,16 @@ export class SignupComponent implements OnInit {
         dealershipnumber: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(50)])],
         mainaddressline1: ['', [Validators.required]],
         mainaddressline2: [''],
-        city: [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')])],
-        state: [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')])],
-        zip: [null, Validators.compose([Validators.required, Validators.pattern('^[0-9]{5}$')])],
-
+        location:this.formBuilder.group({
+          zipcode: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])],
+          state: ['', [Validators.required]],
+          city: ['', [Validators.required]],
+  
+        })
       })
     });
 
+    console.log(this.signUpFormStep2)
     this.signUpFormStep3 = this.formBuilder.group({
       availabilitydate: ['', [Validators.required]],
       time: [this.time, Validators.required],
@@ -407,6 +529,7 @@ export class SignupComponent implements OnInit {
 
   checkFormValidity() {
     this.step1submitted = true;
+    console.log(this.signUpFormStep1)
     if (this.signUpFormStep1.invalid) {
       return;
     }

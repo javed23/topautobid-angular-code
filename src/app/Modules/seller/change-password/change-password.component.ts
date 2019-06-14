@@ -8,11 +8,11 @@ import { untilDestroyed } from 'ngx-take-until-destroy';// unsubscribe from obse
 import { of, Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 //import services
-  //import shared 
-  import { AlertService, PageLoaderService } from '../../../shared/_services'
+//import shared 
+import { AlertService, PageLoaderService } from '../../../shared/_services'
 
- //modules core services
- import { UserAuthService, TitleService, CognitoUserService } from '../../../core/_services'
+//modules core services
+import { UserAuthService, TitleService, CognitoUserService } from '../../../core/_services'
 
 import { environment } from '../../../../environments/environment'
 
@@ -36,26 +36,26 @@ export class ChangePasswordComponent implements OnInit {
   breadcrumbs: any[] = [{ page: 'Home', link: '#' }, { page: 'Profile', link: '/seller/seller-profile' }, { page: 'Change password', link: '' }]
   changePasswordForm: FormGroup;
   submitted: boolean = false;
-  otpVerificationForm:FormGroup;
+  otpVerificationForm: FormGroup;
   showOtpForm: boolean = false;
   otpFormsubmitted: boolean = false;
-  
-  constructor(private alertService: AlertService, private userAuthService: UserAuthService, private pageLoaderService: PageLoaderService, private formBuilder: FormBuilder, private titleService: TitleService, private router: Router, private cognitoUserService:CognitoUserService, private toastr: ToastrManager) {
+
+  constructor(private alertService: AlertService, private userAuthService: UserAuthService, private pageLoaderService: PageLoaderService, private formBuilder: FormBuilder, private titleService: TitleService, private router: Router, private cognitoUserService: CognitoUserService, private toastr: ToastrManager) {
 
     this.initForgotPasswordForm();
   }
 
-  ngOnInit() { 
+  ngOnInit() {
 
     this.titleService.setTitle();//setting page title 
   }
-  
+
 
   //change password form
-  private initForgotPasswordForm(){
-    this.changePasswordForm = this.formBuilder.group({  
+  private initForgotPasswordForm() {
+    this.changePasswordForm = this.formBuilder.group({
       id: [localStorage.getItem('loggedinUserId')],
-      previous_password:[
+      previous_password: [
         null,
         Validators.compose([
           Validators.required,
@@ -81,7 +81,7 @@ export class ChangePasswordComponent implements OnInit {
             }
           ),
           Validators.minLength(10)
-        ]),this.isPasswordCorrect.bind(this)
+        ]), this.isPasswordCorrect.bind(this)
       ],
       password: [
         null,
@@ -110,22 +110,22 @@ export class ChangePasswordComponent implements OnInit {
           ),
           Validators.minLength(10)
         ])
-      ], 
-      repassword: [null, Validators.compose([Validators.minLength(10),Validators.maxLength(50),Validators.required])],  
+      ],
+      repassword: [null, Validators.compose([Validators.minLength(10), Validators.maxLength(50), Validators.required])],
     },
-    {
-      // check whether our password and confirm password match
-      validators: CustomValidators.passwordMatchValidator
-    }
+      {
+        // check whether our password and confirm password match
+        validators: CustomValidators.passwordMatchValidator
+      }
     );
   }
-  
 
 
 
-    //check the unique password on change
 
-    isPasswordCorrect(control: AbstractControl): Promise<{ [key: string]: any } | null>
+  //check the unique password on change
+
+  isPasswordCorrect(control: AbstractControl): Promise<{ [key: string]: any } | null>
     | Observable<{ [key: string]: any } | null> {
 
     return this.userAuthService.sellerIsPasswordCorrect({ previous_password: control.value })
@@ -136,34 +136,34 @@ export class ChangePasswordComponent implements OnInit {
     return of(null);
   }
 
-    //change password seller into our local db
-    public onSubmit(){
-      if(this.changePasswordForm.invalid){
-        return
-      }
-      
-      this.userAuthService.changePassword(this.changePasswordForm.value)  
+  //change password seller into our local db
+  public onSubmit() {
+    if (this.changePasswordForm.invalid) {
+      return
+    }
+
+    this.userAuthService.changePassword(this.changePasswordForm.value)
       .subscribe(
-        (response) => {     
-       
+        (response) => {
+
           this.pageLoaderService.pageLoader(false);//hide page loader
-      
+
           this.toastr.successToastr(environment.MESSAGES.PASSWORD_RESET_SUCCESS, 'Success!');//showing success toaster
-          this.changePasswordForm.reset();          
-          this._logout(); 
-          this.router.navigate(['/seller/login']);     
+          this.changePasswordForm.reset();
+          this._logout();
+          this.router.navigate(['/seller/login']);
         },
         error => {
-          console.log('error otp');  
+          console.log('error otp');
           this.toastr.errorToastr(environment.MESSAGES.SYSTEM_ERROR, 'Oops!');//showing error toaster message
         }
       );
-    }
+  }
 
- 
+
 
   private _logout() {
-       
+
     localStorage.removeItem('loggedinUser');
     localStorage.clear();
     this.userAuthService.isLoggedIn(false, '');

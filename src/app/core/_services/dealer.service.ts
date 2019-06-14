@@ -72,4 +72,13 @@ export class DealerService {
 
     }
 
+    public getAllDealShips(): Observable<any> {
+        let postedData ={};
+        postedData['dealer_id'] = localStorage.getItem('loggedinUserId');
+        return this.httpClient.post('dealer/getAllDealerShips', postedData).map((response: any) => response);
+
+    }
+
+    
+
 }

@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { EventEmitter } from '@angular/core';
 //modules services, models and enviornment file
 import { CommonUtilsService  } from '../../../../core/_services'
 
@@ -15,6 +15,7 @@ export class DateFilterComponent implements OnInit {
 
   dateFilterForm:FormGroup
   datesFilter:any = {}
+  @Output() sendDate = new EventEmitter();
 
   constructor(private commonUtilsService:CommonUtilsService, private formBuilder: FormBuilder) {
     this.dateFilterForm = this.formBuilder.group( {
@@ -90,7 +91,10 @@ export class DateFilterComponent implements OnInit {
       this.commonUtilsService.onError('End date should not less than start date');  
       
     }else{     
-      this.datesFilter;      
+      
+      this.datesFilter;  
+      this.sendDate.emit(this.datesFilter);
+
     }
   }
 
@@ -104,7 +108,9 @@ export class DateFilterComponent implements OnInit {
       endDate: null,  
       startDate: null,      
     });
-    this.datesFilter = {}     
+    this.datesFilter = {}    
+    this.sendDate.emit(this.datesFilter);
+
   }  
   
 }

@@ -80,45 +80,42 @@
                     <input class="form-control" type="text" placeholder="Main Address Line 2" name="mainaddressline2"
                       formControlName="mainaddressline2">
                   </div>
-                  <div class="register-form form-group col-md-12">
-                    <label>Select State*</label>
-                    <div class="selected-box auto-hight w-100">
 
-                      <select formControlName="state"
-                        [ngClass]="{ 'is-invalid': (newDealershipForm.get('state').touched || submitted) && newDealershipForm.get('state').errors }">
-                        <option *ngFor="let state of states"
-                          value="{{ state.abbreviation?state.name:state.abbreviation }}">{{state.name}}</option>
 
-                      </select>
-                      <p *ngIf="newDealershipForm.get('state').touched || submitted">
-                        <app-form-validation-errors minLength=2 maxLength=50 patternError="Must enter valid state."
-                          errorPrefix="State " [errors]="newDealershipForm.get('state').errors">
-                        </app-form-validation-errors>
+
+                  <div formGroupName="location">
+                 
+                    <div class="form-group col-md-12">
+                      <label>Zipcode*</label>
+                      <input  mask="00000" class="form-control" type="text" placeholder="Enter Zipcode" formControlName="zipcode" [ngClass]="{ 'is-invalid': (newDealershipForm.controls.location.get('zipcode').touched || submitted) && newDealershipForm.controls.location.get('zipcode').errors }">
+                      <p class="error_msg" *ngIf="newDealershipForm.controls.location.get('zipcode').touched || submitted">                      
+                          <app-form-validation-errors minLength=2 maxLength=5 errorPrefix="Zip " patternError="Must enter valid zip code." [errors]="newDealershipForm.controls.location.get('zipcode').errors"></app-form-validation-errors>   
                       </p>
                     </div>
-                  </div>
+    
+                    <div class="form-group col-md-12">
+                      <label>State*</label>
+                      <input  readonly class="form-control" type="text" placeholder="State" formControlName="state" [ngClass]="{ 'is-invalid': (newDealershipForm.controls.location.get('state').touched || submitted) && newDealershipForm.controls.location.get('state').errors }">  
+                      <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="State " [errors]="newDealershipForm.controls.location.get('state').errors"></app-form-validation-errors>                
+                    </div>              
+                    <div class="form-group col-md-12">
+                      <label>City*</label>
+                      <input *ngIf="cities.length<=1" readonly class="form-control" type="text" placeholder="City" formControlName="city" [ngClass]="{ 'is-invalid': (newDealershipForm.controls.location.get('city').touched || submitted) && newDealershipForm.controls.location.get('city').errors }">
+                      <select *ngIf="cities.length >1" formControlName="city" [ngClass]="{ 'is-invalid': (newDealershipForm.controls.location.get('city').touched || submitted) && newDealershipForm.controls.location.get('city').errors }">
+                        
+                        <option *ngFor="let cityObject of cities" value="{{cityObject.city}}">{{cityObject.city}}</option>
+                      </select>
+                      <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="City " [errors]="newDealershipForm.controls.location.get('city').errors"></app-form-validation-errors>
+                    </div>
+      
+                </div>
 
-                  <div class="form-group col-md-12">
-                    <label>City*</label>
-                    <input class="form-control" type="text" placeholder="City" formControlName="city"
-                      [ngClass]="{ 'is-invalid': (newDealershipForm.get('city').touched || submitted) && newDealershipForm.get('city').errors }"
-                      name="city">
-                    <p *ngIf="newDealershipForm.get('city').touched || submitted">
-                      <app-form-validation-errors minLength=2 maxLength=50 patternError="Must enter valid city."
-                        errorPrefix="City " [errors]="newDealershipForm.get('city').errors">
-                      </app-form-validation-errors>
-                    </p>
-                  </div>
-                  <div class="form-group col-md-12">
-                    <label>Zip*</label>
-                    <input mask="00000" class="form-control" type="text" placeholder="Zip" name="zip"
-                      formControlName="zip"
-                      [ngClass]="{ 'is-invalid': (newDealershipForm.get('zip').touched || submitted) && newDealershipForm.get('zip').errors }">
-                    <p *ngIf="newDealershipForm.get('zip').touched || submitted">
-                      <app-form-validation-errors minLength=2 maxLength=50 patternError="Must enter valid zip code."
-                        errorPrefix="Zip " [errors]="newDealershipForm.get('zip').errors"></app-form-validation-errors>
-                    </p>
-                  </div>
+
+
+
+                  
+
+                 
                 </div>
               </div>
             </div>
@@ -141,7 +138,7 @@
                         <span class="text-white d-block"><b>{{data.dealershipnumber}}</b></span>
                         <address>
                           {{data.mainaddressline1}} {{data.mainaddressline2}}, <br>
-                          {{data.city}}, {{data.state}} - {{data.zip}}
+                          {{data.location.city}}, {{data.location.state}} - {{data.location.zipcode}}
                         </address>
                         <div class="actions">
                           <button type="button"><i class="fa fa-pencil" (click)="editNewDealership(i)"

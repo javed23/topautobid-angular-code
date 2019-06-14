@@ -47,7 +47,8 @@ export class CreateDealershipComponent implements OnInit {
   submitted = false;
   states: any = []
   IsForUpdate: boolean = false;
-
+  private _dealerLocation:any = {}
+  cities:any=[];
   newDealershipForm: FormGroup;
   public config: DropzoneConfigInterface;
 
@@ -61,10 +62,63 @@ export class CreateDealershipComponent implements OnInit {
     
 
     //fetching us states
-    this.fetchStates();
+    //this.fetchStates();
+
+    let zipcodeFormControl = this.newDealershipForm.controls.location.get('zipcode');
+    zipcodeFormControl.valueChanges    
+    .subscribe(zipcode => {  
+      this.newDealershipForm.controls.location.get('state').patchValue(''); 
+      this.newDealershipForm.controls.location.get('city').patchValue(''); 
+      ((zipcode) && zipcode.length==5)?this.fetchCityStateOfZipcode(zipcode):''
+    });
 
   }
 
+  /**
+ * private function to fetch city and state information of entered zipcode
+ * @param zipcode number(entered zipcode from clientside)
+ * @return  void
+*/
+ private fetchCityStateOfZipcode(zipcode):void{
+  this.commonUtilsService.fetchCityStateOfZipcode(zipcode)
+    .subscribe(
+    (response) => { 
+      console.log(!_.has(response[0],['status']))
+      if(!_.has(response[0],['status'])){
+        console.log(response)
+        this.cities = response[0]['city_states'];
+        let cityState = response[0]['city_states'][0]       
+        cityState['coordinates'] = [response[0]['zipcodes'][0]['longitude'],response[0]['zipcodes'][0]['latitude']]            
+        this.dealerLocation =  cityState
+
+      }else{
+        this.newDealershipForm.controls.location.get('zipcode').patchValue(''); 
+        this.commonUtilsService.onError('Could not fetch city, state data for zipcode.');
+      }       
+    },
+    error => {        
+      this.newDealershipForm.controls.location.get('zipcode').patchValue(''); 
+      this.commonUtilsService.onError('Could not fetch city, state data for zipcode.');
+    });  
+}
+
+/**
+  * get vehicle to be picked up value.
+  * @return  any
+  */
+ get dealerLocation(): any {
+  return this._dealerLocation;
+}
+
+/**
+* set vehicle to be picked up value.
+* @param dealerLocation  object of key:value
+*/
+set dealerLocation(dealerLocation: any){
+  this._dealerLocation = dealerLocation;  
+  this.newDealershipForm.get('location').patchValue(this._dealerLocation); 
+  console.log('form value location',this.newDealershipForm.get('location').value)
+}
 
   ngOnChanges(changes: SimpleChanges) {
     //setting the page title
@@ -220,9 +274,16 @@ export class CreateDealershipComponent implements OnInit {
       dealershipnumber: [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(50)])],
       mainaddressline1: [null, [Validators.required]],
       mainaddressline2: [null],
-      city: [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')])],
+      location:this.formBuilder.group({
+        zipcode: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])],
+        state: ['', [Validators.required]],
+        city: ['', [Validators.required]],
+
+      }), 
+
+      /*city: [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')])],
       state: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')])],
-      zip: [null, Validators.compose([Validators.required, Validators.pattern('^[0-9]{5}$')])],
+      zip: [null, Validators.compose([Validators.required, Validators.pattern('^[0-9]{5}$')])],*/
       profile_pic: [null],
       _id: [null],
       dealer_id: [localStorage.getItem('loggedinUserId')],
@@ -307,7 +368,6 @@ export class CreateDealershipComponent implements OnInit {
     }
     var pulled = _.pullAt(this.dealershipsItems, [index]);
   }
-
 
   //saving the new dealership
   onCreateDealership() {

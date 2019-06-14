@@ -110,7 +110,7 @@ export class ListComponent implements OnInit, AfterViewInit {
   * @param dealershipId    id to add legal contacts to specific dealeship
   */
   showCreateLegalContact(index, dealershipId){
-   
+    console.log('dealershipId',dealershipId)
     this.isCreateContactModalOpened = true;  
     this.legalContactItems = [] 
     this.dealershipId = dealershipId   

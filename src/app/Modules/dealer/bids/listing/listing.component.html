@@ -20,51 +20,76 @@
 
           <div class="sorting-options-main">
 
-          <div *ngIf="sectionEnable=='list'" class="filter_opt">
+            <div *ngIf="sectionEnable=='list'" class="filter_opt">
 
-            <div class="row sorting-options top_sorting">
-              <div class="col-md-12">
-                <div class="ml-auto text-right product-listing ">
+              <div class="row sorting-options top_sorting">
+                <div class="col-md-12">
+                  <div class="ml-auto text-right product-listing ">
 
 
 
-                  <div class="price-search">
-                    <div class="search">
-                      <i class="fa fa-search"></i>
-                      <input type="search" class="form-control placeholder" (input)="onSearch($event.target.value)"
-                        placeholder="Type Make, Model, Trim etc..">
+                    <div class="price-search">
+                      <div class="search">
+                        <i class="fa fa-search"></i>
+                        <input type="search" class="form-control placeholder" (input)="onSearch($event.target.value)"
+                          placeholder="Type Make, Model, Trim etc..">
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div class="row blog-sidebar listing_outer">
-
+              <div class="row blog-sidebar listing_outer">
 
 
 
 
 
 
-              <div class="col-md-12 d-flex">
 
-                <div class="sidebar-widget mb-0">
-                  <div class="tags">
+                <div class="col-md-12 d-flex">
 
-                    <ul>
-                      <li [ngClass]="{ active: page.type=='all'}"> <button
-                          (click)="onChangeListType('all')">All</button></li>
+                  <div class="sidebar-widget mb-0">
+                    <div class="tags">
 
-                      <li [ngClass]="{ active: page.type=='active'}"><button
-                          (click)="onChangeListType('active')">Active</button></li>
-                      <li [ngClass]="{ active: page.type=='inactive'}"><button
-                          (click)="onChangeListType('inactive')">Inactive</button></li>
+                      <ul>
+                        <li [ngClass]="{ active: page.type=='all'}"> <button
+                            (click)="onChangeListType('all')">All</button></li>
+                        <li [ngClass]="{ active: page.type=='applied'}"><button
+                            (click)="onChangeListType('applied')">Applied</button></li>
+                        <li [ngClass]="{ active: page.type=='wishlist'}"><button
+                            (click)="onChangeListType('wishlist')">WishList</button></li>
+                        <li [ngClass]="{ active: page.type=='hidden'}"><button
+                            (click)="onChangeListType('hidden')">Hidden</button></li>
 
 
-                    </ul>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="right_sec right_filter ml-auto">
+                    <div (click)="show('list')" class="list_view d-inline-block">
+                      <img src="/assets/images/list_view_icon.png" alt="list_view_icon" class="img-fluid">
+                    </div>
+                    <div (click)="show('sort')" class="sort_BTN d-inline-block">
+                      <img src="/assets/images/sort_icon.png" alt="sort_icon" class="img-fluid">
+                    </div>
+                    <div (click)="show('filter')" class="filter_BTN d-inline-block">
+                      <img src="/assets/images/filter_icon_grey.png" alt="filter_icon" class="img-fluid">
+                    </div>
+
+                    <app-date-filter (sendDate)="getDateFilter($event)"></app-date-filter>
                   </div>
                 </div>
+              </div>
+
+            </div>
+
+
+            <!--Filters-->
+            <div *ngIf="sectionEnable=='filter'" class="bid-section filter_by">
+
+              <div class="d-flex">
+                <h3 class="d-inline-block">Filters</h3>
                 <div class="right_sec right_filter ml-auto">
                   <div (click)="show('list')" class="list_view d-inline-block">
                     <img src="/assets/images/list_view_icon.png" alt="list_view_icon" class="img-fluid">
@@ -75,32 +100,8 @@
                   <div (click)="show('filter')" class="filter_BTN d-inline-block">
                     <img src="/assets/images/filter_icon_grey.png" alt="filter_icon" class="img-fluid">
                   </div>
-
-                  <app-date-filter></app-date-filter>
                 </div>
               </div>
-            </div>
-
-          </div>
-
-
-            <!--Filters-->
-          <div *ngIf="sectionEnable=='filter'" class="bid-section filter_by">
-              
-            <div class="d-flex">
-              <h3 class="d-inline-block">Filters</h3>
-              <div class="right_sec right_filter ml-auto">
-                  <div (click)="show('list')" class="list_view d-inline-block">
-                    <img src="/assets/images/list_view_icon.png" alt="list_view_icon" class="img-fluid">
-                  </div>
-                  <div (click)="show('sort')" class="sort_BTN d-inline-block">
-                    <img src="/assets/images/sort_icon.png" alt="sort_icon" class="img-fluid">
-                  </div>
-                  <div (click)="show('filter')" class="filter_BTN d-inline-block">
-                    <img src="/assets/images/filter_icon_grey.png" alt="filter_icon" class="img-fluid">
-                  </div>               
-              </div>
-            </div>
 
 
 
@@ -109,9 +110,9 @@
                   <div class="row">
                     <div class="col-md-6 p-md-0">
                       <div class="range_filter dark">
-                        <label for="year">Year</label>                        
-                        <div id="year-range"></div>  
-                        <input type="text" id="year"  class="years" readonly />
+                        <label for="year">Year</label>
+                        <div id="year-range"></div>
+                        <input type="text" id="year" class="years" readonly />
                       </div>
                     </div>
                     <div class="col-md-6 p-md-0">
@@ -282,343 +283,351 @@
                 </div>
               </div>
             </div>
-          <!--Filter END-->
+            <!--Filter END-->
 
-          <!--Sort-->
-          <div *ngIf="sectionEnable=='sort'" class="bid-section filter_by sort_by">
-          <div class="d-flex">
-              <h3 class="d-inline-block">Sort By</h3>
-              
-            
+            <!--Sort-->
+            <div *ngIf="sectionEnable=='sort'" class="bid-section filter_by sort_by">
+              <div class="d-flex">
+                <h3 class="d-inline-block">Sort By</h3>
 
 
-            <div class="right_sec right_filter ml-auto">
-                <div (click)="show('list')" class="list_view d-inline-block">
-                  <img src="/assets/images/list_view_icon.png" alt="list_view_icon" class="img-fluid">
-                </div>
-                <div (click)="show('sort')" class="sort_BTN d-inline-block">
-                  <img src="/assets/images/sort_icon.png" alt="sort_icon" class="img-fluid">
-                </div>
-                <div (click)="show('filter')" class="filter_BTN d-inline-block">
-                  <img src="/assets/images/filter_icon_grey.png" alt="filter_icon" class="img-fluid">
-                </div>
 
-              
-              </div>
-            </div>
-           
-            <div class="filters_inner container">
-              <div class="bottom_filter gray-form">
-                <div class="row">
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label>Order by</label>
-                      <div class="selected-box">
-                        <select class="selectpicker my_select">
-                          <option>Newest</option>
-                        </select>
-                      </div>
-                    </div>
+
+                <div class="right_sec right_filter ml-auto">
+                  <div (click)="show('list')" class="list_view d-inline-block">
+                    <img src="/assets/images/list_view_icon.png" alt="list_view_icon" class="img-fluid">
                   </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label>Bids Recieved</label>
-                      <div class="selected-box">
-                        <select class="selectpicker my_select">
-                          <option>Less Then 5</option>
-                        </select>
-                      </div>
-                    </div>
+                  <div (click)="show('sort')" class="sort_BTN d-inline-block">
+                    <img src="/assets/images/sort_icon.png" alt="sort_icon" class="img-fluid">
                   </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label>Listing End in</label>
-                      <div class="selected-box">
-                        <select class="selectpicker my_select">
-                          <option>5 Hrs</option>
-                        </select>
-                      </div>
-                    </div>
+                  <div (click)="show('filter')" class="filter_BTN d-inline-block">
+                    <img src="/assets/images/filter_icon_grey.png" alt="filter_icon" class="img-fluid">
                   </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label>Seller Type</label>
-                      <div class="selected-box">
-                        <select class="selectpicker my_select">
-                          <option>New</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label>Seller Rating</label>
-                      <div class="selected-box">
-                        <select class="selectpicker my_select">
-                          <option>4.5 TO 5 Star</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <label>Show only</label>
-
-                      <div class="Radio_BTN">
-                        <input type="radio" name="one" id="one">
-                        <label for="one">My Dealership Bids</label>
-                      </div>
 
 
-                      <div class="Radio_BTN">
-                        <input type="radio" name="one" id="two" checked>
-                        <label for="two">Wishlisted Cars</label>
-                      </div>
-
-                    </div>
-                  </div>
-                  <div class="col-md-12">
-                    <div class="submission_buttons">
-                      <button class="button">Submit</button>
-                      <button class="button">Reset</button>
-                    </div>
-                  </div>
                 </div>
               </div>
+
+              <div class="filters_inner container">
+                <div class="bottom_filter gray-form">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Order by</label>
+                        <div class="selected-box">
+                          <select class="selectpicker my_select">
+                            <option>Newest</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Bids Recieved</label>
+                        <div class="selected-box">
+                          <select class="selectpicker my_select">
+                            <option>Less Then 5</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Listing End in</label>
+                        <div class="selected-box">
+                          <select class="selectpicker my_select">
+                            <option>5 Hrs</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Seller Type</label>
+                        <div class="selected-box">
+                          <select class="selectpicker my_select">
+                            <option>New</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Seller Rating</label>
+                        <div class="selected-box">
+                          <select class="selectpicker my_select">
+                            <option>4.5 TO 5 Star</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label>Show only</label>
+
+                        <div class="Radio_BTN">
+                          <input type="radio" name="one" id="one">
+                          <label for="one">My Dealership Bids</label>
+                        </div>
+
+
+                        <div class="Radio_BTN">
+                          <input type="radio" name="one" id="two" checked>
+                          <label for="two">Wishlisted Cars</label>
+                        </div>
+
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="submission_buttons">
+                        <button class="button">Submit</button>
+                        <button class="button">Reset</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-           <!--Sort End-->
-            
+            <!--Sort End-->
+
           </div>
 
 
 
           <!-- Data listing -->
           <div *ngIf="sectionEnable=='list'" class="bid-section sidebar-widget">
-            <div class="product_list">
 
-              <ul>
-                <li>
-                  <div class="row">
-                    <div class="col-md-4">
-                      <div class="product_info_left">
-                          <div class="product_head"><h2>Ford Mustang</h2></div>
-                        <!-- Side Slider -->
-                        <ngx-gallery [options]="sliderOptions" [images]="sliderImages"></ngx-gallery>
-                      </div>
-                    </div>
-                    <div class="col-md-8">
-                      <div class="unordered-lists table-responsive text-center">
-                        <table class="table table-striped">
-                          <thead class="thead-dark">
-                            <tr>
-                              <th>Bidders</th>
-                              <th>Bids</th>
-                              <th>Bid time</th>
-                              <th>Location</th>
-                              <th>Contact</th>
-                              <th>Applied by</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>Anonymous</td>
-                              <td>$5000</td>
-                              <td>03-06-2017 22:10</td>
-                              <td>VXI</td>
-                              <td>VXI</td>
-                              <td>VXI</td>
-                            </tr>
-                            <tr>
-                                <td>My Company</td>
-                                <td>$4000</td>
-                                <td>03-06-2017 22:10</td>
-                                <td>ABC</td>
-                                <td>Mike</td>
-                                <td>Mike</td>
-                              </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div class="submission_buttons text-right">
-                        <button class="button">Car Details</button>
-                        <button class="button">View All Bids</button>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                    <div class="row">
-                      <div class="col-md-4">
-                        <div class="product_info_left">
-                            <div class="product_head"><h2>Ford Mustang</h2></div>
-                          <!-- Side Slider -->
-                          <ngx-gallery [options]="sliderOptions" [images]="sliderImages"></ngx-gallery>
-                        </div>
-                      </div>
-                      <div class="col-md-8">
-                        <div class="unordered-lists table-responsive text-center">
-                          <table class="table table-striped">
-                            <thead class="thead-dark">
-                              <tr>
-                                <th>Bidders</th>
-                                <th>Bids</th>
-                                <th>Bid time</th>
-                                <th>Location</th>
-                                <th>Contact</th>
-                                <th>Applied by</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>Anonymous</td>
-                                <td>$5000</td>
-                                <td>03-06-2017 22:10</td>
-                                <td>VXI</td>
-                                <td>VXI</td>
-                                <td>VXI</td>
-                              </tr>
-                              <tr>
-                                  <td>My Company</td>
-                                  <td>$4000</td>
-                                  <td>03-06-2017 22:10</td>
-                                  <td>ABC</td>
-                                  <td>Mike</td>
-                                  <td>Mike</td>
-                                </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                        <div class="submission_buttons text-right">
-                          <button class="button">Car Details</button>
-                          <button class="button">View All Bids</button>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                      <div class="row">
-                        <div class="col-md-4">
-                          <div class="product_info_left">
-                              <div class="product_head"><h2>Ford Mustang</h2></div>
-                            <!-- Side Slider -->
-                            <ngx-gallery [options]="sliderOptions" [images]="sliderImages"></ngx-gallery>
-                          </div>
-                        </div>
-                        <div class="col-md-8">
-                          <div class="unordered-lists table-responsive text-center">
-                            <table class="table table-striped">
-                              <thead class="thead-dark">
-                                <tr>
-                                  <th>Bidders</th>
-                                  <th>Bids</th>
-                                  <th>Bid time</th>
-                                  <th>Location</th>
-                                  <th>Contact</th>
-                                  <th>Applied by</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr>
-                                  <td>Anonymous</td>
-                                  <td>$5000</td>
-                                  <td>03-06-2017 22:10</td>
-                                  <td>VXI</td>
-                                  <td>VXI</td>
-                                  <td>VXI</td>
-                                </tr>
-                                <tr>
-                                    <td>My Company</td>
-                                    <td>$4000</td>
-                                    <td>03-06-2017 22:10</td>
-                                    <td>ABC</td>
-                                    <td>Mike</td>
-                                    <td>Mike</td>
-                                  </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                          <div class="submission_buttons text-right">
-                            <button class="button">Car Details</button>
-                            <button class="button">View All Bids</button>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                    <li>
+
+
+
+
+            <div class="unordered-lists table-responsive text-center">
+
+              <ngx-datatable #listingTable class="bootstrap" [rows]="cars"
+                [columns]="[{name:'Year'},{name:'Make'},{name:'Model'},{name:'Trim'},{name:'Listed'},{name:'Status'},{name:'Bids'}]"
+                [sorts]="[{prop: 'created_at', dir: 'desc'}]" [columnMode]="'force'" [headerHeight]="50"
+                [footerHeight]="80" [externalPaging]="true" [count]="page.totalElements" [offset]="page.pageNumber"
+                [limit]="page.size" [rowHeight]="90" (sort)="onSort($event)" (page)="setPage($event)">
+
+                <ngx-datatable-row-detail [rowHeight]="100" #myDetailRow (toggle)="onDetailToggle($event)">
+                  <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+                    <div class="row_detail col-md-12">
+                      <div class="row_detail_inner">
+
                         <div class="row">
-                          <div class="col-md-4">
-                            <div class="product_info_left">
-                                <div class="product_head"><h2>Ford Mustang</h2></div>
-                              <!-- Side Slider -->
-                              <ngx-gallery [options]="sliderOptions" [images]="sliderImages"></ngx-gallery>
-                            </div>
-                          </div>
-                          <div class="col-md-8">
-                            <div class="unordered-lists table-responsive text-center">
-                              <table class="table table-striped">
-                                <thead class="thead-dark">
+                          <div class="col-md-12">
+                            <div class="vehicle_table_details">
+
+                              <div class="table-responsive">
+                                <table class="table table-bordered">
                                   <tr>
-                                    <th>Bidders</th>
-                                    <th>Bids</th>
-                                    <th>Bid time</th>
-                                    <th>Location</th>
-                                    <th>Contact</th>
-                                    <th>Applied by</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr>
-                                    <td>Anonymous</td>
-                                    <td>$5000</td>
-                                    <td>03-06-2017 22:10</td>
-                                    <td>VXI</td>
-                                    <td>VXI</td>
-                                    <td>VXI</td>
+                                    <td><span class="head">Trim:</span><span class="value">{{row.trim}}</span></td>
+                                    <td><span class="head">Body:</span><span class="value">{{row.body_style}}</span>
+                                    </td>
                                   </tr>
                                   <tr>
-                                      <td>My Company</td>
-                                      <td>$4000</td>
-                                      <td>03-06-2017 22:10</td>
-                                      <td>ABC</td>
-                                      <td>Mike</td>
-                                      <td>Mike</td>
-                                    </tr>
-                                </tbody>
-                              </table>
-                            </div>
-                            <div class="submission_buttons text-right">
-                              <button class="button">Car Details</button>
-                              <button class="button">View All Bids</button>
+                                    <td><span class="head">Engine:</span><span class="value">{{row.engine}}</span></td>
+                                    <td><span class="head">Transmission:</span><span
+                                        class="value">{{row.transmission}}</span></td>
+                                  </tr>
+                                  <tr>
+                                    <td><span class="head">Interior Material:</span><span
+                                        class="value">{{row.interior_material}}</span></td>
+                                    <td><span class="head">Fuel Type:</span><span class="value">{{row.fuel_type}}</span>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td><span class="head">Interior Color:</span><span
+                                        class="value">{{row.interior_color}}</span></td>
+                                    <td><span class="head">Exterior Color:</span><span
+                                        class="value">{{row.exterior_color}}</span></td>
+                                  </tr>
+
+                                </table>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </li>
-
-              </ul>
-              <!--table START-->
 
 
+                      </div>
+                    </div>
+                  </ng-template>
+                </ngx-datatable-row-detail>
 
-              <!--table END-->
+                <ngx-datatable-column [width]="50" [sortable]="false" [resizeable]="false" [draggable]="false">
+                  <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                    <a href="javascript:void(0)" [class.datatable-icon-right]="!expanded"
+                      [class.datatable-icon-down]="expanded" title="Expand/Collapse Row" (click)="toggleExpandRow(row)">
+                    </a>
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column [resizeable]="false" [draggable]="false" name="year" [sortable]="true">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row.year }}
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column [resizeable]="false" [draggable]="false" name="make" [sortable]="true">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row.make }}
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [draggable]="false" name="model" [sortable]="true">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row.model }}
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Trim" [sortable]="true">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row?.trim }}
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column [resizeable]="false" [draggable]="false" name="bids" prop="best_bid"
+                  [sortable]="true">
+                  <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
+                    <!-- $<b>0.00</b> -->
+                    <b>{{row?.best_bid | currency:'USD':true:'2.2-2'}} </b>
+                    <span *ngIf="row?.bids" class="left_bids">
+
+                      <button (click)="show(row?._id)">See all ({{row?.bids}}) bids</button></span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+
+
+                <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Miles" prop="miles"
+                  [sortable]="true">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row.miles | number}}
+                    <!--<span class="left_time">10 Hrs 15 min left</span>-->
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Created At" prop="created_at"
+                  [sortable]="true">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row.created_at | date:'MMM d y h:mm'}}
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Action" [sortable]="false">
+                  <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
+
+                    <span class="actions">
+                      <!--<button type="button" (click)="show(rowIndex, 'car-view')">
+                                      <i class="fa fa-eye" aria-hidden="true"></i>
+                                  </button>-->
+                      <a title="Car Detail" routerLink="/dealer/car-detail/{{row._id}}"><i class="fa fa-eye"></i></a>
+
+                      <button *ngIf="page.type == 'all'" title="Move To WishList" type="button"
+                        (click)="saveToWishList(row._id)">
+                        <img src="/assets/images/wishlist.png">
+                      </button>
+                      <button *ngIf="page.type == 'all' || page.type == 'wishlist'" title="Hide Car from Listing"
+                        type="button" (click)="hideCar(row._id)">
+                        <img src="/assets/images/blind.png">
+                      </button>
+                      <button *ngIf="page.type == 'hidden'" title="Unhide Car from Listing" type="button"
+                        (click)="unhideCar(row._id)">
+                        <img src="/assets/images/wishlist.png">
+                      </button>
+
+                      <button *ngIf="page.type == 'all' || page.type == 'wishlist'" title="Unhide Car from Listing"
+                        type="button" (click)="placeBid(row._id)">
+                        place Bid
+                      </button>
+                    </span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+
+                <ngx-datatable-footer>
+                  <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                    let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset"
+                    let-isVisible="isVisible">
+                    <div class="pagination_outer d-flex">
+                      <div class="showing_records">
+                        Showing <div class="selected-box number_records">
+                          <select class="selectpicker my_select" id="per-page"
+                            (change)="onLimitChange($event.target.value)">
+                            <option *ngFor="let option of pageLimitOptions" [value]="option.value"
+                              [selected]="option.value == currentPageLimit">
+                              {{ option.value }}
+                            </option>
+                          </select>
+                        </div> records on page
+                      </div>
+                      <div class="ml-auto">
+                        <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+                          [pagerRightArrowIcon]="'datatable-icon-right'" [pagerPreviousIcon]="'datatable-icon-prev'"
+                          [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage" [size]="pageSize" [count]="rowCount"
+                          [hidden]="!((rowCount / pageSize) > 1)" (change)="listingTable.onFooterPage($event)">
+                        </datatable-pager>
+                      </div>
+                    </div>
+                  </ng-template>
+                </ngx-datatable-footer>
+              </ngx-datatable>
             </div>
-            
-            
-
           </div>
-
-
-          
-
-          
-
         </div>
-
       </div>
-
     </div>
   </div>
 </section>
 
+
+
+<div class="modal fade bd-example-modal-lg feedback-modal_rating" #bidModal id="bidModal" tabindex="-1" role="dialog"
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+  <div class="modal-dialog mw-55 border-none  mx-auto" role="document">
+
+    <div class="modal-content p-0">
+
+      <div class="modal-header feedback-header_bg">
+        <h5 class="modal-title text-white" id="bidModal">Place Bid</h5>
+        <button type="button" class="close text-white opac-1" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body p-4">
+        <div class="row pt-3">
+
+          <div class="col-md-12">
+            <div class="selected-box auto-hight">
+              <select class="margin-top42" (change)="selectStore($event.target.value)">
+                <option value="">Select the store</option>
+                <option *ngFor="let d of dealerShips;let i = index;" value="{{i}}">{{d?.legalcoroporationname}}</option>
+              </select>
+            </div>
+            <div class="selected-box auto-hight">
+              <select class="margin-top42">
+
+               <option value="">Assign a contact</option>
+                <option *ngFor="let lc of legalContacts;let i= index;">{{lc?.name?.first_name}} {{lc?.name?.last_name}}</option>
+              </select>
+            </div>
+            <div class="selected-box auto-hight">
+              <input type="text" class="form-control" placeholder="Enter the bid price">
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-5"><button class="button red" type="button" > Submit Bid</button></div>                 
+          <div class="form-group col-md-5"><button class="button red" type="button" (click)="finishFunction()">Discard Bid</button></div>
+      </div>
+      </div>
+    </div>
+
+
+
+  </div>
+</div>
 <!--=================================
  blog -->
