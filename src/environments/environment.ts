@@ -10,8 +10,8 @@ export const environment = {
   WEB_ENDPOINT: 'http://54.245.128.14',
   ADDRESS_API: {
     ENDPOINT: 'https://us-zipcode.api.smartystreets.com',
-    KEY: '4931092145880524',
-    TOKEN: 'DwDT9GApVGQdUlxLVHtB',
+    KEY: '9990007564021932',
+    TOKEN: 'xQJiKs2daBdjoKIHkBqo',
   },
   VEHICLE_STATS_API: {
     ENDPOINT: 'https://www.carqueryapi.com/api/0.3',

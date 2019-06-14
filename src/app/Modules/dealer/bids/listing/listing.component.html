@@ -55,12 +55,14 @@
                       <ul>
                         <li [ngClass]="{ active: page.type=='all'}"> <button
                             (click)="onChangeListType('all')">All</button></li>
-                        <li [ngClass]="{ active: page.type=='applied'}"><button
-                            (click)="onChangeListType('applied')">Applied</button></li>
                         <li [ngClass]="{ active: page.type=='wishlist'}"><button
                             (click)="onChangeListType('wishlist')">WishList</button></li>
+
                         <li [ngClass]="{ active: page.type=='hidden'}"><button
                             (click)="onChangeListType('hidden')">Hidden</button></li>
+                        <li [ngClass]="{ active: page.type=='applied'}"><button
+                            (click)="onChangeListType('applied')">Applied</button></li>
+
 
 
                       </ul>
@@ -493,24 +495,42 @@
                     <b>{{row?.best_bid | currency:'USD':true:'2.2-2'}} </b>
                     <span *ngIf="row?.bids" class="left_bids">
 
-                      <button (click)="show(row?._id)">See all ({{row?.bids}}) bids</button></span>
+                      <button><a routerLink="/dealer/car-bids/{{row._id}}"> See all ({{row?.bids}}) bids</a></button></span>
                   </ng-template>
                 </ngx-datatable-column>
 
 
 
-                <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Miles" prop="miles"
-                  [sortable]="true">
+                <ngx-datatable-column *ngIf="page.type !='applied'" [resizeable]="false" [draggable]="false"
+                  name="Miles" prop="miles" [sortable]="true">
                   <ng-template let-row="row" ngx-datatable-cell-template>
                     {{ row.miles | number}}
                     <!--<span class="left_time">10 Hrs 15 min left</span>-->
                   </ng-template>
                 </ngx-datatable-column>
-
-                <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Created At" prop="created_at"
-                  [sortable]="true">
+                <ngx-datatable-column *ngIf="page.type =='applied'" [resizeable]="false" [draggable]="false"
+                  name="My Bid" prop="miles" [sortable]="true">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row?.dealers_bids[0]?.price | currency:'USD':true:'2.2-2'}}
+                    <!--<span class="left_time">10 Hrs 15 min left</span>-->
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column *ngIf="page.type != 'applied'" [resizeable]="false" [draggable]="false"
+                  name="Created At" prop="created_at" [sortable]="true">
                   <ng-template let-row="row" ngx-datatable-cell-template>
                     {{ row.created_at | date:'MMM d y h:mm'}}
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column *ngIf="page.type == 'applied'" [resizeable]="false" [draggable]="false"
+                  name="Applied On" prop="bid_date" [sortable]="true">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row?.dealers_bids[0]?.bid_date | date:'MMM d y h:mm'}}
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column *ngIf="page.type == 'applied'" [resizeable]="false" [draggable]="false"
+                  name="Bid Status" prop="bid_acceptance" [sortable]="true">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row?.dealers_bids[0]?.bid_acceptance }}
                   </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Action" [sortable]="false">
@@ -524,20 +544,20 @@
 
                       <button *ngIf="page.type == 'all'" title="Move To WishList" type="button"
                         (click)="saveToWishList(row._id)">
-                        <img src="/assets/images/wishlist.png">
+                        <i class="fa fa-heart-o" aria-hidden="true"></i>
                       </button>
                       <button *ngIf="page.type == 'all' || page.type == 'wishlist'" title="Hide Car from Listing"
                         type="button" (click)="hideCar(row._id)">
-                        <img src="/assets/images/blind.png">
+                        <i class="fa fa-eye-slash" aria-hidden="true"></i>
                       </button>
                       <button *ngIf="page.type == 'hidden'" title="Unhide Car from Listing" type="button"
                         (click)="unhideCar(row._id)">
-                        <img src="/assets/images/wishlist.png">
+                        <i class="fa fa-eye-slash" aria-hidden="true"></i>
                       </button>
 
                       <button *ngIf="page.type == 'all' || page.type == 'wishlist'" title="Unhide Car from Listing"
-                        type="button" (click)="placeBid(row._id)">
-                        place Bid
+                        type="button" (click)="placeBid(row)">
+                        <i class="fa fa-gavel" aria-hidden="true"></i>
                       </button>
                     </span>
                   </ng-template>
@@ -589,39 +609,74 @@
     <div class="modal-content p-0">
 
       <div class="modal-header feedback-header_bg">
-        <h5 class="modal-title text-white" id="bidModal">Place Bid</h5>
-        <button type="button" class="close text-white opac-1" data-dismiss="modal" aria-label="Close">
+        <h5 class="modal-title" id="bidModal">Place Bid</h5>
+        <button type="button" class="close opac-1" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
 
-      <div class="modal-body p-4">
-        <div class="row pt-3">
+      <div class="modal-body">
+        <form [formGroup]="bidForm">
+          <div class="row ">
 
-          <div class="col-md-12">
-            <div class="selected-box auto-hight">
-              <select class="margin-top42" (change)="selectStore($event.target.value)">
-                <option value="">Select the store</option>
-                <option *ngFor="let d of dealerShips;let i = index;" value="{{i}}">{{d?.legalcoroporationname}}</option>
-              </select>
-            </div>
-            <div class="selected-box auto-hight">
-              <select class="margin-top42">
+            <div class="col-md-12">
+              <div class="search_result">
+                Suggested Price $5000
+              </div>
 
-               <option value="">Assign a contact</option>
-                <option *ngFor="let lc of legalContacts;let i= index;">{{lc?.name?.first_name}} {{lc?.name?.last_name}}</option>
-              </select>
-            </div>
-            <div class="selected-box auto-hight">
-              <input type="text" class="form-control" placeholder="Enter the bid price">
+              <div class="selected-box auto-hight form-group w-100">
+                <label for="">Select The Store</label>
+                <select
+                  [ngClass]="{ 'is-invalid': (bidForm.controls.dealership_id.touched || submitted) && bidForm.get('dealership_id').errors }"
+                  class="margin-top42 my_select w-100 d-block" (change)="selectStore($event.target.value)"
+                  formControlName="dealership_id">
+                  <option value="" selected>Select the store</option>
+                  <option *ngFor="let d of dealerShips;let i = index;" value="{{d._id}}">{{d?.legalcoroporationname}}
+                  </option>
+                </select>
+                <p *ngIf="bidForm.controls.dealership_id.touched || submitted">
+                  <app-form-validation-errors errorPrefix="dealership name "
+                    [errors]="bidForm.get('dealership_id').errors"></app-form-validation-errors>
+                </p>
+              </div>
+
+              <div class="selected-box auto-hight form-group w-100">
+                <label for="">Assign A Contact</label>
+                <select class="margin-top42 my_select w-100 d-block" formControlName="legal_contact"
+                  [ngClass]="{ 'is-invalid': (bidForm.controls.legal_contact.touched || submitted) && bidForm.get('legal_contact').errors }">
+
+                  <option value="" selected>Assign a contact</option>
+                  <option *ngFor="let lc of legalContacts;let i= index;">{{lc?.name?.first_name}}
+                    {{lc?.name?.last_name}}</option>
+                </select>
+                <p *ngIf="bidForm.controls.legal_contact.touched || submitted">
+                  <app-form-validation-errors errorPrefix="Legal Contact "
+                    [errors]="bidForm.get('legal_contact').errors"></app-form-validation-errors>
+                </p>
+              </div>
+
+              <div class="selected-box auto-hight form-group w-100">
+                <label for="">Enter Your Bid</label>
+                <input type="text"
+                  [ngClass]="{ 'is-invalid': (bidForm.controls.price.touched || submitted) && bidForm.get('price').errors }"
+                  class="form-control w-100 d-block my_select" formControlName="price">
+                <p *ngIf="bidForm.controls.price.touched || submitted">
+                  <app-form-validation-errors errorPrefix="Legal Contact " [errors]="bidForm.get('price').errors">
+                  </app-form-validation-errors>
+                </p>
+              </div>
+
+              <div class="form-group w-100">
+                <div class="submission_Btns text-center">
+                  <button class="button red black_BTN" type="button" (click)="finishFunction()">Discard
+                    Bid</button>
+                  <button class="button red" type="button" (click)="onSubmit()"> Submit
+                    Bid</button>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div class="row">
-          <div class="form-group col-md-5"><button class="button red" type="button" > Submit Bid</button></div>                 
-          <div class="form-group col-md-5"><button class="button red" type="button" (click)="finishFunction()">Discard Bid</button></div>
-      </div>
+        </form>
       </div>
     </div>
 
