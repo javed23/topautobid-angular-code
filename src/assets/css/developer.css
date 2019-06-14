@@ -45,6 +45,7 @@ input[type="file"] {
     top: 0;
     left: 0;
     width: 100%;
+    height: 100%;
 }
 .relative{
     position: relative;
@@ -74,6 +75,12 @@ input[type="file"] {
     display: block;
     border-radius: 100%;
     overflow: hidden;
+}
+
+.avtar img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 .actions button {
     padding: 0;
@@ -708,6 +715,34 @@ button {
     cursor: pointer;
     border-bottom: 1px solid rgba(0, 7, 0, 0.678);
 }
+.mega-menu .drop-down-multilevel{
+    -webkit-transform: translateY(-200px);
+    -moz-transform: translateY(-200px);
+    -ms-transform: translateY(-200px);
+    -o-transform: translateY(-200px);
+    transform: translateY(-200px);
+}
+
+.mega-menu .menu-links li.hoverTrigger:hover > .drop-down.effect-fade, .mega-menu .menu-links li.hoverTrigger:hover > .drop-down-tab-bar.effect-fade, .mega-menu .menu-links li.hoverTrigger:hover > .drop-down-multilevel.effect-fade, .mega-menu .menu-links li.ClickTrigger .drop-down.active.effect-fade, .mega-menu .menu-links li.ClickTrigger .drop-down-tab-bar.active.effect-fade, .mega-menu .menu-links li.ClickTrigger .drop-down-multilevel.active.effect-fade{
+    -webkit-transform: translateY(0px);
+    -moz-transform: translateY(0px);
+    -ms-transform: translateY(0px);
+    -o-transform: translateY(0px);
+    transform: translateY(0px);
+}
+
+
+#image-preview .dz-image-preview .dz-details ,#image-preview .dz-image-preview .dz-success-mark ,#image-preview .dz-image-preview .dz-error-mark ,#image-preview .dz-image-preview .dz-remove   { 
+    display: none;
+}
+
+.no_img img {
+    padding-top: 20%;
+    width: 90%;
+}
+
+
+/********************************** Media Query *******************************************************/
 @media screen and (max-width:767px) {
     .range_filter {
         margin: 0;

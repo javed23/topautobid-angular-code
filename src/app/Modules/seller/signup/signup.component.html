@@ -41,7 +41,7 @@
                  <label>First Name*</label>
                  <input  class="form-control" type="text" placeholder="First Name" formControlName="first_name" [ngClass]="{ 'is-invalid': (signupForm.controls.name.get('first_name').touched || submitted) && signupForm.controls.name.get('first_name').errors }">
                  <p *ngIf="signupForm.controls.name.get('first_name').touched || submitted">
-                   <app-form-validation-errors patternError="Must contain only characters." minLength=2 maxLength=50 errorPrefix="Your name " [errors]="signupForm.controls.name.get('first_name').errors"></app-form-validation-errors>
+                   <app-form-validation-errors patternError="Must contain only characters." minLength=2 maxLength=50 errorPrefix="First name " [errors]="signupForm.controls.name.get('first_name').errors"></app-form-validation-errors>
                  </p>
                </div>
  

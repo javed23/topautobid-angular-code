@@ -22,7 +22,7 @@ export class CarService {
 
     public listingCars(page: Page): Observable<PagedData<Car>> {
 
-        page['seller_id'] = localStorage.getItem('loggedinUserId') 
+        page['seller_id'] = localStorage.getItem('loggedinUserId')
         // page['seller_id'] = '5cd170562688321559f12f32'
         return this.httpClient.post('car/listingCars', page)
             .map((response: any) => {
@@ -38,7 +38,7 @@ export class CarService {
                     //console.log('jsonObj', jsonObj);
                     let car = new Car(jsonObj);
 
-                   // console.log('created object', car);
+                    // console.log('created object', car);
                     pagedData.data.push(car);
                 }
                 pagedData.page = page;
@@ -54,9 +54,9 @@ export class CarService {
 
     public listingCarsOnDatable(page: Page): Observable<PagedData<Car>> {
 
-       // page['seller_id'] = localStorage.getItem('loggedinUserId') 
-         page['seller_id'] = '5cf5ccb2307a6515e914c269'
-        return this.httpClient.post('car/listingCarsOnDatable', page)
+        page['dealer_id'] = localStorage.getItem('loggedinUserId')
+        // page['dealer_id'] = '5cf5ccb2307a6515e914c269'
+        return this.httpClient.post('car/getdealerCarListing', page)
             .map((response: any) => {
 
                 page.totalElements = response.count;
@@ -84,7 +84,7 @@ export class CarService {
     */
     public listingDealersCars(page: Page): Observable<PagedData<Car>> {
 
-        page['dealer_id'] = localStorage.getItem('loggedinUserId')   
+        page['dealer_id'] = localStorage.getItem('loggedinUserId')
         // page['dealer_id'] = '5ca1e88f9dac60394419c0bc'
 
         return this.httpClient.post('car/listingDealersCars', page)
@@ -184,62 +184,94 @@ export class CarService {
             })
 
 
-        }
-/*
-* Function to rate & review car by dealer
-* @param ratingReview    rating and review object
-* @return        Observable<any>
-*/
-  public ratingReviewByDealer(ratingReview): Observable<any> {
-      
-    ratingReview['seller_id'] = localStorage.getItem('loggedinUserId') 
-    return this.httpClient.post('car/ratingReviewByDealer', ratingReview)
-        .map((response: any) => response)
-}
+    }
+    /*
+    * Function to rate & review car by dealer
+    * @param ratingReview    rating and review object
+    * @return        Observable<any>
+    */
+    public ratingReviewByDealer(ratingReview): Observable<any> {
+
+        ratingReview['seller_id'] = localStorage.getItem('loggedinUserId')
+        return this.httpClient.post('car/ratingReviewByDealer', ratingReview)
+            .map((response: any) => response)
+    }
 
 
-/*
-* Function to rate & review car by seller
-* @param ratingReview    rating and review object
-* @return        Observable<any>
-*/
-public ratingReviewBySeller(ratingReview): Observable<any> {
-    ratingReview['seller_id'] = localStorage.getItem('loggedinUserId')
-    // ratingReview['seller_id'] = '5ca1e88f9dac60394419c0bc'
-    return this.httpClient.post('car/ratingReviewBySeller', ratingReview)
-        .map((response: any) => response)
-}
+    /*
+    * Function to rate & review car by seller
+    * @param ratingReview    rating and review object
+    * @return        Observable<any>
+    */
+    public ratingReviewBySeller(ratingReview): Observable<any> {
+        ratingReview['seller_id'] = localStorage.getItem('loggedinUserId')
+        // ratingReview['seller_id'] = '5ca1e88f9dac60394419c0bc'
+        return this.httpClient.post('car/ratingReviewBySeller', ratingReview)
+            .map((response: any) => response)
+    }
 
 
-/*
-* Function to rate & review car by seller
-* @param ratingReview    rating and review object
-* @return        Observable<any>
-*/
-public changeCarStatus(carData): Observable<any> {   
-    return this.httpClient.post('car/changeCarStatus', carData)
-        .map((response: any) => response)
-}
+    /*
+    * Function to rate & review car by seller
+    * @param ratingReview    rating and review object
+    * @return        Observable<any>
+    */
+    public changeCarStatus(carData): Observable<any> {
+        return this.httpClient.post('car/changeCarStatus', carData)
+            .map((response: any) => response)
+    }
 
-/**
- * Fetch car details
- * @param carObject    car object to fetch from database.
- * @return        Observable<any>
-*/
-public fetchCarDetails(carIdObject): Observable<any> {
+    /**
+     * Fetch car details
+     * @param carObject    car object to fetch from database.
+     * @return        Observable<any>
+    */
+    public fetchCarDetails(carIdObject): Observable<any> {
 
-    return this.httpClient.post('car/carDetail', carIdObject)
-        .map((response: any) => {
-            //let car = new Car(response);
-            //console.log('car detail', car);
-            return response;
-        })
-}
-
-
+        return this.httpClient.post('car/carDetail', carIdObject)
+            .map((response: any) => {
+                //let car = new Car(response);
+                //console.log('car detail', car);
+                return response;
+            })
+    }
 
 
-    
+
+    /**
+     * Delete car
+     * @param carObject    car object to delete from database.
+     * @return        Observable<any>
+    */
+    public saveCarInWishList(carObject): Observable<any> {
+        carObject['dealer_id'] = localStorage.getItem('loggedinUserId')
+        return this.httpClient.post('car/saveCarToWishList', carObject)
+            .map((response: any) => response)
+    }
+
+
+    /**
+        * hide car
+        * @param carObject    car object to hide from database.
+        * @return        Observable<any>
+       */
+    public hideCar(carObject): Observable<any> {
+        carObject['dealer_id'] = localStorage.getItem('loggedinUserId')
+        return this.httpClient.post('car/hideCar', carObject)
+            .map((response: any) => response)
+    }
+    /**
+           * unhide car
+           * @param carObject    car object to unhide from hide list.
+           * @return        Observable<any>
+          */
+    public unhideCar(carObject): Observable<any> {
+        carObject['dealer_id'] = localStorage.getItem('loggedinUserId')
+        return this.httpClient.post('car/unhideCar', carObject)
+            .map((response: any) => response)
+    }
+
+
 
 
 

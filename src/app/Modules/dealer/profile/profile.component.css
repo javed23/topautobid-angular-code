@@ -9,7 +9,18 @@ select {padding:11px;}
 
 
 .user-thumb-col {width:100%; text-align: center; display: inline-block; margin-bottom: 25px;}
-.user-thumb {width: 125px; height: 125px; border-radius:100%; border:1px solid #5d5d5d; line-height:110px; overflow: hidden; margin:0px auto; margin-bottom:5px; position: relative;}
+.user-thumb {
+    width: 125px;
+    height: 125px;
+    border-radius: 100%;
+    border: 0px solid #5d5d5d;
+    line-height: 110px;
+    overflow: hidden;
+    margin: 0px auto;
+    margin-bottom: 5px;
+    position: relative;
+    background: #96999b;
+}
 .user-thumb-col p { font-size: 13px; color:#5d5d5d; margin:0px; padding:0px 0px 5px 0px;}
 .change-photo {border:0px; background: red; color:#fff; margin-top: 5px;}
 

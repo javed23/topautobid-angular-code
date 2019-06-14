@@ -104,6 +104,12 @@ const routes: Routes = [
     canActivate: [SellerAuthGuardService]
   },
   {
+    path: 'addcar/:type',
+    component: AddCarComponent,
+    data: { title: 'Seller AddCar' },
+    canActivate: [SellerAuthGuardService]
+  },
+  {
     path: 'account-verify/:id',
     component: AccountVerifyComponent,
     data: { title: 'Seller AddCar' }

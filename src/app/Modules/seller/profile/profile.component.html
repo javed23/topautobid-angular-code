@@ -27,7 +27,7 @@
         <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">       
         
           <div class="user-thumb-col">
-            <div id="preview" class="user-thumb"></div>
+            <div id="image-preview" class="user-thumb"></div>
 
           
           <p>Size of image: Upto 2 MB</p>
@@ -46,7 +46,7 @@
               <div class="form-group col-md-4">
                 <label>Prefix</label>
                 <select formControlName="prefix">
-                  <option value="">Select</option>
+                  <option value="">Select Prefix</option>
                   <option value="Mr.">Mr.</option>
                   <option value="Mrs.">Mrs.</option>
                   <option value="Ms.">Ms.</option>
@@ -57,7 +57,7 @@
                 <label>First Name*</label>
                 <input class="form-control" type="text" placeholder="First Name" formControlName="first_name" [ngClass]="{ 'is-invalid': (profileForm.controls.name.get('first_name').touched || submitted) && profileForm.controls.name.get('first_name').errors }">
                 <p *ngIf="profileForm.controls.name.get('first_name').touched || submitted">
-                  <app-form-validation-errors patternError="Must contain only characters." minLength=2 maxLength=50 errorPrefix="Your name " [errors]="profileForm.controls.name.get('first_name').errors"></app-form-validation-errors>
+                  <app-form-validation-errors patternError="Must contain only characters." minLength=2 maxLength=50 errorPrefix="First name " [errors]="profileForm.controls.name.get('first_name').errors"></app-form-validation-errors>
                 </p>
               </div>
 
