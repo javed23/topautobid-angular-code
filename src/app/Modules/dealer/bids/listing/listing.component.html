@@ -409,7 +409,7 @@
                 [columns]="[{name:'Year'},{name:'Make'},{name:'Model'},{name:'Trim'},{name:'Listed'},{name:'Status'},{name:'Bids'}]"
                 [sorts]="[{prop: 'created_at', dir: 'desc'}]" [columnMode]="'force'" [headerHeight]="50"
                 [footerHeight]="80" [externalPaging]="true" [count]="page.totalElements" [offset]="page.pageNumber"
-                [limit]="page.size" [rowHeight]="90" (sort)="onSort($event)" (page)="setPage($event)">
+                [limit]="page.size" [rowHeight]="60" (sort)="onSort($event)" (page)="setPage($event)">
 
                 <ngx-datatable-row-detail [rowHeight]="100" #myDetailRow (toggle)="onDetailToggle($event)">
                   <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
@@ -547,22 +547,22 @@
                         (click)="saveToWishList(row._id)">
                         <i class="fa fa-heart-o" aria-hidden="true"></i>
                       </button>
-                      <button *ngIf="page.type == 'all' || page.type == 'wishlist'" title="Hide Car from Listing"
-                        type="button" (click)="hideCar(row._id)">
-                        <i class="fa fa-eye-slash" aria-hidden="true"></i>
-                      </button>
+                   
 
                       <button *ngIf="page.type == 'wishlist'" title="Hide Car from WishList" type="button"
                         (click)="moveFromWishList(row._id)">
-                        <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                        <i class="fa fa-heart" aria-hidden="true"></i>
                       </button>
-
+                      <button *ngIf="page.type == 'all' || page.type == 'wishlist'" title="Hide Car from Listing"
+                      type="button" (click)="hideCar(row._id)">
+                      <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                    </button>
                       <button *ngIf="page.type == 'hidden'" title="Unhide Car from Listing" type="button"
                         (click)="unhideCar(row._id)">
-                        <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                        <i class="fa fa-minus-circle" aria-hidden="true"></i>
                       </button>
 
-                      <button *ngIf="page.type == 'all' || page.type == 'wishlist'" title="Unhide Car from Listing"
+                      <button *ngIf="page.type == 'all' || page.type == 'wishlist'" title="Place Bid"
                         type="button" (click)="placeBid(row)">
                         <i class="fa fa-gavel" aria-hidden="true"></i>
                       </button>
@@ -632,43 +632,43 @@
               </div>
 
               <div class="selected-box auto-hight form-group w-100">
-                <label for="">Select The Store</label>
+                <label for="">Assign a DealerShip</label>
                 <select
                   [ngClass]="{ 'is-invalid': (bidForm.controls.dealership_id.touched || submitted) && bidForm.get('dealership_id').errors }"
                   class="margin-top42 my_select w-100 d-block" (change)="selectStore($event.target.value)"
                   formControlName="dealership_id">
-                  <option disabled selected value="">Select the store</option>
+                  <option disabled selected value="">Select the dealership</option>
                   <option *ngFor="let d of dealerShips;let i = index;" value="{{d._id}}">{{d?.legalcoroporationname}}
                   </option>
                 </select>
                 <p *ngIf="bidForm.controls.dealership_id.touched || submitted">
-                  <app-form-validation-errors errorPrefix="dealership name "
+                  <app-form-validation-errors errorPrefix="Store name "
                     [errors]="bidForm.get('dealership_id').errors"></app-form-validation-errors>
                 </p>
               </div>
 
               <div class="selected-box auto-hight form-group w-100">
-                <label for="">Assign A Contact</label>
+                <label for="">Assign Legal Contact</label>
                 <select class="margin-top42 my_select w-100 d-block" formControlName="legal_contact"
                   [ngClass]="{ 'is-invalid': (bidForm.controls.legal_contact.touched || submitted) && bidForm.get('legal_contact').errors }">
 
-                  <option value="" selected>Assign a contact</option>
+                  <option value="" selected>Assign legal contact</option>
                   <option *ngFor="let lc of legalContacts;let i= index;">{{lc?.name?.first_name}}
                     {{lc?.name?.last_name}}</option>
                 </select>
                 <p *ngIf="bidForm.controls.legal_contact.touched || submitted">
-                  <app-form-validation-errors errorPrefix="legal contact "
+                  <app-form-validation-errors errorPrefix="Assigning contact  "
                     [errors]="bidForm.get('legal_contact').errors"></app-form-validation-errors>
                 </p>
               </div>
 
               <div class="selected-box auto-hight form-group w-100">
-                <label for="">Enter Your Bid</label>
-                <input type="text"
+                <label for="">Bid Price</label>
+                <input type="text" prefix=" $" mask="000000"
                   [ngClass]="{ 'is-invalid': (bidForm.controls.price.touched || submitted) && bidForm.get('price').errors }"
                   class="form-control w-100 d-block my_select" formControlName="price">
                 <p *ngIf="bidForm.controls.price.touched || submitted">
-                  <app-form-validation-errors errorPrefix="bid price " [errors]="bidForm.get('price').errors">
+                  <app-form-validation-errors errorPrefix="Bid price  " [errors]="bidForm.get('price').errors">
                   </app-form-validation-errors>
                 </p>
               </div>

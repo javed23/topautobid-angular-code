@@ -35,6 +35,7 @@ export class Dealership {
         this.location =object.location;
         this.state  =  object.location.state;
         this.zip  =  object.location.zipcode;
+        this.location = object.location;
         this.dealer_id  =  object.dealer_id;
         this.profile_pic = object.profile_pic;
         this.created_at = object.created_at

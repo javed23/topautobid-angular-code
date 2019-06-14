@@ -2,7 +2,8 @@ import { Component, OnInit,  ViewChild, ElementRef, ViewEncapsulation, NgZone } 
 import { Location } from '@angular/common';
 //import { TranslateService } from '@ngx-translate/core';
 import { AbstractControl,  FormBuilder, FormArray,  FormGroup,  FormControl, Validators } from '@angular/forms';
-import { Router} from "@angular/router";
+import { Router, ActivatedRoute} from "@angular/router";
+
 import { Subscription } from 'rxjs/Subscription';
 import { of, Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
@@ -13,7 +14,7 @@ import { DropzoneComponent, DropzoneDirective, DropzoneConfigInterface } from 'n
 import { trigger, state, style, animate, transition } from '@angular/animations';
  //shared services
 import { AlertService, PageLoaderService } from '../../../../shared/_services'
-import Swal from 'sweetalert2';
+
 
  
 
@@ -60,7 +61,7 @@ export class AddCarComponent implements OnInit {
 
   // Define Page Title and Breadcrumbs
   title:string = 'New Car Listing';
-  breadcrumbs:any = [{page:'Home',link:''},{page:'New Car Listing',link:''}]
+  breadcrumbs:any = [{page:'Home',link:'/seller/home'},{ page: "Car Listing", link: '/seller/car-listing' },{page:'New Car Listing',link:''}]
 
   // Smooth Scroll To Add Car Form Wizard
   @ViewChild("addCarSection") addCarSection: ElementRef;
@@ -167,7 +168,12 @@ export class AddCarComponent implements OnInit {
 
 
 
-constructor( private zone:NgZone, private cognitoUserService:CognitoUserService, private location: Location, private alertService: AlertService, private vehicleService: VehicleService, private userAuthService: UserAuthService, private pageLoaderService: PageLoaderService, private formBuilder: FormBuilder, private titleService: TitleService, private commonUtilsService: CommonUtilsService, private toastr: ToastrManager, private router: Router) { 
+constructor( private activatedRoute: ActivatedRoute, private zone:NgZone, private cognitoUserService:CognitoUserService, private location: Location, private alertService: AlertService, private vehicleService: VehicleService, private userAuthService: UserAuthService, private pageLoaderService: PageLoaderService, private formBuilder: FormBuilder, private titleService: TitleService, private commonUtilsService: CommonUtilsService, private toastr: ToastrManager, private router: Router) { 
+
+   //checking the type to change breadcrumbs
+  if ('type' in this.activatedRoute.snapshot.params) {
+    this.breadcrumbs = [{ page: 'Home', link: '' }, { page: "Dashboard", link: '/seller/car-dashboard' }, {page:'New Car Listing',link:''}]
+  }
 
   this.selectVehicleOption(); // Initialize Vehicle Option Fields 
   this.basicInfo();          // Initialize Basic Info Wizard Fields 

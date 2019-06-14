@@ -292,7 +292,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       acceptedFiles: '.jpg, .png, .jpeg',
       maxFilesize: 2, // MB,
       dictDefaultMessage: 'Change Photo',
-      previewsContainer: "#preview",
+      previewsContainer: "#image-preview",
       addRemoveLinks: true,
       resizeWidth: 125,
       resizeHeight: 125,

@@ -120,9 +120,9 @@ const routes: Routes = [
     component: AccountVerifyComponent,
     data: { title: 'Account verify' },
   }, {
-    path: 'bid-listing',
+    path: 'dashboard',
     component: BidsListingComponent,
-    data: { title: "Cars Bids Listing" },
+    data: { title: "Dealer Dashboard" },
     canActivate: [DealerAuthGuardService]
   },
   {

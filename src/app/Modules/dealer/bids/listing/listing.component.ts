@@ -42,8 +42,8 @@ export class ListingComponent implements OnInit {
     pageSize: this.currentPageLimit
   }
   //title and breadcrumbs
-  readonly title: string = 'Bid Listing'
-  readonly breadcrumbs: any[] = [{ page: 'Home', link: '/dealer/home' }, { page: 'Bid Listing', link: '' }]
+  readonly title: string = 'Dealer Dashboard'
+  readonly breadcrumbs: any[] = [{ page: 'Home', link: '/dealer/home' }, { page: 'Dashboard', link: '' }]
 
 
   constructor(private dealerService:DealerService,private commonUtilsService: CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private titleService: TitleService) {

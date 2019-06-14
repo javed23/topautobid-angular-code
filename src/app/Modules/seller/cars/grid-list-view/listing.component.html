@@ -107,46 +107,8 @@
                      </span></li>                    
                  </ul>
                </li>
- 
-            
-               <li class="list-group-item">
-                 <a  href="#">Body</a>
-                 <ul>
-                   <!--<li><span class="checkbox">
-                       <label>
-                         <input [checked]="isAllBodySelected" type="checkbox" (change)="resetAll('body_style')"> All Body Styles
-                       </label>
-                     </span></li>-->
-                   <li *ngFor="let bodyStyle of bodyStyles">
-                     <span class="checkbox">
-                       <label>
-                         <!--
-                           <input type="checkbox" [checked]="bodyStyle.checked" value="{{bodyStyle.name}}" (change)="uncheckAllFetchRecords(bodyStyle.name, 'body_style')"> {{bodyStyle.name}}
-                         -->
-                         <button type="button" [ngClass]="{btn_active: (page?.filters?.body_style == bodyStyle.name)}" (click)="uncheckAllFetchRecords(bodyStyle.name, 'body_style')" href="javascript:void(0)" class="sidebar_content">{{bodyStyle.name}} </button>
-                       </label>
-                     </span></li>                    
-                 </ul>
-               </li>              
-               <li  class="list-group-item">
-                 <a  href="#">Transmission</a>
-                 <ul>
-                   <!--<li><span class="checkbox">
-                       <label>
-                         <input [checked]="isAllTransmissionSelected" type="checkbox" (change)="resetAll('transmission')"> All Transmissions
-                       </label>
-                     </span></li> -->
-                   <li *ngFor="let transmission of transmissions">
-                     <span class="checkbox">
-                       <label>
-                         <!--
-                           <input type="checkbox" [checked]="transmission.checked" value="{{transmission.name}}" (change)="uncheckAllFetchRecords(transmission.name, 'transmission')"> {{transmission.name}}
-                         -->
-                         <button type="button" [ngClass]="{btn_active: (page?.filters?.transmission == transmission.name)}" (click)="uncheckAllFetchRecords(transmission.name, 'transmission')" href="javascript:void(0)" class="sidebar_content">{{transmission.name}} </button>
-                       </label>
-                     </span></li>                    
-                 </ul>
-               </li> 
+              
+              
                <li  class="list-group-item">
                  <a  href="#">Exterior Color</a>
                  <ul>
