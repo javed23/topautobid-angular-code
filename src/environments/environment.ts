@@ -18,7 +18,7 @@ export const environment = {
   },
 
   FILE_UPLOAD_API: "http://54.245.128.14:3000/api/common/imageUploadtoBucket",
-  APP_NAME: 'TopAutoBid',
+  APP_NAME: 'CarsGoat',
   DEFAULT_PROFILE: 'assets/images/default-user.png',
   DEFAULT_COUNTRY_CODE: '+1',
   DEFAULT_RECORDS_LIMIT: 6,

@@ -54,7 +54,7 @@
 
                       <ul>
                         <li [ngClass]="{ active: page.type=='all'}"> <button
-                            (click)="onChangeListType('all')">All</button></li>
+                            (click)="onChangeListType('all')">Active</button></li>
                         <li [ngClass]="{ active: page.type=='wishlist'}"><button
                             (click)="onChangeListType('wishlist')">WishList</button></li>
 
@@ -495,7 +495,8 @@
                     <b>{{row?.best_bid | currency:'USD':true:'2.2-2'}} </b>
                     <span *ngIf="row?.bids" class="left_bids">
 
-                      <button><a routerLink="/dealer/car-bids/{{row._id}}"> See all ({{row?.bids}}) bids</a></button></span>
+                      <button><a routerLink="/dealer/car-bids/{{row._id}}"> See all ({{row?.bids}})
+                          bids</a></button></span>
                   </ng-template>
                 </ngx-datatable-column>
 
@@ -550,6 +551,12 @@
                         type="button" (click)="hideCar(row._id)">
                         <i class="fa fa-eye-slash" aria-hidden="true"></i>
                       </button>
+
+                      <button *ngIf="page.type == 'wishlist'" title="Hide Car from WishList" type="button"
+                        (click)="moveFromWishList(row._id)">
+                        <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                      </button>
+
                       <button *ngIf="page.type == 'hidden'" title="Unhide Car from Listing" type="button"
                         (click)="unhideCar(row._id)">
                         <i class="fa fa-eye-slash" aria-hidden="true"></i>

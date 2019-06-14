@@ -249,6 +249,18 @@ export class CarService {
             .map((response: any) => response)
     }
 
+   /**
+     * Delete car
+     * @param carObject    car object to delete from database.
+     * @return        Observable<any>
+    */
+   public moveCarFromWishList(carObject): Observable<any> {
+    carObject['dealer_id'] = localStorage.getItem('loggedinUserId')
+    return this.httpClient.post('car/deleteCarFromWishList', carObject)
+        .map((response: any) => response)
+}
+
+    
 
     /**
         * hide car

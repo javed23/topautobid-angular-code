@@ -171,7 +171,23 @@ export class ListingComponent implements OnInit {
 
   };
 
+  /**
+    * move the car from wishlist of the dealer 
+    * @param $carId    carId is car id to hide the car
+    */
+   moveFromWishList(carId: any) {
 
+    this.carService.moveCarFromWishList({ carId: carId }).pipe(untilDestroyed(this)).subscribe(response => {
+      this.commonUtilsService.onSuccess('Your car has been moved to wishlist');
+      this.setPage(this._defaultPagination);
+
+    }, error => {
+      this.commonUtilsService.onError(error)
+    })
+
+  };
+
+  
 
   /**
     * save the car in hide list
