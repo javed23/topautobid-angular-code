@@ -1,4 +1,4 @@
- import { NgModule, Component } from '@angular/core';
+import { NgModule, Component } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 //importing components
@@ -7,13 +7,14 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
-import {RateReviewComponent} from './rate-review/rate-review.component';
+import { RateReviewComponent } from './rate-review/rate-review.component';
 import { PurchasesListComponent } from './purchases/purchases-list/purchases-list.component';
 //cars management components
 // import { ListComponent as CarsListComponent } from './cars/list/list.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { AccountVerifyComponent } from './account-verify/account-verify.component';
-import {ChangePasswordComponent} from  './change-password/change-password.component';
+import { CarBidsComponent } from './bids/car-bids/car-bids.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 //cars management components
 
@@ -108,7 +109,7 @@ const routes: Routes = [
     path: 'purchases',
     component: PurchasesListComponent,
     data: { title: 'My Purchases' },
-  },{
+  }, {
     path: 'dealerships-list',
     component: DealershipsListComponent,
     data: { title: 'Dealerships listing' },
@@ -119,15 +120,20 @@ const routes: Routes = [
     component: AccountVerifyComponent,
     data: { title: 'Account verify' },
   }, {
-    path: 'bid-listing',
+    path: 'dashboard',
     component: BidsListingComponent,
-    data: { title: "Cars Bids Listing" },
+    data: { title: "Dealer Dashboard" },
     canActivate: [DealerAuthGuardService]
   },
   {
-    path:'rate-review',
-    component:RateReviewComponent,
-    data:{title:'Dealer Rate and Review'}
+    path: 'rate-review',
+    component: RateReviewComponent,
+    data: { title: 'Dealer Rate and Review' }
+  },
+  {
+    path: 'car-bids/:id',
+    component: CarBidsComponent,
+    data: {title:'Dealer Car Bids'}
   }
 ];
 

@@ -221,7 +221,7 @@
 
 
 
-                                          <div formGroupName="location">
+                                          <div formGroupName="location" class="col-md-12">
                                               <div class="form-group">
                                                 <label>Zipcode*</label>
                                                 <input  (input)="fetchCityState($event.target.value)" mask="00000" class="form-control" type="text" placeholder="Enter Zipcode" formControlName="zipcode" [ngClass]="{ 'is-invalid': (signUpFormStep2.get('dealerships').get('location').get('zipcode').touched || step2submitted) && signUpFormStep2.get('dealerships').get('location').get('zipcode').errors }">

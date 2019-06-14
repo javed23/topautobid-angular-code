@@ -79,6 +79,14 @@ export class DealerService {
 
     }
 
+
+    public placeBid(postedData:any): Observable<any> {
+        postedData['dealer_id'] = localStorage.getItem('loggedinUserId');
+        return this.httpClient.post('dealer/createBid', postedData).map((response: any) => response);
+
+    }
+
+    
     
 
 }

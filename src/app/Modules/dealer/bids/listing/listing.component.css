@@ -8,3 +8,32 @@
         .feedback-modal_rating .feedback-buyer-description p {font-size: 17px;}
         .feedback-modal_rating .buyer-name-rating {width: 120px;text-align: center;font-size: 17px;margin-top: 10px;}
         .opac-1 {opacity: 1 !important;} */
+      
+
+        .submission_Btns {
+                margin: 18px 0 00 0;
+            }
+        .submission_Btns button {
+                margin: 0 3px;
+            }
+
+            .modal-header {
+                border: 0;
+                text-align: center;
+            }
+            .modal-title {
+                text-align: center;
+                display: block;
+                width: 100%;
+            }
+            .modal-body label {
+                font-size: 14px;
+                font-weight: 600;
+            }
+            .modal-body {
+                padding: 15px 50px;
+            }
+
+            .fa-gavel{
+                    color:#d90f22;
+            }

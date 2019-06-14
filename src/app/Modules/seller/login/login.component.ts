@@ -185,6 +185,17 @@ export class LoginComponent implements OnInit {
           }
            else if (response.body.is_multifactor_authorized) {
             this.loginByOtp();
+          } else if(response.body.carCount == 0){
+            this.toastr.successToastr(environment.MESSAGES.LOGIN_SUCCESS, 'Success!');//showing success toaster message
+            console.log('x-auth-token:' + response.headers.get('x-auth-token'))
+            //save to local storage
+            localStorage.setItem('loggedinUser', JSON.stringify(response.body))
+            localStorage.setItem('loggedinUserId', response.body._id)
+            localStorage.setItem('loggedinSellerUser', JSON.stringify(true))
+            localStorage.setItem('x-auth-token', response.headers.get('x-auth-token'))
+
+            this.userAuthService.isLoggedIn(true, 'Seller');//trigger loggedin observable 
+           this.router.navigate(['/seller/addcar'])
           }
 
           else {

@@ -64,6 +64,7 @@
                   </a>
                   <!-- drop down multilevel  -->
                   <ul class="drop-down-multilevel right-menu effect-fade" style="transition: all 400ms ease 0s;">
+                    <li *ngIf="loggedinUserType=='Dealer'"><a routerLink="/dealer/dashboard"> Dashboard</a></li>
                     <li>
                       <a *ngIf="loggedinUserType=='Seller'" routerLink="/seller/seller-profile">Profile</a>
                       <a *ngIf="loggedinUserType=='Dealer'" routerLink="/dealer/dealer-profile">Profile</a>
@@ -74,7 +75,7 @@
                     <li *ngIf="loggedinUserType=='Seller'"><a routerLink="/seller/rate-review"> Rate and Review</a></li>
                     <li *ngIf="loggedinUserType=='Dealer'"><a routerLink="/dealer/rate-review"> Rate and Review</a></li>
                     <li *ngIf="loggedinUserType=='Dealer'"><a routerLink="/dealer/dealerships-list"> Dealerships</a></li>
-                    <li *ngIf="loggedinUserType=='Dealer'"><a routerLink="/dealer/bid-listing"> Bids</a></li>
+                    
                     <li><a href="#" (click)="logout()"> Logout</a></li>
                   </ul>
                 </li>

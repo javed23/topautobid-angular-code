@@ -6,7 +6,7 @@ import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from 'ngx-gal
 import { TitleService, CarService, CommonUtilsService,DealerService } from '../../../../core/_services'
 import { PagedData, Car, Page } from "../../../../core/_models";
 import { environment } from '../../../../../environments/environment'
-
+import { untilDestroyed } from 'ngx-take-until-destroy';// unsubscribe from observables when the component destroyed
 
 declare let jQuery: any;
 declare let $: any;
@@ -31,6 +31,8 @@ export class ListingComponent implements OnInit {
   page = new Page(); //object of Page type  
   cars = new Array<Car>() //array of Car type 
 
+  submitted:boolean = false;
+
   currentPageLimit: number = environment.DEFAULT_RECORDS_LIMIT
   readonly pageLimitOptions = environment.DEFAULT_PAGE_LIMIT_OPTIONS
   private _defaultPagination = {
@@ -40,8 +42,8 @@ export class ListingComponent implements OnInit {
     pageSize: this.currentPageLimit
   }
   //title and breadcrumbs
-  readonly title: string = 'Bid Listing'
-  readonly breadcrumbs: any[] = [{ page: 'Home', link: '/dealer/home' }, { page: 'Bid Listing', link: '' }]
+  readonly title: string = 'Dealer Dashboard'
+  readonly breadcrumbs: any[] = [{ page: 'Home', link: '/dealer/home' }, { page: 'Dashboard', link: '' }]
 
 
   constructor(private dealerService:DealerService,private commonUtilsService: CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private titleService: TitleService) {
@@ -56,9 +58,10 @@ export class ListingComponent implements OnInit {
 
   private dealerBidForm() {
     this.bidForm = this.formBuilder.group({
-      dealership: [null, [ Validators.required]],
-      legal_contact: [null, [Validators.required]],
-      bid_price: [null]
+      car_id:[null,Validators.required],
+      dealership_id: ['', [ Validators.required]],
+      legal_contact: ['', [Validators.required]],
+      price: [null,[Validators.required,Validators.pattern(/^\d+$/)]]
     });
   }
 
@@ -67,7 +70,7 @@ export class ListingComponent implements OnInit {
     this.page.pageNumber = page.offset;
     this.page.size = page.pageSize;
     //hit api to fetch data
-    this.carService.listingCarsOnDatable(this.page).subscribe(
+    this.carService.listingCarsOnDatable(this.page).pipe(untilDestroyed(this)).subscribe(
 
       //case success
       (pagedData) => {
@@ -158,7 +161,7 @@ export class ListingComponent implements OnInit {
     */
   saveToWishList(carId: any) {
 
-    this.carService.saveCarInWishList({ carId: carId }).subscribe(response => {
+    this.carService.saveCarInWishList({ carId: carId }).pipe(untilDestroyed(this)).subscribe(response => {
       this.commonUtilsService.onSuccess('Your car has been moved to wishlist');
       this.setPage(this._defaultPagination);
 
@@ -175,7 +178,7 @@ export class ListingComponent implements OnInit {
     * @param $carId    carId is car id to hide the car
     */
   hideCar(carId: any) {
-    this.carService.hideCar({ carId: carId }).subscribe(response => {
+    this.carService.hideCar({ carId: carId }).pipe(untilDestroyed(this)).subscribe(response => {
       this.commonUtilsService.onSuccess('Your car has been hidden');
       this.setPage(this._defaultPagination);
     }, error => {
@@ -190,7 +193,7 @@ export class ListingComponent implements OnInit {
     * @param $carId    carId is car id to hide the car
     */
    unhideCar(carId: any) {
-    this.carService.unhideCar({ carId: carId }).subscribe(response => {
+    this.carService.unhideCar({ carId: carId }).pipe(untilDestroyed(this)).subscribe(response => {
       this.commonUtilsService.onSuccess('Your car has been hidden');
       this.setPage(this._defaultPagination);
     }, error => {
@@ -221,6 +224,10 @@ export class ListingComponent implements OnInit {
  */ 
   placeBid(car:any){
     this.getAllDealShips();
+    console.log('the car is is',car._id)
+    this.bidForm.patchValue({
+      car_id:car._id
+    })
     $(this.bidModal.nativeElement).modal({ backdrop: 'static', keyboard: false, show: true });
   }
 
@@ -230,7 +237,7 @@ export class ListingComponent implements OnInit {
    * get all dealer ships
    */
   getAllDealShips(){
-    this.dealerService.getAllDealShips().subscribe(response=>{
+    this.dealerService.getAllDealShips().pipe(untilDestroyed(this)).subscribe(response=>{
     this.dealerShips  = response;
     },error=>{
       this.commonUtilsService.onError(error);
@@ -238,22 +245,47 @@ export class ListingComponent implements OnInit {
     
   }
 
+  onSubmit(){
+    this.submitted = true;
+    if(this.bidForm.invalid)return;
+
+    this.dealerService.placeBid(this.bidForm.value).pipe(untilDestroyed(this)).subscribe(response=>{
+    this.commonUtilsService.onSuccess('The Bid has been Applied SuccessFully!');
+     this.bidForm.reset();
+
+    $(this.bidModal.nativeElement).modal('hide');
+    this.setPage(this._defaultPagination);
+    },error=>{
+      this.commonUtilsService.onError(error);
+    })
+  }
+
 /**after selecting the store assign legal contacts to legal contact array
  * @params value is the target value after selecting the dealership
  * return void
  */
   selectStore(value:any):void{
-    if(value >=0)this.legalContacts = this.dealerShips[value].legal_contacts;
+   let   pos = this.dealerShips.map(e=>e._id).indexOf(value);
+   console.log(pos)
+    if(pos >=0)this.legalContacts = this.dealerShips[pos].legal_contacts;
     else this.legalContacts = [];
   }
 
+
+/**
+ * will invoke on the discard of the bid
+ */
+  finishFunction(){
+  this.bidForm.reset();
+  }
   toggleExpandRow(row) {
-    console.log('Toggled Expand Row!', row);
     this.listingTable.rowDetail.toggleExpandRow(row);
   }
 
 
   onDetailToggle(event) {
-    console.log('Detail Toggled', event);
+  }
+  ngOnDestroy(){
+    
   }
 }

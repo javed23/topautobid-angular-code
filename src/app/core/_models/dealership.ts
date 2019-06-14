@@ -32,6 +32,7 @@ export class Dealership {
         this.mainaddressline1  =  object.mainaddressline1;
         this.mainaddressline2  =  object.mainaddressline2;
         this.city  =  object.location.city;
+        this.location =object.location;
         this.state  =  object.location.state;
         this.zip  =  object.location.zipcode;
         this.location = object.location;

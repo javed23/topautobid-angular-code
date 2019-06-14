@@ -274,7 +274,7 @@ set dealershipLocation(dealershipLocation: any){
     this.signUpFormStep1 = this.formBuilder.group({
       username: [null],
       name: this.formBuilder.group({
-        prefix: [''],
+        //prefix: [''],
         first_name: [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')])],
         last_name: [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')])],
 
@@ -310,9 +310,6 @@ set dealershipLocation(dealershipLocation: any){
         ])
       ],
       repassword: [null, Validators.compose([Validators.minLength(10),Validators.maxLength(50),Validators.required])],
-     /* state: ['', Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50),Validators.pattern('^[a-zA-Z ]*$')])],
-      city: [null, Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50),Validators.pattern('^[a-zA-Z ]*$')])],
-      zip: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])],*/
       location:this.formBuilder.group({
         zipcode: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])],
         state: ['', [Validators.required]],
