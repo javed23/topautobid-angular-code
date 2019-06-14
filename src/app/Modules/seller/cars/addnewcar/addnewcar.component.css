@@ -370,7 +370,7 @@ select:disabled {
     vertical-align: top;
 }
 
-.formCenterCol input:disabled {
+.formCenterCol input[readonly] {
     background: #f6f6f6;
     border-color: #f6f6f6!important;
 }
@@ -492,7 +492,7 @@ select:disabled {
 /*---------------------------*/
 h1{text-transform: none;}
 button{ cursor: pointer;}
-h2 {font-size:35px; color:#fff; padding-bottom:20px; text-align:center;text-transform: none;}
+app-addnewcar h2 {font-size:35px; color:#fff; padding-bottom:20px; text-align:center;text-transform: none;}
 .banner_col p.highlight {color: #fff;font-size: 24px;text-align: center;font-weight: 500;letter-spacing: 0.8px;margin-bottom:30px;}
 /*---------------------------*/
 h3 {padding-bottom:15px;}
@@ -505,7 +505,15 @@ h3 {padding-bottom:15px;}
 
 .formCenterCol h5 {padding-bottom: 0px;letter-spacing: 1.0px;font-weight: 500;font-size: 25px;text-transform: none;}
 .formCenterCol p {font-size:14px; padding:0px 0px 15px 0px; margin:0px; color:#7B7B7B;}
-.formCenterCol input[type="text"] {font-size: 16px;color: #7B7B7B;border: 1px solid #e3e3e3;padding: 15px;border-radius: 0px;width: 100%;margin: 10px 0px 20px 0px;display: block;margin: 0px auto;margin-bottom: 20px;}
+.formCenterCol input[type="text"] {font-size: 16px;color: #7B7B7B;border: 1px solid #e3e3e3;padding: 15px;border-radius: 0px;width: 100%;margin: 10px 0px 20px 0px;display: block;margin: 0px auto;margin-bottom: 4px;}
+.formCenterCol p.error_msg {
+    text-align: left;
+}
+
+.formCenterCol p.error_label app-form-validation-errors{
+max-width: 100%;
+}
+
 .formCenterCol .form-group label {
     text-align: left;
     color: #686a71;
@@ -562,7 +570,7 @@ ul li { list-style:none;}
 .form_col {padding:50px 0px;}
 .form_col h4 {font-size:20px; margin:0px; padding:0px 0px 10px 0px; color:#6E6E6E;letter-spacing: 0.8px;}
 .f_width {width:90%; padding:0px 0px 20px 0px; position:relative;}
-label {font-size:14px; width:100%; padding-bottom:10px; letter-spacing:0.7px; color:#696969; letter-spacing: 0.8px;}
+app-addnewcar label {font-size:14px; width:100%; padding-bottom:10px; letter-spacing:0.7px; color:#696969; letter-spacing: 0.8px;}
 /*----------------------------*/
 .vehicle_thumb_outer { padding-bottom:40px; display:inline-block; width:100%;}
 .vehicle_thumb {width: 400px;height: 180px;display: inline-block; overflow:hidden;}
@@ -981,6 +989,32 @@ p.note {font-size:13px;}
     object-fit: contain!important;
 }
 
+.search_result {
+    background: #eaffee;
+    color: #363636;
+    border: 1px dotted #a7ffb8;
+    padding: 15px 25px;
+    text-align: left;
+    margin: 25px 0;
+    font-size: 15px;
+}
+.search_result span {
+    margin-right: 5px;
+}
+
+.black_BTN {
+    background: #333333;
+}
+
+.submission_btns .grayBtn {
+    width: auto;
+    margin: 00 4px;
+    min-width: 230px;
+}
+.fields_section {
+    margin-bottom: 40px;
+}
+
 /*-----Please do not include any other css at the bottom of responsive css-------*/
 /*------------Responsive Css----------------*/
 /*----------------------------*/
@@ -1020,7 +1054,13 @@ p.note {font-size:13px;}
     .banner_col p.highlight {font-size: 14px; margin-bottom: 20px;}
     #pills-tabContent {padding: 20px; min-height: auto;}
     .formCenterCol h5 {padding-bottom:10px;font-size: 20px;}
-    .formCenterCol input[type="text"] {font-size: 13px;padding: 10px;max-width: 400px;width:100%;text-align: center;}
+    .formCenterCol input[type="text"] {
+        font-size: 13px;
+        padding: 10px;
+        max-width: 100%;
+        width: 100%;
+        text-align: left;
+    }
     .formCenterCol {min-height:auto;}
     .grayBtn {padding: 10px;max-width: 400px;width:100%;font-size: 15px;}
     .category_Box ul li {width: calc(25% - 6px);}
@@ -1035,7 +1075,6 @@ p.note {font-size:13px;}
     .detail_body .galler_box,.detail_body ul {margin: 10px 0 50px 0;}
     .f_width {width:100%;}
     .vehicle_thumb img {max-width:100%;}
-    p.error_label app-form-validation-errors {text-align:center;}
     .modal-content {padding: 10px 0px;}
     .thumbnail_list{
         width: calc(100% / 3);
@@ -1081,6 +1120,11 @@ p.note {font-size:13px;}
     .category_images ul li{
         width: calc(100% / 4) !important;
         height: 56px;
+    }
+
+    .radio_buttons .form-group input[type="radio"] + label {
+        padding: 13px;
+        width: 120px;
     }
 
 }
