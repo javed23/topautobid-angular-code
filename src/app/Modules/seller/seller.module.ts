@@ -37,6 +37,11 @@ import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.c
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { AccountVerifyComponent } from './account-verify/account-verify.component';
 import { ContactRequestComponent } from './cars/contact-request/contact-request.component';
+import { CarBidsComponent } from './cars/car-bids/car-bids.component';
+import { RateReviewComponent } from './rate-review/rate-review.component';
+import {ChangePasswordComponent} from  './change-password/change-password.component';
+
+//loader components
 import { EditCarComponent } from './cars/editcar/editcar.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
@@ -72,11 +77,15 @@ let config = new AuthServiceConfig([
     CarsGridListComponent,
     CarDetailPageComponent,
     AddCarComponent,
+    ContactRequestComponent,
+    CarBidsComponent,
+    RateReviewComponent,
     VerifyEmailComponent,
     AccountVerifyComponent,
     EditCarComponent,
     ContactRequestComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    ChangePasswordComponent
   ],
   
   imports: [

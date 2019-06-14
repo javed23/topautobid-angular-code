@@ -42,7 +42,7 @@
               <!-- menu logo -->
               <ul class="menu-logo">
                 <li>
-                  <a href="#"><img id="logo_dark_img" src="assets/images/logo-dark.png" alt="logo"> </a>
+                  <a href="#"><img id="logo_dark_img" src="assets/images/applogo.png" alt="logo"> </a>
                 </li>
               </ul>
               <!-- menu links -->
@@ -68,8 +68,11 @@
                       <a *ngIf="loggedinUserType=='Seller'" routerLink="/seller/seller-profile">Profile</a>
                       <a *ngIf="loggedinUserType=='Dealer'" routerLink="/dealer/dealer-profile">Profile</a>
                     </li>
+
                     <li *ngIf="loggedinUserType=='Seller'"><a routerLink="/seller/car-listing"> Cars Listing</a></li>
                     <li *ngIf="loggedinUserType=='Dealer'"><a routerLink="/dealer/car-listing"> Cars Listing</a></li>
+                    <li *ngIf="loggedinUserType=='Seller'"><a routerLink="/seller/rate-review"> Rate and Review</a></li>
+                    <li *ngIf="loggedinUserType=='Dealer'"><a routerLink="/dealer/rate-review"> Rate and Review</a></li>
                     <li *ngIf="loggedinUserType=='Dealer'"><a routerLink="/dealer/dealerships-list"> Dealerships</a></li>
                     <li *ngIf="loggedinUserType=='Dealer'"><a routerLink="/dealer/bid-listing"> Bids</a></li>
                     <li><a href="#" (click)="logout()"> Logout</a></li>

@@ -7,11 +7,13 @@ import { NgxMaskModule } from 'ngx-mask'
 import { NgbModule, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 import { ArchwizardModule } from 'angular-archwizard';
-import { DropzoneModule, DropzoneConfigInterface,
-  DROPZONE_CONFIG } from 'ngx-dropzone-wrapper';
+import {
+  DropzoneModule, DropzoneConfigInterface,
+  DROPZONE_CONFIG
+} from 'ngx-dropzone-wrapper';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { NgxPaginationModule } from 'ngx-pagination'; 
+import { NgxPaginationModule } from 'ngx-pagination';
 import { NgxGalleryModule } from 'ngx-gallery';
 
 
@@ -45,8 +47,11 @@ import { ContactViewComponent } from './dealerships/contact-view/contact-view.co
 import { DealershipViewComponent } from './dealerships/dealership-view/dealership-view.component';
 import { CreateDealershipComponent } from './dealerships/create-dealership/create-dealership.component';
 import { CreateContactComponent } from './dealerships/create-contact/create-contact.component';
+import { PurchasesListComponent } from './purchases/purchases-list/purchases-list.component';
+import {RateReviewComponent} from './rate-review/rate-review.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { AccountVerifyComponent } from './account-verify/account-verify.component';
+import {ChangePasswordComponent} from  './change-password/change-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 //cars management components
 import { ListingComponent as CarsGridListComponent } from './cars/grid-list-view/listing.component';
@@ -100,14 +105,15 @@ let config = new AuthServiceConfig([
   declarations: [
     LoginComponent,
     HomeComponent,
-    SignupComponent, 
-    ProfileComponent, 
-    ForgotPasswordComponent,   
+    SignupComponent,
+    ProfileComponent,
+    ForgotPasswordComponent,
     DealershipsListComponent,
     ContactViewComponent,
     DealershipViewComponent,
     CreateDealershipComponent,
     CreateContactComponent,
+    PurchasesListComponent,
     VerifyEmailComponent,
     AccountVerifyComponent  ,  
     CarsGridListComponent,
@@ -117,15 +123,20 @@ let config = new AuthServiceConfig([
     SortComponent,
     BidsListingComponent,
     DateFilterComponent,
-    ResetPasswordComponent
-  ],
+    ResetPasswordComponent,
+    RateReviewComponent,
+    ChangePasswordComponent
+  ]
+  ,
+
+
   imports: [
     CommonModule,
     DealerRoutingModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SocialLoginModule,
+    SocialLoginModule, 
     SharedModule,
     DropzoneModule,
     NgxMaskModule.forRoot(),

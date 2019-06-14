@@ -1,4 +1,4 @@
-import { NgModule, Component } from '@angular/core';
+ import { NgModule, Component } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 //importing components
@@ -7,8 +7,13 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import {RateReviewComponent} from './rate-review/rate-review.component';
+import { PurchasesListComponent } from './purchases/purchases-list/purchases-list.component';
+//cars management components
+// import { ListComponent as CarsListComponent } from './cars/list/list.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { AccountVerifyComponent } from './account-verify/account-verify.component';
+import {ChangePasswordComponent} from  './change-password/change-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 //cars management components
 
@@ -52,6 +57,11 @@ const routes: Routes = [
     data: { title: 'Dealer Forgot Pasword' }
   },
   {
+    path: 'change-password',
+    component: ChangePasswordComponent,
+    data: { title: 'Dealer Change Pasword' }
+  },
+  {
     path: 'reset-password/:token',
     component: ResetPasswordComponent,
     data: { title: 'Dealer Reset Pasword' }
@@ -85,6 +95,7 @@ const routes: Routes = [
     path: 'car-listing',
     component: CarsGridListComponent,
     data: { title: "Dealer's Cars listing" },
+    /*canActivate: [DealerAuthGuardService]*/
     canActivate: [DealerAuthGuardService]
   },
   {
@@ -94,6 +105,10 @@ const routes: Routes = [
     canActivate: [DealerAuthGuardService]
   },
   {
+    path: 'purchases',
+    component: PurchasesListComponent,
+    data: { title: 'My Purchases' },
+  },{
     path: 'dealerships-list',
     component: DealershipsListComponent,
     data: { title: 'Dealerships listing' },
@@ -109,6 +124,11 @@ const routes: Routes = [
     data: { title: "Cars Bids Listing" },
     canActivate: [DealerAuthGuardService]
   },
+  {
+    path:'rate-review',
+    component:RateReviewComponent,
+    data:{title:'Dealer Rate and Review'}
+  }
 ];
 
 @NgModule({

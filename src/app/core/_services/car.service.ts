@@ -3,7 +3,7 @@ import { Observable } from "rxjs";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/observable/of';
 import { delay } from "rxjs/operators";
-import { PagedData, Car, Page } from "../../core/_models";
+import { PagedData, Car, Page, Bid } from "../../core/_models";
 
 /**
  * A server used to mock a paged data result from a server
@@ -135,7 +135,7 @@ export class CarService {
                 return car;
             })
     }
-    
+
     /*
     * @param carData    car object to delete from database.
     * @return        Observable<any>
@@ -157,6 +157,34 @@ export class CarService {
     }
 
 
+    /*
+  * @param carId    car id to fetch data from database.
+  * @return        Observable<any>
+ */
+    public getCarBids(page: Page): Observable<PagedData<Bid>> {
+
+
+
+        return this.httpClient.post('car/getCarBids', page)
+            .map((response: any) => {
+                page.totalElements = response.count;
+                let pagedData = new PagedData<Bid>();
+                page.filteredElements = response.filteredRecords;
+                page.totalPages = page.totalElements / page.size;
+                for (let i in response.records) {
+                    let jsonObj = response.records[i];
+                    let bid = new Bid(jsonObj);
+                    pagedData.data.push(bid);
+                }
+                pagedData.page = page;
+                return pagedData;
+
+
+
+            })
+
+
+        }
 /*
 * Function to rate & review car by dealer
 * @param ratingReview    rating and review object
@@ -164,7 +192,7 @@ export class CarService {
 */
   public ratingReviewByDealer(ratingReview): Observable<any> {
       
-    ratingReview['dealer_id'] = localStorage.getItem('loggedinUserId') 
+    ratingReview['seller_id'] = localStorage.getItem('loggedinUserId') 
     return this.httpClient.post('car/ratingReviewByDealer', ratingReview)
         .map((response: any) => response)
 }
@@ -211,6 +239,7 @@ public fetchCarDetails(carIdObject): Observable<any> {
 
 
 
+    
 
 
 

@@ -16,7 +16,7 @@
        <div class="col-md-10">
          <div class="section-title">
            <span>Welcome to </span>
-           <h2>the TopAutoBid online</h2>
+           <h2>the CarsGoat online</h2>
            <div class="separator"></div>
          </div>
        </div>
@@ -121,7 +121,8 @@
              <div class="form-group">
                <label>Password* </label>
                <input [ngClass]="{ 'is-invalid': (signupForm.controls.password.touched || submitted) && signupForm.get('password').errors }"
-                 class="form-control" type="password" placeholder="Password" formControlName="password">
+               
+               class="form-control" type="password" placeholder="Password" formControlName="password">
                <p *ngIf="signupForm.controls.password.touched || submitted">
                  <app-form-validation-errors minLength=10 maxLength=50 errorPrefix="Password" [errors]="signupForm.get('password').errors"></app-form-validation-errors>
                </p>

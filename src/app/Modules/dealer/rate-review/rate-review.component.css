@@ -1,0 +1,16 @@
+.upload-profile-photo {width: 120px;height: 120px;border: 2px solid #8c8c8c;border-radius: 50%;display: inline-block;object-fit: cover;overflow: hidden;}
+        .upload-profile-photo >img {width: 100%;height: 100%;object-fit: cover;}
+        .feedback-header_bg {background: #db2d2e !important;margin: 0 !important;border-radius: 0 !important;align-items: center;box-shadow: 0px 2px 5px rgba(0,0,0,0.5);border-bottom: none !important;}
+        .mw-55 {max-width: 600px;width: 80% !important;}
+        .feedback-modal_rating .upload-profile-photo{box-shadow: 0px 0px 10px rgba(0,0,0,0.6);}
+        .feedback-modal_rating .Feedback-buyer-name {text-align: center;margin-top: 10px;}
+        .feedback-modal_rating .feedback-buyer-description textarea {resize: none;overflow: auto;margin-bottom: 15px;}
+        .feedback-modal_rating .feedback-buyer-description p {font-size: 17px;}
+        .feedback-modal_rating .buyer-name-rating {width: 120px;text-align: center;font-size: 17px;margin-top: 10px;}
+        .opac-1 {opacity: 1 !important;}
+
+
+        .ngx-datatable .datatable-body-cell{
+                overflow-x: visible !important;
+        }
+      

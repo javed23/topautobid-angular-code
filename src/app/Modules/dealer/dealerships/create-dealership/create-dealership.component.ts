@@ -64,16 +64,20 @@ export class CreateDealershipComponent implements OnInit {
     //fetching us states
     //this.fetchStates();
 
-    let zipcodeFormControl = this.newDealershipForm.controls.location.get('zipcode');
-    zipcodeFormControl.valueChanges    
-    .subscribe(zipcode => {  
-      this.newDealershipForm.controls.location.get('state').patchValue(''); 
-      this.newDealershipForm.controls.location.get('city').patchValue(''); 
-      ((zipcode) && zipcode.length==5)?this.fetchCityStateOfZipcode(zipcode):''
-    });
+    
 
   }
 
+  fetchCityState(zipcode){
+    
+    if((zipcode) && zipcode.length==5){
+      this.newDealershipForm.controls.location.get('state').patchValue(''); 
+      this.newDealershipForm.controls.location.get('city').patchValue(''); 
+      this.fetchCityStateOfZipcode(zipcode);
+    }
+      
+   
+  }
   /**
  * private function to fetch city and state information of entered zipcode
  * @param zipcode number(entered zipcode from clientside)
@@ -280,15 +284,9 @@ set dealerLocation(dealerLocation: any){
         city: ['', [Validators.required]],
 
       }), 
-
-      /*city: [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')])],
-      state: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')])],
-      zip: [null, Validators.compose([Validators.required, Validators.pattern('^[0-9]{5}$')])],*/
       profile_pic: [null],
       _id: [null],
-      dealer_id: [localStorage.getItem('loggedinUserId')],
-      // dealer_id: "5ca1e88f9dac60394419c0bc"
-
+      dealer_id: [localStorage.getItem('loggedinUserId')]
     });
   }
   // push new dealership item 
@@ -298,8 +296,7 @@ set dealerLocation(dealerLocation: any){
       this.submitted = true;
       return;
     }
-    this.newDealershipForm.get('dealer_id').setValue(localStorage.getItem('loggedinUserId'))
-    // this.newDealershipForm.get('dealer_id').setValue('5ca1e88f9dac60394419c0bc')    
+    this.newDealershipForm.get('dealer_id').setValue(localStorage.getItem('loggedinUserId'))  
     this.dealershipsItems.push(
       this.newDealershipForm.value
     );   
@@ -317,13 +314,14 @@ set dealerLocation(dealerLocation: any){
       $(".dz-image img").attr('src', dealerProfilePic);
     });
     this.newDealershipForm.patchValue(this.dealershipsItems[index])
+   
   }
 
   // update content of newely added dealership
   onUpdateExistingDealership() {
 
 
-    if (this.newDealershipForm.invalid) {
+    if (this.newDealershipForm.invalid) {     
       return;
     }
     this.onUpdateDealership.emit({ index: this.dealershipItemIndex, value: this.newDealershipForm.value });
@@ -345,7 +343,7 @@ set dealerLocation(dealerLocation: any){
         });
 
     this.IsForUpdate = false;
-    this.resetForm();
+    //this.resetForm();
   }
 
   // update content of newely added dealership

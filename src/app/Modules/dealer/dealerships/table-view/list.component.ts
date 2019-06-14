@@ -275,6 +275,7 @@ export class ListComponent implements OnInit, AfterViewInit {
       this.dealershipsItems.push(
         this.dealerships[index]
       );
+      console.log('dealershipsItems',this.dealershipsItems);
     }  
 
     // when view Dealership modal is called

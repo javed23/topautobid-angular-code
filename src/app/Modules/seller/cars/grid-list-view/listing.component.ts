@@ -785,6 +785,8 @@ uncheckAllFetchRecords(option, filter):void{
   }  
   
 }
+
+
 /**
   * To choose the option from year dropdown from leftside filters
   * @return  void

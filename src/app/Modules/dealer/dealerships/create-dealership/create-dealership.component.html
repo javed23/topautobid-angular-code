@@ -87,7 +87,7 @@
                  
                     <div class="form-group col-md-12">
                       <label>Zipcode*</label>
-                      <input  mask="00000" class="form-control" type="text" placeholder="Enter Zipcode" formControlName="zipcode" [ngClass]="{ 'is-invalid': (newDealershipForm.controls.location.get('zipcode').touched || submitted) && newDealershipForm.controls.location.get('zipcode').errors }">
+                      <input  mask="00000" (input)="fetchCityState($event.target.value)" class="form-control" type="text" placeholder="Enter Zipcode" formControlName="zipcode" [ngClass]="{ 'is-invalid': (newDealershipForm.controls.location.get('zipcode').touched || submitted) && newDealershipForm.controls.location.get('zipcode').errors }">
                       <p class="error_msg" *ngIf="newDealershipForm.controls.location.get('zipcode').touched || submitted">                      
                           <app-form-validation-errors minLength=2 maxLength=5 errorPrefix="Zip " patternError="Must enter valid zip code." [errors]="newDealershipForm.controls.location.get('zipcode').errors"></app-form-validation-errors>   
                       </p>

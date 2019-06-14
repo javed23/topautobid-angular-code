@@ -120,6 +120,10 @@ export class UserAuthService {
   }
 
 
+
+  
+
+
   sendSellerVerificationLink(postedData): Observable<any> {
 
     return this.httpClient
@@ -282,8 +286,31 @@ export class UserAuthService {
         return response;
       })
   }
+
+
   
+
+  dealerIsPasswordCorrect(postedData): Observable<any> {
+     postedData['id']=localStorage.getItem('loggedinUserId');
+    return this.httpClient
+      .post('dealer/PasswordCorrect', postedData)
+      .map((response: Response) => {
+        return response;
+      })
+  }
   
+
+
+  sellerIsPasswordCorrect(postedData): Observable<any> {
+    postedData['id']=localStorage.getItem('loggedinUserId');
+   return this.httpClient
+     .post('seller/PasswordCorrect', postedData)
+     .map((response: Response) => {
+       return response;
+     })
+   }
+
+
   updateDealerPassword(postedData): Observable<any> {
     //console.log('postedData',postedData);
     return this.httpClient
@@ -305,5 +332,22 @@ export class UserAuthService {
     //checking and redirecting to dealer dashboard page
     if(this.isDealerLoggedin())
       this.router.navigate(['/dealer/home']);
+  }
+
+
+  changePassword(postedData): Observable<any> {
+    let url ='seller/changePassword';
+
+    if (JSON.parse(localStorage.getItem("loggedinSellerUser"))) {
+      url = 'seller/changePassword';
+    } else if (JSON.parse(localStorage.getItem("loggedinDealerUser"))) {
+      url = 'dealer/changePassword'
+    }
+    return this.httpClient
+      .post(url, postedData)
+      .map((response: Response) => {
+        return response;
+      })
+
   }
 }

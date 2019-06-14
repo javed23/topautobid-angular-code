@@ -702,7 +702,12 @@ button {
 .form-group > label {
     text-transform: capitalize;
 }
-
+.underLine{
+        
+    text-decoration: none;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(0, 7, 0, 0.678);
+}
 @media screen and (max-width:767px) {
     .range_filter {
         margin: 0;

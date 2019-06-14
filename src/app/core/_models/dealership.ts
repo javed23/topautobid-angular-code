@@ -13,6 +13,7 @@ export class Dealership {
     dealer_id:any;
     profile_pic:string;
     created_at:any;
+    location:any;
     legal_contacts:[];
     
   
@@ -33,6 +34,7 @@ export class Dealership {
         this.city  =  object.location.city;
         this.state  =  object.location.state;
         this.zip  =  object.location.zipcode;
+        this.location = object.location;
         this.dealer_id  =  object.dealer_id;
         this.profile_pic = object.profile_pic;
         this.created_at = object.created_at
