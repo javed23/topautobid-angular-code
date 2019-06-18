@@ -8,6 +8,8 @@ export class Bid {
     buyer_rating:any;
     price:number;
     car:any;
+    bidId:any;
+    status:any;
 
 
 
@@ -20,6 +22,8 @@ constructor(object){
     this.buyer_rating = 2.5;
     this.bid_date = object.bid_date;
     this.price  = object.price;
-    this.car = object.car_id
+    this.car = object.car_id,
+    this.bidId =object._id;
+    this.status = object.bid_acceptance;
 }
 }

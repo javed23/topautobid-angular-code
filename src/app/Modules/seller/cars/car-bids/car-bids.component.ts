@@ -1,11 +1,12 @@
 import { Component, ViewChild, Input, ElementRef, ViewEncapsulation } from '@angular/core';
 import { CarService } from '../../../../core/_services/car.service';
 import { Bid } from '../../../../core/_models'
+import Swal from 'sweetalert2'
 declare let $: any; import { ToastrManager } from 'ng6-toastr-notifications';//toaster class
 //shared services
 import { AlertService, PageLoaderService } from '../../../../shared/_services'
 //import DealerService 
-import { TitleService, DealerService, CommonUtilsService } from '../../../../core/_services';
+import { TitleService, SellerService, CommonUtilsService } from '../../../../core/_services';
 //import models
 import { Page, Purchase } from "../../../../core/_models";
 import { Router, ActivatedRoute } from '@angular/router';
@@ -14,6 +15,7 @@ import * as _ from 'lodash';
 @Component({
   selector: 'app-car-bids',
   templateUrl: './car-bids.component.html',
+  styleUrls: ['./car-bids.component.css'],
   encapsulation: ViewEncapsulation.None
 })
 export class CarBidsComponent {
@@ -24,6 +26,7 @@ export class CarBidsComponent {
   bidEndDate: any;
   datesFilter: any = {};
   carId: any;
+  bidId: any;
   //title and breadcrumbs
   readonly title: string = 'Car Bid Listing';
   readonly breadcrumbs: any[] = [{ page: 'Home', link: '/dealer/home' }, { page: 'Car Bid Listing', link: '' }];
@@ -31,7 +34,7 @@ export class CarBidsComponent {
   //Defined records limit and records limit options
   currentPageLimit: number = environment.DEFAULT_RECORDS_LIMIT
   readonly pageLimitOptions = environment.DEFAULT_PAGE_LIMIT_OPTIONS
-  constructor(private route: ActivatedRoute, private carService: CarService, private router: Router, private commonUtilsService: CommonUtilsService, private titleService: TitleService, private pageLoaderService: PageLoaderService, private toastr: ToastrManager) {
+  constructor(private sellerService: SellerService, private route: ActivatedRoute, private carService: CarService, private router: Router, private commonUtilsService: CommonUtilsService, private titleService: TitleService, private pageLoaderService: PageLoaderService, private toastr: ToastrManager) {
 
   }
 
@@ -146,10 +149,10 @@ export class CarBidsComponent {
 
 
 
-      /**
-      * Populate the table with new data based on the sorting
-      * @param sortValue The sort object to select the records
-      */
+  /**
+  * Populate the table with new data based on the sorting
+  * @param sortValue The sort object to select the records
+  */
   sortCallback(sortValue: any): void {
     this.page.sortProperty = sortValue.sorts[0].prop;
     this.page.sortDirection = sortValue.sorts[0].dir;
@@ -167,5 +170,59 @@ export class CarBidsComponent {
     this.setPage(this._defaultPagination);
   }
 
+
+  /**
+   * accept bid will be invoked on accepting the bid
+   * @param bidId is the bid id 
+   */
+  acceptBid(bidId: any): void {
+    console.log('the bid id is', bidId);
+    this.bidId = bidId;
+    Swal.fire({
+      title: 'Are you sure you want to Accept this bid? ',
+      text: 'You will not be able to cancel it again!',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Accept it!',
+      cancelButtonText: 'No, keep it'
+    }).then((result) => {
+      if (result.value) {
+
+        this.submitBid();
+
+      
+        // For more information about handling dismissals please visit
+        // https://sweetalert2.github.io/#handling-dismissals
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire(
+          'Cancelled',
+          'Your imaginary file is safe :)',
+          'error'
+        )
+      }
+    })
+  };
+
+  /**
+   * will invoke when you confirm that accept the bid
+   */
+  private submitBid(): void {
+    let obj = {
+      bidId: this.bidId,
+      carId:this.bids[0].car._id
+    };
+    this.sellerService.acceptBid(obj).subscribe(response => {
+      // console.log('');
+     
+        Swal.fire(
+          'success!',
+          'Your bid  has been Accepted.',
+          'success'
+        );
+        this.setPage(this._defaultPagination);
+    },error=>{
+      this.commonUtilsService.onError(error)
+    })
+  }
 
 }

@@ -50,4 +50,11 @@ public saveDealerRating(postedData:any):Observable<any>{
 
 }
 
+
+public acceptBid(postedData:any):Observable<any>{
+    postedData['seller_id'] =  localStorage.getItem('loggedinUserId') ;
+    console.log(postedData)
+    return this.httpClient.post('car/acceptBid',postedData).map((response:any)=>response);
+
+}
 }

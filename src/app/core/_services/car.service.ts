@@ -54,9 +54,9 @@ export class CarService {
 
     public listingCarsOnDatable(page: Page): Observable<PagedData<Car>> {
 
-        page['dealer_id'] = localStorage.getItem('loggedinUserId')
+        page['seller_id'] = localStorage.getItem('loggedinUserId')
         // page['dealer_id'] = '5cf5ccb2307a6515e914c269'
-        return this.httpClient.post('car/getdealerCarListing', page)
+        return this.httpClient.post('car/listingCarsOnDatable', page)
             .map((response: any) => {
 
                 page.totalElements = response.count;
@@ -87,7 +87,7 @@ export class CarService {
         page['dealer_id'] = localStorage.getItem('loggedinUserId')
         // page['dealer_id'] = '5ca1e88f9dac60394419c0bc'
 
-        return this.httpClient.post('car/listingDealersCars', page)
+        return this.httpClient.post('car/getdealerCarListing', page)
             .map((response: any) => {
 
                 page.totalElements = response.count;

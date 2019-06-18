@@ -9,6 +9,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
+          <h3 class="left_tittle">Bids on - {{bids[0]?.car?.vehicle_year}} {{bids[0]?.car?.basic_info?.vehicle_make}} {{bids[0]?.car?.basic_info?.vehicle_model}}</h3>
         <div class="listing_outer blog-sidebar">
           <div class="sorting-options-main">
             <div class="row blog-sidebar listing_outer">
@@ -108,7 +109,9 @@
                 <ngx-datatable-column name="Action" prop="contact" [sortable]="true" [resizeable]="false"
                 [draggable]="false">
                   <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
-                    <span>Accept|Offer</span>
+                    <span *ngIf="row?.status == 'active'"><a class="underLine" (click)="acceptBid(row?.bidId)">Accept</a> <a class="underLine"></a></span>
+                    <span *ngIf="row?.status == 'accepted'">Accepted</span>
+                    <span *ngIf="row?.status == 'rejected'">Rejected</span>
                   </ng-template>
                 </ngx-datatable-column>
 
