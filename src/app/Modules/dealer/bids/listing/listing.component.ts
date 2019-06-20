@@ -7,7 +7,7 @@ import { TitleService, CarService, CommonUtilsService,DealerService } from '../.
 import { PagedData, Car, Page } from "../../../../core/_models";
 import { environment } from '../../../../../environments/environment'
 import { untilDestroyed } from 'ngx-take-until-destroy';// unsubscribe from observables when the component destroyed
-
+import Swal from 'sweetalert2/dist/sweetalert2.js'
 declare let jQuery: any;
 declare let $: any;
 declare let POTENZA: any;
@@ -267,16 +267,43 @@ export class ListingComponent implements OnInit {
     this.submitted = true;
     if(this.bidForm.invalid)return;
 
-    this.dealerService.placeBid(this.bidForm.value).pipe(untilDestroyed(this)).subscribe(response=>{
-    this.commonUtilsService.onSuccess('The Bid has been Applied SuccessFully!');
-     this.bidForm.reset();
-
-    $(this.bidModal.nativeElement).modal('hide');
-    this.setPage(this._defaultPagination);
-    },error=>{
-      this.commonUtilsService.onError(error);
-    })
+    this.confirmBid();
+    
   }
+
+/**
+ * 
+ * place bid confirmation
+ */
+
+ private confirmBid():void{
+  Swal.fire({
+    title: 'Are you sure you want to apply?',
+    text: 'You will not be able to revert this change!',
+    type: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, Apply!',
+    cancelButtonText: 'Cancel'
+  }).then((result) => {
+    if (result.value) {
+
+
+      this.dealerService.placeBid(this.bidForm.value).pipe(untilDestroyed(this)).subscribe(response=>{
+        this.commonUtilsService.onSuccess('The Bid has been Applied Successfully!');
+         this.bidForm.reset();
+    
+        $(this.bidModal.nativeElement).modal('hide');
+        this.setPage(this._defaultPagination);
+        },error=>{
+          this.commonUtilsService.onError(error);
+        })
+    }
+    
+  })
+  
+ }
+
+
 
 /**after selecting the store assign legal contacts to legal contact array
  * @params value is the target value after selecting the dealership

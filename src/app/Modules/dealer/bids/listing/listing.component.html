@@ -55,13 +55,15 @@
                       <ul>
                         <li [ngClass]="{ active: page.type=='all'}"> <button
                             (click)="onChangeListType('all')">Active</button></li>
+                        <li [ngClass]="{ active: page.type=='applied'}"><button (click)="onChangeListType('applied')">My
+                            Bids</button></li>
                         <li [ngClass]="{ active: page.type=='wishlist'}"><button
                             (click)="onChangeListType('wishlist')">WishList</button></li>
 
                         <li [ngClass]="{ active: page.type=='hidden'}"><button
                             (click)="onChangeListType('hidden')">Hidden</button></li>
-                        <li [ngClass]="{ active: page.type=='applied'}"><button
-                            (click)="onChangeListType('applied')">Applied</button></li>
+                        <li [ngClass]="{ active: page.type=='transactions'}"><button
+                            (click)="onChangeListType('transactions')">Transactions</button></li>
 
 
 
@@ -81,7 +83,10 @@
 
                     <app-date-filter (sendDate)="getDateFilter($event)"></app-date-filter>
                   </div>
+
+
                 </div>
+
               </div>
 
             </div>
@@ -416,8 +421,67 @@
 
                     <div class="row_detail col-md-12">
                       <div class="row_detail_inner">
+                        <div class="listing_section">
+                          <div class="container">
 
-                        <div class="row">
+                            <div class="row no-gutters">
+
+                              <div class="col-md-2">
+                                <div class="img_car">
+                                  <img src="{{row?.images[0]?.file_path}}">
+                                </div>
+                                <div class="thumbnail_text">
+                                  <h5>THUMBNAIL IMAGE</h5>
+                                </div>
+                              </div>
+
+                              <div class="col-md-5 border_class">
+                                <div class="bg_all">
+                                  <div class="d-flex justify-content-between border_bottom">
+                                    <div class="list_content text-center">Trim:</div>
+                                    <div class="list_content text-center">{{row.trim}}</div>
+                                  </div>
+                                  <div class="d-flex justify-content-between border_bottom">
+                                    <div class="list_content">Engine:</div>
+                                    <div class="list_content">{{row.engine}}</div>
+                                  </div>
+                                  <div class="d-flex justify-content-between border_bottom">
+                                    <div class="list_content text-center">Interior Material:</div>
+                                    <div class="list_content text-center">{{row?.interior_material}}</div>
+                                  </div>
+                                  <div class="d-flex justify-content-between border_bottom">
+                                    <div class="list_content text-center">Interior Color:</div>
+                                    <div class="list_content text-center">{{row?.interior_color}}</div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="col-md-5 border_class">
+                                <div class="bg_all">
+                                  <div class="d-flex justify-content-between border_bottom">
+                                    <div class="list_content text-center">Body:</div>
+                                    <div class="list_content text-center">{{row?.body_style}}</div>
+                                  </div>
+                                  <div class="d-flex justify-content-between border_bottom">
+                                    <div class="list_content text-center">Transmission:</div>
+                                    <div class="list_content text-center">{{row?.transmission}}</div>
+                                  </div>
+                                  <div class="d-flex justify-content-between border_bottom">
+                                    <div class="list_content text-center">Fuel Type:</div>
+                                    <div class="list_content text-center">{{row?.fuel_type}}</div>
+                                  </div>
+                                  <div class="d-flex justify-content-between border_bottom">
+                                    <div class="list_content text-center">Exterior Color:</div>
+                                    <div class="list_content text-center">{{row?.exterior_color}}</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                          </div>
+                        </div>
+
+                        <!-- <div class="row">
                           <div class="col-md-12">
                             <div class="vehicle_table_details">
 
@@ -450,7 +514,7 @@
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div> -->
 
 
                       </div>
@@ -487,12 +551,23 @@
                     {{ row?.trim }}
                   </ng-template>
                 </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Car Condition" [sortable]="true">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row?.vehicle_condition?.vehicle_condition_value }}
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Seller Distance" [sortable]="true">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    8787mile
+                  </ng-template>
+                </ngx-datatable-column>
 
                 <ngx-datatable-column [resizeable]="false" [draggable]="false" name="bids" prop="best_bid"
                   [sortable]="true">
                   <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
                     <!-- $<b>0.00</b> -->
-                    <b>{{row?.best_bid | currency:'USD':true:'2.2-2'}} </b>
+                    <b *ngIf="row?.higest_bid == row?.my_bid[0]?.price && page.type=='applied'" class="text-success">{{row?.my_bid[0]?.price | currency:'USD':true:'2.2-2'}} </b>
+                    <b *ngIf="row?.higest_bid > row?.my_bid[0]?.price && page.type=='applied'" class="text-warning">{{row?.my_bid[0]?.price | currency:'USD':true:'2.2-2'}} </b>
                     <span *ngIf="row?.bids" class="left_bids">
 
                       <button><a routerLink="/dealer/car-bids/{{row._id}}"> See all ({{row?.bids}})
@@ -502,13 +577,6 @@
 
 
 
-                <ngx-datatable-column *ngIf="page.type !='applied'" [resizeable]="false" [draggable]="false"
-                  name="Miles" prop="miles" [sortable]="true">
-                  <ng-template let-row="row" ngx-datatable-cell-template>
-                    {{ row.miles | number}}
-                    <!--<span class="left_time">10 Hrs 15 min left</span>-->
-                  </ng-template>
-                </ngx-datatable-column>
                 <ngx-datatable-column *ngIf="page.type =='applied'" [resizeable]="false" [draggable]="false"
                   name="My Bid" prop="miles" [sortable]="true">
                   <ng-template let-row="row" ngx-datatable-cell-template>
@@ -517,15 +585,15 @@
                   </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column *ngIf="page.type != 'applied'" [resizeable]="false" [draggable]="false"
-                  name="Created At" prop="created_at" [sortable]="true">
+                  name="Listed On" prop="created_at" [sortable]="true">
                   <ng-template let-row="row" ngx-datatable-cell-template>
-                    {{ row.created_at | date:'MMM d y h:mm'}}
+                    {{ row.created_at | date:'MM-dd-yy, h:mm a'}}
                   </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column *ngIf="page.type == 'applied'" [resizeable]="false" [draggable]="false"
                   name="Applied On" prop="bid_date" [sortable]="true">
                   <ng-template let-row="row" ngx-datatable-cell-template>
-                    {{ row?.dealers_bids[0]?.bid_date | date:'MMM d y h:mm'}}
+                    {{ row?.dealers_bids[0]?.bid_date | date:'MM-dd-yy, h:mm a'}}
                   </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column *ngIf="page.type == 'applied'" [resizeable]="false" [draggable]="false"
@@ -541,31 +609,52 @@
                       <!--<button type="button" (click)="show(rowIndex, 'car-view')">
                                       <i class="fa fa-eye" aria-hidden="true"></i>
                                   </button>-->
+
+
                       <a title="Car Detail" routerLink="/dealer/car-detail/{{row._id}}"><i class="fa fa-eye"></i></a>
+
+                      <a href="#" class="notification_icon">
+                        <span><i class="fa fa-bell" aria-hidden="true"></i></span>
+                        <span class="badge">3</span>
+                      </a>
 
                       <button *ngIf="page.type == 'all'" title="Move To WishList" type="button"
                         (click)="saveToWishList(row._id)">
                         <i class="fa fa-heart-o" aria-hidden="true"></i>
                       </button>
-                   
+
+
+
+
 
                       <button *ngIf="page.type == 'wishlist'" title="Hide Car from WishList" type="button"
                         (click)="moveFromWishList(row._id)">
                         <i class="fa fa-heart" aria-hidden="true"></i>
                       </button>
                       <button *ngIf="page.type == 'all' || page.type == 'wishlist'" title="Hide Car from Listing"
-                      type="button" (click)="hideCar(row._id)">
-                      <i class="fa fa-eye-slash" aria-hidden="true"></i>
-                    </button>
+                        type="button" (click)="hideCar(row._id)">
+                        <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                      </button>
+
+
+
+
                       <button *ngIf="page.type == 'hidden'" title="Unhide Car from Listing" type="button"
                         (click)="unhideCar(row._id)">
                         <i class="fa fa-minus-circle" aria-hidden="true"></i>
                       </button>
 
-                      <button *ngIf="page.type == 'all' || page.type == 'wishlist'" title="Place Bid"
-                        type="button" (click)="placeBid(row)">
+                      <button *ngIf="page.type == 'all' || page.type == 'wishlist'" title="Place Bid" type="button"
+                        (click)="placeBid(row)">
                         <i class="fa fa-gavel" aria-hidden="true"></i>
                       </button>
+
+                      <div class="col-md-12 text-right carfax_img">
+
+                        <img src="../../../../../assets//images/carfax_img.png">
+
+                      </div>
+
                     </span>
                   </ng-template>
                 </ngx-datatable-column>
@@ -623,13 +712,33 @@
       </div>
 
       <div class="modal-body">
+
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="modal_img">
+              <img src="{{car?.images[0]?.file_path}}">
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="right_content">
+              <h6>Year:<span>{{car?.year}}</span></h6>
+              <h6>Make:<span>{{car?.make}}</span></h6>
+              <h6>Model:<span>{{car?.model}}</span></h6>
+              <h6>Current Bid:<span>{{car?.bidPrice}}</span></h6>
+            </div>
+          </div>
+        </div>
+
+
         <form [formGroup]="bidForm">
           <div class="row ">
 
             <div class="col-md-12">
-              <div class="search_result">
+              <!-- <div class="search_result">
                 Suggested Price ${{car?.vehicle_finance_details?.vehicle_offer_in_hands_price}}
-              </div>
+              </div> -->
 
               <div class="selected-box auto-hight form-group w-100">
                 <label for="">Assign a DealerShip*</label>
@@ -642,8 +751,8 @@
                   </option>
                 </select>
                 <p *ngIf="bidForm.controls.dealership_id.touched || submitted">
-                  <app-form-validation-errors errorPrefix="Store name "
-                    [errors]="bidForm.get('dealership_id').errors"></app-form-validation-errors>
+                  <app-form-validation-errors errorPrefix="Store name " [errors]="bidForm.get('dealership_id').errors">
+                  </app-form-validation-errors>
                 </p>
               </div>
 
@@ -675,10 +784,9 @@
 
               <div class="form-group w-100">
                 <div class="submission_Btns text-center">
-                  <button class="button red black_BTN" type="button" (click)="finishFunction()">Discard
-                    Bid</button>
-                  <button class="button red" type="button" (click)="onSubmit()"> Submit
-                    Bid</button>
+                  <button class="button red" type="button" (click)="onSubmit()"> Apply</button>
+                  <button class="button red black_BTN" type="button" (click)="finishFunction()">Cancel</button>
+
                 </div>
               </div>
             </div>
