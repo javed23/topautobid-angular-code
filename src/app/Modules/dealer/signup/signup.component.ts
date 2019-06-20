@@ -314,7 +314,7 @@ set dealershipLocation(dealershipLocation: any){
         zipcode: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])],
         state: ['', [Validators.required]],
         city: ['', [Validators.required]],
-
+        coordinates:[null]
       }), 
       verified: [true],
       active: [true],     
@@ -333,7 +333,7 @@ set dealershipLocation(dealershipLocation: any){
           zipcode: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])],
           state: ['', [Validators.required]],
           city: ['', [Validators.required]],
-  
+          coordinates:[null]
         })
       })
     });

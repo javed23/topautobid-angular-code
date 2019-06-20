@@ -495,8 +495,12 @@
                     <b>{{row?.best_bid | currency:'USD':true:'2.2-2'}} </b>
                     <span *ngIf="row?.bids" class="left_bids">
 
-                      <button><a routerLink="/dealer/car-bids/{{row._id}}"> See all ({{row?.bids}})
-                          bids</a></button></span>
+                     <!-- <button><a routerLink="/dealer/car-bids/{{row._id}}"> See all ({{row?.bids}})
+                          bids</a></button>-->
+
+                          <button (click)="showBids(row._id)"> See all ({{row?.bids}})
+                            bids</button>
+                    </span>
                   </ng-template>
                 </ngx-datatable-column>
 
@@ -693,3 +697,4 @@
 </div>
 <!--=================================
  blog -->
+ <app-car-bids-popup (onClose)="hide($event)" [isOpen]="isBidListingModalOpen" [carId]="selectedCarId"></app-car-bids-popup>

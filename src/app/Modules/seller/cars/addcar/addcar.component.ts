@@ -1692,9 +1692,10 @@ constructor( private activatedRoute: ActivatedRoute, private zone:NgZone, privat
       .subscribe(
       (response) => { 
         if(!_.has(response,['status'])){
-          let cityState = response[0]['city_states'][0]        
+          let cityState = response[0]['city_states'][0]       
           cityState['latitude'] = response[0]['zipcodes'][0]['latitude']
-          cityState['longitude'] = response[0]['zipcodes'][0]['longitude']         
+          cityState['longitude'] = response[0]['zipcodes'][0]['longitude']           
+          cityState['coordinates'] = [response[0]['zipcodes'][0]['longitude'],response[0]['zipcodes'][0]['latitude']]     
           this.vehicleLocation =  cityState    
         }else{
           this.commonUtilsService.onError('Could not fetch city, state data for zipcode.');

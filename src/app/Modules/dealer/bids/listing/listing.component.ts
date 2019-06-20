@@ -20,7 +20,7 @@ declare let POTENZA: any;
 })
 export class ListingComponent implements OnInit {
   @ViewChild('listingTable') listingTable;
-  @ViewChild('bidModal') bidModal:ElementRef;
+  @ViewChild('bidModal') bidModal:ElementRef;  
 
   sectionEnable: string = 'list'
   sliderOptions: NgxGalleryOptions[];
@@ -31,7 +31,8 @@ export class ListingComponent implements OnInit {
   car:any;
   page = new Page(); //object of Page type  
   cars = new Array<Car>() //array of Car type 
-
+  selectedCarId:any;
+  isBidListingModalOpen:boolean = false;
   submitted:boolean = false;
 
   currentPageLimit: number = environment.DEFAULT_RECORDS_LIMIT
@@ -71,6 +72,7 @@ export class ListingComponent implements OnInit {
     this.page.pageNumber = page.offset;
     this.page.size = page.pageSize;
     //hit api to fetch data
+    this.commonUtilsService.showPageLoader();
     this.carService.listingDealersCars(this.page).pipe(untilDestroyed(this)).subscribe(
 
       //case success
@@ -90,7 +92,22 @@ export class ListingComponent implements OnInit {
 
   show(type) {
     this.sectionEnable = type
-    console.log('sectionEnable', this.sectionEnable);
+    console.log('sectionEnable', this.sectionEnable);    
+  }
+
+  showBids(carId):void {
+    this.isBidListingModalOpen = true;   
+    this.selectedCarId = carId
+  }
+
+/**
+* Reset modal popup to hide
+* @param isOpened    boolean value 
+* @return void
+*/
+  hide(isOpened:boolean):void{
+    this.isBidListingModalOpen = isOpened; //set to false which will reset modal to show on click again
+    this.selectedCarId = '';
   }
 
   /**

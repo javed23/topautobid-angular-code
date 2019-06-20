@@ -73,7 +73,7 @@ export class SignupComponent implements OnInit {
     .subscribe(zipcode => {  
       this.signupForm.controls.location.get('state').patchValue(''); 
       this.signupForm.controls.location.get('city').patchValue(''); 
-      (zipcode.length==5)?this.fetchCityStateOfZipcode(zipcode):''
+      (zipcode && zipcode.length==5)?this.fetchCityStateOfZipcode(zipcode):''
     });
     
   }
@@ -147,7 +147,7 @@ set sellerLocation(sellerLocation: any){
         zipcode: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])],
         state: [null],
         city: [null],
-
+        coordinates:[null]
       }),   
       phones: this.formBuilder.array([], Validators.required),
       emails: this.formBuilder.array([], Validators.required),
