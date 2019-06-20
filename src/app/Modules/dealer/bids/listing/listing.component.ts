@@ -71,7 +71,7 @@ export class ListingComponent implements OnInit {
     this.page.pageNumber = page.offset;
     this.page.size = page.pageSize;
     //hit api to fetch data
-    this.carService.listingCarsOnDatable(this.page).pipe(untilDestroyed(this)).subscribe(
+    this.carService.listingDealersCars(this.page).pipe(untilDestroyed(this)).subscribe(
 
       //case success
       (pagedData) => {
