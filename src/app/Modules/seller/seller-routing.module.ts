@@ -20,6 +20,9 @@ import { AccountVerifyComponent } from './account-verify/account-verify.componen
 import { EditCarComponent } from './cars/editcar/editcar.component';
 import {ChangePasswordComponent} from  './change-password/change-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { AddNewCarComponent } from './cars/addnewcar/addnewcar.component';
+
+
 //importing guards
 import { SellerAuthGuardService } from '../../core/guards/seller-auth-guard.service';
 
@@ -100,6 +103,12 @@ const routes: Routes = [
   {
     path: 'addcar',
     component: AddCarComponent,
+    data: { title: 'Seller AddCar' },
+    canActivate: [SellerAuthGuardService]
+  },
+  {
+    path: 'addnewcar',
+    component: AddNewCarComponent,
     data: { title: 'Seller AddCar' },
     canActivate: [SellerAuthGuardService]
   },

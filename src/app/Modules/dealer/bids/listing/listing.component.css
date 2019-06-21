@@ -1,21 +1,26 @@
-/* .upload-profile-photo {width: 120px;height: 120px;border: 2px solid #8c8c8c;border-radius: 50%;display: inline-block;object-fit: cover;overflow: hidden;}
-        .upload-profile-photo >img {width: 100%;height: 100%;object-fit: cover;}
-        .feedback-header_bg {background: #db2d2e !important;margin: 0 !important;border-radius: 0 !important;align-items: center;box-shadow: 0px 2px 5px rgba(0,0,0,0.5);border-bottom: none !important;}
-        .mw-55 {max-width: 600px;width: 80% !important;}
-        .feedback-modal_rating .upload-profile-photo{box-shadow: 0px 0px 10px rgba(0,0,0,0.6);}
-        .feedback-modal_rating .Feedback-buyer-name {text-align: center;margin-top: 10px;}
-        .feedback-modal_rating .feedback-buyer-description textarea {resize: none;overflow: auto;margin-bottom: 15px;}
-        .feedback-modal_rating .feedback-buyer-description p {font-size: 17px;}
-        .feedback-modal_rating .buyer-name-rating {width: 120px;text-align: center;font-size: 17px;margin-top: 10px;}
-        .opac-1 {opacity: 1 !important;} */
-      
+app-listing .submission_Btns {
+    margin: 18px 0 00 0;
+}
+app-listing .submission_Btns button {
+    margin: 0 3px;
+}
 
-        .submission_Btns {
-                margin: 18px 0 00 0;
-            }
-        .submission_Btns button {
-                margin: 0 3px;
-            }
+app-listing .modal-header {
+    border: 0;
+    text-align: center;
+}
+app-listing .modal-title {
+    text-align: center;
+    display: block;
+    width: 100%;
+}
+app-listing .modal-body label {
+    font-size: 14px;
+    font-weight: 600;
+}
+app-listing .modal-body {
+    padding: 15px 50px;
+}
 
             .modal-header {
                 border: 0;
@@ -107,7 +112,7 @@
 }
 
 .right_content h6 span {
-    text-transform: capitalize;
+    /* text-transform: capitalize; */
     margin-left: 10px;
     color: #333;
     font-weight: 400;
@@ -138,4 +143,15 @@ datatable-header-cell, datatable-body-cell {
 
 datatable-body-row , datatable-body-cell{
     height: auto!important;
+}
+app-listing .fa-gavel{
+        color:#d90f22;
+}
+/* app-listing datatable-body-cell:nth-child(5), datatable-header-cell:nth-child(5) {
+    width: 340px!important;
+} */
+.ngx-datatable.bootstrap .datatable-header .datatable-header-cell {
+    padding: 10px 8px;
+    border-bottom: 0px solid #d1d4d7;
+    font-size: 14px;
 }

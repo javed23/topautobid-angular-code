@@ -65,6 +65,7 @@ import { FilterComponent } from './bids/filter/filter.component';
 import { SortComponent } from './bids/sort/sort.component';
 import { ListingComponent as BidsListingComponent} from './bids/listing/listing.component';
 import { DateFilterComponent } from './bids/date-filter/date-filter.component';
+import { CarBidsPopupComponent } from './bids/car-bids-popup/car-bids-popup.component';
 
 
 
@@ -127,7 +128,8 @@ let config = new AuthServiceConfig([
     ResetPasswordComponent,
     RateReviewComponent,
     ChangePasswordComponent,
-    CarBidsComponent
+    CarBidsComponent,
+    CarBidsPopupComponent
   ]
   ,
 

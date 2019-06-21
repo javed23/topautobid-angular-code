@@ -1,13 +1,13 @@
 import { Component, ViewChild, Input, ElementRef, ViewEncapsulation } from '@angular/core';
 import { CarService } from '../../../../core/_services/car.service';
-import { Bid } from '../../../../core/_models'
+
 declare let $: any; import { ToastrManager } from 'ng6-toastr-notifications';//toaster class
 //shared services
 import { AlertService, PageLoaderService } from '../../../../shared/_services'
 //import DealerService 
 import { TitleService, DealerService, CommonUtilsService } from '../../../../core/_services';
 //import models
-import { Page, Purchase } from "../../../../core/_models";
+import { Page, Purchase, Bid } from "../../../../core/_models";
 import { Router, ActivatedRoute } from '@angular/router';
 import { environment } from '../../../../../environments/environment';
 import * as _ from 'lodash';

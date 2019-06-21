@@ -297,8 +297,20 @@ export class ListingComponent implements OnInit {
         },error=>{
           this.commonUtilsService.onError(error);
         })
+      // Swal.fire(
+      //   'Applied!',
+      //   'You have applied successfully!.',
+      //   'success'
+      // )
+    // For more information about handling dismissals please visit
+    // https://sweetalert2.github.io/#handling-dismissals
+    } else if (result.dismiss === Swal.DismissReason.cancel) {
+      // Swal.fire(
+      //   'Cancelled',
+      //   'Your  file is safe :)',
+      //   'error'
+      // )
     }
-    
   })
   
  }
@@ -322,6 +334,7 @@ export class ListingComponent implements OnInit {
  */
   finishFunction(){
   this.bidForm.reset();
+  $(this.bidModal.nativeElement).modal('close');
   }
   toggleExpandRow(row) {
     this.listingTable.rowDetail.toggleExpandRow(row);

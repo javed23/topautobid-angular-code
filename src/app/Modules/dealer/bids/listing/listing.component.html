@@ -56,7 +56,7 @@
                         <li [ngClass]="{ active: page.type=='all'}"> <button
                             (click)="onChangeListType('all')">Active</button></li>
                         <li [ngClass]="{ active: page.type=='applied'}"><button (click)="onChangeListType('applied')">My
-                            Bids</button></li>
+                           Active Bids</button></li>
                         <li [ngClass]="{ active: page.type=='wishlist'}"><button
                             (click)="onChangeListType('wishlist')">WishList</button></li>
 
@@ -558,7 +558,7 @@
                 </ngx-datatable-column>
                 <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Seller Distance" [sortable]="true">
                   <ng-template let-row="row" ngx-datatable-cell-template>
-                    8787mile
+                    432 Mi
                   </ng-template>
                 </ngx-datatable-column>
 
@@ -568,10 +568,18 @@
                     <!-- $<b>0.00</b> -->
                     <b *ngIf="row?.higest_bid == row?.my_bid[0]?.price && page.type=='applied'" class="text-success">{{row?.my_bid[0]?.price | currency:'USD':true:'2.2-2'}} </b>
                     <b *ngIf="row?.higest_bid > row?.my_bid[0]?.price && page.type=='applied'" class="text-warning">{{row?.my_bid[0]?.price | currency:'USD':true:'2.2-2'}} </b>
+                    <b *ngIf="row?.bids == 0" class="">{{00 | currency:'USD':true:'2.2-2'}} </b>
                     <span *ngIf="row?.bids" class="left_bids">
 
-                      <button><a routerLink="/dealer/car-bids/{{row._id}}"> See all ({{row?.bids}})
-                          bids</a></button></span>
+                     <!-- <button><a routerLink="/dealer/car-bids/{{row._id}}"> See all ({{row?.bids}})
+                          bids</a></button>-->
+
+
+                          <button *ngIf="row?.bids == 1" (click)="showBids(row._id)"> See  ({{row?.bids}})
+                            bid</button>
+                          <button *ngIf="row?.bids >1" (click)="showBids(row._id)"> See all ({{row?.bids}})
+                            bids</button>
+                    </span>
                   </ng-template>
                 </ngx-datatable-column>
 
@@ -587,13 +595,13 @@
                 <ngx-datatable-column *ngIf="page.type != 'applied'" [resizeable]="false" [draggable]="false"
                   name="Listed On" prop="created_at" [sortable]="true">
                   <ng-template let-row="row" ngx-datatable-cell-template>
-                    {{ row.created_at | date:'MM-dd-yy, h:mm a'}}
+                    {{ row.created_at | date:'MM-dd-yyyy, h:mm a'}}
                   </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column *ngIf="page.type == 'applied'" [resizeable]="false" [draggable]="false"
                   name="Applied On" prop="bid_date" [sortable]="true">
                   <ng-template let-row="row" ngx-datatable-cell-template>
-                    {{ row?.dealers_bids[0]?.bid_date | date:'MM-dd-yy, h:mm a'}}
+                    {{ row?.dealers_bids[0]?.bid_date | date:'MM-dd-yyyy, h:mm a'}}
                   </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column *ngIf="page.type == 'applied'" [resizeable]="false" [draggable]="false"
@@ -726,7 +734,7 @@
               <h6>Year:<span>{{car?.year}}</span></h6>
               <h6>Make:<span>{{car?.make}}</span></h6>
               <h6>Model:<span>{{car?.model}}</span></h6>
-              <h6>Current Bid:<span>{{car?.bidPrice}}</span></h6>
+              <!-- <h6>Current Bid:<span>{{car?.bidPrice}}</span></h6> -->
             </div>
           </div>
         </div>
@@ -751,8 +759,8 @@
                   </option>
                 </select>
                 <p *ngIf="bidForm.controls.dealership_id.touched || submitted">
-                  <app-form-validation-errors errorPrefix="Store name " [errors]="bidForm.get('dealership_id').errors">
-                  </app-form-validation-errors>
+                  <app-form-validation-errors errorPrefix="Dealership "
+                    [errors]="bidForm.get('dealership_id').errors"></app-form-validation-errors>
                 </p>
               </div>
 
@@ -801,3 +809,4 @@
 </div>
 <!--=================================
  blog -->
+ <app-car-bids-popup (onClose)="hide($event)" [isOpen]="isBidListingModalOpen" [carId]="selectedCarId"></app-car-bids-popup>

@@ -157,7 +157,7 @@ export class CarService {
     }
 
 
-    /*
+/*
   * @param carId    car id to fetch data from database.
   * @return        Observable<any>
  */
@@ -185,6 +185,20 @@ export class CarService {
 
 
     }
+
+    /*
+  * @param carId    car id to fetch data from database.
+  * @return        Observable<any>
+ */
+public listingCarBids(carObject): Observable<PagedData<Bid>> {
+
+
+
+    return this.httpClient.post('car/listingCarBids', carObject)
+        .map((response: any) => response)
+
+
+}
     /*
     * Function to rate & review car by dealer
     * @param ratingReview    rating and review object
