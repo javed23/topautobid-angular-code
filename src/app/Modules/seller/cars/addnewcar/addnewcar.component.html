@@ -70,7 +70,7 @@
                                     
                                     <div class="col-md-12">
                                         <div class="form-group gray_box">
-                                                <input type="text" #vin_number mask="A{17}" placeholder="Enter VIN*" [ngClass]="{ 'is-invalid': (vehicleOption.controls.vin_number.touched || isVehicleOptionSubmitted) && vehicleOption.controls.vin_number.errors }" formControlName="vin_number"/> 
+                                                <input type="text" #vin_number mask="A{17}" placeholder="Enter VIN*" [ngClass]="{ 'is-invalid': (vehicleOption.controls.vin_number.touched || isVehicleOptionSubmitted) && vehicleOption.controls.vin_number.errors }" formControlName="vin_number" [value]="vin_number.value.toUpperCase()" /> 
                                                 <p class="error_label" *ngIf="vehicleOption.controls.vin_number.touched || isVehicleOptionSubmitted">                      
                                                     <app-form-validation-errors minLength=17 maxLength=17 errorPrefix="VIN " [errors]="vehicleOption.controls.vin_number.errors"></app-form-validation-errors>   
                                                 </p>
@@ -374,14 +374,15 @@
 
                                         <div class="select_type_tab category_Box">
                                             <ul>
+                                                <li>
+                                                        <input type="radio" (click)="checkVehicleImageCatgeory('Exterior')" formControlName="vehicle_image_category_name"  value="Exterior" id="Exterior">
+                                                        <label for="Exterior">Exterior</label>
+                                                </li>
                                                 <li >
                                                     <input type="radio" (click)="checkVehicleImageCatgeory('Interior')" formControlName="vehicle_image_category_name"  value="Interior" id="Interior">
                                                     <label for="Interior">Interior</label>
                                                 </li> 
-                                                <li>
-                                                        <input type="radio" (click)="checkVehicleImageCatgeory('Exterior')" formControlName="vehicle_image_category_name"  value="Exterior" id="Exterior">
-                                                        <label for="Exterior">Exterior</label>
-                                                </li> 
+                                                 
                                             </ul>
                                         </div>
 

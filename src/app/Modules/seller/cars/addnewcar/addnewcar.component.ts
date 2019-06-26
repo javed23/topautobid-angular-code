@@ -109,7 +109,7 @@ export class AddNewCarComponent implements OnInit {
   isOtherInteriorColorSelected:boolean = false;
   isOtherExteriorColorSelected:boolean = false;
 
-  vehicleImageCategory:string = "Interior";
+  vehicleImageCategory:string = "Exterior";
   exteriorColor:string = "Black";
   interiorColor:string = "Black";
   vehicleImageCategoryOnSummary:string = "all";
@@ -280,7 +280,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   */
   private uploadVehicleImages(){
     this.uploadVehicleImagesWizard = this.formBuilder.group({  
-      vehicle_image_category_name: ['Interior'],                
+      vehicle_image_category_name: ['Exterior'],                
       vehicle_images: this.formBuilder.array([])
     });
   }  
