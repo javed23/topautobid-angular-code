@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from 'ngx-gallery';
-
+import {Location} from '@angular/common';
 //modules services, models and enviornment file
 import { TitleService, CarService, CommonUtilsService } from '../../../../core/_services'
 
@@ -29,7 +29,7 @@ export class CarDetailPageComponent implements OnInit {
   title: string = 'Car Detail';
   breadcrumbs: any[] = [{ page: 'Home', link: '' }, { page: "Car Listing", link: '/dealer/car-listing' }, { page: 'Car Detail', link: '' }]
 
-  constructor(private activatedRoute: ActivatedRoute, private carService: CarService, private commonUtilsService: CommonUtilsService, private titleService:TitleService) {
+  constructor(private _location:Location, private activatedRoute: ActivatedRoute, private carService: CarService, private commonUtilsService: CommonUtilsService, private titleService:TitleService) {
     
     //setting the page title
     this.titleService.setTitle();
@@ -164,5 +164,11 @@ show():void {
   this.isOpen = isOpened; //set to false which will reset modal to show on click again
 }
 
+/**
+ * go back to the location from where it came on this page
+ */
+goBack(){
+  this._location.back();
+}
 
 }

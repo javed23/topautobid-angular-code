@@ -42,6 +42,9 @@ export class ListComponent implements AfterViewInit {
   isModalOpen:boolean=false;
   isBidsModalOpen:boolean=false;
   isFiltersModalOpen:boolean=false;
+  selectedCarId:any;
+  isBidListingModalOpen:boolean = false;
+
   datesFilter:any = {};
   dateFilterForm:FormGroup
   //Defined records limit and records limit options
@@ -301,22 +304,33 @@ onSort(event) {
   * @param index    array index of selected car
   * @param type     which modal popup should show
   * Before delete, system confirm to delete the car. If yes opted then process deleting car else no action;
-  */
-    show(carId):void {
-      this.router.navigate(['/seller/car-bids',carId])
+  // */
+  //   show(carId):void {
+  //     this.router.navigate(['/seller/car-bids',carId])
     
 
-      // this.isBidsModalOpen = true 
-      // this.carId = carId
-    }
+  //     // this.isBidsModalOpen = true 
+  //     // this.carId = carId
+  //   }
 
+
+
+
+    show(carId):void {
+  console.log('the ji')
+
+      this.isBidListingModalOpen = true;   
+      this.selectedCarId = carId
+    }
   /**
   * Reset modal popup to hide
   * @param isOpened    boolean value 
   * @return void
-  */
+  */  
     hide(isOpened:boolean):void{
-      this.isModalOpen = isOpened; //set to false which will reset modal to show on click again
+      console.log('hiiii',isOpened);
+      this.isModalOpen = isOpened
+      this.isBidListingModalOpen = isOpened; //set to false which will reset modal to show on click again
     }
 
   /**
@@ -408,4 +422,16 @@ onSort(event) {
       // To protect you, we'll throw an error if it doesn't exist.
     }
 
+/**
+ * 
+ * @param $event is the true value if the bid accept successfully!
+ */
+    acceptBid($event){
+
+      if($event){
+        this.isModalOpen = false
+        this.isBidListingModalOpen = false; //set to false which will reset modal to sho
+      }
+
+    }
 }

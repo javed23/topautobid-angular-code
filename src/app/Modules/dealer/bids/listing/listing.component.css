@@ -44,8 +44,12 @@ app-listing .modal-body {
             }
 
             /* ----------------- */
+            .carfax_img{
+                display: inline-block;
+                margin-left: 10px;
+            }
             .carfax_img img {
-                width: auto;
+                width: 80px;
                 max-width: 100%;
             }
             notification_icon span i{
@@ -75,13 +79,14 @@ app-listing .modal-body {
 
     width: 100%;
     height: 100%;
+    border: 1px solid #e2e2e2;
 
 }
 .img_car img {
     position:relative;
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
 
 }
 .bg_al{background:#f1f2f2;}
@@ -109,10 +114,11 @@ app-listing .modal-body {
 }
 .right_content h6 {
     font-size: 12px;
+    text-transform: capitalize !important;
 }
 
 .right_content h6 span {
-    /* text-transform: capitalize; */
+    text-transform: capitalize !important;
     margin-left: 10px;
     color: #333;
     font-weight: 400;
@@ -123,19 +129,24 @@ app-listing .modal-body {
 .orange_color{
     color: #FF8C00
 }
+datatable-body-cell:last-child, datatable-header-cell:last-child {
+    width: 160px!important;
+}
 
-/* datatable-header-cell:nth-child(2), datatable-body-cell:nth-child(2) {
-    width: 80px!important;
+.notification_icon {
+    position: relative;
 }
-datatable-header-cell:nth-child(3), datatable-body-cell:nth-child(3) {
-    width: 100px!important;
+.notification_icon .badge {
+    position: absolute;
+    top: -2px;
+    left: 9px;
+    min-width: 15px;
+    min-height: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-datatable-header-cell:nth-child(8), datatable-body-cell:nth-child(8) {
-    width: 100px!important;
-}
-datatable-header-cell:nth-child(10), datatable-body-cell:nth-child(10) {
-    width: 200px!important;
-} */
+
 datatable-header-cell, datatable-body-cell {
     white-space: pre-wrap!important;
     word-break: break-word;
@@ -147,11 +158,37 @@ datatable-body-row , datatable-body-cell{
 app-listing .fa-gavel{
         color:#d90f22;
 }
-/* app-listing datatable-body-cell:nth-child(5), datatable-header-cell:nth-child(5) {
-    width: 340px!important;
-} */
+
 .ngx-datatable.bootstrap .datatable-header .datatable-header-cell {
     padding: 10px 8px;
     border-bottom: 0px solid #d1d4d7;
     font-size: 14px;
+}
+
+#bidModal .modal_img {
+    width: auto;
+    max-width: 160px;
+    border: 1px solid #eaeaea;
+    height: auto;
+    margin: auto;
+}
+.make_model {
+    text-decoration: underline;
+    font-weight: 600;
+    display: block;
+    text-align: center;
+    margin: 10px 0;
+    color: #272727;
+}
+#bidModal .close
+{
+    position: absolute;
+    right: 22px;
+}
+.btn_apply{
+    background-color: #129012;
+    color: #fff;
+    border-radius: 4px;
+    padding: 3px;
+    cursor: pointer;
 }

@@ -26,7 +26,8 @@
                           <th>Legal Contact</th>
                           <th>Price</th>
                           <th>Buyer Rating</th>
-                          <th>Applied On</th>                          
+                          <th>Applied On</th>      
+                          <th>Action</th>                          
                         </tr>
                       </thead>
                       <tbody *ngIf="bids?.length <= 0">
@@ -43,12 +44,13 @@
                           <td>{{bid?.dealer[0]?.name?.first_name}} {{bid?.dealer[0]?.name.last_name}}</td>
                           <td>{{ bid?.dealership[0]?.legalcoroporationname}}</td>
                           <td>{{ bid.bids[bid.bids.length-1]?.legal_contact}} </td>
-                          <td>{{ bid.bids[bid.bids.length-1]?.price | currency:'USD':true:'2.2-2'}}</td>              
+                          <td>{{ bid.bids[bid.bids.length-1]?.price | currency:'USD':true:'2.2-2'}}</td>             
                           <td>
                               <ngb-rating [readonly]="true" aria-labelledby="Rating & Review" [max]="5" [rate]="bid?.dealer_rating_average">
                                 </ngb-rating>
                                 <span class="rating-number">({{bid?.dealer_rating_average}}/5)</span></td>
-                          <td> {{bid.bids[bid.bids.length-1]?.bid_date | date:'MM-dd-yyyy'}}</td>                        
+                          <td> {{ bid?.bids[bid.bids.length-1]?.bid_date | date:'MM-dd-yyyy'}}</td>  
+                          <td> <span class="accept_btn" (click)="acceptBid(bid?._id)">Accept</span></td>                         
                         </tr>
 
                       </tbody>
