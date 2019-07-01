@@ -96,7 +96,7 @@ export class Car {
         this.dealers_bids = object.dealers_bids;
         this.vehicle_finance_details = object.vehicle_finance_details
         this.vehicle_condition = object.vehicle_condition;
-        this.my_bid = object.my_bid ?object.my_bid[0].bids:[];
+        this.my_bid = object.my_bid.length >0 ?object.my_bid[0].bids:[];
         this.higest_bid = object.higest_bid ? object.higest_bid :null;
         this.seller_distance = (object.distance)?object.distance : 0
         
