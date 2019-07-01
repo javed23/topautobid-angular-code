@@ -550,12 +550,22 @@
                 </ngx-datatable-column>
                 <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Trim" [sortable]="true">
                   <ng-template let-row="row" ngx-datatable-cell-template>
-                    {{ row?.trim }}
+                    {{ row?.trim | slice:0:18}}
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Miles" [sortable]="true">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row?.miles }}
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Exterior Color" [sortable]="true">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row?.exterior_color }}
                   </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Car Condition" [sortable]="true">
                   <ng-template let-row="row" ngx-datatable-cell-template>
-                    {{ row?.vehicle_condition?.vehicle_condition_value }}
+                    {{ row?.vehicle_condition?.vehicle_condition_value | slice:0:18 }}
                   </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Seller Distance" [sortable]="true">
@@ -606,12 +616,7 @@
                     {{ row?.my_bid[row?.my_bid?.length - 1]?.bid_date | date:'MM-dd-yyyy'}}
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column *ngIf="page.type == 'applied'" [resizeable]="false" [draggable]="false"
-                  name="Bid Status" prop="bid_acceptance" [sortable]="true">
-                  <ng-template let-row="row" ngx-datatable-cell-template>
-                    {{ row?.dealers_bids[0]?.bids[row?.dealers_bids[0]?.bids?.length - 1]?.bid_acceptance }}
-                  </ng-template>
-                </ngx-datatable-column>
+               
                 <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Action" [sortable]="false">
                   <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
 

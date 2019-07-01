@@ -9,3 +9,4 @@ export * from './common-utils.service';
 export * from './vehicle.service';
 export * from './dealer.service';
 export * from './seller.service';
+export * from './real_updates';

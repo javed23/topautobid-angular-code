@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from 'ngx-gallery';
 
 //modules services, models and enviornment file
-import { TitleService, CarService, CommonUtilsService, DealerService } from '../../../../core/_services'
+import { TitleService, CarService, RealUpdateService, CommonUtilsService, DealerService } from '../../../../core/_services'
 import { PagedData, Car, Page } from "../../../../core/_models";
 import { environment } from '../../../../../environments/environment'
 import { untilDestroyed } from 'ngx-take-until-destroy';// unsubscribe from observables when the component destroyed
@@ -48,10 +48,14 @@ export class ListingComponent implements OnInit {
   readonly breadcrumbs: any[] = [{ page: 'Home', link: '/dealer/home' }, { page: 'Dashboard', link: '' }]
 
 
-  constructor(private dealerService: DealerService, private commonUtilsService: CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private titleService: TitleService) {
+  constructor(private dealerService: DealerService, private realTimeUpdate:RealUpdateService, private commonUtilsService: CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private titleService: TitleService) {
 
 
     //setting the page title
+    
+    this.realTimeUpdate.updateLsiting().subscribe(res=>{
+        this.setPage(this._defaultPagination) // this willbe called after real time updation of listing
+    })
     this.titleService.setTitle();
 
     this.setPage(this._defaultPagination);
@@ -269,13 +273,13 @@ export class ListingComponent implements OnInit {
    */
   placeBid(car: any) {
     this.getAllDealShips();
-    console.log('the car is is', car)
     this.car = car;
     this.bidForm.patchValue({
       car_id: car._id
     })
     $(this.bidModal.nativeElement).modal({ backdrop: 'static', keyboard: false, show: true });
   }
+
 
 
 
@@ -332,6 +336,7 @@ export class ListingComponent implements OnInit {
   private saveBid() {
     this.dealerService.placeBid(this.bidForm.value).pipe(untilDestroyed(this)).subscribe(response => {
       this.commonUtilsService.onSuccess(environment.MESSAGES.BID_SUCCESS);
+      this.realTimeUpdate.updateRealTimeData();
       this.bidForm.reset();
       this.submitted = false;
 
@@ -345,6 +350,7 @@ export class ListingComponent implements OnInit {
 
   private updateBid() {
     this.dealerService.updateBid(this.bidForm.value).pipe(untilDestroyed(this)).subscribe(response => {
+      this.realTimeUpdate.updateRealTimeData();
       this.commonUtilsService.onSuccess(environment.MESSAGES.BID_SUCCESS);
       this.bidForm.reset();
       this.submitted = false;

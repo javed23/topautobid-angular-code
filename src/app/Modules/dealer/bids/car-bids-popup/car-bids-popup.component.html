@@ -21,7 +21,7 @@
                     <table class="table table-bordered-custom-modal table-striped table-image-set">
                       <thead class="thead-dark-custom-modal">
                         <tr>                        
-                          <th>Dealer</th>
+                          <th>DealerShip Logo</th>
                           <th>Dealership</th>
                           <th>Legal Contact</th>
                           <th>Price</th>
@@ -40,7 +40,7 @@
                         <tr *ngFor="let bid of bids; let i = index">
 
                          
-                          <td>{{bid?.dealer[0]?.name?.first_name}} {{bid?.dealer[0]?.name.last_name}}</td>
+                          <td><img  *ngIf="bid?.dealership[0]?.profile_pic" src="{{bid?.dealership[0]?.profile_pic}}"/></td>
                           <td>{{ bid?.dealership[0]?.legalcoroporationname}}</td>
                           <td>{{ bid.bids[bid.bids.length-1]?.legal_contact}} </td>
                           <td>{{ bid.bids[bid.bids.length-1]?.price | currency:'USD':true:'2.2-2'}}</td>              
