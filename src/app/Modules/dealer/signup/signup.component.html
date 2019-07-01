@@ -17,7 +17,7 @@
       <div class="col-md-10">
          <div class="section-title">
            <span>Welcome to </span>
-           <h2>the TopAutoBid online</h2>
+           <h2>the CarsGoat online</h2>
            <div class="separator"></div>
          </div>
       </div>
@@ -221,28 +221,28 @@
 
 
 
-                                          <div formGroupName="location">
-                                              <div class="form-group col-md-6">
+                                          <div formGroupName="location" class="col-md-12">
+                                              <div class="form-group">
                                                 <label>Zipcode*</label>
-                                                <input  mask="00000" class="form-control" type="text" placeholder="Enter Zipcode" formControlName="zipcode" [ngClass]="{ 'is-invalid': (signUpFormStep2.controls.dealerships.controls.location.get('zipcode').touched || step2submitted) && signUpFormStep2.controls.dealerships.controls.location.get('zipcode').errors }">
-                                                <p class="error_msg" *ngIf="signUpFormStep2.controls.dealerships.controls.location.get('zipcode').touched || step2submitted">                      
-                                                    <app-form-validation-errors minLength=2 maxLength=5 errorPrefix="Zip " patternError="Must enter valid zip code." [errors]="signUpFormStep2.controls.dealerships.controls.location.get('zipcode').errors"></app-form-validation-errors>   
+                                                <input  (input)="fetchCityState($event.target.value)" mask="00000" class="form-control" type="text" placeholder="Enter Zipcode" formControlName="zipcode" [ngClass]="{ 'is-invalid': (signUpFormStep2.get('dealerships').get('location').get('zipcode').touched || step2submitted) && signUpFormStep2.get('dealerships').get('location').get('zipcode').errors }">
+                                                <p class="error_msg" *ngIf="signUpFormStep2.get('dealerships').get('location').get('zipcode').touched || step2submitted">                      
+                                                    <app-form-validation-errors minLength=2 maxLength=5 errorPrefix="Zip " patternError="Must enter valid zip code." [errors]="signUpFormStep2.get('dealerships').get('location').get('zipcode').errors"></app-form-validation-errors>   
                                                 </p>
                                               </div>
                                 
-                                              <div class="form-group col-md-6">
+                                              <div class="form-group">
                                                   <label>State*</label>
-                                                  <input  readonly class="form-control" type="text" placeholder="State" formControlName="state" [ngClass]="{ 'is-invalid': (signUpFormStep2.controls.dealerships.controls.location.get('state').touched || step2submitted) && signUpFormStep2.controls.dealerships.controls.location.get('state').errors }">  
-                                                  <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="State " [errors]="signUpFormStep2.controls.dealerships.controls.location.get('state').errors"></app-form-validation-errors>                
+                                                  <input  readonly class="form-control" type="text" placeholder="State" formControlName="state" [ngClass]="{ 'is-invalid': (signUpFormStep2.get('dealerships').get('location').get('state').touched || step2submitted) && signUpFormStep2.get('dealerships').get('location').get('state').errors }">  
+                                                  <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="State " [errors]="signUpFormStep2.get('dealerships').get('location').get('state').errors"></app-form-validation-errors>                
                                                 </div>              
-                                                <div class="form-group col-md-6">
+                                                <div class="form-group">
                                                   <label>City*</label>
-                                                  <input *ngIf="cities.length<=1" readonly class="form-control" type="text" placeholder="City" formControlName="city" [ngClass]="{ 'is-invalid': (signUpFormStep2.controls.dealerships.controls.location.get('city').touched || step2submitted) && signUpFormStep2.controls.dealerships.controls.location.get('city').errors }">
-                                                  <select *ngIf="cities.length >1" formControlName="city" [ngClass]="{ 'is-invalid': (signUpFormStep2.controls.dealerships.controls.location.get('city').touched || step1submitted) && signUpFormStep2.controls.dealerships.controls.location.get('city').errors }">
+                                                  <input *ngIf="dealershipCities.length<=1" readonly class="form-control" type="text" placeholder="City" formControlName="city" [ngClass]="{ 'is-invalid': (signUpFormStep2.get('dealerships').get('location').get('city').touched || step2submitted) && signUpFormStep2.get('dealerships').get('location').get('city').errors }">
+                                                  <select *ngIf="dealershipCities.length >1" formControlName="city" [ngClass]="{ 'is-invalid': (signUpFormStep2.get('dealerships').get('location').get('city').touched || step1submitted) && signUpFormStep2.get('dealerships').get('location').get('city').errors }">
                                                     
-                                                    <option *ngFor="let cityObject of cities" value="{{cityObject.city}}">{{cityObject.city}}</option>
+                                                    <option *ngFor="let cityObject of dealershipCities" value="{{cityObject.city}}">{{cityObject.city}}</option>
                                                   </select>
-                                                  <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="City " [errors]="signUpFormStep2.controls.dealerships.controls.location.get('city').errors"></app-form-validation-errors>
+                                                  <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="City " [errors]="signUpFormStep2.get('dealerships').get('location').get('city').errors"></app-form-validation-errors>
                                                 </div>
                                   
                                 
@@ -274,7 +274,7 @@
                                                     <span class="text-white d-block"><b>{{data.dealershipnumber}}</b></span>
                                                     <address>
                                                       {{data.mainaddressline1}} {{data.mainaddressline2}}, <br>
-                                                      {{data.city}}, {{data.state}} - {{data.zip}}
+                                                      {{data.location.city}}, {{data.location.state}} - {{data.location.zipcode}}
                                                     </address>
                                                     <div class="actions">
                                                         <button><i class="fa fa-pencil" (click)="EditDealership(i)" aria-hidden="true"></i></button>

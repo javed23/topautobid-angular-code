@@ -11,7 +11,7 @@
     <div class="container">
         <div class="row ">
             <div class="col-md-12 d-flex">
-                <a routerLink="/seller/addcar" class="createNew ml-auto"><i class="fa fa-plus-circle"
+                <a routerLink="/seller/addcar/dashboard" class="createNew ml-auto"><i class="fa fa-plus-circle"
                         aria-hidden="true"></i> Create New</a>
             </div>
         </div>
@@ -229,7 +229,7 @@
                                 <ngx-datatable-column [resizeable]="false"
                                 [draggable]="false"  name="Created At" prop="created_at" [sortable]="true">
                                     <ng-template let-row="row" ngx-datatable-cell-template>
-                                        {{ row.created_at | date:'MMM d y h:mm'}}
+                                        {{ row.created_at | date:'MM-dd-yy, h:mm a'}}
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column [resizeable]="false"

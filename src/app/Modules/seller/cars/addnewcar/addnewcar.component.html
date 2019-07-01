@@ -8,10 +8,10 @@
 
  <section #addNewCarSection class="accordian_listing">
     
-    <div class="banner_col" *ngIf="!isVehicleOptionSelected">
+    <div class="banner_col" *ngIf="!isThisYourCar">
             <div class="banner_col_inner">
               <div class="banner_col_inner_center">
-                <form [formGroup]="vehicleOption">  
+                <form [formGroup]="vehicleDetails">  
                     <div class="container">
                     <div class="row">
                         <div class="col-md-10">
@@ -30,10 +30,10 @@
                                         <div class="form-group">
                                         <label for="">Car Location Zipcode*</label>                      
 
-                                            <input #zipcode mask="00000" type="text" class="form-control placeholder" (input)="fetchCityState($event.target.value)" placeholder="ZIP" formControlName="zipcode" [ngClass]="{ 'is-invalid': (vehicleOption.controls.vehicle_location.get('zipcode').touched || isVehicleOptionSubmitted) && vehicleOption.controls.vehicle_location.get('zipcode').errors }">
+                                            <input #zipcode mask="00000" type="text" class="form-control placeholder" (input)="fetchCityState($event.target.value)" placeholder="ZIP" formControlName="zipcode" [ngClass]="{ 'is-invalid': (vehicleDetails.controls.vehicle_location.get('zipcode').touched || isVehicleDetailsSubmitted) && vehicleDetails.controls.vehicle_location.get('zipcode').errors }">
         
-                                            <p class="error_msg" *ngIf="vehicleOption.controls.vehicle_location.get('zipcode').touched || isVehicleOptionSubmitted">                      
-                                                <app-form-validation-errors minLength=2 maxLength=5 errorPrefix="Zipcode " patternError="Must enter valid zip code." [errors]="vehicleOption.controls.vehicle_location.get('zipcode').errors"></app-form-validation-errors>   
+                                            <p class="error_msg" *ngIf="vehicleDetails.controls.vehicle_location.get('zipcode').touched || isVehicleDetailsSubmitted">                      
+                                                <app-form-validation-errors minLength=2 maxLength=5 errorPrefix="Zipcode " patternError="Must enter valid zip code." [errors]="vehicleDetails.controls.vehicle_location.get('zipcode').errors"></app-form-validation-errors>   
                                             </p>
                                         </div>
                                     </div>
@@ -46,7 +46,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                         <label for="">City*</label>
-                                            <input *ngIf="cities.length <= 1" readonly class="form-control" type="text" placeholder="City" formControlName="city">
+                                                <input *ngIf="cities.length <= 1" readonly class="form-control" type="text" placeholder="City" formControlName="city">
                     
                                             <select class="simple_select selectpicker" *ngIf="cities.length > 1" formControlName="city">
                                                 <option *ngFor="let cityObject of cities" value="{{cityObject.city}}">{{cityObject.city}}</option>
@@ -70,9 +70,9 @@
                                     
                                     <div class="col-md-12">
                                         <div class="form-group gray_box">
-                                                <input type="text" #vin_number mask="A{17}" placeholder="Enter VIN*" [ngClass]="{ 'is-invalid': (vehicleOption.controls.vin_number.touched || isVehicleOptionSubmitted) && vehicleOption.controls.vin_number.errors }" formControlName="vin_number" [value]="vin_number.value.toUpperCase()" /> 
-                                                <p class="error_label" *ngIf="vehicleOption.controls.vin_number.touched || isVehicleOptionSubmitted">                      
-                                                    <app-form-validation-errors minLength=17 maxLength=17 errorPrefix="VIN " [errors]="vehicleOption.controls.vin_number.errors"></app-form-validation-errors>   
+                                                <input type="text" #vin_number mask="A{17}" placeholder="Enter VIN*" [ngClass]="{ 'is-invalid': (vehicleDetails.controls.vin_number.touched || isVehicleDetailsSubmitted) && vehicleDetails.controls.vin_number.errors }" formControlName="vin_number" [value]="vin_number.value.toUpperCase()" /> 
+                                                <p class="error_label" *ngIf="vehicleDetails.controls.vin_number.touched || isVehicleDetailsSubmitted">                      
+                                                    <app-form-validation-errors minLength=17 maxLength=17 errorPrefix="VIN " [errors]="vehicleDetails.controls.vin_number.errors"></app-form-validation-errors>   
                                                 </p>
                                                                                         
                                         </div>
@@ -83,15 +83,24 @@
                                     <div *ngIf="isMyCarFound" class="col-md-12">
                                         <div class="result_outer">
                                             <div class="search_result">
+                                                <span>{{vehicleYearLabel}}</span> 
                                                 <span>{{vehicleMakeLabel}}</span>
-                                                <span>{{vehicleModelLabel}}</span>
-                                                <span>{{vehicleYearLabel}}</span>    
+                                                <span>{{vehicleModelLabel}}</span>                       
                                             </div>
-                                            <div class="submission_btns">
-                                                    <button (click)="resetVINControl()" class="grayBtn black_BTN">
-                                                            No, It is not
-                                                    </button>
-                                                    <button class="grayBtn" type="button" [disabled]="vehicleOption.invalid" (click)="validateVINNumber(vehicleModelLabel)">Yes, this is my car</button>
+                                            <div>                                                 
+                                                <select class="simple_select selectpicker" (change)="onSelectTrim($event)" #vehicle_trim formControlName="vehicle_trim" [ngClass]="{ 'is-invalid': (vehicleDetails.controls.vehicle_trim.touched || isVehicleDetailsSubmitted) && vehicleDetails.controls.vehicle_trim.errors }">
+                                                    <option value=''>Select Trim</option>
+                                                    <option *ngFor="let trim of trims;" [attr.data-modelId]="trim.id_car_trim" value='{{trim.name}}'>{{trim.name}}</option> 
+                                                </select>
+                                                <p class="error_msg" *ngIf="vehicleDetails.controls.vehicle_trim.touched || isVehicleDetailsSubmitted">                      
+                                                <app-form-validation-errors errorPrefix="Trim " [errors]="vehicleDetails.controls.vehicle_trim.errors"></app-form-validation-errors>   
+                                                </p>
+                                            </div>
+                                            <div *ngIf="isAllVehicleDetailsSelected" class="submission_btns">
+                                                <button (click)="resetVINControl()" class="grayBtn black_BTN">
+                                                        No, It is not
+                                                </button>
+                                                <button class="grayBtn" type="button" [disabled]="vehicleDetails.invalid" (click)="validateVINNumber(vehicleModelLabel)">Yes, this is my car</button>
                                             </div> 
                                         </div>
                                     </div>
@@ -106,50 +115,29 @@
             </div>
     </div>
 
-    <div *ngIf="isVehicleOptionSelected" [@AnimateList]>
+    <div *ngIf="isThisYourCar" [@AnimateList]>
       
         <aw-wizard #wizard class="step_col">    
-                <aw-wizard-step stepTitle="Standard Options" (stepEnter)="scrollToSpecificDiv()" [canExit]="moveDirection.bind(this, basicInfoWizard.valid)">  
+                <aw-wizard-step stepTitle="Standard Options" (stepEnter)="scrollToSpecificDiv()" [canExit]="moveDirection.bind(this, standardOptionsWizard.valid)">  
                     
                     <div class="container">
                         <div class="steps_info">
-                            <form [formGroup]="basicInfoWizard">
+                            <form [formGroup]="standardOptionsWizard">
                                 <div class="add_car">
                                     <div class="row">
                                         <div class="form-group col-md-6">
                                             <div formGroupName="basic_info">
                                                 <div class="fields_section">
-                                                    <div class="f_width">       
-                                                        <label>Make</label>
-                                                        {{vehicleMakeLabel}}
-                                                    </div>
-                                                    <div class="f_width"> 
-                                                        <label>Model</label>
-                                                        {{vehicleModelLabel}}
-                                                    </div>
-        
-                                                    <div class="f_width">       
-                                                            <label>Trim*</label>
-                                                            <select class="simple_select selectpicker" (change)="getAllVehicleDetails($event)" #vehicle_trim formControlName="vehicle_trim" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_trim').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_trim').errors }">
-                                                            <option value="">Select Trim</option>
-                                                            <option *ngFor="let trim of trims;" [attr.data-modelId]="trim.model_id" value="{{trim.model_trim}}">{{trim.model_trim}}</option> 
-                                                            </select>
-                                                            <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_trim').touched || isBasicInfoSubmitted">                      
-                                                            <app-form-validation-errors errorPrefix="Trim " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_trim').errors"></app-form-validation-errors>   
-                                                            </p>
-
-                                                    </div>
+                                                   
 
                                                     <div class="f_width">
                                                             <label>Mileage*</label>
-                                                            <input type="text" class="simple_select form-control placeholder" placeholder="Enter the Vehicle Mileage in miles" formControlName="vehicle_mileage" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_mileage').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_mileage').errors }" #vehicle_mileage>
+                                                            <input type="text" class="simple_select form-control placeholder" placeholder="Enter the Vehicle Mileage in miles" formControlName="vehicle_mileage" [ngClass]="{ 'is-invalid': (standardOptionsWizard.controls.basic_info.get('vehicle_mileage').touched || isStandardOptionsSubmitted) && standardOptionsWizard.controls.basic_info.get('vehicle_mileage').errors }" #vehicle_mileage>
                         
-                                                            <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_mileage').touched || isBasicInfoSubmitted">                      
-                                                                <app-form-validation-errors patternError="Must enter valid vehicle mileage." minLength=2 maxLength=6 errorPrefix="Mileage " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_mileage').errors"></app-form-validation-errors>   
+                                                            <p class="error_msg" *ngIf="standardOptionsWizard.controls.basic_info.get('vehicle_mileage').touched || isStandardOptionsSubmitted">                      
+                                                                <app-form-validation-errors patternError="Must enter valid vehicle mileage." minLength=2 maxLength=6 errorPrefix="Mileage " [errors]="standardOptionsWizard.controls.basic_info.get('vehicle_mileage').errors"></app-form-validation-errors>   
                                                             </p>                                       			
                                                     </div>
-
-
 
                                                     <div class="f_width">
                                                         
@@ -173,8 +161,8 @@
                                                                     <label for="vehicle_interior_color_other">Other Color</label>
                                                                 </div>
 
-                                                                <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_interior_color').touched || isBasicInfoSubmitted">                      
-                                                                    <app-form-validation-errors errorPrefix="Interior Color " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_interior_color').errors"></app-form-validation-errors>   
+                                                                <p class="error_msg" *ngIf="standardOptionsWizard.controls.basic_info.get('vehicle_interior_color').touched || isStandardOptionsSubmitted">                      
+                                                                    <app-form-validation-errors errorPrefix="Interior Color " [errors]="standardOptionsWizard.controls.basic_info.get('vehicle_interior_color').errors"></app-form-validation-errors>   
                                                                 </p>
                                                         </div> 
                                                                     
@@ -185,10 +173,10 @@
 
                                                     <div class="f_width" [hidden]="!isOtherInteriorColorSelected">
                                                         
-                                                        <input type="text" minLength=2 maxLength=20 class="simple_select form-control placeholder" formControlName="vehicle_other_interior_color" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_other_interior_color').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_other_interior_color').errors }" #vehicle_other_interior_color>
+                                                        <input type="text" minLength=2 maxLength=20 class="simple_select form-control placeholder" formControlName="vehicle_other_interior_color" [ngClass]="{ 'is-invalid': (standardOptionsWizard.controls.basic_info.get('vehicle_other_interior_color').touched || isStandardOptionsSubmitted) && standardOptionsWizard.controls.basic_info.get('vehicle_other_interior_color').errors }" #vehicle_other_interior_color>
                     
-                                                        <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_other_interior_color').touched || isBasicInfoSubmitted">                      
-                                                            <app-form-validation-errors patternError="Must contain only characters." minLength=2 maxLength=20 errorPrefix="Interior Color " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_other_interior_color').errors"></app-form-validation-errors>   
+                                                        <p class="error_msg" *ngIf="standardOptionsWizard.controls.basic_info.get('vehicle_other_interior_color').touched || isStandardOptionsSubmitted">                      
+                                                            <app-form-validation-errors patternError="Must contain only characters." minLength=2 maxLength=20 errorPrefix="Interior Color " [errors]="standardOptionsWizard.controls.basic_info.get('vehicle_other_interior_color').errors"></app-form-validation-errors>   
                                                         </p>                                       			
                                                     </div>
                                             
@@ -211,114 +199,80 @@
                                                                     <label for="vehicle_exterior_color_other">Other Color</label>
                                                                 </div>    
                                                                                                                     
-                                                            <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_exterior_color').touched || isBasicInfoSubmitted">                      
-                                                                <app-form-validation-errors errorPrefix="Exterior Color " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_exterior_color').errors"></app-form-validation-errors>   
+                                                            <p class="error_msg" *ngIf="standardOptionsWizard.controls.basic_info.get('vehicle_exterior_color').touched || isStandardOptionsSubmitted">                      
+                                                                <app-form-validation-errors errorPrefix="Exterior Color " [errors]="standardOptionsWizard.controls.basic_info.get('vehicle_exterior_color').errors"></app-form-validation-errors>   
                                                             </p>
                                                         </div>			
                                                     </div> 
                                                     
                                                     <div class="f_width" [hidden]="!isOtherExteriorColorSelected">
                                                         
-                                                        <input type="text" minLength=2 maxLength=20 class="simple_select form-control placeholder" formControlName="vehicle_other_exterior_color" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_other_exterior_color').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_other_exterior_color').errors }" #vehicle_other_exterior_color>
+                                                        <input type="text" minLength=2 maxLength=20 class="simple_select form-control placeholder" formControlName="vehicle_other_exterior_color" [ngClass]="{ 'is-invalid': (standardOptionsWizard.controls.basic_info.get('vehicle_other_exterior_color').touched || isStandardOptionsSubmitted) && standardOptionsWizard.controls.basic_info.get('vehicle_other_exterior_color').errors }" #vehicle_other_exterior_color>
                     
-                                                        <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_other_exterior_color').touched || isBasicInfoSubmitted">                      
-                                                            <app-form-validation-errors patternError="Must contain only characters." minLength=2 maxLength=20 errorPrefix="Exterior Color " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_other_exterior_color').errors"></app-form-validation-errors>   
+                                                        <p class="error_msg" *ngIf="standardOptionsWizard.controls.basic_info.get('vehicle_other_exterior_color').touched || isStandardOptionsSubmitted">                      
+                                                            <app-form-validation-errors patternError="Must contain only characters." minLength=2 maxLength=20 errorPrefix="Exterior Color " [errors]="standardOptionsWizard.controls.basic_info.get('vehicle_other_exterior_color').errors"></app-form-validation-errors>   
                                                         </p>                                       			
                                                     </div>
 
                                                     <div class="f_width">
                                                                 
                                                         <label>Interior Material*</label>
-                                                        <select class="simple_select selectpicker" #vehicle_interior_material formControlName="vehicle_interior_material" [ngClass]="{ 'is-invalid': (basicInfoWizard.controls.basic_info.get('vehicle_interior_material').touched || isBasicInfoSubmitted) && basicInfoWizard.controls.basic_info.get('vehicle_interior_material').errors }">
+                                                        <select class="simple_select selectpicker" #vehicle_interior_material formControlName="vehicle_interior_material" [ngClass]="{ 'is-invalid': (standardOptionsWizard.controls.basic_info.get('vehicle_interior_material').touched || isStandardOptionsSubmitted) && standardOptionsWizard.controls.basic_info.get('vehicle_interior_material').errors }">
                                                                 <option value="">Select Interior Material</option>
                                                                 <option *ngFor="let interiorMaterial of interiorMaterials;" value="{{interiorMaterial.name}}">{{interiorMaterial.name}}</option> 
                                                         </select>
-                                                            <p class="error_msg" *ngIf="basicInfoWizard.controls.basic_info.get('vehicle_interior_material').touched || isBasicInfoSubmitted">                      
-                                                                <app-form-validation-errors errorPrefix="Interior Material " [errors]="basicInfoWizard.controls.basic_info.get('vehicle_interior_material').errors"></app-form-validation-errors>   
+                                                            <p class="error_msg" *ngIf="standardOptionsWizard.controls.basic_info.get('vehicle_interior_material').touched || isStandardOptionsSubmitted">                      
+                                                                <app-form-validation-errors errorPrefix="Interior Material " [errors]="standardOptionsWizard.controls.basic_info.get('vehicle_interior_material').errors"></app-form-validation-errors>   
                                                             </p>
                                                         
                                                     </div>
 
-                                                </div>    
-
-                                                <div formGroupName="vehicle_chassis" class="fields_section">
-                                                        <h4>Chassis</h4>
-
-                                                        <div class="f_width">
-                                                            <label>Body Type*</label>
-                                                            <select class="simple_select selectpicker" #model_body formControlName="model_body" [ngClass]="{ 'is-invalid': (basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_body').touched || isBasicInfoSubmitted) && basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_body').errors }">
-                                                                <option value="">Select Body Type</option>
-                                                                <option *ngFor="let bodyType of bodyTypes;" value="{{bodyType.name}}">{{bodyType.name}}</option> 
-                                                            </select>
-                        
-                                                            <p class="error_msg" *ngIf="basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_body').touched || isBasicInfoSubmitted">                      
-                                                                <app-form-validation-errors  errorPrefix="Body Type " [errors]="basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_body').errors"></app-form-validation-errors>   
-                                                            </p>                                       			
-                                                        </div>
-
-                                                        <div class="f_width">
-                                                            <label>Number of Seater*</label>
-                                                            <input type="text" class="simple_select form-control placeholder"  formControlName="model_seats" [ngClass]="{ 'is-invalid': (basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_seats').touched || isBasicInfoSubmitted) && basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_seats').errors }" #model_seats>
-                        
-                                                            <p class="error_msg" *ngIf="basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_seats').touched || isBasicInfoSubmitted">                      
-                                                                <app-form-validation-errors  errorPrefix="No of Seats " [errors]="basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_seats').errors"></app-form-validation-errors>   
-                                                            </p>                                       			
-                                                        </div>
-
-                                                        <div class="f_width">
-                                                            <label>Length*</label>
-                                                            <input type="text" class="simple_select form-control placeholder"  formControlName="model_length_mm" [ngClass]="{ 'is-invalid': (basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_length_mm').touched || isBasicInfoSubmitted) && basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_length_mm').errors }" #model_length_mm>
-                        
-                                                            <p class="error_msg" *ngIf="basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_length_mm').touched || isBasicInfoSubmitted">                      
-                                                                <app-form-validation-errors  errorPrefix="Length " [errors]="basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_length_mm').errors"></app-form-validation-errors>   
-                                                            </p>                                        			
-                                                        </div>
-
-                                                        <div class="f_width">
-                                                            <label>Width*</label>
-                                                            <input type="text" class="simple_select form-control placeholder"  formControlName="model_width_mm" [ngClass]="{ 'is-invalid': (basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_width_mm').touched || isBasicInfoSubmitted) && basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_width_mm').errors }" #model_width_mm>
-                        
-                                                            <p class="error_msg" *ngIf="basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_width_mm').touched || isBasicInfoSubmitted">                      
-                                                                <app-form-validation-errors  errorPrefix="Length " [errors]="basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_width_mm').errors"></app-form-validation-errors>   
-                                                            </p>                                        			
-                                                        </div>
-
-
-                                                        <div class="f_width">
-                                                            <label>Height*</label>
-                                                            <input type="text" class="simple_select form-control placeholder"  formControlName="model_height_mm" [ngClass]="{ 'is-invalid': (basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_height_mm').touched || isBasicInfoSubmitted) && basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_height_mm').errors }" #model_height_mm>
-                        
-                                                            <p class="error_msg" *ngIf="basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_height_mm').touched || isBasicInfoSubmitted">                      
-                                                                <app-form-validation-errors  errorPrefix="Length " [errors]="basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_height_mm').errors"></app-form-validation-errors>   
-                                                            </p>                                        			
-                                                        </div>
-
-
-                                                        <div class="f_width">
-                                                            <label>Wheelbase*</label>
-                                                            <input type="text" class="simple_select form-control placeholder"  formControlName="model_wheelbase_mm" [ngClass]="{ 'is-invalid': (basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_wheelbase_mm').touched || isBasicInfoSubmitted) && basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_wheelbase_mm').errors }" #model_wheelbase_mm>
-                        
-                                                            <p class="error_msg" *ngIf="basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_wheelbase_mm').touched || isBasicInfoSubmitted">                      
-                                                                <app-form-validation-errors  errorPrefix="Length " [errors]="basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_wheelbase_mm').errors"></app-form-validation-errors>   
-                                                            </p>                                        			
-                                                        </div>
-
-
-                                                        <div class="f_width">
-                                                            <label>Full Weight *</label>
-                                                            <input type="text" class="simple_select form-control placeholder"  formControlName="model_weight_kg" [ngClass]="{ 'is-invalid': (basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_weight_kg').touched || isBasicInfoSubmitted) && basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_weight_kg').errors }" #model_weight_kg>
-                        
-                                                            <p class="error_msg" *ngIf="basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_weight_kg').touched || isBasicInfoSubmitted">                      
-                                                                <app-form-validation-errors  errorPrefix="Length " [errors]="basicInfoWizard.get('basic_info').get('vehicle_chassis').get('model_weight_kg').errors"></app-form-validation-errors>   
-                                                            </p>                                        			
-                                                        </div>
-                                                </div> 
-
+                                                </div>  
                                                 
+                                            </div>
+                                            <div class="fields_section">
+                                                <div>   
+                                                    <label>Standard Equipment</label>
 
+                                                <div *ngFor="let equipment of standardEquipments.controls; let i=index">
+                                                        <input type="checkbox" [formControl]="equipment" /> {{standardEquipmentsArray[i].name}}
+                                                    </div>
+
+                                                </div>
                                                 
                                             </div>
 
+                                            <div class="fields_section">
+                                                <div>   
+                                                    <label>Entertainment & Instrumentation</label>
+
+                                                    <div *ngFor="let entertainment of entertainments.controls; let i=index">
+                                                        <input type="checkbox" [formControl]="entertainment" /> {{entertainmentsArray[i].name}}
+                                                    </div>
+
+                                                </div>
+
+                                                
+
+                                                <div>   
+                                                    <label>Wheels & Tires</label>
+
+                                                    <div *ngFor="let wheel of wheels.controls; let i=index">
+                                                        <input type="checkbox" [formControl]="wheel" /> {{wheelsArray[i].name}}
+                                                    </div>
+
+                                                </div>
+
+                                                <div>   
+                                                    <label>Accessory Packages</label>
+
+                                                    <div *ngFor="let package of accessory_packages.controls; let i=index">
+                                                        <input type="checkbox" [formControl]="package" /> {{accessoryPackagesArray[i].name}}
+                                                    </div>
+
+                                                </div>
+                                                
+                                            </div>
 
                                         </div>
 
@@ -332,10 +286,8 @@
                                             </div>
 
                                             <div class="vehicle_thumb_outer">
-                                                    <div class="vehicle_thumb"><img src="assets/images/mercedes_logo.png" alt=""></div>
-                                                    
-
-                                                </div>
+                                                <div class="vehicle_thumb"><img src="assets/images/mercedes_logo.png" alt=""></div>
+                                            </div>
 
 
                                         </div>
@@ -354,7 +306,7 @@
                                 <div class="form-group button_Submission text-right">
                                     <button class="button red d-inline-block width-auto boder0 mt-4" type="button" (click)="isPreviousClicked()">Previous Step</button>
 
-                                    <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="basicInfoWizard.invalid" (click)="validateBasicInfoWizard()" type="button" awNextStep>Next Step</button>		
+                                    <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="standardOptionsWizard.invalid" (click)="validateStandardOptionsWizard()" type="button" awNextStep>Next Step</button>		
                                 </div>
                             </form>    
                         </div>  
@@ -628,6 +580,51 @@
                                     </div>
                                     <!--Vehicle Ownership Section-->
 
+
+
+                                    <div class="row">
+                                            <div class="form-group col-md-12"> 
+                                                    <div class="switch_outer text-center">                                               
+                                                <span>Do You Want the Car to be Picked Up?</span>
+                                                <label class="switch">
+                                                        <input type="checkbox" (change)="toggleVehiclePickedUp($event)" formControlName="vehicle_to_be_picked_up">
+                                                        <span class="slider round"></span>
+                                                </label>
+                                            </div>
+                                            </div>
+                                    </div> 
+    
+                                    <div class="collapsable_box">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="text-center collapsable_head">     
+                                                    <div class="switch_outer">                                           
+                                                        <span>Willing to Drive?</span>
+                                                        <label class="switch">
+                                                                <input type="checkbox" (change)="toggleWillingToDrive($event)" formControlName="willing_to_drive">
+                                                                <span class="slider round"></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="collapsable_body willing_to_drive_label" [hidden]="!isWillingToDriveSelected">
+                                                        <div class="collapsable_body_inner">
+                                                            <label>Miles*</label>
+                                                            <input #willing_to_drive_how_many_miles mask="000" type="text" class="simple_select form-control placeholder" placeholder="How Many Miles" formControlName="willing_to_drive_how_many_miles" [ngClass]="{ 'is-invalid': (aboutVehicleWizard.controls.willing_to_drive_how_many_miles.touched || isAboutVehicleSubmitted) && aboutVehicleWizard.controls.willing_to_drive_how_many_miles.errors }">        
+                                                            
+                                                            
+                                                            <p *ngIf="aboutVehicleWizard.controls.willing_to_drive_how_many_miles.touched || isAboutVehicleSubmitted">                      
+                                                                <app-form-validation-errors minLength=1 maxLength=3 errorPrefix="Miles " [errors]="aboutVehicleWizard.controls.willing_to_drive_how_many_miles.errors"></app-form-validation-errors>   
+                                                            </p>
+                                                        </div>
+                                                </div>
+                                            </div>
+                                        </div>
+    
+                                        
+                                    </div>
+
+
+                                    
                                     <!--More About Vehicle Section-->
 
                                     <div class="form-group text-center">
@@ -914,51 +911,89 @@
 
 
                 </aw-wizard-step>  
-                <aw-wizard-step stepTitle="Pick Up Location" (stepEnter)="scrollToSpecificDiv()" [canExit]="moveDirection.bind(this, pickupLocationWizard.valid)">
+                <aw-wizard-step stepTitle="Finance Details" (stepEnter)="scrollToSpecificDiv()" [canExit]="moveDirection.bind(this, financeDetailsWizard.valid)">
                     <div class="container">
                     <div class="row">
                         <div class="form-group col-md-8">
-                            <form [formGroup]="pickupLocationWizard">                        
-                                <div class="row">
-                                    <div class="form-group col-md-12"> 
-                                            <div class="switch_outer text-center">                                               
-                                        <span>Do You Want the Car to be Picked Up?</span>
-                                        <label class="switch">
-                                                <input type="checkbox" (change)="toggleVehiclePickedUp($event)" formControlName="vehicle_to_be_picked_up">
-                                                <span class="slider round"></span>
-                                        </label>
-                                    </div>
-                                    </div>
-                                </div> 
-
-                                <div class="collapsable_box">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="text-center collapsable_head">     
-                                                <div class="switch_outer">                                           
-                                                    <span>Willing to Drive?</span>
-                                                    <label class="switch">
-                                                            <input type="checkbox" (change)="toggleWillingToDrive($event)" formControlName="willing_to_drive">
-                                                            <span class="slider round"></span>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="collapsable_body willing_to_drive_label" [hidden]="!isWillingToDriveSelected">
-                                                    <div class="collapsable_body_inner">
-                                                        <label>Miles*</label>
-                                                        <input #willing_to_drive_how_many_miles mask="000" type="text" class="simple_select form-control placeholder" placeholder="How Many Miles" formControlName="willing_to_drive_how_many_miles" [ngClass]="{ 'is-invalid': (pickupLocationWizard.controls.willing_to_drive_how_many_miles.touched || isPickupLocationSubmitted) && pickupLocationWizard.controls.willing_to_drive_how_many_miles.errors }">        
-                                                        
-                                                        
-                                                        <p *ngIf="pickupLocationWizard.controls.willing_to_drive_how_many_miles.touched || isPickupLocationSubmitted">                      
-                                                            <app-form-validation-errors minLength=1 maxLength=3 errorPrefix="Miles " [errors]="pickupLocationWizard.controls.willing_to_drive_how_many_miles.errors"></app-form-validation-errors>   
-                                                        </p>
-                                                    </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
+                            <form [formGroup]="financeDetailsWizard">      
+                                
+                                
+                                <!-- Finance Details -->
+                                <div formGroupName="vehicle_finance_details" class="row">   
                                     
-                                </div>
+                                    
+
+                                        <div class="col-md-12">
+                                            <div class="head_section">
+                                                <h2 class="underline_heading">Finance Details</h2>
+                                            </div>    
+                                                <div class="form-group ">
+                                                    <label>Estimated Price*</label>
+                                                    <input #vehicle_estimated_price maxLength=17 type="text" currencyMask [options]="{ allowNegative: false, align: 'left'}" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_estimated_price" [ngClass]="{ 'is-invalid': (financeDetailsWizard.controls.vehicle_finance_details.get('vehicle_estimated_price').touched || isFinanceDetailsSubmitted) && financeDetailsWizard.controls.vehicle_finance_details.get('vehicle_estimated_price').errors }">        
+                                                    
+                                                    <p *ngIf="financeDetailsWizard.controls.vehicle_finance_details.get('vehicle_estimated_price').touched || isFinanceDetailsSubmitted">                      
+                                                        <app-form-validation-errors errorPrefix="Pay Off " [isPrice]=true minAmount='$1' [errors]="financeDetailsWizard.controls.vehicle_finance_details.get('vehicle_estimated_price').errors"></app-form-validation-errors>   
+                                                    </p>
+                                                </div>
+    
+                                                <div class="form-group ">
+                                                    <label>My Pay Off</label>
+                                                    <input #vehicle_pay_off maxLength=17 type="text" currencyMask [options]="{ allowNegative: false, align: 'left'}" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_pay_off" [ngClass]="{ 'is-invalid': (financeDetailsWizard.controls.vehicle_finance_details.get('vehicle_pay_off').touched || isFinanceDetailsSubmitted) && financeDetailsWizard.controls.vehicle_finance_details.get('vehicle_pay_off').errors }">        
+                                                    
+                                                    <p *ngIf="financeDetailsWizard.controls.vehicle_finance_details.get('vehicle_pay_off').touched || isFinanceDetailsSubmitted">                      
+                                                        <app-form-validation-errors errorPrefix="Pay Off " [isPrice]=true minAmount='$1' [errors]="financeDetailsWizard.controls.vehicle_finance_details.get('vehicle_pay_off').errors"></app-form-validation-errors>   
+                                                    </p>
+                                                </div>
+                                                
+                                                <div class="form-group">
+                                                        <label>Finance Bank</label>
+                                                        <input #vehicle_finance_bank minLength=2 maxLength=50 type="text" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_finance_bank" [ngClass]="{ 'is-invalid': (financeDetailsWizard.controls.vehicle_finance_details.get('vehicle_finance_bank').touched || isFinanceDetailsSubmitted) && financeDetailsWizard.controls.vehicle_finance_details.get('vehicle_finance_bank').errors }">        
+                                                        
+                                                        <p *ngIf="financeDetailsWizard.controls.vehicle_finance_details.get('vehicle_finance_bank').touched || isFinanceDetailsSubmitted">                      
+                                                            <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="Finance Bank " [errors]="financeDetailsWizard.controls.vehicle_finance_details.get('vehicle_finance_bank').errors"></app-form-validation-errors>   
+                                                        </p>
+                                                </div>
+                                            
+    
+    
+                                        
+                                            <label>Offer In Hand </label>
+                                            <div class="form-group enter_price">
+                                                
+                                                <input #offerInHandsPrice maxLength=17 type="text" currencyMask [options]="{ allowNegative: false, align: 'left'}" class="form-control grey_input" formControlName="vehicle_offer_in_hands_price" [ngClass]="{ 'is-invalid': (financeDetailsWizard.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').touched || isFinanceDetailsSubmitted) && financeDetailsWizard.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').errors }">   
+                                                <div class="uploadImages">
+                                                    <div class="dropzone dropzone-container" [dropzone]="offerInHandsConfiguration" [disabled]="disabled"></div>
+                                                </div>  
+                                                
+                                                
+                                                <p *ngIf="financeDetailsWizard.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').touched || isFinanceDetailsSubmitted">                      
+                                                        <app-form-validation-errors minAmount='$1' [isPrice]=true  errorPrefix="Offer In Hand " [errors]="financeDetailsWizard.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').errors"></app-form-validation-errors>   
+                                                    </p>
+                                            </div>                
+                                        </div>
+                                            
+                                        <!--Upload Images Section-->
+                                            <div class="col-md-12"> 
+                                                <div class="thumbnails" *ngIf="checkObjectLength(offerInHandsImagesArray.value) > 0">
+                                                    <div class="thumbnail_list" *ngFor="let offerInHandsImage of offerInHandsImagesArray.value | keyvalue; let offerInHandsImage = index;">
+    
+                                                        <img *ngIf="offerInHandsImage.value.file_mimetype != 'application/pdf'" src="{{offerInHandsImage.value.file_path}}">
+    
+                                                        <a class="upload_pdf" data-toggle="tooltip" title="{{offerInHandsImage.value.file_name}}" *ngIf="offerInHandsImage.value.file_mimetype == 'application/pdf'" href="{{offerInHandsImage.value.file_path}}" target="_blank"><img src="assets/images/pdf_icon.png"></a>
+    
+                                                        <i (click)="removeImage(offerInHandsImage.key, 'offer_in_hands',offerInHandsImage.value.file_key)" class="fa fa-times" aria-hidden="true"></i>
+                                                    </div>
+                                                </div>
+                                            </div>    
+                                            
+                                            <!--Upload Images Section-->
+                                    </div>
+                                    <!-- Finance Details -->    
+
+
+
+
+                                
                                 <div class="form-group text-center">
                                     <div class="button_Submission">
                                         <button class="button red d-inline-block width-auto boder0 mt-4" type="button" awPreviousStep>Previous Step</button>

@@ -1,4 +1,4 @@
-<ngb-rating  [readonly]="isDisable" aria-labelledby="Rating & Review" [max]="MaxRateStars" (rateChange)="show($event)" [rate]="currentRating"></ngb-rating>
+<ngb-rating  [readonly]="isDisable" aria-labelledby="Rating & Review" [max]="MaxRateStars" (click)="show()" [rate]="currentRating" [(ngModel)]="rating"></ngb-rating>
 
 
 

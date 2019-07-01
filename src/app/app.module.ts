@@ -24,7 +24,7 @@ import { PageLoaderComponent } from './shared/components/page-loader/page-loader
 import { AlertService, PageLoaderService } from './shared/_services'
 
 //import core services
-import { UserAuthService, TitleService, CommonUtilsService, CarService, DealershipService } from './core/_services';
+import { UserAuthService,SellerService, TitleService, CommonUtilsService, CarService,DealerService, DealershipService } from './core/_services';
 
 //import shared module
 import { SharedModule } from './core/shared.module';
@@ -62,7 +62,9 @@ import { HttpErrorInterceptor } from './core/intercepters/http-error.interceptor
     CommonUtilsService,
     CarService,
     DealershipService,
+    DealerService,
     TitleService,
+    SellerService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ApiIntercepter, multi: true

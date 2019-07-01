@@ -47,7 +47,8 @@ export class CreateDealershipComponent implements OnInit {
   submitted = false;
   states: any = []
   IsForUpdate: boolean = false;
-
+  private _dealerLocation:any = {}
+  cities:any=[];
   newDealershipForm: FormGroup;
   public config: DropzoneConfigInterface;
 
@@ -61,10 +62,67 @@ export class CreateDealershipComponent implements OnInit {
     
 
     //fetching us states
-    this.fetchStates();
+    //this.fetchStates();
+
+    
 
   }
 
+  fetchCityState(zipcode){
+    
+    if((zipcode) && zipcode.length==5){
+      this.newDealershipForm.controls.location.get('state').patchValue(''); 
+      this.newDealershipForm.controls.location.get('city').patchValue(''); 
+      this.fetchCityStateOfZipcode(zipcode);
+    }
+      
+   
+  }
+  /**
+ * private function to fetch city and state information of entered zipcode
+ * @param zipcode number(entered zipcode from clientside)
+ * @return  void
+*/
+ private fetchCityStateOfZipcode(zipcode):void{
+  this.commonUtilsService.fetchCityStateOfZipcode(zipcode)
+    .subscribe(
+    (response) => { 
+      console.log(!_.has(response[0],['status']))
+      if(!_.has(response[0],['status'])){
+        console.log(response)
+        this.cities = response[0]['city_states'];
+        let cityState = response[0]['city_states'][0]       
+        cityState['coordinates'] = [response[0]['zipcodes'][0]['longitude'],response[0]['zipcodes'][0]['latitude']]            
+        this.dealerLocation =  cityState
+
+      }else{
+        this.newDealershipForm.controls.location.get('zipcode').patchValue(''); 
+        this.commonUtilsService.onError('Could not fetch city, state data for zipcode.');
+      }       
+    },
+    error => {        
+      this.newDealershipForm.controls.location.get('zipcode').patchValue(''); 
+      this.commonUtilsService.onError('Could not fetch city, state data for zipcode.');
+    });  
+}
+
+/**
+  * get vehicle to be picked up value.
+  * @return  any
+  */
+ get dealerLocation(): any {
+  return this._dealerLocation;
+}
+
+/**
+* set vehicle to be picked up value.
+* @param dealerLocation  object of key:value
+*/
+set dealerLocation(dealerLocation: any){
+  this._dealerLocation = dealerLocation;  
+  this.newDealershipForm.get('location').patchValue(this._dealerLocation); 
+  console.log('form value location',this.newDealershipForm.get('location').value)
+}
 
   ngOnChanges(changes: SimpleChanges) {
     //setting the page title
@@ -220,14 +278,15 @@ export class CreateDealershipComponent implements OnInit {
       dealershipnumber: [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(50)])],
       mainaddressline1: [null, [Validators.required]],
       mainaddressline2: [null],
-      city: [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')])],
-      state: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')])],
-      zip: [null, Validators.compose([Validators.required, Validators.pattern('^[0-9]{5}$')])],
+      location:this.formBuilder.group({
+        zipcode: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])],
+        state: ['', [Validators.required]],
+        city: ['', [Validators.required]],
+
+      }), 
       profile_pic: [null],
       _id: [null],
-      dealer_id: [localStorage.getItem('loggedinUserId')],
-      // dealer_id: "5ca1e88f9dac60394419c0bc"
-
+      dealer_id: [localStorage.getItem('loggedinUserId')]
     });
   }
   // push new dealership item 
@@ -237,8 +296,7 @@ export class CreateDealershipComponent implements OnInit {
       this.submitted = true;
       return;
     }
-    this.newDealershipForm.get('dealer_id').setValue(localStorage.getItem('loggedinUserId'))
-    // this.newDealershipForm.get('dealer_id').setValue('5ca1e88f9dac60394419c0bc')    
+    this.newDealershipForm.get('dealer_id').setValue(localStorage.getItem('loggedinUserId'))  
     this.dealershipsItems.push(
       this.newDealershipForm.value
     );   
@@ -256,13 +314,14 @@ export class CreateDealershipComponent implements OnInit {
       $(".dz-image img").attr('src', dealerProfilePic);
     });
     this.newDealershipForm.patchValue(this.dealershipsItems[index])
+   
   }
 
   // update content of newely added dealership
   onUpdateExistingDealership() {
 
 
-    if (this.newDealershipForm.invalid) {
+    if (this.newDealershipForm.invalid) {     
       return;
     }
     this.onUpdateDealership.emit({ index: this.dealershipItemIndex, value: this.newDealershipForm.value });
@@ -284,7 +343,7 @@ export class CreateDealershipComponent implements OnInit {
         });
 
     this.IsForUpdate = false;
-    this.resetForm();
+    //this.resetForm();
   }
 
   // update content of newely added dealership
@@ -307,7 +366,6 @@ export class CreateDealershipComponent implements OnInit {
     }
     var pulled = _.pullAt(this.dealershipsItems, [index]);
   }
-
 
   //saving the new dealership
   onCreateDealership() {

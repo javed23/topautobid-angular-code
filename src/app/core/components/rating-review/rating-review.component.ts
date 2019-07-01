@@ -62,9 +62,8 @@ export class RatingReviewComponent implements OnInit {
   * @param $starRate    number(starRate) which is selected by user.
   * @return             void
   */
-  public show($starRate):void{    
-    this.rating = $starRate    
-   // $(this.contentSection.nativeElement).modal({keyboard: false, show: true});
+  public show():void{    
+   $(this.contentSection.nativeElement).modal({keyboard: false, show: true});
   }
 
   /**
@@ -103,7 +102,12 @@ export class RatingReviewComponent implements OnInit {
   */ 
   onSubmit(){    
 
+
+    this.ratingReviewForm.patchValue({
+      rating:this.rating
+    })
     // stop here if form is invalid
+
     if (this.ratingReviewForm.invalid) {
       this.isSubmitted = true;
       return true;

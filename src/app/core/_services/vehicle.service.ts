@@ -67,7 +67,24 @@ export class VehicleService {
     })
 
   }
-  /**
+
+    /**
+     * get Trims By Make Name
+     * @param makeName   Make Name.
+     * @return Observable<any>
+    */
+    getTrimsByMakeName(makeData): Observable<any> {
+
+        return this.httpClient
+        .post('common/ListingTrimsByMakeName', makeData)
+        .map((response: Response) => {
+            return response;
+        })
+
+    }
+    
+    
+    /**
      * Add Your Vehicle
      * @param vehicleData    Vehicle Details.
      * @return        Observable<any>

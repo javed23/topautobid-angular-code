@@ -82,7 +82,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     this.profileForm = this.formBuilder.group({
       id: [localStorage.getItem('loggedinUserId')],
       name: this.formBuilder.group({
-        prefix: ['Mr.'],
+        prefix: [''],
         first_name: [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')])],
         last_name: [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')])],
 
@@ -289,7 +289,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       acceptedFiles: '.jpg, .png, .jpeg',
       maxFilesize: 2, // MB,
       dictDefaultMessage: 'Change Photo',
-      previewsContainer: "#preview",
+      previewsContainer: "#image-preview",
       addRemoveLinks: true,
       resizeWidth: 125,
       resizeHeight: 125,

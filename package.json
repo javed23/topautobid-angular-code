@@ -28,6 +28,7 @@
     "adal-angular4": "^3.0.16",
     "amazon-cognito-identity-js": "^3.0.7",
     "angular-archwizard": "^3.0.0",
+    "angular5-csv": "^0.2.11",
     "angularx-social-login": "^1.2.5",
     "aws-sdk": "^2.385.0",
     "core-js": "^2.5.4",
@@ -50,7 +51,7 @@
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.13.8",
+    "@angular-devkit/build-angular": "^0.13.9",
     "@angular/cli": "^7.3.8",
     "@angular/compiler-cli": "^7.2.11",
     "@angular/language-service": "~7.1.0",

@@ -74,28 +74,29 @@ export class AddNewCarComponent implements OnInit {
   
 
   // AddNewCar Form Group Wizard
-  vehicleOption: FormGroup;
-  basicInfoWizard: FormGroup;
+  vehicleDetails: FormGroup;
+  standardOptionsWizard: FormGroup;
   uploadVehicleImagesWizard: FormGroup;
   aboutVehicleWizard: FormGroup;
   vehicleConditionWizard: FormGroup;
-  pickupLocationWizard: FormGroup;
+  financeDetailsWizard: FormGroup;
   offerInHands: FormGroup;
   
 
-  isBasicInfoSubmitted:boolean = false;
+  isStandardOptionsSubmitted:boolean = false;
   isVehicleImagesSubmitted:boolean = false;
   isAboutVehicleSubmitted:boolean = false;
   isVehicleConditionSubmitted:boolean = false;
-  isPickupLocationSubmitted:boolean = false;
-  isVehicleOptionSubmitted:boolean = false;
+  isFinanceDetailsSubmitted:boolean = false;
+  isVehicleDetailsSubmitted:boolean = false;
   isOfferInHandsSubmitted:boolean = false;
   isMyCarFound:boolean = false;
+  isAllVehicleDetailsSelected:boolean=false;
   
   
-  isBasicInfoFieldsVisible:boolean = true;  
+  isStandardOptionsFieldsVisible:boolean = true;  
   isMoreSelected:boolean = false;
-  isVehicleOptionSelected:boolean = false;
+  isThisYourCar:boolean = false;
  
   isVinSelected:boolean = false;
   isYearSelected:boolean = false;  
@@ -124,6 +125,50 @@ export class AddNewCarComponent implements OnInit {
   makes = [];  
   models = [];
   trims = [];
+
+  standardEquipmentsArray = [
+    { id: 'Automatic, CVT', name: 'Automatic, CVT' },    
+    { id: 'FWD', name: 'FWD' },
+    { id: '4-CYL, Hybrid, 1.8 Liter', name: '4-CYL, Hybrid, 1.8 Liter' },
+    { id: 'Traction Control', name: 'Traction Control' },
+    { id: 'Stability Control', name: 'Stability Control' },
+    { id: 'ABS, 4 Wheel', name: 'ABS, 4 Wheel' },
+    { id: 'Anti-Theft System', name: 'Anti-Theft System' },
+    { id: 'Keyless Entry', name: 'Keyless Entry' },
+    { id: 'Keyless Start', name: 'Keyless Start' },
+    { id: 'Air Conditioning', name: 'Air Conditioning' },
+    { id: 'Power Windows', name: 'Power Windows' },
+    { id: 'Power Door Locks', name: 'Power Door Locks' },
+    { id: 'Cruise Control', name: 'Cruise Control' },
+    { id: 'Power Steering', name: 'Power Steering' },
+    { id: 'Tilt & Telescoping Wheel', name: 'Tilt & Telescoping Wheel' },
+    { id: 'AM/FM Stereo', name: 'AM/FM Stereo' },
+    { id: 'CD/MP3 (Single Disc)', name: 'CD/MP3 (Single Disc)' },
+    { id: 'Bluetooth Wireless', name: 'Bluetooth Wireless' },
+    { id: 'Dual Airbags', name: 'Dual Airbags' },
+    { id: 'Side Airbags', name: 'Side Airbags' },
+    { id: 'F&R Head Curtain Air Bags', name: 'F&R Head Curtain Air Bags' },
+    { id: 'Daytime Running Lights', name: 'Daytime Running Lights' },
+    { id: 'Rear Spoiler', name: 'Rear Spoiler' } 
+  ];
+
+  entertainmentsArray = [
+    { id: 'Premium Sound', name: 'Premium Sound' },
+    { id: 'SiriusXM Satellite', name: 'SiriusXM Satellite' },
+    { id: 'DVD System', name: 'DVD System' }
+  ];
+
+  wheelsArray = [
+    { id: 'Alloy Wheels', name: 'Alloy Wheels' },
+    { id: 'Premium Wheels', name: 'Premium Wheels' },
+    { id: 'Premium Wheels 19"+', name: 'Premium Wheels 19"+' }
+  ];
+
+  accessoryPackagesArray = [
+    { id: 'Plus Performance Pkg', name: 'Plus Performance Pkg' }
+  ]
+
+
   bodyTypes = [{name: "Cabriolet"}, {name: "Coupe"}, {name: "Crossover"}, {name: "Fastback"}, {name: "Hardtop"}, {name: "Hatchback"}, {name: "Liftback"}, {name: "Limousine"}, {name: "Minivan"}, {name: "Pickup"}, {name: "Roadster"}, {name: "Sedan"}, {name: "Targa"}, {name: "Wagon"}];
 
   engineType= [{name: "Gasoline"}, {name: "Electric Gasoline"}, {name: "Gas"}, {name: "Diesel"}, {name: "Gas Diesel"}];
@@ -135,7 +180,7 @@ export class AddNewCarComponent implements OnInit {
   interiorColors= [{name: "Black"}, {name: "Blue"}, {name: "Brown"}, {name: "Grey"}, {name: "Red"}, {name: "Silver"}];
   exteriorColors= [{name: "Black"}, {name: "Blue"}, {name: "Brown"}, {name: "Grey"}, {name: "Red"}, {name: "Silver"}];
   interiorMaterials= [{name: "Faux Leather"}, {name: "Brushed Nylon"}, {name: "Nylon Fabric"}];
-  basicInfoDetails= {model_doors: "", model_engine_cyl: "", model_transmission_type: "", model_engine_fuel: "", model_drive: "", model_body: ""};
+  standardOptionsDetails= {model_doors: "", model_engine_cyl: "", model_transmission_type: "", model_engine_fuel: "", model_drive: "", model_body: ""};
 
 
   vehicleMakeLabel ="";
@@ -180,19 +225,18 @@ export class AddNewCarComponent implements OnInit {
 
 constructor( private zone:NgZone, private cognitoUserService:CognitoUserService, private location: Location, private alertService: AlertService, private vehicleService: VehicleService, private userAuthService: UserAuthService, private pageLoaderService: PageLoaderService, private formBuilder: FormBuilder, private titleService: TitleService, private commonUtilsService: CommonUtilsService, private toastr: ToastrManager, private router: Router) { 
 
-  this.selectVehicleOption(); // Initialize Vehicle Option Fields 
-  this.basicInfo();          // Initialize Basic Info Wizard Fields 
+  this.selectvehicleDetails(); // Initialize Vehicle Option Fields 
+  this.standardOptions();          // Initialize Basic Info Wizard Fields 
   this.uploadVehicleImages(); // Initialize Vehicle Images Wizard Fields
   this.aboutVehicle();       // Initialize About Vehicle Wizard Fields
   this.vehicleCondition();   // Initialize Vehicle Condition Wizard Fields
-  this.pickUpLocation();     // Initialize Pickup Location Wizard Fields
+  this.financeDetails();     // Initialize Pickup Location Wizard Fields
   this.offerInHandsPopUp();  //
 
   this.vehicleImagesDropzoneInit()        //initalize dropzone library
   this.vehicleAfterMarketDropzoneInit(); //initalize dropzone library
   this.vehicleAfterConditionDropzoneInit(); //initalize dropzone library
   this.offerInHandsDropzoneInit(); //initalize dropzone library 
-
 
   
 }
@@ -201,12 +245,15 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   /**
   * Initialize Basic Info Wizard Fields.
   */
-  private selectVehicleOption(){
-    this.vehicleOption = this.formBuilder.group({
+  private selectvehicleDetails(){
+    this.vehicleDetails = this.formBuilder.group({
       _id: [null],
       seller_id: [localStorage.getItem('loggedinUserId')],
       vin_number: ['', Validators.compose([Validators.required,Validators.minLength(17),Validators.maxLength(17)])],       
-      vehicle_year: [''],    
+      vehicle_year: [''],   
+      vehicle_make: [''],
+      vehicle_model: [''],
+      vehicle_trim: ['', Validators.compose([Validators.required])], 
       vehicle_location:this.formBuilder.group({
         zipcode: ['', Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])],     
         state: [''],
@@ -218,60 +265,22 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   /**
   * Initialize Basic Info Wizard Fields.
   */
-  private basicInfo(){
-    this.basicInfoWizard = this.formBuilder.group({ 
-              
-        basic_info:this.formBuilder.group({  
-
-          vehicle_make: [{value: '', disabled: true}, Validators.compose([Validators.required])],
-          vehicle_model: [{value: '', disabled: true}, Validators.compose([Validators.required])],
-          vehicle_trim: [{value: '', disabled: true}, Validators.compose([Validators.required])],
-          vehicle_mileage: ['', Validators.compose([Validators.required,Validators.minLength(1),Validators.maxLength(6),Validators.pattern(/^-?(0|[1-9]\d*)?$/)])],
-          vehicle_interior_color: ['Black', Validators.compose([Validators.required])],
-          vehicle_other_interior_color: [''],
-          vehicle_exterior_color: ['Black', Validators.compose([Validators.required])],
-          vehicle_other_exterior_color: [''],
-          vehicle_interior_material: ['', Validators.compose([Validators.required])],
-
-          // Vehicle Chassis
-          vehicle_chassis:this.formBuilder.group({        
-            model_body: [''],
-            model_seats: [''],
-            model_length_mm: [''],
-            model_width_mm: [''],
-            model_height_mm: [''],
-            model_wheelbase_mm: [''],
-            model_weight_kg: [''],            
-          }),
-
-          /* vehicle_gearbox_and_handling:this.formBuilder.group({
-            model_transmission_type: [''],
-            ​model_drive: [''],
-            ​model_no_of_speed: [''],
-            ​model_turning_circle: [''],
-          }), */
-           
-          location:[null]                
-        }), 
-
-       /* ​model_engine_fuel: [''],
-        model_engine_cc: [''],
-        ​model_engine_power_ps: [''],
-        model_engine_power_rpm: [''],
-        ​model_engine_torque_nm: [''],
-        model_engine_torque_rpm: [''],
-        model_engine_compression: [''],            
-        model_engine_boost_type: [''],            
-        model_engine_intercooler_presence: [''],            
-        ​model_engine_type: [''],            
-        ​model_engine_cyl: [''],            
-        ​model_engine_valves_per_cyl: [''],            
-        ​model_engine_bore_mm: [''],            
-        ​model_engine_stroke_mm: [''],  */         
-              ​
-        
-        
-        
+  private standardOptions(){
+    this.standardOptionsWizard = this.formBuilder.group({ 
+      standard_equipments: this.buildstandardEquipments(), 
+      additional_options: this.formBuilder.group({
+        entertainments: this.buildEntertainments(), 
+        wheels: this.buildWheels(), 
+        accessory_packages: this.buildAccessoryPackages(), 
+      }),      
+      basic_info:this.formBuilder.group({ 
+        vehicle_mileage: ['', Validators.compose([Validators.required,Validators.minLength(1),Validators.maxLength(6),Validators.pattern(/^-?(0|[1-9]\d*)?$/)])],
+        vehicle_interior_color: ['Black', Validators.compose([Validators.required])],
+        vehicle_other_interior_color: [''],
+        vehicle_exterior_color: ['Black', Validators.compose([Validators.required])],
+        vehicle_other_exterior_color: [''],
+        vehicle_interior_material: ['', Validators.compose([Validators.required])]                     
+      })
     });
   }
 
@@ -301,7 +310,11 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
         vehicle_ownership_value : ['', Validators.compose([Validators.required])],
         vehicle_ownership_description : ['']
             
-      })
+      }),
+      vehicle_to_be_picked_up:  [false],             
+      willing_to_drive : [false],
+      willing_to_drive_how_many_miles: [0]
+      
       
     }); 
   }
@@ -323,11 +336,15 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   /**
   * Initialize Pickup Location Wizard Fields.
   */
-  private pickUpLocation(){     
-    this.pickupLocationWizard = this.formBuilder.group({      
-      vehicle_to_be_picked_up:  [false],             
-      willing_to_drive : [false],
-      willing_to_drive_how_many_miles: [0]                      
+  private financeDetails(){     
+    this.financeDetailsWizard = this.formBuilder.group({ 
+      vehicle_finance_details:this.formBuilder.group({
+        vehicle_finance_bank: ['', Validators.compose([Validators.minLength(2),Validators.maxLength(50)])],
+        vehicle_estimated_price: [0, Validators.compose([Validators.required, Validators.min(1)])],       
+        vehicle_pay_off: [0],       
+        vehicle_offer_in_hands_price : [0],
+        vehicle_proof_image: this.formBuilder.array([]), 
+      })                            
     });
   }
 
@@ -346,7 +363,52 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     })
   }
 
-  
+  get standardEquipments() {
+    return this.standardOptionsWizard.get('standard_equipments');
+  }
+
+  buildstandardEquipments() {
+    const arr = this.standardEquipmentsArray.map(skill => {
+      return this.formBuilder.control(false);
+    });
+    return this.formBuilder.array(arr);
+  }
+
+  get entertainments() {
+   
+    return this.standardOptionsWizard.get('additional_options').get('entertainments');
+  }
+
+  buildEntertainments() {
+    const arr = this.entertainmentsArray.map(skill => {
+      return this.formBuilder.control(false);
+    });
+    return this.formBuilder.array(arr);
+  }
+
+
+  get wheels() {
+    return this.standardOptionsWizard.get('additional_options').get('wheels');
+  }
+
+  buildWheels() {
+    const arr = this.wheelsArray.map(skill => {
+      return this.formBuilder.control(false);
+    });
+    return this.formBuilder.array(arr);
+  }
+
+
+  get accessory_packages() {
+    return this.standardOptionsWizard.get('additional_options').get('accessory_packages');
+  }
+
+  buildAccessoryPackages() {
+    const arr = this.accessoryPackagesArray.map(skill => {
+      return this.formBuilder.control(false);
+    });
+    return this.formBuilder.array(arr);
+  }
 
   /**
    * save Car in DB  
@@ -369,9 +431,9 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     }); 
 
     // set Default Vin Number
-    //this.vehicleOption.controls.vin_number.setValue('1C6RR7GT1ES223950');
+    //this.vehicleDetails.controls.vin_number.setValue('1C6RR7GT1ES223950');
 
-    var mergeVehicleData = Object.assign(this.vehicleOption.value, this.basicInfoWizard.value, this.uploadVehicleImagesWizard.value, this.aboutVehicleWizard.value, this.vehicleConditionWizard.value, this.pickupLocationWizard.value, this.offerInHands.value);
+    var mergeVehicleData = Object.assign(this.vehicleDetails.value, this.standardOptionsWizard.value, this.uploadVehicleImagesWizard.value, this.aboutVehicleWizard.value, this.vehicleConditionWizard.value, this.financeDetailsWizard.value, this.offerInHands.value);
 
     //console.log(mergeVehicleData);
 
@@ -857,15 +919,15 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   */
   async isPreviousClicked() {
     if(! await this.commonUtilsService.isPreviousConfirmed()) { 
-      this.isVehicleOptionSelected = true;        
+      this.isThisYourCar = true;        
     }else{ 
 
       this.isMyCarFound = false; 
-      this.vehicleOption.reset();
-      this.selectVehicleOption();
+      this.vehicleDetails.reset();
+      this.selectvehicleDetails();
 
-      this.basicInfoWizard.reset(); 
-      this.basicInfo();          // Initialize Basic Info Wizard Fields 
+      this.standardOptionsWizard.reset(); 
+      this.standardOptions();          // Initialize Basic Info Wizard Fields 
       
       this.uploadVehicleImagesWizard.reset();
       this.uploadVehicleImages();      
@@ -890,8 +952,8 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
         this.vehicleConditionImagesArray.removeAt(this.vehicleConditionImagesArray.length-1);
       }
 
-      this.pickupLocationWizard.reset();
-      this.pickUpLocation();     // Initialize Pickup Location Wizard Fields
+      this.financeDetailsWizard.reset();
+      this.financeDetails();     // Initialize Pickup Location Wizard Fields
 
       this.offerInHands.reset();
       this.offerInHandsPopUp(); 
@@ -907,7 +969,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       this.isOtherInteriorColorSelected = false;
       this.isOtherExteriorColorSelected = false;
 
-      this.isVehicleOptionSelected = false; 
+      this.isThisYourCar = false; 
       
       this.scrollToSpecificDiv();
       
@@ -932,21 +994,21 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     
 
     const _this = this;
-    let vehicleYear = _this.vehicleOption.controls.vehicle_year;
+    let vehicleYear = _this.vehicleDetails.controls.vehicle_year;
 
     this.getVehicleYear = vehicleYear.value;
    
 
 
 
-    let vehicleModelControl = _this.basicInfoWizard.controls.basic_info.get('vehicle_model');
-    let vehicleTrimControl = _this.basicInfoWizard.controls.basic_info.get('vehicle_trim');
+    let vehicleModelControl = _this.standardOptionsWizard.controls.basic_info.get('vehicle_model');
+    let vehicleTrimControl = _this.standardOptionsWizard.controls.basic_info.get('vehicle_trim');
 
     vehicleModelControl.setValue(''); 
 
     _this.resetTrimControl();
 
-    _this.emptyBasicInfoFields();
+    _this.emptyStandardOptionsFields();
 
     if(makeName == ""){ 
       _this.resetModelControl();
@@ -971,7 +1033,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
          
           _this.resetModelControl();
           _this.resetTrimControl();
-          _this.emptyBasicInfoFields();
+          _this.emptyStandardOptionsFields();
           
         }
 
@@ -990,13 +1052,13 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
     const _this = this;    
 
-    let vehicleYear = _this.vehicleOption.controls.vehicle_year;
+    let vehicleYear = _this.vehicleDetails.controls.vehicle_year;
     _this.getVehicleYear = vehicleYear.value;
    
 
-    let vehicleTrimControl = _this.basicInfoWizard.controls.basic_info.get('vehicle_trim');  
+    let vehicleTrimControl = _this.standardOptionsWizard.controls.basic_info.get('vehicle_trim');  
 
-   /* _this.emptyBasicInfoFields();
+   /* _this.emptyStandardOptionsFields();
 
     if(modelName == ""){
       _this.resetTrimControl();      
@@ -1013,14 +1075,14 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
         if(response.Trims.length > 0){
 
-          _this.isVehicleOptionSelected = true;
+          _this.isThisYourCar = true;
           
           vehicleTrimControl.enable(); 
           _this.trims = response.Trims;                
   
         }else{     
 
-          _this.isVehicleOptionSelected = false;
+          _this.isThisYourCar = false;
                
           _this.resetTrimControl();     
 
@@ -1030,7 +1092,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
     });
 
-   // console.log(_this.isVehicleOptionSelected);
+   // console.log(_this.isThisYourCar);
     //this.trims = this.models.find(x => x.name === modelName).trims;  
   }
 
@@ -1041,53 +1103,29 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    */
   validateVINNumber(modelName){
 
-    this.isVehicleOptionSubmitted = true;   
+    this.isVehicleDetailsSubmitted = true;   
 
-    if(this.vehicleOption.invalid) {
-      this.isVehicleOptionSelected = false;
+    if(this.vehicleDetails.invalid) {
+      this.isThisYourCar = false;
       return;
     }
 
+    this.isThisYourCar = true;
     
-    this.getTrimsByModel(modelName);
+   // this.getTrimsByModel(modelName);
       
     
   }
 
 
   /**
-   * get All VehicleDetails By Model ID
-   * @return  array(vehicleDetails)
+   * show/hide Submit Buttons
+   * event 
    */
-  getAllVehicleDetails(event){
-    const _this = this; 
-    const selectedTrim = event.target;
-    const modelId = selectedTrim.options[selectedTrim.selectedIndex].getAttribute('data-modelId');
-
-
-    if(selectedTrim.value==""){
-      _this.emptyBasicInfoFields();
-    }
-
-    
-    $.getJSON("https://www.carqueryapi.com/api/0.3/?callback=?", {cmd:"getModel", model:modelId}, function(response) {
-        //The 'data' variable contains all response data.    
-        console.log('response', response);
-          if(response.length > 0){                                
-
-              _this.vehicleService.getAllVehicleDetails(response[0])              
-              .subscribe(
-
-              (response) => {      
-                _this.basicInfoWizard.controls.basic_info.patchValue(response);
-                _this.basicInfoWizard.controls.basic_info.get('vehicle_chassis').patchValue(response);
-                
-              
-              },error => { });
-          }
-    });
-   
-    
+  onSelectTrim(event): void{     
+    let selectedTrim = event.target;
+    let modelId = selectedTrim.options[selectedTrim.selectedIndex].getAttribute('data-modelId');
+    (selectedTrim.value == "") ? this.isAllVehicleDetailsSelected = false: this.isAllVehicleDetailsSelected = true;
   }
  
 
@@ -1098,16 +1136,16 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    */
   getVehicleStatisticsByYear(year){
 
-    let vehicleMakeControl = this.basicInfoWizard.controls.basic_info.get('vehicle_make');
-    let vehicleModelControl = this.basicInfoWizard.controls.basic_info.get('vehicle_model');
-    let vehicleTrimControl = this.basicInfoWizard.controls.basic_info.get('vehicle_trim');
+    let vehicleMakeControl = this.standardOptionsWizard.controls.basic_info.get('vehicle_make');
+    let vehicleModelControl = this.standardOptionsWizard.controls.basic_info.get('vehicle_model');
+    let vehicleTrimControl = this.standardOptionsWizard.controls.basic_info.get('vehicle_trim');
 
     if(year == ''){ 
       vehicleMakeControl.disable(); this.makes = [];
       vehicleModelControl.disable(); this.models = [];
       vehicleTrimControl.disable(); this.trims = [];
 
-      this.emptyBasicInfoFields();
+      this.emptyStandardOptionsFields();
 
       return;
     }
@@ -1124,17 +1162,17 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
         
         if(response.Makes.length > 0){
 
-          _this.isVehicleOptionSelected = true;
+          _this.isThisYourCar = true;
           _this.makes = response.Makes;
           vehicleMakeControl.enable();
           vehicleModelControl.disable(); _this.models = [];
           vehicleTrimControl.disable(); _this.trims = []; 
           
-          _this.emptyBasicInfoFields();
+          _this.emptyStandardOptionsFields();
           
   
         }else{
-          _this.isVehicleOptionSelected = false;
+          _this.isThisYourCar = false;
           _this.commonUtilsService.onError(environment.MESSAGES.NO_RECORDS_FOUND);
         } 
 
@@ -1147,11 +1185,11 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   /**
    * validate Basic Info Wizard and move to Upload Images Wizard.   
    */
-  validateBasicInfoWizard() : void {    
+  validateStandardOptionsWizard() : void {    
 
-    this.isBasicInfoSubmitted = true;   
+    this.isStandardOptionsSubmitted = true;   
 
-    if(this.basicInfoWizard.invalid) {
+    if(this.standardOptionsWizard.invalid) {
       return;
     }
 
@@ -1242,11 +1280,11 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   /**
    * validate Pickup Location Wizard and open offer in hands Popup.   
    */
-  validatePickupLocationWizard() : void {
+  validateFinanceDetailsWizard() : void {
     
-    this.isPickupLocationSubmitted = true;   
+    this.isFinanceDetailsSubmitted = true;   
 
-    if(this.pickupLocationWizard.invalid) {
+    if(this.financeDetailsWizard.invalid) {
       return;
     }
 
@@ -1289,7 +1327,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    */
   setExteriorColor(value: string): void {
     
-    const vehicleExteriorColorIfOtherSelected = this.basicInfoWizard.controls.basic_info.get('vehicle_other_exterior_color');
+    const vehicleExteriorColorIfOtherSelected = this.standardOptionsWizard.controls.basic_info.get('vehicle_other_exterior_color');
     vehicleExteriorColorIfOtherSelected.patchValue('');
     
     if(value == "Other"){
@@ -1310,7 +1348,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    * @param value color 
    */
   setInteriorColor(value: string): void {
-    const vehicleInteriorColorIfOtherSelected = this.basicInfoWizard.controls.basic_info.get('vehicle_other_interior_color');
+    const vehicleInteriorColorIfOtherSelected = this.standardOptionsWizard.controls.basic_info.get('vehicle_other_interior_color');
     vehicleInteriorColorIfOtherSelected.patchValue('');
     
     if(value == "Other"){
@@ -1565,7 +1603,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    * @param event object
    */
   toggleWillingToDrive(event): void {   
-    let willingToDriveHowManyMiles = this.pickupLocationWizard.controls['willing_to_drive_how_many_miles'];        
+    let willingToDriveHowManyMiles = this.financeDetailsWizard.controls['willing_to_drive_how_many_miles'];        
     if( event.target.checked ){
       this.isWillingToDriveSelected = true;
       willingToDriveHowManyMiles.setValidators(Validators.compose([Validators.required,Validators.minLength(1),Validators.maxLength(3),Validators.pattern(/^-?(0|[1-9]\d*)?$/)]));
@@ -1594,7 +1632,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   */
   set willingToDrive($willingToDrive: boolean) {
     this._willingToDrive = $willingToDrive; 
-    //this.pickupLocationWizard.controls['willing_to_drive'].patchValue(this._willingToDrive);   
+    //this.financeDetailsWizard.controls['willing_to_drive'].patchValue(this._willingToDrive);   
   }
 
   /**
@@ -1620,7 +1658,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   */
   set vehiclePickedUp(vehiclePickedUp: boolean) {
     this._vehiclePickedUp = vehiclePickedUp;  
-    //this.pickupLocationWizard.controls['vehicle_to_be_picked_up'].patchValue(this._vehiclePickedUp);  
+    //this.financeDetailsWizard.controls['vehicle_to_be_picked_up'].patchValue(this._vehiclePickedUp);  
   }
 
 
@@ -1640,22 +1678,43 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       dataType: "json",
       success: function(response)
       {
-        console.log('result', response);
+        //console.log('result', response);
         if(response.Results[0].Make == ""){
           _this.commonUtilsService.onError(environment.MESSAGES.NO_RECORDS_FOUND);
+          _this.commonUtilsService.hidePageLoader();
         }else{
 
-          _this.isMyCarFound = true;
+         
 
-          let vehicleYearControl = _this.vehicleOption.controls.vehicle_year;
-          let vehicleMakeControl = _this.basicInfoWizard.controls.basic_info.get('vehicle_make');
-          let vehicleModelControl = _this.basicInfoWizard.controls.basic_info.get('vehicle_model');
-          let vehicleTrimControl = _this.basicInfoWizard.controls.basic_info.get('vehicle_trim');
+          let vehicleYearControl = _this.vehicleDetails.controls.vehicle_year;
+          let vehicleMakeControl = _this.vehicleDetails.controls.vehicle_make;
+          let vehicleModelControl = _this.vehicleDetails.controls.vehicle_model;
+          let vehicleTrimControl = _this.vehicleDetails.controls.vehicle_trim;
 
           vehicleYearControl.patchValue(response.Results[0].ModelYear);
           vehicleMakeControl.patchValue(response.Results[0].Make);
           vehicleModelControl.patchValue(response.Results[0].Model);
           vehicleTrimControl.patchValue(response.Results[0].Trim);
+
+          //_this.commonUtilsService.showPageLoader('Saving Your Car...');
+
+          _this.vehicleService.getTrimsByMakeName({make_name:response.Results[0].Make, model_name:response.Results[0].Model})
+          .subscribe(
+          (response) => { 
+
+            _this.isMyCarFound = true;
+            _this.trims = response;
+            //console.log(response);
+            _this.commonUtilsService.hidePageLoader();
+            
+          },
+          error => {
+            _this.isMyCarFound = false;
+            _this.commonUtilsService.onError(environment.MESSAGES.NO_RECORDS_FOUND);
+            //console.log(error); 
+            _this.commonUtilsService.hidePageLoader();  
+
+          });
 
           _this.vehicleMakeLabel = response.Results[0].Make;
           _this.vehicleModelLabel = response.Results[0].Model;
@@ -1663,7 +1722,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           
         }
         
-        _this.commonUtilsService.hidePageLoader();
+        
       },
       error: function(xhr, ajaxOptions, thrownError)
       {
@@ -1713,12 +1772,12 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
         cityState['coordinates'] = [response[0]['zipcodes'][0]['longitude'],response[0]['zipcodes'][0]['latitude']]            
         this.vehicleLocation =  cityState    
       }else{
-        this.vehicleOption.controls.vehicle_location.get('zipcode').patchValue('');                  
+        this.vehicleDetails.controls.vehicle_location.get('zipcode').patchValue('');                  
         this.commonUtilsService.onError('Could not fetch city, state data for zipcode.');
       }       
     },
     error => {        
-      this.vehicleOption.controls.vehicle_location.get('zipcode').patchValue(''); 
+      this.vehicleDetails.controls.vehicle_location.get('zipcode').patchValue(''); 
       this.commonUtilsService.onError('Could not fetch city, state data for zipcode.');
     });  
 }
@@ -1737,7 +1796,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 */
 set vehicleLocation(vehicleLocation: any){  
   this._vehicleLocation = vehicleLocation;  
-  this.vehicleOption.get('vehicle_location').patchValue(this._vehicleLocation);  
+  this.vehicleDetails.get('vehicle_location').patchValue(this._vehicleLocation);  
 }
 
 /**
@@ -1745,7 +1804,7 @@ set vehicleLocation(vehicleLocation: any){
 */
 resetVehicleLocationControl():void{
   this.cities = [];
-  this.vehicleOption.get('vehicle_location').patchValue('');
+  this.vehicleDetails.get('vehicle_location').patchValue('');
 }
 
 /**
@@ -1753,18 +1812,19 @@ resetVehicleLocationControl():void{
 */
 resetVINControl():void{  
   this.isMyCarFound = false;
+  this.isAllVehicleDetailsSelected = false;
   this.commonUtilsService.onError("Please try again with another VIN Number or License Plate.");
-  this.vehicleOption.get('vin_number').patchValue('');
+  this.vehicleDetails.get('vin_number').patchValue('');
 }
 
 /**
 * empty basic Info Fields.
 */
-emptyBasicInfoFields():void{
+emptyStandardOptionsFields():void{
 
-  this.vehicleService.getAllVehicleDetails(this.basicInfoDetails).subscribe(
+  this.vehicleService.getAllVehicleDetails(this.standardOptionsDetails).subscribe(
     (response) => {      
-      this.basicInfoWizard.controls.basic_info.patchValue(response);
+      this.standardOptionsWizard.controls.basic_info.patchValue(response);
     
     },error => { });
 }
@@ -1773,7 +1833,7 @@ emptyBasicInfoFields():void{
 * Reset Trim Control
 */
 resetTrimControl():void{
-  let vehicleTrimControl = this.basicInfoWizard.controls.basic_info.get('vehicle_trim');
+  let vehicleTrimControl = this.standardOptionsWizard.controls.basic_info.get('vehicle_trim');
   vehicleTrimControl.disable(); vehicleTrimControl.setValue('');  this.trims = [];
 }
 
@@ -1781,7 +1841,7 @@ resetTrimControl():void{
 * Reset Trim Control
 */
 resetModelControl():void{
-  let vehicleModelControl = this.basicInfoWizard.controls.basic_info.get('vehicle_model');
+  let vehicleModelControl = this.standardOptionsWizard.controls.basic_info.get('vehicle_model');
   vehicleModelControl.disable(); vehicleModelControl.setValue('');  this.models = [];
 }
 
@@ -1789,8 +1849,8 @@ fetchCityState(zipcode){
     
   if((zipcode) && zipcode.length==5){
 
-      this.vehicleOption.controls.vehicle_location.get('state').patchValue(''); 
-      this.vehicleOption.controls.vehicle_location.get('city').patchValue('');      
+      this.vehicleDetails.controls.vehicle_location.get('state').patchValue(''); 
+      this.vehicleDetails.controls.vehicle_location.get('city').patchValue('');      
       (zipcode.length==5)?this.fetchCityStateOfZipcode(zipcode):this.resetVehicleLocationControl()
   }   
  
@@ -1831,7 +1891,7 @@ public checkObjectLength(object): number{
     
     
     const userData = JSON.parse(localStorage.getItem('loggedinUser'));//parsing the local store data
-    this.vehicleOption.controls.vehicle_location.patchValue(userData.location);
+    this.vehicleDetails.controls.vehicle_location.patchValue(userData.location);
   }
 
   ngAfterViewInit(){    

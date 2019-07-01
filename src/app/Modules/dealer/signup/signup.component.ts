@@ -131,21 +131,36 @@ export class SignupComponent implements OnInit {
     .subscribe(zipcode => {  
       this.signUpFormStep1.controls.location.get('state').patchValue(''); 
       this.signUpFormStep1.controls.location.get('city').patchValue(''); 
-      (zipcode.length==5)?this.fetchCityStateOfZipcode(zipcode):''
+      this.resetDealerCities();
+      ((zipcode) && (zipcode.length==5))?this.fetchCityStateOfZipcode(zipcode):''
     });
 
 
     //change on zipcode at dealership
-    let dealershipZipcodeFormControl = this.signUpFormStep1.controls.location.get('zipcode');
+   /* let dealershipZipcodeFormControl = this.signUpFormStep2.get('dealerships').get('location').get('zipcode');
     dealershipZipcodeFormControl.valueChanges    
     .subscribe(zipcode => {  
-      this.signUpFormStep1.controls.location.get('state').patchValue(''); 
-      this.signUpFormStep1.controls.location.get('city').patchValue(''); 
+      this.signUpFormStep2.get('dealerships').get('location').get('state').patchValue(''); 
+      this.signUpFormStep2.get('dealerships').get('location').get('city').patchValue(''); 
+      this.resetDealershipCities();
       (zipcode.length==5)?this.fetchCityStateOfDealershipZipcode(zipcode):''
-    });
+    });*/
 
   }
 
+/**
+* Reset dealer cities
+*/
+resetDealerCities():void{
+  this.cities = [];
+}
+
+/**
+* Reset dealership cities
+*/
+resetDealershipCities():void{
+  this.dealershipCities = [];  
+}
 /**
  * private function to fetch city and state information of entered zipcode
  * @param zipcode number(entered zipcode from clientside)
@@ -174,6 +189,19 @@ export class SignupComponent implements OnInit {
     });  
 }
 
+fetchCityState(zipcode){
+    
+  if((zipcode) && zipcode.length==5){
+    this.signUpFormStep2.get('dealerships').get('location').get('state').patchValue(''); 
+      this.signUpFormStep2.get('dealerships').get('location').get('city').patchValue(''); 
+      this.resetDealershipCities();
+      (zipcode.length==5)?this.fetchCityStateOfDealershipZipcode(zipcode):''
+  }
+    
+ 
+}
+
+
 /**
  * private function to fetch city and state information of entered zipcode
  * @param zipcode number(entered zipcode from clientside)
@@ -187,6 +215,7 @@ private fetchCityStateOfDealershipZipcode(zipcode):void{
       if(!_.has(response[0],['status'])){
         console.log(response)
         this.dealershipCities = response[0]['city_states'];
+        console.log('dealershipCities',this.dealershipCities);
         let cityState = response[0]['city_states'][0]       
         cityState['coordinates'] = [response[0]['zipcodes'][0]['longitude'],response[0]['zipcodes'][0]['latitude']]            
         this.dealershipLocation =  cityState
@@ -245,7 +274,7 @@ set dealershipLocation(dealershipLocation: any){
     this.signUpFormStep1 = this.formBuilder.group({
       username: [null],
       name: this.formBuilder.group({
-        prefix: [''],
+        //prefix: [''],
         first_name: [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')])],
         last_name: [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')])],
 
@@ -281,14 +310,11 @@ set dealershipLocation(dealershipLocation: any){
         ])
       ],
       repassword: [null, Validators.compose([Validators.minLength(10),Validators.maxLength(50),Validators.required])],
-     /* state: ['', Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50),Validators.pattern('^[a-zA-Z ]*$')])],
-      city: [null, Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50),Validators.pattern('^[a-zA-Z ]*$')])],
-      zip: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])],*/
       location:this.formBuilder.group({
         zipcode: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])],
         state: ['', [Validators.required]],
         city: ['', [Validators.required]],
-
+        coordinates:[null]
       }), 
       verified: [true],
       active: [true],     
@@ -307,7 +333,7 @@ set dealershipLocation(dealershipLocation: any){
           zipcode: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])],
           state: ['', [Validators.required]],
           city: ['', [Validators.required]],
-  
+          coordinates:[null]
         })
       })
     });
@@ -565,6 +591,7 @@ set dealershipLocation(dealershipLocation: any){
     );
     //console.log(this.dealershipsItems);
     this.step2submitted = false;
+    this.resetDealershipCities();
     this.signUpFormStep2.reset();
 
   }

@@ -18,6 +18,7 @@ declare let jQuery: any;
 declare let $: any;
 declare let POTENZA: any;
 import * as _ from 'lodash';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list',
@@ -64,7 +65,7 @@ export class ListComponent implements AfterViewInit {
 
 
 
-  constructor(private ngbDateParserFormatter: NgbDateParserFormatter,private commonUtilsService:CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private titleService:TitleService) {
+  constructor(private ngbDateParserFormatter: NgbDateParserFormatter,private router:Router, private commonUtilsService:CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private titleService:TitleService) {
 
     //setting the page title
     this.titleService.setTitle();  
@@ -302,8 +303,11 @@ onSort(event) {
   * Before delete, system confirm to delete the car. If yes opted then process deleting car else no action;
   */
     show(carId):void {
-      this.isBidsModalOpen = true 
-      this.carId = carId
+      this.router.navigate(['/seller/car-bids',carId])
+    
+
+      // this.isBidsModalOpen = true 
+      // this.carId = carId
     }
 
   /**

@@ -5,6 +5,7 @@
 <ng-container *ngIf="errors && errors['maxlength']">Maximum length is {{maxLength}}.<br /></ng-container>
 <ng-container *ngIf="errors && errors['hasNumber']">Must contain at least 1 number.<br /></ng-container>
 <ng-container *ngIf="errors && errors['pattern']">{{patternError}}<br /></ng-container>
+<ng-container *ngIf="errors && errors['isPasswordCorrect']">{{errorPrefix}} is incorrect<br /></ng-container>
 
 <ng-container *ngIf="errors && errors['hasCapitalCase']">{{errorPrefix}} must contain at least 1 Letter in Capital
     Case.<br /></ng-container>

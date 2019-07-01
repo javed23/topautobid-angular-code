@@ -440,7 +440,7 @@ select:disabled {
 /*---------------------------*/
 h1{text-transform: none;}
 button{ cursor: pointer;}
-h2 {font-size:35px; color:#fff; padding-bottom:20px; text-align:center;text-transform: none;}
+app-addcar h2 {font-size:35px; color:#fff; padding-bottom:20px; text-align:center;text-transform: none;}
 .banner_col p.highlight {color: #fff;font-size: 24px;text-align: center;font-weight: 500;letter-spacing: 0.8px;margin-bottom:60px;}
 /*---------------------------*/
 h3 {padding-bottom:15px;}
@@ -498,7 +498,7 @@ ul li { list-style:none;}
 .form_col {padding:50px 0px;}
 .form_col h4 {font-size:20px; margin:0px; padding:0px 0px 10px 0px; color:#6E6E6E;letter-spacing: 0.8px;}
 .f_width {width:90%; padding:0px 0px 20px 0px; position:relative;}
-label {font-size:14px; width:100%; padding-bottom:10px; letter-spacing:0.7px; color:#696969; letter-spacing: 0.8px;}
+app-addcar label {font-size:14px; width:100%; padding-bottom:10px; letter-spacing:0.7px; color:#696969; letter-spacing: 0.8px;}
 /*----------------------------*/
 .vehicle_thumb_outer { padding-bottom:40px; display:inline-block; width:100%;}
 .vehicle_thumb {width: 400px;height: 180px;display: inline-block; overflow:hidden;}

@@ -46,6 +46,9 @@ export class CreateContactComponent implements OnInit {
   IsForUpdateContact: boolean = false; 
   newLegalContactForm: FormGroup;
   public lconfig:DropzoneConfigInterface;
+  private _dealerLocation:any = {}
+  cities:any=[];
+
   //define default emails and phones formArrayName 
   data: any = {
     phones: [
@@ -73,10 +76,55 @@ export class CreateContactComponent implements OnInit {
   constructor(private pageLoaderService:PageLoaderService, private titleService:TitleService, private commonUtilsService:CommonUtilsService, private dealershipService: DealershipService,  private formBuilder: FormBuilder, private zone: NgZone,private router: Router) {
 
     //fetching us states
-    this.fetchStates();
+    //this.fetchStates();
 
+    
    }
+   /**
+ * private function to fetch city and state information of entered zipcode
+ * @param zipcode number(entered zipcode from clientside)
+ * @return  void
+*/
+ private fetchCityStateOfZipcode(zipcode):void{
+  this.commonUtilsService.fetchCityStateOfZipcode(zipcode)
+    .subscribe(
+    (response) => { 
+      console.log(!_.has(response[0],['status']))
+      if(!_.has(response[0],['status'])){
+        console.log(response)
+        this.cities = response[0]['city_states'];
+        let cityState = response[0]['city_states'][0]       
+        cityState['coordinates'] = [response[0]['zipcodes'][0]['longitude'],response[0]['zipcodes'][0]['latitude']]            
+        this.dealerLocation =  cityState
+
+      }else{
+        this.newLegalContactForm.controls.location.get('zipcode').patchValue(''); 
+        this.commonUtilsService.onError('Could not fetch city, state data for zipcode.');
+      }       
+    },
+    error => {        
+      this.newLegalContactForm.controls.location.get('zipcode').patchValue(''); 
+      this.commonUtilsService.onError('Could not fetch city, state data for zipcode.');
+    });  
+}
   
+/**
+  * get vehicle to be picked up value.
+  * @return  any
+  */
+ get dealerLocation(): any {
+  return this._dealerLocation;
+}
+
+/**
+* set vehicle to be picked up value.
+* @param dealerLocation  object of key:value
+*/
+set dealerLocation(dealerLocation: any){
+  this._dealerLocation = dealerLocation;  
+  this.newLegalContactForm.get('location').patchValue(this._dealerLocation); 
+  console.log('form value location',this.newLegalContactForm.get('location').value)
+}
 
   ngOnChanges(changes: SimpleChanges) {
     //setting the page title
@@ -97,6 +145,17 @@ export class CreateContactComponent implements OnInit {
 
     //initalize new legal contact form
     this.initalizeNewLegalContactForm();    
+
+    let zipcodeFormControl = this.newLegalContactForm.controls.location.get('zipcode');
+    zipcodeFormControl.valueChanges    
+    .subscribe(zipcode => {  
+      this.newLegalContactForm.controls.location.get('state').patchValue(''); 
+      this.newLegalContactForm.controls.location.get('city').patchValue(''); 
+      ((zipcode) && zipcode.length==5)?this.fetchCityStateOfZipcode(zipcode):''
+    });
+
+
+
     this.legalContactDropzoneInit() //initalize dropzone library for legal contact    
     this.setPhones();
     this.setEmails();
@@ -200,7 +259,7 @@ export class CreateContactComponent implements OnInit {
       this.newLegalContactForm = this.formBuilder.group({
         //dealer_id: [localStorage.getItem('loggedinUserId')],
         name: this.formBuilder.group({
-          prefix: ['Mr.'],
+          prefix: [''],
           first_name: [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')])],
           last_name: [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')])],
   
@@ -213,11 +272,17 @@ export class CreateContactComponent implements OnInit {
         faxs: this.formBuilder.array([], Validators.required),
         default_fax: [null],
         profile_pic: [null],
-        state: [null, Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50),Validators.pattern('^[a-zA-Z ]*$')])],
+        /*state: [null, Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50),Validators.pattern('^[a-zA-Z ]*$')])],
         city: [null, Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(50),Validators.pattern('^[a-zA-Z ]*$')])],
-        zip: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])],
+        zip: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])],*/
         address_1 : [null, Validators.compose([Validators.required])],
         address_2 : [null],
+        location:this.formBuilder.group({
+          zipcode: [null, Validators.compose([Validators.required,Validators.pattern('^[0-9]{5}$')])],
+          state: ['', [Validators.required]],
+          city: ['', [Validators.required]],
+  
+        }), 
         default_legal_contact:[null],
         _id: [null],
       })      

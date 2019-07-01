@@ -1,0 +1,157 @@
+app-listing .submission_Btns {
+    margin: 18px 0 00 0;
+}
+app-listing .submission_Btns button {
+    margin: 0 3px;
+}
+
+app-listing .modal-header {
+    border: 0;
+    text-align: center;
+}
+app-listing .modal-title {
+    text-align: center;
+    display: block;
+    width: 100%;
+}
+app-listing .modal-body label {
+    font-size: 14px;
+    font-weight: 600;
+}
+app-listing .modal-body {
+    padding: 15px 50px;
+}
+
+            .modal-header {
+                border: 0;
+                text-align: center;
+            }
+            .modal-title {
+                text-align: center;
+                display: block;
+                width: 100%;
+            }
+            .modal-body label {
+                font-size: 14px;
+                font-weight: 600;
+            }
+            .modal-body {
+                padding: 15px 50px;
+            }
+
+            .fa-gavel{
+                    color:#d90f22;
+            }
+
+            /* ----------------- */
+            .carfax_img img {
+                width: auto;
+                max-width: 100%;
+            }
+            notification_icon span i{
+                position: relative;
+            }
+            .badge {
+                position: absolute;
+                background: red;
+                color: #fff;
+                border-radius: 50%;
+                top: 0px;
+                right: 72px;
+                font-size: 9px;
+            }
+            .bg_all{background:#f1f2f2;}
+.border_class{
+	border:1px solid #e2e2e2;
+	padding:0;
+}
+.list_content {
+
+    padding: 10px 30px;
+
+}
+.border_bottom{border-bottom:1px solid #e2e2e2;}
+.img_car {
+
+    width: 100%;
+    height: 100%;
+
+}
+.img_car img {
+    position:relative;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+
+}
+.bg_al{background:#f1f2f2;}
+
+.thumbnail_text h5 {
+    background: #333;
+    color: #fff;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+
+    margin: 0;
+    font-size: 12px;
+    text-align: center;
+}
+.modal_img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.modal_img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+.right_content h6 {
+    font-size: 12px;
+}
+
+.right_content h6 span {
+    /* text-transform: capitalize; */
+    margin-left: 10px;
+    color: #333;
+    font-weight: 400;
+};
+.green_color{
+   color:  green !important;
+}
+.orange_color{
+    color: #FF8C00
+}
+
+/* datatable-header-cell:nth-child(2), datatable-body-cell:nth-child(2) {
+    width: 80px!important;
+}
+datatable-header-cell:nth-child(3), datatable-body-cell:nth-child(3) {
+    width: 100px!important;
+}
+datatable-header-cell:nth-child(8), datatable-body-cell:nth-child(8) {
+    width: 100px!important;
+}
+datatable-header-cell:nth-child(10), datatable-body-cell:nth-child(10) {
+    width: 200px!important;
+} */
+datatable-header-cell, datatable-body-cell {
+    white-space: pre-wrap!important;
+    word-break: break-word;
+}
+
+datatable-body-row , datatable-body-cell{
+    height: auto!important;
+}
+app-listing .fa-gavel{
+        color:#d90f22;
+}
+/* app-listing datatable-body-cell:nth-child(5), datatable-header-cell:nth-child(5) {
+    width: 340px!important;
+} */
+.ngx-datatable.bootstrap .datatable-header .datatable-header-cell {
+    padding: 10px 8px;
+    border-bottom: 0px solid #d1d4d7;
+    font-size: 14px;
+}
