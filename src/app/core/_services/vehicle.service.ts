@@ -82,6 +82,20 @@ export class VehicleService {
         })
 
     }
+
+    /**
+     * get Vehicle Details by Trim ID
+     * @param trimData   Trim Id.
+     * @return Observable<any>
+    */
+    getVehicleDetailsByTrimId(trimData): Observable<any> {
+        return this.httpClient
+        .post('common/ListingVehicleDetailsByTrimId', trimData)
+        .map((response: Response) => {
+            return response;
+        })
+    }    
+
     
     
     /**

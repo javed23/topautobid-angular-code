@@ -1124,8 +1124,28 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    */
   onSelectTrim(event): void{     
     let selectedTrim = event.target;
-    let modelId = selectedTrim.options[selectedTrim.selectedIndex].getAttribute('data-modelId');
+    let trimId = selectedTrim.options[selectedTrim.selectedIndex].getAttribute('data-modelId');
     (selectedTrim.value == "") ? this.isAllVehicleDetailsSelected = false: this.isAllVehicleDetailsSelected = true;
+
+    // get Trim Details by Make and Model
+    this.vehicleService.getVehicleDetailsByTrimId({trim_id:trimId})
+    .subscribe(
+    (response) => { 
+
+      console.log(response);
+      this.commonUtilsService.hidePageLoader();
+      
+    },
+    error => {
+      console.log(error);
+      this.commonUtilsService.onError(environment.MESSAGES.NO_RECORDS_FOUND);     
+      this.commonUtilsService.hidePageLoader();  
+
+    });
+    // get Trim Details by Make and Model
+
+
+
   }
  
 
@@ -1603,7 +1623,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    * @param event object
    */
   toggleWillingToDrive(event): void {   
-    let willingToDriveHowManyMiles = this.financeDetailsWizard.controls['willing_to_drive_how_many_miles'];        
+    let willingToDriveHowManyMiles = this.aboutVehicleWizard.controls['willing_to_drive_how_many_miles'];        
     if( event.target.checked ){
       this.isWillingToDriveSelected = true;
       willingToDriveHowManyMiles.setValidators(Validators.compose([Validators.required,Validators.minLength(1),Validators.maxLength(3),Validators.pattern(/^-?(0|[1-9]\d*)?$/)]));
@@ -1696,8 +1716,8 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           vehicleModelControl.patchValue(response.Results[0].Model);
           vehicleTrimControl.patchValue(response.Results[0].Trim);
 
-          //_this.commonUtilsService.showPageLoader('Saving Your Car...');
-
+          
+          // get Trim Details by Make and Model
           _this.vehicleService.getTrimsByMakeName({make_name:response.Results[0].Make, model_name:response.Results[0].Model})
           .subscribe(
           (response) => { 
@@ -1715,6 +1735,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
             _this.commonUtilsService.hidePageLoader();  
 
           });
+          // get Trim Details by Make and Model
 
           _this.vehicleMakeLabel = response.Results[0].Make;
           _this.vehicleModelLabel = response.Results[0].Model;

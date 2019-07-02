@@ -370,7 +370,7 @@
                                     <div class="button_Submission text-center">
                                         <button class="button red d-inline-block width-auto boder0 mt-4" type="button" awPreviousStep>Previous Step</button>
                                         
-                                        <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="uploadVehicleImagesWizard.invalid" (click)="validateVehicleImagesWizard()" type="button" awNextStep>Next Step</button>		
+                                        <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="(interiorImagesArray.length == 0) || (exteriorImagesArray.length == 0)" (click)="validateVehicleImagesWizard()" type="button" awNextStep>Next Step</button>		
                                         
                                     </div>
                                 </div>   
@@ -584,13 +584,16 @@
 
                                     <div class="row">
                                             <div class="form-group col-md-12"> 
+                                                <div class="head_section">
+                                                    <h2 class="underline_heading">Pick Up Location</h2>
                                                     <div class="switch_outer text-center">                                               
-                                                <span>Do You Want the Car to be Picked Up?</span>
-                                                <label class="switch">
-                                                        <input type="checkbox" (change)="toggleVehiclePickedUp($event)" formControlName="vehicle_to_be_picked_up">
-                                                        <span class="slider round"></span>
-                                                </label>
-                                            </div>
+                                                        <span>Do You Want the Car to be Picked Up?</span>
+                                                        <label class="switch">
+                                                                <input type="checkbox" (change)="toggleVehiclePickedUp($event)" formControlName="vehicle_to_be_picked_up">
+                                                                <span class="slider round"></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
                                             </div>
                                     </div> 
     
@@ -987,7 +990,7 @@
                                             </div>    
                                             
                                             <!--Upload Images Section-->
-                                    </div>
+                                </div>
                                     <!-- Finance Details -->    
 
 
@@ -998,7 +1001,7 @@
                                     <div class="button_Submission">
                                         <button class="button red d-inline-block width-auto boder0 mt-4" type="button" awPreviousStep>Previous Step</button>
                                         
-                                        <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="pickupLocationWizard.invalid" (click)="validatePickupLocationWizard()" type="button">Next Step</button>		
+                                        <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="financeDetailsWizard.invalid" (click)="validateFinanceDetailsWizard()" type="button">Next Step</button>		
                                     </div>		
                                 </div>
                             </form>  
