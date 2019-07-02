@@ -296,6 +296,19 @@ POTENZA.revolutionSlider = function (jQuery) {
         });
     }
   }
+
+  POTENZA.mileageSlider = function () {
+    if($(".mileage-slide").exists()) {
+         //$("#slider-range,#slider-range-2").slider({
+         $("#mileage-range").slider({
+             range: true,
+             min: 100,
+             max: 100000,
+             values: [100, 100000]            
+         });
+     }
+   }
+
   POTENZA.yearslider = function () {
     if($(".year-slide").exists()) {
          //$("#slider-range,#slider-range-2").slider({

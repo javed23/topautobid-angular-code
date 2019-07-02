@@ -493,6 +493,7 @@ ngx-image-zoom .ngxImageZoomContainer[_ngcontent-c7] {
     padding-left: 13px;
     position: absolute;
 }
+
 .ngx-gallery-arrow-left .ngx-gallery-icon .ngx-gallery-icon-content:hover {
     background: #db2d2e;
     border-color: #db2d2e;
@@ -574,13 +575,15 @@ ngx-image-zoom .ngxImageZoomContainer[_ngcontent-c7] {
     color: #444444;
     text-transform: uppercase;
     display: block;
-    margin: 0 0 30px 0;
+    margin: 0 0 15x 0;
     font-weight:600;
 }
 
 .ui-widget-content {
     background: #d6d6d6;
     height: 3px;
+    width: 92%;
+    margin: auto;
     margin-bottom: 30px;
 }
 
@@ -602,6 +605,7 @@ ngx-image-zoom .ngxImageZoomContainer[_ngcontent-c7] {
     color: #444444;
     font-size: 16px;
     background: none;
+    margin-bottom: 25px;
 }
 
 .range_filter.dark {
@@ -754,6 +758,69 @@ button {
     font-size: 15px;
 }
 
+/* Toggle Button CSS Start  *********************/
+.switch_outer {
+    margin: 0;
+    padding: 0px 0;
+    color: #413e3e;
+}
+.switch_outer .switch {
+    margin: 0;
+    vertical-align: middle;
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+
+.switch .slider.round {
+    border-radius: 34px;
+    width: 100%;
+    display: block;
+    height: 100%;
+}
+
+.switch .slider.round:before {
+    border-radius: 50%;
+}
+.switch  .slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 1px;
+    bottom: auto;
+    background-color: white;
+    transition: .4s;
+    top: 1px;
+}
+
+.switch input:checked + .slider {
+    background-color: #46ab55;
+}
+
+/* Toggle Button CSS END  ***************************************/
+.bottom_filter.gray-form input {
+    padding: 9px 20px;
+}
 /* Media******************************** Query ******************************/
 @media screen and (max-width:767px) {
     .range_filter {

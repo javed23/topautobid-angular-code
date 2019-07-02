@@ -264,7 +264,7 @@ public isPDFCorrupted(base64string, type): Observable<any> {
    * Fetch city, state information of zipcode
    * @param zipcode    Vehicle zipcode.
    * @return        Observable<any>
-  */
+*/
  public fetchCityStateOfZipcode(zipcode): Observable<any> {  
     
   let url = `${environment.ADDRESS_API.ENDPOINT}/lookup?auth-id=${environment.ADDRESS_API.KEY}&auth-token=${environment.ADDRESS_API.TOKEN}&zipcode=${zipcode}`;
@@ -273,6 +273,56 @@ public isPDFCorrupted(base64string, type): Observable<any> {
       .map((response: any) => {         
           return response;
       })
+}
+
+/**
+ * get Vehicle makes from DB
+ * @return  array(makes)       
+*/
+public listingMakes(): Observable<any> {
+  return this.httpClient.get('common/listingMakes')
+    .map((response: any) => {
+      //console.log(response); 
+      return response;
+    })
+}
+
+/**
+ * get vehicle models from DB
+ * @param makeData selected make from dropdown.
+ * @return  array(makes)       
+*/
+public listingModels(makeData): Observable<any> {
+  return this.httpClient.post('common/ListingModels', makeData)
+    .map((response: any) => {
+      //console.log(response); 
+      return response;
+    })
+}
+
+/**
+ * get model trims from DB
+ * @param modelData selected model from dropdown.
+ * @return  array(models)       
+*/
+public listingTrimsWithBodystyles(modelData): Observable<any> {
+  return this.httpClient.post('common/ListingTrimsWithBodystyles',modelData)
+    .map((response: any) => {
+      //console.log(response); 
+      return response;
+    })
+}
+
+/**
+ * get model body styles from DB
+ * @return  array(models)       
+*/
+public listingBodystyles(modelData): Observable<any> {
+  return this.httpClient.post('common/listingBodystyles',modelData)
+    .map((response: any) => {
+      //console.log(response); 
+      return response;
+    })
 }
 
 

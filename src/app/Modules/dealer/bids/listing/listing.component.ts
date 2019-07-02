@@ -93,40 +93,9 @@ export class ListingComponent implements OnInit {
     console.log('sectionEnable', this.sectionEnable);
   }
 
-  /**
- * Private function to initalize slider 
- * @return  void
-*/
-  private sliderinit(): void {
-    this.sliderOptions = [
-      {
-        "image": false, "height": "90px", "thumbnailsColumns": 1,
-        "previewCloseOnClick": true, "previewCloseOnEsc": true, "width": "100%"
-      },
-      { "breakpoint": 500, "width": "300px", "height": "300px", }
-    ];
-
-    this.sliderImages = [
-      {
-        small: 'assets/images/bg/cars/small/01.jpg',
-        medium: 'assets/images/bg/cars/small/01.jpg',
-        big: 'assets/images/bg/cars/bg/01.jpg',
-      },
-      {
-        small: 'assets/images/bg/cars/small/02.jpg',
-        medium: 'assets/images/bg/cars/small/02.jpg',
-        big: 'assets/images/bg/cars/bg/02.jpg',
-      },
-      {
-        small: 'assets/images/bg/cars/small/03.jpg',
-        medium: 'assets/images/bg/cars/small/03.jpg',
-        big: 'assets/images/bg/cars/bg/03.jpg',
-      }
-    ];
-  }
-
+  
   ngOnInit() {
-    this.sliderinit()
+    
 
     POTENZA.priceslider()
     POTENZA.yearslider()
@@ -327,6 +296,18 @@ export class ListingComponent implements OnInit {
     if(pos >=0)this.legalContacts = this.dealerShips[pos].legal_contacts;
     else this.legalContacts = [];
   }
+  /**
+   * Search results according to user inputs
+   * @param searchValue user inputs to search particular data
+   * @return  void
+   */
+  applyDashboardFilters(filters): void {
+    this.page.filters = filters
+    this.sectionEnable = 'list'
+    console.log('filters',this.page.filters);
+    this.setPage(this._defaultPagination);
+  }
+
 
 
 /**
