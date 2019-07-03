@@ -21,6 +21,7 @@ declare let POTENZA: any;
 export class ListingComponent implements OnInit {
   @ViewChild('listingTable') listingTable;
   @ViewChild('bidModal') bidModal:ElementRef;
+  @ViewChild("listingSection") listingSection: ElementRef;
 
   sectionEnable: string = 'list'
   sliderOptions: NgxGalleryOptions[];
@@ -45,7 +46,7 @@ export class ListingComponent implements OnInit {
   //title and breadcrumbs
   readonly title: string = 'Dealer Dashboard'
   readonly breadcrumbs: any[] = [{ page: 'Home', link: '/dealer/home' }, { page: 'Dashboard', link: '' }]
-
+  
 
   constructor(private dealerService:DealerService,private commonUtilsService: CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private titleService: TitleService) {
 
@@ -68,6 +69,7 @@ export class ListingComponent implements OnInit {
 
 
   setPage(page) {
+    
     this.page.pageNumber = page.offset;
     this.page.size = page.pageSize;
     //hit api to fetch data
@@ -75,7 +77,7 @@ export class ListingComponent implements OnInit {
 
       //case success
       (pagedData) => {
-
+        this.listingSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });//scroll the page to defined section #contentSection
         this.page = pagedData.page;
 
         //this.cars =  pagedData.data; 
