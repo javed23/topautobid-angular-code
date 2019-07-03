@@ -20,12 +20,8 @@ declare let POTENZA: any;
 })
 export class ListingComponent implements OnInit {
   @ViewChild('listingTable') listingTable;
-<<<<<<< HEAD
   @ViewChild('bidModal') bidModal:ElementRef;
   @ViewChild("listingSection") listingSection: ElementRef;
-=======
-  @ViewChild('bidModal') bidModal: ElementRef;
->>>>>>> 72f6c989a5bce4d041f42d4341414d73a669e477
 
   sectionEnable: string = 'list'
   sliderOptions: NgxGalleryOptions[];
@@ -112,9 +108,6 @@ export class ListingComponent implements OnInit {
     console.log('sectionEnable', this.sectionEnable);
   }
 
-<<<<<<< HEAD
-  
-=======
 
 
 
@@ -134,41 +127,8 @@ export class ListingComponent implements OnInit {
     this.selectedCarId = '';
   }
 
-  /**
- * Private function to initalize slider 
- * @return  void
-*/
-  private sliderinit(): void {
-    this.sliderOptions = [
-      {
-        "image": false, "height": "90px", "thumbnailsColumns": 1,
-        "previewCloseOnClick": true, "previewCloseOnEsc": true, "width": "100%"
-      },
-      { "breakpoint": 500, "width": "300px", "height": "300px", }
-    ];
 
-    this.sliderImages = [
-      {
-        small: 'assets/images/bg/cars/small/01.jpg',
-        medium: 'assets/images/bg/cars/small/01.jpg',
-        big: 'assets/images/bg/cars/bg/01.jpg',
-      },
-      {
-        small: 'assets/images/bg/cars/small/02.jpg',
-        medium: 'assets/images/bg/cars/small/02.jpg',
-        big: 'assets/images/bg/cars/bg/02.jpg',
-      },
-      {
-        small: 'assets/images/bg/cars/small/03.jpg',
-        medium: 'assets/images/bg/cars/small/03.jpg',
-        big: 'assets/images/bg/cars/bg/03.jpg',
-      }
-    ];
-  }
-
->>>>>>> 72f6c989a5bce4d041f42d4341414d73a669e477
-  ngOnInit() {
-    
+  ngOnInit() {    
 
     POTENZA.priceslider()
     POTENZA.yearslider()

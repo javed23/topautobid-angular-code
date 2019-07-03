@@ -77,7 +77,7 @@ export class Car {
         this.offer_in_hand_images = object.vehicle_finance_details.vehicle_proof_image
         this.type = object.type
         this.miles = object.basic_info.vehicle_mileage;
-        this.cover_image = (object.vehicle_images.length > 0) ? object.vehicle_images[0]['file_path'] : 'assets/images/no_vehicle.png'
+        this.cover_image = (object.vehicle_images && object.vehicle_images.length > 0) ? object.vehicle_images[0]['file_path'] : 'assets/images/no_vehicle.png'
         this.car_images = object.vehicle_images;
         this.market_value = object.vehicle_aftermarket.vehicle_aftermarket_description;
         this.review = object.review;
@@ -96,7 +96,7 @@ export class Car {
         this.dealers_bids = object.dealers_bids;
         this.vehicle_finance_details = object.vehicle_finance_details
         this.vehicle_condition = object.vehicle_condition;
-        this.my_bid = object.my_bid.length >0 ?object.my_bid[0].bids:[];
+        this.my_bid = (object.my_bid && object.my_bid.length) >0 ?object.my_bid[0].bids:[];
         this.higest_bid = object.higest_bid ? object.higest_bid :null;
         this.seller_distance = (object.distance)?object.distance : 0
         

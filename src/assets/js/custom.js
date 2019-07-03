@@ -302,21 +302,22 @@ POTENZA.revolutionSlider = function (jQuery) {
          //$("#slider-range,#slider-range-2").slider({
          $("#mileage-range").slider({
              range: true,
-             min: 100,
-             max: 100000,
-             values: [100, 100000]            
+             min: 1,
+             max: 10000,
+             values: [1, 10000]            
          });
      }
    }
 
   POTENZA.yearslider = function () {
+    const currentYear = new Date().getFullYear();
     if($(".year-slide").exists()) {
          //$("#slider-range,#slider-range-2").slider({
          $("#year-range").slider({
              range: true,
              min: 2010,
-             max: 2018,
-             values: [2010, 2018]            
+             max: currentYear,
+             values: [2010, currentYear]            
          });
      }
    }

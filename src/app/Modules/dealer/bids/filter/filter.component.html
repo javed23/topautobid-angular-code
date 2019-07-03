@@ -26,7 +26,7 @@
           <div class="form-group">
             <label>VIN or License Plate</label>
             <div class="selected-box">
-                <input placeholder="Enter VIN Or License Plate" class="form-control" formControlName="vin_license_plate" type="text" class="bids" />
+                <input style="text-transform: uppercase" placeholder="Enter VIN Or License Plate" class="form-control" formControlName="vin_license_plate" type="text" class="bids" />
             </div>
           </div>
         </div>
@@ -110,7 +110,7 @@
             <div class="selected-box">
               <select (change)="multipleSelection($event,'interior_color')"  formControlName="interior_color" multiple class="selectpicker my_select">
                   <option value="">All</option>
-                  <option *ngFor="let interiorColor of interiorColors | keyvalue" value="{{interiorColor.value.name}}">{{interiorColor.value.name}}</option>
+                  <option *ngFor="let interiorColor of colors | keyvalue" value="{{interiorColor.value.label}}">{{interiorColor.value.label}}</option>
               </select>
             </div>
           </div>
@@ -121,7 +121,7 @@
             <div class="selected-box">
               <select (change)="multipleSelection($event,'exterior_color')" formControlName="exterior_color" multiple class="selectpicker my_select">
                   <option value="">All</option>
-                  <option *ngFor="let exteriorColor of exteriorColors | keyvalue" value="{{exteriorColor.value.name}}">{{exteriorColor.value.name}}</option>
+                  <option *ngFor="let exteriorColor of colors | keyvalue" value="{{exteriorColor.value.label}}">{{exteriorColor.value.label}}</option>
               </select>
             </div>
           </div>
@@ -139,8 +139,8 @@
         </div>
         <div class="col-md-12">
           <div class="submission_buttons">
-            <button class="button">Apply Filters</button>
-            <button class="button">Reset</button>
+            <button  class="button">Apply Filters</button>
+            <button type="button" class="button" (click)="resetFilters()">Reset</button>
           </div>
         </div>
       </div>
