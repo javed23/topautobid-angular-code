@@ -296,8 +296,11 @@
                   </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Trim" [sortable]="true">
-                  <ng-template let-row="row" ngx-datatable-cell-template>
-                    {{ row?.trim | slice:0:18}}
+                  <ng-template let-row="row" ngx-datatable-cell-template >
+                    <span *ngIf="row?.trim?.length <= 18" data-toggle="tooltip" title="{{row?.trim}}">{{ row?.trim | slice:0:18}}</span>
+                    <span *ngIf="row?.trim?.length > 18" data-toggle="tooltip" title="{{row?.trim}}">{{ row?.trim | slice:0:18}}...</span>
+                    
+
                   </ng-template>
                 </ngx-datatable-column>
                 
@@ -314,7 +317,9 @@
 
                 <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Car Condition" [sortable]="true">
                   <ng-template let-row="row" ngx-datatable-cell-template>
-                    {{ row?.vehicle_condition?.vehicle_condition_value | slice:0:18 }}
+                      <span *ngIf="row?.vehicle_condition?.vehicle_condition_value?.length <= 18" data-toggle="tooltip" title="{{row?.vehicle_condition?.vehicle_condition_value}}">{{ row?.vehicle_condition?.vehicle_condition_value | slice:0:18 }}</span>
+                      <span *ngIf="row?.vehicle_condition?.vehicle_condition_value?.length > 18" data-toggle="tooltip" title="{{row?.vehicle_condition?.vehicle_condition_value}}">{{ row?.vehicle_condition?.vehicle_condition_value | slice:0:18 }}...</span>
+                    
                   </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Seller Distance" [sortable]="true">
