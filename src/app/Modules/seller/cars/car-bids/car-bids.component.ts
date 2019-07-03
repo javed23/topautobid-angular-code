@@ -193,12 +193,6 @@ export class CarBidsComponent {
       
         // For more information about handling dismissals please visit
         // https://sweetalert2.github.io/#handling-dismissals
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        Swal.fire(
-          'Cancelled',
-          'Your imaginary file is safe :)',
-          'error'
-        )
       }
     })
   };

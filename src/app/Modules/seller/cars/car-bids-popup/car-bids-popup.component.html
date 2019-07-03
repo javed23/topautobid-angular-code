@@ -21,12 +21,13 @@
                     <table class="table table-bordered-custom-modal table-striped table-image-set">
                       <thead class="thead-dark-custom-modal">
                         <tr>                        
-                          <th>DealerShip Logo</th>
+                          <th>Dealer</th>
                           <th>Dealership</th>
                           <th>Legal Contact</th>
                           <th>Price</th>
                           <th>Buyer Rating</th>
-                          <th>Applied On</th>                          
+                          <th>Applied On</th>      
+                          <th>Action</th>                          
                         </tr>
                       </thead>
                       <tbody *ngIf="bids?.length <= 0">
@@ -40,15 +41,16 @@
                         <tr *ngFor="let bid of bids; let i = index">
 
                          
-                          <td><img  *ngIf="bid?.dealership[0]?.profile_pic" src="{{bid?.dealership[0]?.profile_pic}}"/></td>
+                          <td>{{bid?.dealer[0]?.name?.first_name}} {{bid?.dealer[0]?.name.last_name}}</td>
                           <td>{{ bid?.dealership[0]?.legalcoroporationname}}</td>
                           <td>{{ bid.bids[bid.bids.length-1]?.legal_contact}} </td>
-                          <td>{{ bid.bids[bid.bids.length-1]?.price | currency:'USD':true:'2.2-2'}}</td>              
+                          <td>{{ bid.bids[bid.bids.length-1]?.price | currency:'USD':true:'2.2-2'}}</td>             
                           <td>
                               <ngb-rating [readonly]="true" aria-labelledby="Rating & Review" [max]="5" [rate]="bid?.dealer_rating_average">
                                 </ngb-rating>
                                 <span class="rating-number">({{bid?.dealer_rating_average}}/5)</span></td>
-                          <td> {{bid.bids[bid.bids.length-1]?.bid_date | date:'MM-dd-yyyy'}}</td>                        
+                          <td> {{ bid?.bids[bid.bids.length-1]?.bid_date | date:'MM-dd-yyyy'}}</td>  
+                          <td> <span class="accept_btn" (click)="acceptBid(bid?._id)">Accept</span></td>                         
                         </tr>
 
                       </tbody>

@@ -10,6 +10,16 @@ car-details -->
 
 <section class="car-details page-section-ptb">
   <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="back_BTN">
+            <a (click)="goBack()">
+                <i class="fa fa-arrow-left" aria-hidden="true"></i>
+            </a> 
+              
+          </div>
+        </div>   
+      </div>
     <div class="row">
       <div class="col-md-9">
         <h3>{{carDetail?.make}} {{carDetail?.model}} </h3>

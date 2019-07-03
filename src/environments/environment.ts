@@ -106,7 +106,8 @@ export const environment = {
     ATLEAST_ONE_CONTACT: 'Please add atleast one legal contact',
     SELECT_PRIMARY: 'Please select primary contact.',
     MAXIMUM_PRIMARY_CONTACT: 'Primary contact can not be more than one.',
-    CAR_STATUS_CHANGED: 'Status has been changed successfully.'
+    CAR_STATUS_CHANGED: 'Status has been changed successfully.',
+    BID_SUCCESS:'The bid has been applied successfully!'
   }
 };
 

@@ -23,7 +23,7 @@ export class Car {
     offer_in_hand: number;
     comments: string;
     car_selleing_radius: number;  
-    bids: any;
+    totalBids: any;
     images: any;
     offer_in_hand_images: any;
     type: string;
@@ -48,6 +48,7 @@ export class Car {
     vehicle_finance_details:any;
     my_bid:any;
     higest_bid:any;
+    seller_distance:any;
     
     constructor(object) {
         console.log('object', object['basic_info']);
@@ -72,7 +73,7 @@ export class Car {
         this.offer_in_hand = object.vehicle_finance_details.vehicle_estimated_price;
         this.comments = object.vehicle_comments;       
         this.images = object.vehicle_images;
-        this.bids = object.bids
+        this.totalBids = object.totalBids
         this.offer_in_hand_images = object.vehicle_finance_details.vehicle_proof_image
         this.type = object.type
         this.miles = object.basic_info.vehicle_mileage;
@@ -95,8 +96,9 @@ export class Car {
         this.dealers_bids = object.dealers_bids;
         this.vehicle_finance_details = object.vehicle_finance_details
         this.vehicle_condition = object.vehicle_condition;
-        this.my_bid = object.my_bid;
-        this.higest_bid = object.higest_bid
+        this.my_bid = object.my_bid.length >0 ?object.my_bid[0].bids:[];
+        this.higest_bid = object.higest_bid ? object.higest_bid :null;
+        this.seller_distance = (object.distance)?object.distance : 0
         
     }
 }

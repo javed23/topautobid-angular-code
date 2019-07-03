@@ -758,6 +758,7 @@ button {
     font-size: 15px;
 }
 
+<<<<<<< HEAD
 /* Toggle Button CSS Start  *********************/
 .switch_outer {
     margin: 0;
@@ -820,6 +821,31 @@ button {
 /* Toggle Button CSS END  ***************************************/
 .bottom_filter.gray-form input {
     padding: 9px 20px;
+=======
+
+
+.table_outer{width:100%;height:auto;float:left;border:1px solid #e0e0e0;-webkit-box-shadow:0 0 20px 0 rgba(0,0,0,0.1);-moz-box-shadow:0 0 20px 0 rgba(0,0,0,0.1);box-shadow:0 0 20px 0 rgba(0,0,0,0.1);-ms-box-shadow:0 0 20px 0 rgba(0,0,0,0.1);-o-box-shadow:0 0 20px 0 rgba(0,0,0,0.1);border-collapse:collapse;overflow-x:auto}
+table.responsive_tables{margin:0;padding:0;width:100%;table-layout:auto;background:#fff}
+table.responsive_tables tr{border-bottom:1px solid #e0e0e0;padding:5px}
+table.responsive_tables thead{background:#fafcfe}
+table.responsive_tables th{font-size:13px;color:#282828;padding:4px 10px;background-color:#fafcfe}
+table.responsive_tables th a,table.responsive_tables th a:link,table.responsive_tables th a:visited{font-size:13px;color:#282828}
+table.responsive_tables td{font-size:14px;line-height:21px!important;color:#909090;padding:5px 10px;background-color:#fff}
+table.responsive_tables td a:hover,table.responsive_tables td a:focus{text-decoration:underline}
+.responsive_tables.last_action th:last-of-type{text-align:right}
+.text-input__profile{border-radius:4px;width:100%}
+.text-input__tables{border-radius:4px;width:100%}
+.text-table--line{height:10px;width:50%;margin:10px;animation:pulse 1s infinite ease-in-out}
+.text-input__tables div:nth-child(1){width:20%;margin-bottom:40px;float:left}
+.text-input__tables div:nth-child(2){width:20%;margin-bottom:40px;float:right}
+.text-input__profile div:nth-child(1){width:20%}
+.text-profile--line{height:10px;margin:10px;animation:pulse 1s infinite ease-in-out}
+.text-input__profile div:nth-child(2){width:35%}
+@keyframes pulse {
+0%{background-color:rgba(165,165,165,0.1)}
+50%{background-color:rgba(165,165,165,0.3)}
+100%{background-color:rgba(165,165,165,0.1)}
+>>>>>>> 72f6c989a5bce4d041f42d4341414d73a669e477
 }
 /* Media******************************** Query ******************************/
 @media screen and (max-width:767px) {

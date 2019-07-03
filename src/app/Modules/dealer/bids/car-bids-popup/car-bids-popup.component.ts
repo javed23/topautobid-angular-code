@@ -40,7 +40,7 @@ export class CarBidsPopupComponent {
         this.commonUtilsService.onError(error);
       });
 
-      $(this.contentSection.nativeElement).modal('show'); 
+      $(this.contentSection.nativeElement).modal({backdrop: 'static', keyboard: false, show: true}); 
     }
   }
 

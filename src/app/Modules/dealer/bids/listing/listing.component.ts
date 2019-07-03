@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation ,ElementRef} from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation, ElementRef, AfterViewInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from 'ngx-gallery';
 
 //modules services, models and enviornment file
-import { TitleService, CarService, CommonUtilsService,DealerService } from '../../../../core/_services'
+import { TitleService, CarService, RealUpdateService, CommonUtilsService, DealerService } from '../../../../core/_services'
 import { PagedData, Car, Page } from "../../../../core/_models";
 import { environment } from '../../../../../environments/environment'
 import { untilDestroyed } from 'ngx-take-until-destroy';// unsubscribe from observables when the component destroyed
@@ -20,21 +20,26 @@ declare let POTENZA: any;
 })
 export class ListingComponent implements OnInit {
   @ViewChild('listingTable') listingTable;
+<<<<<<< HEAD
   @ViewChild('bidModal') bidModal:ElementRef;
   @ViewChild("listingSection") listingSection: ElementRef;
+=======
+  @ViewChild('bidModal') bidModal: ElementRef;
+>>>>>>> 72f6c989a5bce4d041f42d4341414d73a669e477
 
   sectionEnable: string = 'list'
   sliderOptions: NgxGalleryOptions[];
   sliderImages: NgxGalleryImage[];
-  dealerShips:any;
-  bidForm:FormGroup;
-  legalContacts:any =[];
-  car:any;
+  dealerShips: any = [];
+  bidForm: FormGroup;
+  legalContacts: any = [];
+  car: any;
   page = new Page(); //object of Page type  
   cars = new Array<Car>() //array of Car type 
 
-  submitted:boolean = false;
-
+  selectedCarId: any;
+  isBidListingModalOpen: boolean = false;
+  submitted: boolean = false;
   currentPageLimit: number = environment.DEFAULT_RECORDS_LIMIT
   readonly pageLimitOptions = environment.DEFAULT_PAGE_LIMIT_OPTIONS
   private _defaultPagination = {
@@ -48,22 +53,30 @@ export class ListingComponent implements OnInit {
   readonly breadcrumbs: any[] = [{ page: 'Home', link: '/dealer/home' }, { page: 'Dashboard', link: '' }]
   
 
-  constructor(private dealerService:DealerService,private commonUtilsService: CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private titleService: TitleService) {
+  constructor(private dealerService: DealerService, private realTimeUpdate:RealUpdateService, private commonUtilsService: CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private titleService: TitleService) {
 
 
     //setting the page title
+    
+    this.realTimeUpdate.updateLsiting().subscribe(res=>{
+        this.setPage(this._defaultPagination) // this willbe called after real time updation of listing
+    })
     this.titleService.setTitle();
 
     this.setPage(this._defaultPagination);
   }
 
 
+
+
+
+
   private dealerBidForm() {
     this.bidForm = this.formBuilder.group({
-      car_id:[null,Validators.required],
-      dealership_id: ['', [ Validators.required]],
+      car_id: [null, Validators.required],
+      dealership_id: ['', [Validators.required]],
       legal_contact: ['', [Validators.required]],
-      price: [null,[Validators.required,Validators.pattern(/^\d+$/)]]
+      price: [null, [Validators.required, Validators.pattern(/^\d+$/)]]
     });
   }
 
@@ -72,6 +85,9 @@ export class ListingComponent implements OnInit {
     
     this.page.pageNumber = page.offset;
     this.page.size = page.pageSize;
+
+    this.commonUtilsService.showPageLoader();
+
     //hit api to fetch data
     this.carService.listingDealersCars(this.page).pipe(untilDestroyed(this)).subscribe(
 
@@ -82,6 +98,7 @@ export class ListingComponent implements OnInit {
 
         //this.cars =  pagedData.data; 
         this.cars = [...pagedData.data];
+        console.log(this.cars)
 
         this.commonUtilsService.hidePageLoader();
         //case error 
@@ -95,7 +112,61 @@ export class ListingComponent implements OnInit {
     console.log('sectionEnable', this.sectionEnable);
   }
 
+<<<<<<< HEAD
   
+=======
+
+
+
+  showBids(carId): void {
+    this.isBidListingModalOpen = true;
+    this.selectedCarId = carId
+  }
+
+  /**
+  * Reset modal popup to hide
+  * @param isOpened    boolean value 
+  * @return void
+  */
+  hide(isOpened: boolean): void {
+    console.log(isOpened)
+    this.isBidListingModalOpen = isOpened; //set to false which will reset modal to show on click again
+    this.selectedCarId = '';
+  }
+
+  /**
+ * Private function to initalize slider 
+ * @return  void
+*/
+  private sliderinit(): void {
+    this.sliderOptions = [
+      {
+        "image": false, "height": "90px", "thumbnailsColumns": 1,
+        "previewCloseOnClick": true, "previewCloseOnEsc": true, "width": "100%"
+      },
+      { "breakpoint": 500, "width": "300px", "height": "300px", }
+    ];
+
+    this.sliderImages = [
+      {
+        small: 'assets/images/bg/cars/small/01.jpg',
+        medium: 'assets/images/bg/cars/small/01.jpg',
+        big: 'assets/images/bg/cars/bg/01.jpg',
+      },
+      {
+        small: 'assets/images/bg/cars/small/02.jpg',
+        medium: 'assets/images/bg/cars/small/02.jpg',
+        big: 'assets/images/bg/cars/bg/02.jpg',
+      },
+      {
+        small: 'assets/images/bg/cars/small/03.jpg',
+        medium: 'assets/images/bg/cars/small/03.jpg',
+        big: 'assets/images/bg/cars/bg/03.jpg',
+      }
+    ];
+  }
+
+>>>>>>> 72f6c989a5bce4d041f42d4341414d73a669e477
   ngOnInit() {
     
 
@@ -105,11 +176,11 @@ export class ListingComponent implements OnInit {
   }
 
 
-/**
-   * Search results according to user inputs
-   * @param searchValue user inputs to search particular data
-   * @return  void
-   */
+  /**
+     * Search results according to user inputs
+     * @param searchValue user inputs to search particular data
+     * @return  void
+     */
   onSearch(searchValue: string): void {
     this.page.search = searchValue
     this.setPage(this._defaultPagination);
@@ -147,7 +218,7 @@ export class ListingComponent implements OnInit {
     * move the car from wishlist of the dealer 
     * @param $carId    carId is car id to hide the car
     */
-   moveFromWishList(carId: any) {
+  moveFromWishList(carId: any) {
 
     this.carService.moveCarFromWishList({ carId: carId }).pipe(untilDestroyed(this)).subscribe(response => {
       this.commonUtilsService.onSuccess('Your car has been moved to wishlist');
@@ -159,7 +230,7 @@ export class ListingComponent implements OnInit {
 
   };
 
-  
+
 
   /**
     * save the car in hide list
@@ -180,7 +251,7 @@ export class ListingComponent implements OnInit {
     * unhide the car in hide list
     * @param $carId    carId is car id to hide the car
     */
-   unhideCar(carId: any) {
+  unhideCar(carId: any) {
     this.carService.unhideCar({ carId: carId }).pipe(untilDestroyed(this)).subscribe(response => {
       this.commonUtilsService.onSuccess('Your car has been hidden');
       this.setPage(this._defaultPagination);
@@ -196,106 +267,121 @@ export class ListingComponent implements OnInit {
    * @param value  is the date filters object
    */
   getDateFilter(value: any) {
-    if(Object.keys(value).length === 0 && value.constructor === Object)
-    this.page.filters = {};
+    if (Object.keys(value).length === 0 && value.constructor === Object)
+      this.page.filters = {};
     else
-    this.page.filters['dates'] = value;
+      this.page.filters['dates'] = value;
 
     this.setPage(this._defaultPagination);
 
   };
 
 
-/**place bid will open the placebid modal popup
- * @param car is the car object for bid
- *will return nothing
- */ 
-  placeBid(car:any){
+  /**place bid will open the placebid modal popup
+   * @param car is the car object for bid
+   *will return nothing
+   */
+  placeBid(car: any) {
     this.getAllDealShips();
-    console.log('the car is is',car)
     this.car = car;
     this.bidForm.patchValue({
-      car_id:car._id
+      car_id: car._id
     })
     $(this.bidModal.nativeElement).modal({ backdrop: 'static', keyboard: false, show: true });
   }
 
 
 
+
   /**
    * get all dealer ships
    */
-  getAllDealShips(){
-    this.dealerService.getAllDealShips().pipe(untilDestroyed(this)).subscribe(response=>{
-    this.dealerShips  = response;
-    },error=>{
+  getAllDealShips() {
+    this.dealerService.getAllDealShips().pipe(untilDestroyed(this)).subscribe(response => {
+      this.dealerShips = response;
+    }, error => {
       this.commonUtilsService.onError(error);
     })
-    
+
   }
 
-  onSubmit(){
+  onSubmit() {
     this.submitted = true;
-    if(this.bidForm.invalid)return;
+    console.log('the form is', this.bidForm);
+    if (this.bidForm.invalid) return;
 
     this.confirmBid();
-    
+
   }
 
-/**
- * 
- * place bid confirmation
- */
+  /**
+   * 
+   * place bid confirmation
+   */
 
- private confirmBid():void{
-  Swal.fire({
-    title: 'Are you sure you want to apply?',
-    text: 'You will not be able to revert this change!',
-    type: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Yes, Apply!',
-    cancelButtonText: 'Cancel'
-  }).then((result) => {
-    if (result.value) {
+  private confirmBid(): void {
+    Swal.fire({
+      title: 'Are you sure you want to apply?',
+      text: 'You will not be able to revert this change!',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Apply!',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.value) {
 
-
-      this.dealerService.placeBid(this.bidForm.value).pipe(untilDestroyed(this)).subscribe(response=>{
-        this.commonUtilsService.onSuccess('The Bid has been Applied Successfully!');
-         this.bidForm.reset();
-    
-        $(this.bidModal.nativeElement).modal('hide');
-        this.setPage(this._defaultPagination);
-        },error=>{
-          this.commonUtilsService.onError(error);
-        })
-      // Swal.fire(
-      //   'Applied!',
-      //   'You have applied successfully!.',
-      //   'success'
-      // )
-    // For more information about handling dismissals please visit
-    // https://sweetalert2.github.io/#handling-dismissals
-    } else if (result.dismiss === Swal.DismissReason.cancel) {
-      // Swal.fire(
-      //   'Cancelled',
-      //   'Your  file is safe :)',
-      //   'error'
-      // )
-    }
-  })
-  
- }
+        if (this.page.type == 'applied') {
+          this.updateBid();//update bid if the dealer is loosing the bid
+        } else {
+          this.saveBid();//create bid 
+        }
 
 
 
-/**after selecting the store assign legal contacts to legal contact array
- * @params value is the target value after selecting the dealership
- * return void
- */
-  selectStore(value:any):void{
-   let   pos = this.dealerShips.map(e=>e._id).indexOf(value);
-   console.log(pos)
-    if(pos >=0)this.legalContacts = this.dealerShips[pos].legal_contacts;
+      }
+    })
+
+  }
+
+  private saveBid() {
+    this.dealerService.placeBid(this.bidForm.value).pipe(untilDestroyed(this)).subscribe(response => {
+      this.commonUtilsService.onSuccess(environment.MESSAGES.BID_SUCCESS);
+      this.realTimeUpdate.updateRealTimeData();
+      this.bidForm.reset();
+      this.submitted = false;
+
+      $(this.bidModal.nativeElement).modal('hide');
+      this.setPage(this._defaultPagination);
+    }, error => {
+      this.commonUtilsService.onError(error);
+    })
+  }
+
+
+  private updateBid() {
+    this.dealerService.updateBid(this.bidForm.value).pipe(untilDestroyed(this)).subscribe(response => {
+      this.realTimeUpdate.updateRealTimeData();
+      this.commonUtilsService.onSuccess(environment.MESSAGES.BID_SUCCESS);
+      this.bidForm.reset();
+      this.submitted = false;
+
+      $(this.bidModal.nativeElement).modal('hide');
+      this.setPage(this._defaultPagination);
+    }, error => {
+      this.commonUtilsService.onError(error);
+    })
+  }
+
+
+
+  /**after selecting the store assign legal contacts to legal contact array
+   * @params value is the target value after selecting the dealership
+   * return void
+   */
+  selectStore(value: any): void {
+    let pos = this.dealerShips.map(e => e._id).indexOf(value);
+    console.log(pos)
+    if (pos >= 0) this.legalContacts = this.dealerShips[pos].legal_contacts;
     else this.legalContacts = [];
   }
   /**
@@ -312,12 +398,12 @@ export class ListingComponent implements OnInit {
 
 
 
-/**
- * will invoke on the discard of the bid
- */
-  finishFunction(){
-  this.bidForm.reset();
-  $(this.bidModal.nativeElement).modal('close');
+  /**
+   * will invoke on the discard of the bid
+   */
+  finishFunction() {
+    this.bidForm.reset();
+    $(this.bidModal.nativeElement).modal('hide');
   }
   toggleExpandRow(row) {
     this.listingTable.rowDetail.toggleExpandRow(row);
@@ -326,7 +412,9 @@ export class ListingComponent implements OnInit {
 
   onDetailToggle(event) {
   }
-  ngOnDestroy(){
-    
+  ngOnDestroy() {
+
   }
+
+
 }

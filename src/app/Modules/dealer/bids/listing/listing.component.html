@@ -55,8 +55,7 @@
                       <ul>
                         <li [ngClass]="{ active: page.type=='all'}"> <button
                             (click)="onChangeListType('all')">Active</button></li>
-                        <li [ngClass]="{ active: page.type=='applied'}"><button (click)="onChangeListType('applied')">My
-                           Active Bids</button></li>
+                        <li [ngClass]="{ active: page.type=='applied'}"><button (click)="onChangeListType('applied')">My Bids</button></li>
                         <li [ngClass]="{ active: page.type=='wishlist'}"><button
                             (click)="onChangeListType('wishlist')">WishList</button></li>
 
@@ -152,10 +151,13 @@
           <div *ngIf="sectionEnable=='list'" class="bid-section sidebar-widget">
 
 
+              <ng-container *ngIf="loading">
+                  <table-loader></table-loader>
+              </ng-container>
+            
 
 
-
-            <div class="unordered-lists table-responsive text-center">
+            <div class="unordered-lists table-responsive text-center" *ngIf="!loading">
 
               <ngx-datatable #listingTable class="bootstrap" [rows]="cars"
                 [columns]="[{name:'Year'},{name:'Make'},{name:'Model'},{name:'Trim'},{name:'Listed'},{name:'Status'},{name:'Bids'}]"
@@ -175,11 +177,11 @@
 
                               <div class="col-md-2">
                                 <div class="img_car">
-                                  <img src="{{row?.images[0]?.file_path}}">
+                                  <img  src="{{row?.cover_image}}">
                                 </div>
-                                <div class="thumbnail_text">
+                                <!-- <div class="thumbnail_text">
                                   <h5>THUMBNAIL IMAGE</h5>
-                                </div>
+                                </div> -->
                               </div>
 
                               <div class="col-md-5 border_class">
@@ -295,36 +297,47 @@
                 </ngx-datatable-column>
                 <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Trim" [sortable]="true">
                   <ng-template let-row="row" ngx-datatable-cell-template>
-                    {{ row?.trim }}
+                    {{ row?.trim | slice:0:18}}
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Miles" [sortable]="true">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row?.miles }}
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Exterior Color" [sortable]="true">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row?.exterior_color }}
                   </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Car Condition" [sortable]="true">
                   <ng-template let-row="row" ngx-datatable-cell-template>
-                    {{ row?.vehicle_condition?.vehicle_condition_value }}
+                    {{ row?.vehicle_condition?.vehicle_condition_value | slice:0:18 }}
                   </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Seller Distance" [sortable]="true">
                   <ng-template let-row="row" ngx-datatable-cell-template>
-                    432 Mi
+                    {{row?.seller_distance | round}} Mi
                   </ng-template>
                 </ngx-datatable-column>
 
-                <ngx-datatable-column [resizeable]="false" [draggable]="false" name="bids" prop="best_bid"
+                <ngx-datatable-column *ngIf="page.type !='transactions'" [resizeable]="false" [draggable]="false" name="bids" prop="best_bid"
                   [sortable]="true">
                   <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
                     <!-- $<b>0.00</b> -->
-                    <b *ngIf="row?.higest_bid == row?.my_bid[0]?.price && page.type=='applied'" class="text-success">{{row?.my_bid[0]?.price | currency:'USD':true:'2.2-2'}} </b>
-                    <b *ngIf="row?.higest_bid > row?.my_bid[0]?.price && page.type=='applied'" class="text-warning">{{row?.my_bid[0]?.price | currency:'USD':true:'2.2-2'}} </b>
-                    <b *ngIf="row?.bids == 0" class="">{{00 | currency:'USD':true:'2.2-2'}} </b>
-                    <span *ngIf="row?.bids" class="left_bids">
+                    <b *ngIf="row?.higest_bid == row?.my_bid[row?.my_bid?.length - 1]?.price && page.type=='applied'" class="text-success">{{row?.my_bid[row?.my_bid?.length - 1]?.price | currency:'USD':true:'2.2-2'}} </b>
+                    <b *ngIf="row?.higest_bid> row?.my_bid[row?.my_bid?.length - 1]?.price && page.type=='applied'" class="text-warning">{{row?.my_bid[row?.my_bid?.length - 1]?.price | currency:'USD':true:'2.2-2'}} <span (click)="placeBid(row)" class="btn_apply">Place Bid</span></b>
+                    <b *ngIf="row?.totalBids == 0" class="">{{00 | currency:'USD':true:'2.2-2'}} </b>
+                    <b *ngIf="row?.totalBids >  0 && !row?.my_bid[0]" class="">{{row?.higest_bid | currency:'USD':true:'2.2-2'}} </b>
+                    <span *ngIf="row?.totalBids" class="left_bids">
 
                      <!-- <button><a routerLink="/dealer/car-bids/{{row._id}}"> See all ({{row?.bids}})
                           bids</a></button>-->
 
 
-                          <button *ngIf="row?.bids == 1" (click)="showBids(row._id)"> See  ({{row?.bids}})
+                          <button *ngIf="row?.totalBids == 1" (click)="showBids(row._id)"> See  ({{row?.totalBids}})
                             bid</button>
-                          <button *ngIf="row?.bids >1" (click)="showBids(row._id)"> See all ({{row?.bids}})
+                          <button *ngIf="row?.totalBids >1" (click)="showBids(row._id)"> See all ({{row?.totalBids}})
                             bids</button>
                     </span>
                   </ng-template>
@@ -332,31 +345,25 @@
 
 
 
-                <ngx-datatable-column *ngIf="page.type =='applied'" [resizeable]="false" [draggable]="false"
+                <ngx-datatable-column *ngIf="page.type =='transactions'" [resizeable]="false" [draggable]="false"
                   name="My Bid" prop="miles" [sortable]="true">
                   <ng-template let-row="row" ngx-datatable-cell-template>
                     {{ row?.dealers_bids[0]?.price | currency:'USD':true:'2.2-2'}}
-                    <!--<span class="left_time">10 Hrs 15 min left</span>-->
                   </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column *ngIf="page.type != 'applied'" [resizeable]="false" [draggable]="false"
                   name="Listed On" prop="created_at" [sortable]="true">
                   <ng-template let-row="row" ngx-datatable-cell-template>
-                    {{ row.created_at | date:'MM-dd-yyyy, h:mm a'}}
+                    {{ row.created_at | date:'MM-dd-yyyy'}}
                   </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column *ngIf="page.type == 'applied'" [resizeable]="false" [draggable]="false"
                   name="Applied On" prop="bid_date" [sortable]="true">
                   <ng-template let-row="row" ngx-datatable-cell-template>
-                    {{ row?.dealers_bids[0]?.bid_date | date:'MM-dd-yyyy, h:mm a'}}
+                    {{ row?.my_bid[row?.my_bid?.length - 1]?.bid_date | date:'MM-dd-yyyy'}}
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column *ngIf="page.type == 'applied'" [resizeable]="false" [draggable]="false"
-                  name="Bid Status" prop="bid_acceptance" [sortable]="true">
-                  <ng-template let-row="row" ngx-datatable-cell-template>
-                    {{ row?.dealers_bids[0]?.bid_acceptance }}
-                  </ng-template>
-                </ngx-datatable-column>
+               
                 <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Action" [sortable]="false">
                   <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
 
@@ -368,10 +375,7 @@
 
                       <a title="Car Detail" routerLink="/dealer/car-detail/{{row._id}}"><i class="fa fa-eye"></i></a>
 
-                      <a href="#" class="notification_icon">
-                        <span><i class="fa fa-bell" aria-hidden="true"></i></span>
-                        <span class="badge">3</span>
-                      </a>
+                      
 
                       <button *ngIf="page.type == 'all'" title="Move To WishList" type="button"
                         (click)="saveToWishList(row._id)">
@@ -403,10 +407,10 @@
                         (click)="placeBid(row)">
                         <i class="fa fa-gavel" aria-hidden="true"></i>
                       </button>
+                     
+                      <div class="text-right carfax_img">
 
-                      <div class="col-md-12 text-right carfax_img">
-
-                        <img src="../../../../../assets//images/carfax_img.png">
+                        <img src="assets/images/carfax_img.png">
 
                       </div>
 
@@ -470,20 +474,14 @@
 
 
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-12">
             <div class="modal_img">
-              <img src="{{car?.images[0]?.file_path}}">
+              <img src="{{car?.cover_image}}">
             </div>
+            <span class="make_model">{{car?.year}} {{car?.make}} {{car?.model}}</span>
           </div>
 
-          <div class="col-md-6">
-            <div class="right_content">
-              <h6>Year:<span>{{car?.year}}</span></h6>
-              <h6>Make:<span>{{car?.make}}</span></h6>
-              <h6>Model:<span>{{car?.model}}</span></h6>
-              <!-- <h6>Current Bid:<span>{{car?.bidPrice}}</span></h6> -->
-            </div>
-          </div>
+        
         </div>
 
 
@@ -499,9 +497,9 @@
                 <label for="">Assign a DealerShip*</label>
                 <select
                   [ngClass]="{ 'is-invalid': (bidForm.controls.dealership_id.touched || submitted) && bidForm.get('dealership_id').errors }"
-                  class="margin-top42 my_select w-100 d-block" (change)="selectStore($event.target.value)"
+                  class="margin-top42 my_select w-100 d-block" id="selectStore" (change)="selectStore($event.target.value)"
                   formControlName="dealership_id">
-                  <option disabled selected value="">Select the dealership</option>
+                  <option  selected value="">Select the dealership</option>
                   <option *ngFor="let d of dealerShips;let i = index;" value="{{d._id}}">{{d?.legalcoroporationname}}
                   </option>
                 </select>
@@ -528,7 +526,7 @@
 
               <div class="selected-box auto-hight form-group w-100">
                 <label for="">Bid Price*</label>
-                <input type="text" prefix=" $" mask="000000"
+                <input type="text" prefix=" $" mask="00000000000"
                   [ngClass]="{ 'is-invalid': (bidForm.controls.price.touched || submitted) && bidForm.get('price').errors }"
                   class="form-control w-100 d-block my_select" formControlName="price">
                 <p *ngIf="bidForm.controls.price.touched || submitted">
