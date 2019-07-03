@@ -125,60 +125,51 @@ export class AddNewCarComponent implements OnInit {
   makes = [];  
   models = [];
   trims = [];
+  vehicleOptions = [];
+  vehicleSpecifications = [];
 
   standardEquipmentsArray = [
-    { id: 'Automatic, CVT', name: 'Automatic, CVT' },    
-    { id: 'FWD', name: 'FWD' },
-    { id: '4-CYL, Hybrid, 1.8 Liter', name: '4-CYL, Hybrid, 1.8 Liter' },
-    { id: 'Traction Control', name: 'Traction Control' },
-    { id: 'Stability Control', name: 'Stability Control' },
-    { id: 'ABS, 4 Wheel', name: 'ABS, 4 Wheel' },
-    { id: 'Anti-Theft System', name: 'Anti-Theft System' },
-    { id: 'Keyless Entry', name: 'Keyless Entry' },
-    { id: 'Keyless Start', name: 'Keyless Start' },
-    { id: 'Air Conditioning', name: 'Air Conditioning' },
-    { id: 'Power Windows', name: 'Power Windows' },
-    { id: 'Power Door Locks', name: 'Power Door Locks' },
-    { id: 'Cruise Control', name: 'Cruise Control' },
-    { id: 'Power Steering', name: 'Power Steering' },
-    { id: 'Tilt & Telescoping Wheel', name: 'Tilt & Telescoping Wheel' },
-    { id: 'AM/FM Stereo', name: 'AM/FM Stereo' },
-    { id: 'CD/MP3 (Single Disc)', name: 'CD/MP3 (Single Disc)' },
-    { id: 'Bluetooth Wireless', name: 'Bluetooth Wireless' },
-    { id: 'Dual Airbags', name: 'Dual Airbags' },
-    { id: 'Side Airbags', name: 'Side Airbags' },
-    { id: 'F&R Head Curtain Air Bags', name: 'F&R Head Curtain Air Bags' },
-    { id: 'Daytime Running Lights', name: 'Daytime Running Lights' },
-    { id: 'Rear Spoiler', name: 'Rear Spoiler' } 
+    { id: '1', name: 'Automatic, CVT',  selected: false },    
+    { id: '2', name: 'FWD',  selected: false },
+    { id: '3', name: '4-CYL, Hybrid, 1.8 Liter',  selected: false },
+    { id: '4', name: 'Traction control',  selected: false },
+    { id: '5', name: 'Stability Control',  selected: false },
+    { id: '6', name: 'ABS, 4 Wheel',  selected: false },
+    { id: '7', name: 'Anti-Theft System',  selected: false },
+    { id: '8', name: 'Keyless Entry',  selected: false },
+    { id: '9', name: 'Keyless Start',  selected: false },
+    { id: '10', name: 'Air Conditioning',  selected: false },
+    { id: '11', name: 'Power Windows',  selected: false },
+    { id: '12', name: 'Power Door Locks',  selected: false },
+    { id: '13', name: 'Cruise Control',  selected: false },
+    { id: '14', name: 'Power steering',  selected: false },
+    { id: '15', name: 'Tilt & Telescoping Wheel',  selected: false },
+    { id: '16', name: 'AM/FM Stereo',  selected: false },
+    { id: '17', name: 'CD/MP3 (Single Disc)',  selected: false },
+    { id: '18', name: 'Bluetooth Wireless',  selected: false },
+    { id: '19', name: 'Dual Airbags',  selected: false },
+    { id: '20', name: 'Side Airbags',  selected: false },
+    { id: '21', name: 'F&R Head Curtain Air Bags',  selected: false },
+    { id: '22', name: 'Daytime Running Lights',  selected: false },
+    { id: '23', name: 'Rear Spoiler',  selected: false } 
   ];
 
   entertainmentsArray = [
-    { id: 'Premium Sound', name: 'Premium Sound' },
-    { id: 'SiriusXM Satellite', name: 'SiriusXM Satellite' },
-    { id: 'DVD System', name: 'DVD System' }
+    { id: '1', name: 'Premium Sound',  selected: false },
+    { id: '2', name: 'SiriusXM Satellite',  selected: false },
+    { id: '3', name: 'DVD System',  selected: false }
   ];
 
   wheelsArray = [
-    { id: 'Alloy Wheels', name: 'Alloy Wheels' },
-    { id: 'Premium Wheels', name: 'Premium Wheels' },
-    { id: 'Premium Wheels 19"+', name: 'Premium Wheels 19"+' }
+    { id: '1', name: 'Alloy Wheels',  selected: false },
+    { id: '2', name: 'Premium Wheels',  selected: false },
+    { id: '3', name: 'Premium Wheels 19+',  selected: false }
   ];
 
   accessoryPackagesArray = [
-    { id: 'Plus Performance Pkg', name: 'Plus Performance Pkg' }
+    { id: '1', name: 'Plus Performance Pkg',  selected: false }
   ]
 
-
-  bodyTypes = [{name: "Cabriolet"}, {name: "Coupe"}, {name: "Crossover"}, {name: "Fastback"}, {name: "Hardtop"}, {name: "Hatchback"}, {name: "Liftback"}, {name: "Limousine"}, {name: "Minivan"}, {name: "Pickup"}, {name: "Roadster"}, {name: "Sedan"}, {name: "Targa"}, {name: "Wagon"}];
-
-  engineType= [{name: "Gasoline"}, {name: "Electric Gasoline"}, {name: "Gas"}, {name: "Diesel"}, {name: "Gas Diesel"}];
-
-  transmissions= [{name: "Automated-Manual"}, {name: "Continuously Variable Transmission"}, {name: "Dual-Clutch Transmission"}]; 
-  doors= [{name: "4 doors"},{name: "2 doors"}];  
-  fuelTypes= [{name: "Gasoline"}, {name: "Diesel"}, {name: "Petrol"}];
-  driveTypes= [{name: "AWD"}, {name: "FWD"}, {name: "4WD"}];
-  interiorColors= [{name: "Black"}, {name: "Blue"}, {name: "Brown"}, {name: "Grey"}, {name: "Red"}, {name: "Silver"}];
-  exteriorColors= [{name: "Black"}, {name: "Blue"}, {name: "Brown"}, {name: "Grey"}, {name: "Red"}, {name: "Silver"}];
   interiorMaterials= [{name: "Faux Leather"}, {name: "Brushed Nylon"}, {name: "Nylon Fabric"}];
   standardOptionsDetails= {model_doors: "", model_engine_cyl: "", model_transmission_type: "", model_engine_fuel: "", model_drive: "", model_body: ""};
 
@@ -267,11 +258,16 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   */
   private standardOptions(){
     this.standardOptionsWizard = this.formBuilder.group({ 
-      standard_equipments: this.buildstandardEquipments(), 
+      //standard_equipments: this.buildstandardEquipments(),    
+      standard_equipments_checkbox: [false],
+      entertainment_checkbox: [false],
+      wheel_checkbox: [false],
+      accessory_package_checkbox: [false],
+      standard_equipments: this.formBuilder.array([]),
       additional_options: this.formBuilder.group({
-        entertainments: this.buildEntertainments(), 
-        wheels: this.buildWheels(), 
-        accessory_packages: this.buildAccessoryPackages(), 
+        entertainments: this.formBuilder.array([]), 
+        wheels: this.formBuilder.array([]), 
+        accessory_packages: this.formBuilder.array([]), 
       }),      
       basic_info:this.formBuilder.group({ 
         vehicle_mileage: ['', Validators.compose([Validators.required,Validators.minLength(1),Validators.maxLength(6),Validators.pattern(/^-?(0|[1-9]\d*)?$/)])],
@@ -364,48 +360,49 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   }
 
   get standardEquipments() {
-    return this.standardOptionsWizard.get('standard_equipments');
+    return this.standardOptionsWizard.get('standard_equipments') as FormArray;
   }
 
   buildstandardEquipments() {
-    const arr = this.standardEquipmentsArray.map(skill => {
-      return this.formBuilder.control(false);
-    });
+    const arr = this.standardEquipmentsArray.map(equipment => {
+      //return this.formBuilder.control({id:skill.id, selected:false});
+      return this.formBuilder.control(equipment.selected);
+    });   
     return this.formBuilder.array(arr);
   }
 
   get entertainments() {
-   
-    return this.standardOptionsWizard.get('additional_options').get('entertainments');
+    return this.standardOptionsWizard.controls.additional_options.get('entertainments') as FormArray;    
   }
 
   buildEntertainments() {
-    const arr = this.entertainmentsArray.map(skill => {
-      return this.formBuilder.control(false);
+    const arr = this.entertainmentsArray.map(entertainment => {
+      return this.formBuilder.control(entertainment.selected);
     });
     return this.formBuilder.array(arr);
   }
 
 
   get wheels() {
-    return this.standardOptionsWizard.get('additional_options').get('wheels');
+    return this.standardOptionsWizard.controls.additional_options.get('wheels') as FormArray;
+    
   }
 
   buildWheels() {
-    const arr = this.wheelsArray.map(skill => {
-      return this.formBuilder.control(false);
+    const arr = this.wheelsArray.map(wheel => {
+      return this.formBuilder.control(wheel.selected);
     });
     return this.formBuilder.array(arr);
   }
 
 
   get accessory_packages() {
-    return this.standardOptionsWizard.get('additional_options').get('accessory_packages');
+    return this.standardOptionsWizard.controls.additional_options.get('accessory_packages') as FormArray; 
   }
 
   buildAccessoryPackages() {
-    const arr = this.accessoryPackagesArray.map(skill => {
-      return this.formBuilder.control(false);
+    const arr = this.accessoryPackagesArray.map(accesory => {
+      return this.formBuilder.control(accesory.selected);
     });
     return this.formBuilder.array(arr);
   }
@@ -414,13 +411,41 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    * save Car in DB  
    */
   onSubmitAddNewCar(): void {
-   
 
-    if(this.offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').value == null){
-      this.offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').setValue(0);
+
+    this.standardEquipmentsArray.forEach(equipment => {        
+
+        this.standardEquipments.push(new FormControl(equipment));       
+      
+    }); 
+
+    this.entertainmentsArray.forEach(entertainment => {        
+
+        this.entertainments.push(new FormControl(entertainment));       
+      
+    });
+
+
+    this.wheelsArray.forEach(wheel => {        
+
+        this.wheels.push(new FormControl(wheel));       
+      
+    });
+
+
+    this.accessoryPackagesArray.forEach(accessory => {        
+
+      this.accessory_packages.push(new FormControl(accessory));       
+    
+    });
+   
+    
+
+    if(this.financeDetailsWizard.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').value == null){
+      this.financeDetailsWizard.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').setValue(0);
     }
-    if(this.offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').value == null){
-      this.offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').setValue(0);
+    if(this.financeDetailsWizard.controls.vehicle_finance_details.get('vehicle_pay_off').value == null){
+      this.financeDetailsWizard.controls.vehicle_finance_details.get('vehicle_pay_off').setValue(0);
     }
 
     // Merge Category Image Array    
@@ -428,16 +453,17 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
     this.vehicleImages.forEach(vehicleImage => {
           this.vehicleImagesArray.push(new FormControl({file_path : vehicleImage.file_path, file_name : vehicleImage.file_name, file_key : vehicleImage.file_key, file_category : vehicleImage.file_category}))
-    }); 
+    });
+    
 
     // set Default Vin Number
     //this.vehicleDetails.controls.vin_number.setValue('1C6RR7GT1ES223950');
 
-    var mergeVehicleData = Object.assign(this.vehicleDetails.value, this.standardOptionsWizard.value, this.uploadVehicleImagesWizard.value, this.aboutVehicleWizard.value, this.vehicleConditionWizard.value, this.financeDetailsWizard.value, this.offerInHands.value);
+    var mergeVehicleData = Object.assign(this.vehicleDetails.value, this.standardOptionsWizard.value, this.uploadVehicleImagesWizard.value, this.aboutVehicleWizard.value, this.vehicleConditionWizard.value, this.financeDetailsWizard.value);
 
-    //console.log(mergeVehicleData);
+    console.log(mergeVehicleData);
 
-    this.commonUtilsService.showPageLoader('Saving Your Car...');
+    //this.commonUtilsService.showPageLoader('Saving Your Car...');
 
     this.addVehicleSubscription = this.vehicleService.addYourVehicle(mergeVehicleData)
       .subscribe(
@@ -955,8 +981,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       this.financeDetailsWizard.reset();
       this.financeDetails();     // Initialize Pickup Location Wizard Fields
 
-      this.offerInHands.reset();
-      this.offerInHandsPopUp(); 
+      
 
 
 
@@ -1109,12 +1134,70 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       this.isThisYourCar = false;
       return;
     }
-
+    this.setVehicleOptionsAndSpecifications();
     this.isThisYourCar = true;
     
-   // this.getTrimsByModel(modelName);
+   
       
     
+  }
+
+
+  /**
+   * set Vehicle Options and Specifications
+   *  
+   */
+  setVehicleOptionsAndSpecifications(): void{     
+    this.standardEquipmentsArray.forEach(equipment => {      
+      if(this.vehicleOptions.find(x => x.car_option_name == equipment.name)){
+        let index = this.standardEquipmentsArray.findIndex(x => x.name == equipment.name);
+        this.standardEquipmentsArray[index].selected = true;          
+      }  
+    });
+
+    this.entertainmentsArray.forEach(entertainment => {      
+      if(this.vehicleOptions.find(x => x.car_option_name == entertainment.name)){
+        let index = this.entertainmentsArray.findIndex(x => x.name == entertainment.name);
+        this.entertainmentsArray[index].selected = true;          
+      }  
+    });
+
+    this.accessoryPackagesArray.forEach(accessory => {      
+      if(this.vehicleOptions.find(x => x.car_option_name == accessory.name)){
+        let index = this.accessoryPackagesArray.findIndex(x => x.name == accessory.name);
+        this.accessoryPackagesArray[index].selected = true;          
+      }  
+    });
+
+    this.wheelsArray.forEach(wheel => {      
+      if(this.vehicleOptions.find(x => x.car_option_name == wheel.name)){
+        let index = this.wheelsArray.findIndex(x => x.name == wheel.name);
+        this.wheelsArray[index].selected = true;          
+      }  
+    });
+   
+  }
+
+  /**
+   * set Vehicle Options and Specifications Checkbox Value
+   *  
+   */
+  updateVehicleOptionsValue(index, array_name, event): void{
+    console.log('event', event.target.checked);
+    console.log('index', index);
+
+    if(array_name == 'equipment'){
+      this.standardEquipmentsArray[index].selected = event.target.checked;
+    }  
+    if(array_name == 'entertainment'){
+      this.entertainmentsArray[index].selected = event.target.checked;
+    }
+    if(array_name == 'accessory'){
+      this.accessoryPackagesArray[index].selected = event.target.checked;
+    }
+    if(array_name == 'wheel'){
+      this.wheelsArray[index].selected = event.target.checked;
+    }
   }
 
 
@@ -1127,11 +1210,14 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     let trimId = selectedTrim.options[selectedTrim.selectedIndex].getAttribute('data-modelId');
     (selectedTrim.value == "") ? this.isAllVehicleDetailsSelected = false: this.isAllVehicleDetailsSelected = true;
 
+    this.vehicleTrimLabel = selectedTrim.value;
     // get Trim Details by Make and Model
     this.vehicleService.getVehicleDetailsByTrimId({trim_id:trimId})
     .subscribe(
     (response) => { 
 
+      this.vehicleOptions = response.vehicle_options;
+      this.vehicleSpecifications = response.vehicle_specifications;
       console.log(response);
       this.commonUtilsService.hidePageLoader();
       
@@ -1211,9 +1297,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
     if(this.standardOptionsWizard.invalid) {
       return;
-    }
-
-    
+    }    
 
   }
 
@@ -1247,18 +1331,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
   }
 
-  /**
-   * validate offer in hands popup.   
-   */
-  validateOfferInHands() : void { 
-    this.isOfferInHandsSubmitted = true;   
-    this.isSkipSubmit = false;
-    if(this.offerInHands.invalid) {
-      return;
-    }  
-
-    $(this.offerInHandsSection.nativeElement).modal('hide');
-  } 
+  
 
   /**
    * skip offer in hands.   
@@ -1306,11 +1379,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
     if(this.financeDetailsWizard.invalid) {
       return;
-    }
-
-    // this.offerInHands.reset(); 
-    $(this.offerInHandsSection.nativeElement).modal({backdrop: 'static', keyboard: false});
-    
+    }  
 
   }
 

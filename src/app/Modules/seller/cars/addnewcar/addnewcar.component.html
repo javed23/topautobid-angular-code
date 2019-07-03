@@ -233,21 +233,21 @@
                                             <div class="fields_section">
                                                 <div>   
                                                     <label>Standard Equipment</label>
-
-                                                <div *ngFor="let equipment of standardEquipments.controls; let i=index">
-                                                        <input type="checkbox" [formControl]="equipment" /> {{standardEquipmentsArray[i].name}}
+                                                    
+                                                <div *ngFor="let equipment of standardEquipmentsArray; let i=index">
+                                                        <input [checked]="equipment.selected" type="checkbox" formControlName="standard_equipments_checkbox"  (change)="updateVehicleOptionsValue(i, 'equipment', $event)" /> {{equipment.name}}
                                                     </div>
 
                                                 </div>
                                                 
                                             </div>
-
+                                            
                                             <div class="fields_section">
                                                 <div>   
                                                     <label>Entertainment & Instrumentation</label>
 
-                                                    <div *ngFor="let entertainment of entertainments.controls; let i=index">
-                                                        <input type="checkbox" [formControl]="entertainment" /> {{entertainmentsArray[i].name}}
+                                                    <div *ngFor="let entertainment of entertainmentsArray; let i=index">
+                                                        <input [checked]="entertainment.selected" type="checkbox" formControlName="entertainment_checkbox" (change)="updateVehicleOptionsValue(i, 'entertainment', $event)" /> {{entertainment.name}}
                                                     </div>
 
                                                 </div>
@@ -257,8 +257,8 @@
                                                 <div>   
                                                     <label>Wheels & Tires</label>
 
-                                                    <div *ngFor="let wheel of wheels.controls; let i=index">
-                                                        <input type="checkbox" [formControl]="wheel" /> {{wheelsArray[i].name}}
+                                                    <div *ngFor="let wheel of wheelsArray; let i=index">
+                                                        <input [checked]="wheel.selected" type="checkbox" formControlName="wheel_checkbox" (change)="updateVehicleOptionsValue(i, 'wheel', $event)" /> {{wheel.name}}
                                                     </div>
 
                                                 </div>
@@ -266,8 +266,8 @@
                                                 <div>   
                                                     <label>Accessory Packages</label>
 
-                                                    <div *ngFor="let package of accessory_packages.controls; let i=index">
-                                                        <input type="checkbox" [formControl]="package" /> {{accessoryPackagesArray[i].name}}
+                                                    <div *ngFor="let accessory of accessoryPackagesArray; let i=index">
+                                                        <input [checked]="accessory.selected" type="checkbox" formControlName="accessory_package_checkbox" (change)="updateVehicleOptionsValue(i, 'accessory', $event)" /> {{accessory.name}}
                                                     </div>
 
                                                 </div>
@@ -319,92 +319,113 @@
                             <div  class="add_car">      
                                 
                                 <div class="row">
-                                <div class="form-group col-md-8">
-                                    <div class="vehicle_category">
+                                    <div class="form-group col-md-8">
+                                        <div class="vehicle_category">
 
 
 
-                                        <div class="select_type_tab category_Box">
-                                            <ul>
-                                                <li>
-                                                        <input type="radio" (click)="checkVehicleImageCatgeory('Exterior')" formControlName="vehicle_image_category_name"  value="Exterior" id="Exterior">
-                                                        <label for="Exterior">Exterior</label>
-                                                </li>
-                                                <li >
-                                                    <input type="radio" (click)="checkVehicleImageCatgeory('Interior')" formControlName="vehicle_image_category_name"  value="Interior" id="Interior">
-                                                    <label for="Interior">Interior</label>
-                                                </li> 
-                                                 
-                                            </ul>
-                                        </div>
+                                            <div class="select_type_tab category_Box">
+                                                <ul>
+                                                    <li>
+                                                            <input type="radio" (click)="checkVehicleImageCatgeory('Exterior')" formControlName="vehicle_image_category_name"  value="Exterior" id="Exterior">
+                                                            <label for="Exterior">Exterior</label>
+                                                    </li>
+                                                    <li >
+                                                        <input type="radio" (click)="checkVehicleImageCatgeory('Interior')" formControlName="vehicle_image_category_name"  value="Interior" id="Interior">
+                                                        <label for="Interior">Interior</label>
+                                                    </li> 
+                                                    
+                                                </ul>
+                                            </div>
 
-                                    </div> 
+                                        </div> 
 
-                                    <div formArrayName="vehicle_images">
-                                        <div class="vertical-container uploadImages" fxLayout="column" fxLayoutAlign="stretch" fxFlex="50%">
-                                            
-                                    
-                                            <div class="content-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="auto">
-                                                                            
-                                                <div class="dropzone dropzone-container draganddrop custom_dragger" [dropzone]="vehicleImagesConfiguration" [disabled]="disabled">
-                                                    <div class="drag_box"><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i><p>Drag/Drop Images Here to Upload</p><span>OR</span><button class="button red d-inline-block width-auto boder0 mt-4" type="button">Click to Upload</button></div>
-                                                </div>
-
+                                        <div formArrayName="vehicle_images">
+                                            <div class="vertical-container uploadImages" fxLayout="column" fxLayoutAlign="stretch" fxFlex="50%">
                                                 
-                                                <div class="thumbnails" *ngIf="vehicleImageCategory == 'Interior'">
-                                                    <div class="thumbnail_list" *ngFor="let interiorImage of interiorImagesArray; let interiorIndex = index;">
-                                                        <img src="{{interiorImage.file_path}}">
-                                                        <i (click)="removeImage(interiorIndex, 'interior', interiorImage.file_key)" class="fa fa-times" aria-hidden="true"></i>
+                                        
+                                                <div class="content-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="auto">
+                                                                                
+                                                    <div class="dropzone dropzone-container draganddrop custom_dragger" [dropzone]="vehicleImagesConfiguration" [disabled]="disabled">
+                                                        <div class="drag_box"><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i><p>Drag/Drop Images Here to Upload</p><span>OR</span><button class="button red d-inline-block width-auto boder0 mt-4" type="button">Click to Upload</button></div>
                                                     </div>
-                                                </div>
-                                                <div class="thumbnails" *ngIf="vehicleImageCategory == 'Exterior'">
-                                                    <div class="thumbnail_list" *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
-                                                        <img src="{{exteriorImage.file_path}}">
-                                                        <i (click)="removeImage(exteriorIndex, 'exterior', exteriorImage.file_key)" class="fa fa-times" aria-hidden="true"></i>
+
+                                                    
+                                                    <div class="thumbnails" *ngIf="vehicleImageCategory == 'Interior'">
+                                                        <div class="thumbnail_list" *ngFor="let interiorImage of interiorImagesArray; let interiorIndex = index;">
+                                                            <img src="{{interiorImage.file_path}}">
+                                                            <i (click)="removeImage(interiorIndex, 'interior', interiorImage.file_key)" class="fa fa-times" aria-hidden="true"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="thumbnails" *ngIf="vehicleImageCategory == 'Exterior'">
+                                                        <div class="thumbnail_list" *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
+                                                            <img src="{{exteriorImage.file_path}}">
+                                                            <i (click)="removeImage(exteriorIndex, 'exterior', exteriorImage.file_key)" class="fa fa-times" aria-hidden="true"></i>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                                        
-                                    <div class="button_Submission text-center">
-                                        <button class="button red d-inline-block width-auto boder0 mt-4" type="button" awPreviousStep>Previous Step</button>
-                                        
-                                        <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="(interiorImagesArray.length == 0) || (exteriorImagesArray.length == 0)" (click)="validateVehicleImagesWizard()" type="button" awNextStep>Next Step</button>		
-                                        
-                                    </div>
-                                </div>   
-                                <div class="col-md-4">
-                                            <!--div class="main_preview">
+                                                            
+                                        <div class="button_Submission text-center">
+                                            <button class="button red d-inline-block width-auto boder0 mt-4" type="button" awPreviousStep>Previous Step</button>
+                                            
+                                            <!--button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="(interiorImagesArray.length == 0) || (exteriorImagesArray.length == 0)" (click)="validateVehicleImagesWizard()" type="button" awNextStep>Next Step</button-->	
+                                            
+                                            <button class="button red d-inline-block width-auto boder0 mt-4" (click)="validateVehicleImagesWizard()" type="button" awNextStep>Next Step</button>
+                                            
+                                        </div>
+                                    </div>   
+                                    <div class="col-md-4">
+                                        <div class="main_preview">
+                                                
+                                            <div class="right_col_head">
+                                                <h5>Progress Preview</h5>
+                                            </div>
+                                            
+                                            <div class="details_inner">
+                                                <h6>Your Vehicle info</h6>
+                                                <ul>
+                                                    <li><label>Year: </label><span>{{vehicleYearLabel}}</span></li>   
+
+                                                    <li><label>Make: </label><span>{{vehicleMakeLabel}}</span></li>
+
+                                                    <li><label>Model: </label><span>{{vehicleModelLabel}}</span></li>
+
+                                                    <li><label>Trim: </label><span>{{vehicleTrimLabel}}</span></li>                                         
+                                                    <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>                
+                                                    <li><label>Interior Color: </label><span>{{!isOtherInteriorColorSelected?interiorColor:vehicle_other_interior_color.value}}</span></li>                                         
+                                                    <li><label>Exterior Color: </label><span>{{!isOtherExteriorColorSelected?exteriorColor:vehicle_other_exterior_color.value}}</span></li>                                       
+                                                    <li><label>Interior Material: </label><span>{{vehicle_interior_material.value}}</span></li>
+                                                    <li>
+                                                        <label>Standard Equipments: </label>
+                                                        <span *ngFor="let equipment of standardEquipmentsArray; let i=index">
+                                                            <span *ngIf="equipment.selected">{{equipment.name}}</span>
+                                                        </span>
+                                                    </li>
+                                                    <li>
+                                                            <label>Entertainment & Instrumentation: </label>
+                                                            <span *ngFor="let entertainment of entertainmentsArray; let i=index">
+                                                                <span *ngIf="entertainment.selected">{{entertainment.name}}</span>
+                                                            </span>
+                                                        </li>
+                                                    <li>
+                                                        <label>Wheels & Tires: </label>
+                                                        <span *ngFor="let wheel of wheelsArray; let i=index">
+                                                            <span *ngIf="wheel.selected">{{wheel.name}}</span>
+                                                        </span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Accessory Packages: </label>
+                                                        <span *ngFor="let accessory of accessoryPackagesArray; let i=index">
+                                                            <span *ngIf="accessory.selected">{{accessory.name}}</span>
+                                                        </span>
+                                                    </li>      
                                                     
-                                                        <div class="right_col_head">
-                                                            <h5>Progress Preview</h5>
-                                                        </div>
-                                                    
-                                                    <div class="details_inner">
-                                                        <h6>Your Vehicle info</h6>
-                                                    <ul>
-                                                        
-                                                        <li><label>Make: </label><span>{{vehicleMakeLabel}}</span></li>
-                                                        <li><label>Model: </label><span>{{vehicleModelLabel}}</span></li>
-                                                        <li><label>Trim: </label><span>{{vehicle_trim.value}}</span></li>
-                                                        <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>
-                                                        <li><label>Body Style: </label><span>{{vehicle_body_type?.value}}</span></li>
-                                                        <li><label>Doors: </label><span>{{vehicle_doors.value}}</span></li>
-                                                        
-                                                        <li><label>Transmission: </label><span>{{vehicle_transmission.value}}</span></li>
-                                                        <li><label>Fuel Type: </label><span>{{vehicle_fuel_type.value}}</span></li>
-                                                        <li><label>Drive Type: </label><span>{{vehicle_drive_type.value}}</span></li>
-                                                        <li><label>Interior Color: </label><span>{{!isOtherInteriorColorSelected?interiorColor:vehicle_other_interior_color.value}}</span></li>
-                                                        
-                                                        <li><label>Exterior Color: </label><span>{{!isOtherExteriorColorSelected?exteriorColor:vehicle_other_exterior_color.value}}</span></li>
-                                                        
-                                                        <li><label>Interior Material: </label><span>{{vehicle_interior_material.value}}</span></li>
-                                                    </ul>
-                                                </div>
-                                            </div-->
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </div> 
-                            
                                 </div>
                             </div>
                             
@@ -642,57 +663,79 @@
                             </div>
                                 
                             <div class="col-md-4">
-                                    <!--div class="main_preview">
-                                            
-                                        <div class="right_col_head">
-                                            <h5>Progress Preview</h5>
-                                        </div>
+                                <div class="main_preview">
                                         
-                                        <div class="details_inner">
-                                            <h6>Your Vehicle info</h6>
+                                    <div class="right_col_head">
+                                        <h5>Progress Preview</h5>
+                                    </div>
+                                    
+                                    <div class="details_inner">
+                                        
+                                        <h6>Your Vehicle info</h6>
                                         <ul>
-                                            
-                                            <li><label>Make: </label><span>{{vehicleMakeLabel}}</span></li>
-                                            <li><label>Model: </label><span>{{vehicleModelLabel}}</span></li>
-                                            <li><label>Trim: </label><span>{{vehicle_trim.value}}</span></li>
-                                            <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>
-                                            <li><label>Body Style: </label><span>{{vehicle_body_type.value}}</span></li>
-                                            <li><label>Doors: </label><span>{{vehicle_doors.value}}</span></li>
-                                            
-                                            <li><label>Transmission: </label><span>{{vehicle_transmission.value}}</span></li>
-                                            <li><label>Fuel Type: </label><span>{{vehicle_fuel_type.value}}</span></li>
-                                            <li><label>Drive Type: </label><span>{{vehicle_drive_type.value}}</span></li>
-                                            <li><label>Interior Color: </label><span>{{!isOtherInteriorColorSelected?interiorColor:vehicle_other_interior_color.value}}</span></li>
-                                            
-                                            <li><label>Exterior Color: </label><span>{{!isOtherExteriorColorSelected?exteriorColor:vehicle_other_exterior_color.value}}</span></li>
-                                            
-                                            <li><label>Interior Material: </label><span>{{vehicle_interior_material.value}}</span></li>
-                                        </ul>
-                                        </div>
-                                        <div class="details_inner" *ngIf="interiorImagesArray?.length > 0 || exteriorImagesArray?.length > 0">
-                                                <div *ngIf="interiorImagesArray?.length > 0">
-                                                    <h6>Interior Images: </h6>
-                                                    <div class="category_images">
-                                                        
-                                                        <ul>
-                                                            <li *ngFor="let interiorImage of interiorImagesArray; let interiorIndex = index;">
-                                                                <img class="preview_images" src="{{interiorImage.file_path}}">       
-                                                            </li>
-                                                        </ul>
-                                                    </div>
+                                                <li><label>Year: </label><span>{{vehicleYearLabel}}</span></li>   
+
+                                                <li><label>Make: </label><span>{{vehicleMakeLabel}}</span></li>
+
+                                                <li><label>Model: </label><span>{{vehicleModelLabel}}</span></li>
+
+                                                <li><label>Trim: </label><span>{{vehicleTrimLabel}}</span></li>                                         
+                                                <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>                
+                                                <li><label>Interior Color: </label><span>{{!isOtherInteriorColorSelected?interiorColor:vehicle_other_interior_color.value}}</span></li>                                         
+                                                <li><label>Exterior Color: </label><span>{{!isOtherExteriorColorSelected?exteriorColor:vehicle_other_exterior_color.value}}</span></li>                                       
+                                                <li><label>Interior Material: </label><span>{{vehicle_interior_material.value}}</span></li>
+                                                <li>
+                                                    <label>Standard Equipments: </label>
+                                                    <span *ngFor="let equipment of standardEquipmentsArray; let i=index">
+                                                        <span *ngIf="equipment.selected">{{equipment.name}}</span>
+                                                    </span>
+                                                </li>
+                                                <li>
+                                                        <label>Entertainment & Instrumentation: </label>
+                                                        <span *ngFor="let entertainment of entertainmentsArray; let i=index">
+                                                            <span *ngIf="entertainment.selected">{{entertainment.name}}</span>
+                                                        </span>
+                                                    </li>
+                                                <li>
+                                                    <label>Wheels & Tires: </label>
+                                                    <span *ngFor="let wheel of wheelsArray; let i=index">
+                                                        <span *ngIf="wheel.selected">{{wheel.name}}</span>
+                                                    </span>
+                                                </li>
+                                                <li>
+                                                    <label>Accessory Packages: </label>
+                                                    <span *ngFor="let accessory of accessoryPackagesArray; let i=index">
+                                                        <span *ngIf="accessory.selected">{{accessory.name}}</span>
+                                                    </span>
+                                                </li>      
+                                                
+                                            </ul>
+                                        
+                                    </div>
+                                    <div class="details_inner" *ngIf="interiorImagesArray?.length > 0 || exteriorImagesArray?.length > 0">
+                                            <div *ngIf="interiorImagesArray?.length > 0">
+                                                <h6>Interior Images: </h6>
+                                                <div class="category_images">
+                                                    
+                                                    <ul>
+                                                        <li *ngFor="let interiorImage of interiorImagesArray; let interiorIndex = index;">
+                                                            <img class="preview_images" src="{{interiorImage.file_path}}">       
+                                                        </li>
+                                                    </ul>
                                                 </div>
-                                                <div *ngIf="exteriorImagesArray?.length > 0">
-                                                    <h6 class="mt-4">Exterior Images: </h6>
-                                                    <div class="category_images">                                 
-                                                        <ul>
-                                                            <li *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
-                                                                <img class="preview_images" src="{{exteriorImage.file_path}}"> 
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>    
-                                        </div>
-                                    </div-->
+                                            </div>
+                                            <div *ngIf="exteriorImagesArray?.length > 0">
+                                                <h6 class="mt-4">Exterior Images: </h6>
+                                                <div class="category_images">                                 
+                                                    <ul>
+                                                        <li *ngFor="let exteriorImage of exteriorImagesArray; let exteriorIndex = index;">
+                                                            <img class="preview_images" src="{{exteriorImage.file_path}}"> 
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>    
+                                    </div>
+                                </div>
                             </div>
                             
                         </div> 
@@ -844,22 +887,42 @@
                                                     <div class="details_inner">
                                                         <h6>Your Vehicle info</h6>
                                                         <ul>
-                                                            
+                                                            <li><label>Year: </label><span>{{vehicleYearLabel}}</span></li>   
+
                                                             <li><label>Make: </label><span>{{vehicleMakeLabel}}</span></li>
+
                                                             <li><label>Model: </label><span>{{vehicleModelLabel}}</span></li>
-                                                            <li><label>Trim: </label><span>{{vehicle_trim.value}}</span></li>
-                                                            <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>
-                                                            <li><label>Body Style: </label><span>{{vehicle_body_type.value}}</span></li>
-                                                            <li><label>Doors: </label><span>{{vehicle_doors.value}}</span></li>
-                                                            
-                                                            <li><label>Transmission: </label><span>{{vehicle_transmission.value}}</span></li>
-                                                            <li><label>Fuel Type: </label><span>{{vehicle_fuel_type.value}}</span></li>
-                                                            <li><label>Drive Type: </label><span>{{vehicle_drive_type.value}}</span></li>
-                                                            <li><label>Interior Color: </label><span>{{!isOtherInteriorColorSelected?interiorColor:vehicle_other_interior_color.value}}</span></li>
-                                                            
-                                                            <li><label>Exterior Color: </label><span>{{!isOtherExteriorColorSelected?exteriorColor:vehicle_other_exterior_color.value}}</span></li>
-                                                            
+
+                                                            <li><label>Trim: </label><span>{{vehicleTrimLabel}}</span></li>                                         
+                                                            <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>                
+                                                            <li><label>Interior Color: </label><span>{{!isOtherInteriorColorSelected?interiorColor:vehicle_other_interior_color.value}}</span></li>                                         
+                                                            <li><label>Exterior Color: </label><span>{{!isOtherExteriorColorSelected?exteriorColor:vehicle_other_exterior_color.value}}</span></li>                                       
                                                             <li><label>Interior Material: </label><span>{{vehicle_interior_material.value}}</span></li>
+                                                            <li>
+                                                                <label>Standard Equipments: </label>
+                                                                <span *ngFor="let equipment of standardEquipmentsArray; let i=index">
+                                                                    <span *ngIf="equipment.selected">{{equipment.name}}</span>
+                                                                </span>
+                                                            </li>
+                                                            <li>
+                                                                    <label>Entertainment & Instrumentation: </label>
+                                                                    <span *ngFor="let entertainment of entertainmentsArray; let i=index">
+                                                                        <span *ngIf="entertainment.selected">{{entertainment.name}}</span>
+                                                                    </span>
+                                                                </li>
+                                                            <li>
+                                                                <label>Wheels & Tires: </label>
+                                                                <span *ngFor="let wheel of wheelsArray; let i=index">
+                                                                    <span *ngIf="wheel.selected">{{wheel.name}}</span>
+                                                                </span>
+                                                            </li>
+                                                            <li>
+                                                                <label>Accessory Packages: </label>
+                                                                <span *ngFor="let accessory of accessoryPackagesArray; let i=index">
+                                                                    <span *ngIf="accessory.selected">{{accessory.name}}</span>
+                                                                </span>
+                                                            </li>      
+                                                            
                                                         </ul>
                                                     </div>
                                                     <div class="details_inner" *ngIf="interiorImagesArray?.length > 0 || exteriorImagesArray?.length > 0">
@@ -1001,7 +1064,7 @@
                                     <div class="button_Submission">
                                         <button class="button red d-inline-block width-auto boder0 mt-4" type="button" awPreviousStep>Previous Step</button>
                                         
-                                        <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="financeDetailsWizard.invalid" (click)="validateFinanceDetailsWizard()" type="button">Next Step</button>		
+                                        <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="financeDetailsWizard.invalid" (click)="validateFinanceDetailsWizard()" type="button" awNextStep>Next Step</button>		
                                     </div>		
                                 </div>
                             </form>  
@@ -1017,24 +1080,44 @@
                                         
                                         <div class="details_inner">
                                             <h6>Your Vehicle info</h6>
-                                            <ul>
-                                                
-                                                <li><label>Make: </label><span>{{vehicleMakeLabel}}</span></li>
-                                                <li><label>Model: </label><span>{{vehicleModelLabel}}</span></li>
-                                                <li><label>Trim: </label><span>{{vehicle_trim.value}}</span></li>
-                                                <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>
-                                                <li><label>Body Style: </label><span>{{vehicle_body_type.value}}</span></li>
-                                                <li><label>Doors: </label><span>{{vehicle_doors.value}}</span></li>
-                                                
-                                                <li><label>Transmission: </label><span>{{vehicle_transmission.value}}</span></li>
-                                                <li><label>Fuel Type: </label><span>{{vehicle_fuel_type.value}}</span></li>
-                                                <li><label>Drive Type: </label><span>{{vehicle_drive_type.value}}</span></li>
-                                                <li><label>Interior Color: </label><span>{{!isOtherInteriorColorSelected?interiorColor:vehicle_other_interior_color.value}}</span></li>
-                                                
-                                                <li><label>Exterior Color: </label><span>{{!isOtherExteriorColorSelected?exteriorColor:vehicle_other_exterior_color.value}}</span></li>
-                                                
-                                                <li><label>Interior Material: </label><span>{{vehicle_interior_material.value}}</span></li>
-                                            </ul>
+                                                <ul>
+                                                    <li><label>Year: </label><span>{{vehicleYearLabel}}</span></li>   
+
+                                                    <li><label>Make: </label><span>{{vehicleMakeLabel}}</span></li>
+
+                                                    <li><label>Model: </label><span>{{vehicleModelLabel}}</span></li>
+
+                                                    <li><label>Trim: </label><span>{{vehicleTrimLabel}}</span></li>                                         
+                                                    <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>                
+                                                    <li><label>Interior Color: </label><span>{{!isOtherInteriorColorSelected?interiorColor:vehicle_other_interior_color.value}}</span></li>                                         
+                                                    <li><label>Exterior Color: </label><span>{{!isOtherExteriorColorSelected?exteriorColor:vehicle_other_exterior_color.value}}</span></li>                                       
+                                                    <li><label>Interior Material: </label><span>{{vehicle_interior_material.value}}</span></li>
+                                                    <li>
+                                                        <label>Standard Equipments: </label>
+                                                        <span *ngFor="let equipment of standardEquipmentsArray; let i=index">
+                                                            <span *ngIf="equipment.selected">{{equipment.name}}</span>
+                                                        </span>
+                                                    </li>
+                                                    <li>
+                                                            <label>Entertainment & Instrumentation: </label>
+                                                            <span *ngFor="let entertainment of entertainmentsArray; let i=index">
+                                                                <span *ngIf="entertainment.selected">{{entertainment.name}}</span>
+                                                            </span>
+                                                        </li>
+                                                    <li>
+                                                        <label>Wheels & Tires: </label>
+                                                        <span *ngFor="let wheel of wheelsArray; let i=index">
+                                                            <span *ngIf="wheel.selected">{{wheel.name}}</span>
+                                                        </span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Accessory Packages: </label>
+                                                        <span *ngFor="let accessory of accessoryPackagesArray; let i=index">
+                                                            <span *ngIf="accessory.selected">{{accessory.name}}</span>
+                                                        </span>
+                                                    </li>      
+                                                    
+                                                </ul>
                                         </div>
                                         <div class="details_inner" *ngIf="interiorImagesArray?.length > 0 || exteriorImagesArray?.length > 0">
                                                 <div *ngIf="interiorImagesArray?.length > 0">
@@ -1104,104 +1187,6 @@
                     </div>
                     </div> 
 
-
-                    <!--=================================
-                    offer-In-hands-form  -->
-                    <!-- Modal -->
-                    <div class="modal fade" #offerInHandsSection id="offerInHandsSection" tabindex="-1" role="dialog" aria-labelledby="offerInHandsSection">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header justify-content-center">
-                                        <h2 class="underline_heading">Finance Details</h2>    
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>     
-                                </div>
-                                <form [formGroup]="offerInHands">
-                                      
-                                <div formGroupName="vehicle_finance_details" class="modal-body">   
-                                    
-                                    
-
-                                    <div class="col-md-12">
-
-                                            <div class="form-group ">
-                                                <label>Estimated Price*</label>
-                                                <input #vehicle_estimated_price maxLength=17 type="text" currencyMask [options]="{ allowNegative: false, align: 'left'}" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_estimated_price" [ngClass]="{ 'is-invalid': (offerInHands.controls.vehicle_finance_details.get('vehicle_estimated_price').touched || isOfferInHandsSubmitted) && offerInHands.controls.vehicle_finance_details.get('vehicle_estimated_price').errors }">        
-                                                
-                                                <p *ngIf="offerInHands.controls.vehicle_finance_details.get('vehicle_estimated_price').touched || isOfferInHandsSubmitted">                      
-                                                    <app-form-validation-errors errorPrefix="Pay Off " [isPrice]=true minAmount='$1' [errors]="offerInHands.controls.vehicle_finance_details.get('vehicle_estimated_price').errors"></app-form-validation-errors>   
-                                                </p>
-                                            </div>
-
-                                            <div class="form-group ">
-                                                <label>My Pay Off</label>
-                                                <input #vehicle_pay_off maxLength=17 type="text" currencyMask [options]="{ allowNegative: false, align: 'left'}" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_pay_off" [ngClass]="{ 'is-invalid': (offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').touched || isOfferInHandsSubmitted) && offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').errors }">        
-                                                
-                                                <p *ngIf="offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').touched || isOfferInHandsSubmitted">                      
-                                                    <app-form-validation-errors errorPrefix="Pay Off " [isPrice]=true minAmount='$1' [errors]="offerInHands.controls.vehicle_finance_details.get('vehicle_pay_off').errors"></app-form-validation-errors>   
-                                                </p>
-                                            </div>
-                                            
-                                            <div class="form-group">
-                                                    <label>Finance Bank</label>
-                                                    <input #vehicle_finance_bank minLength=2 maxLength=50 type="text" class="simple_select form-control placeholder" placeholder="" formControlName="vehicle_finance_bank" [ngClass]="{ 'is-invalid': (offerInHands.controls.vehicle_finance_details.get('vehicle_finance_bank').touched || isOfferInHandsSubmitted) && offerInHands.controls.vehicle_finance_details.get('vehicle_finance_bank').errors }">        
-                                                    
-                                                    <p *ngIf="offerInHands.controls.vehicle_finance_details.get('vehicle_finance_bank').touched || isOfferInHandsSubmitted">                      
-                                                        <app-form-validation-errors minLength=2 maxLength=50 errorPrefix="Finance Bank " [errors]="offerInHands.controls.vehicle_finance_details.get('vehicle_finance_bank').errors"></app-form-validation-errors>   
-                                                    </p>
-                                            </div>
-                                        
-
-
-                                    
-                                        <label>Offer In Hand </label>
-                                        <div class="form-group enter_price">
-                                            
-                                            <input #offerInHandsPrice maxLength=17 type="text" currencyMask [options]="{ allowNegative: false, align: 'left'}" class="form-control grey_input" formControlName="vehicle_offer_in_hands_price" [ngClass]="{ 'is-invalid': (offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').touched || isOfferInHandsSubmitted) && offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').errors }">   
-                                            <div class="uploadImages">
-                                                <div class="dropzone dropzone-container" [dropzone]="offerInHandsConfiguration" [disabled]="disabled"></div>
-                                            </div>  
-                                            
-                                            
-                                            <p *ngIf="offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').touched || isOfferInHandsSubmitted">                      
-                                                    <app-form-validation-errors minAmount='$1' [isPrice]=true  errorPrefix="Offer In Hand " [errors]="offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').errors"></app-form-validation-errors>   
-                                                </p>
-                                        </div>                
-                                    </div>
-                                        
-                                    <!--Upload Images Section-->
-                                        <div class="col-md-12"> 
-                                            <div class="thumbnails" *ngIf="checkObjectLength(offerInHandsImagesArray.value) > 0">
-                                                <div class="thumbnail_list" *ngFor="let offerInHandsImage of offerInHandsImagesArray.value | keyvalue; let offerInHandsImage = index;">
-
-                                                    <img *ngIf="offerInHandsImage.value.file_mimetype != 'application/pdf'" src="{{offerInHandsImage.value.file_path}}">
-
-                                                    <a class="upload_pdf" data-toggle="tooltip" title="{{offerInHandsImage.value.file_name}}" *ngIf="offerInHandsImage.value.file_mimetype == 'application/pdf'" href="{{offerInHandsImage.value.file_path}}" target="_blank"><img src="assets/images/pdf_icon.png"></a>
-
-                                                    <i (click)="removeImage(offerInHandsImage.key, 'offer_in_hands',offerInHandsImage.value.file_key)" class="fa fa-times" aria-hidden="true"></i>
-                                                </div>
-                                            </div>
-                                        </div>    
-                                        
-                                        <!--Upload Images Section-->
-                                </div>  
-                                <div class="modal-footer justify-content-center">  
-                                    <!--button class="button red d-inline-block width-auto boder0 " type="button" data-dismiss="modal" (click)="skipOfferInHands()" awNextStep>Skip</button-->          
-                                    <button class="button red d-inline-block width-auto boder0 " [disabled]="offerInHands.invalid" type="submit" (click)="validateOfferInHands()" awNextStep>Submit </button>
-                                </div>
-                                </form>  
-                            </div>
-                            </div>
-                    </div>
-                        
-                        
-                    <!--=================================
-                    offer-In-hands-form  -->
-
-
-
-                    
                 </aw-wizard-step>
                 <aw-wizard-step stepTitle="Preview" (stepEnter)="scrollToSpecificDiv()">
                     <div class="summary_page">
@@ -1444,6 +1429,13 @@
                                             </div>
                                 </div>
                             </div -->
+
+                            <div class="col-lg-12 text-center">
+                                    <div class="button_Submission mb-4">
+                                            <button class="button red d-inline-block width-auto boder0 mt-4" type="button" awPreviousStep>Previous Step</button>                                    
+                                            <button class="button red d-inline-block width-auto boder0 mt-4" (click)="onSubmitAddNewCar()" type="button" >Submit Car</button>		
+                                        </div>
+                            </div>
                         </div>
                     </div>
                 </aw-wizard-step>
