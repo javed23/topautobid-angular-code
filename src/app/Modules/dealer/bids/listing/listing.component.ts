@@ -376,6 +376,20 @@ export class ListingComponent implements OnInit {
   }
 
 
+
+      /**
+ * To sort the records on dattable columns
+ * @param event event object which have column name and direction data
+ * @return  void
+*/
+onSort(event) {
+  
+  const sort = event.sorts[0];
+  this.page.sortProperty = sort.prop
+  this.page.sortDirection = sort.dir   
+  this.setPage(this._defaultPagination);    
+}
+
   /**
    * will invoke on the discard of the bid
    */
