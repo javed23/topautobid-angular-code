@@ -627,6 +627,10 @@ i.fa-caret-down {position: absolute;font-size: 18px;right:5%;top: 30%;color: #BA
 .detail_head a:hover {color: #da2a2b;text-decoration: none;}
 .detail_body ul {list-style: none;padding: 0;margin: 0 0 95px 0;}
 .detail_body ul>li:nth-child(odd) {background: rgba(238, 238, 238, 0.70);}
+.detail_body ul>li .vehicle_options {
+    padding: 0 16px;
+    padding-bottom: 7px;
+}
 .detail_body ul>li {font-size: 0;}
 .detail_body ul>li .label,.detail_body ul li .value {    color: #424856!important;
     font-size: 15px!important;
@@ -829,7 +833,7 @@ p.error_msg {border:0px; padding:0px;     margin: 0; left:0px;}
 }
 
 .ownership_btns {
-    margin: 20px 0 10px auto;
+    margin: 20px 0 30px auto;
     width: 75%;
 }
 .ownership_btns  .Radio_BTN label{
@@ -1012,8 +1016,8 @@ p.note {font-size:13px;}
     min-width: 230px;
 }
 .fields_section {
-    margin-bottom: 40px;
-}
+    margin-bottom: 10px;
+}   
 
 
 .option_box {
@@ -1029,6 +1033,7 @@ p.note {font-size:13px;}
     text-align: left;
     font-size: 16px;
     margin-bottom: 15px;
+    font-weight: normal;
 }
 
 .option_box h5 {

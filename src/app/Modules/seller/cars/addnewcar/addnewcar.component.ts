@@ -170,8 +170,9 @@ export class AddNewCarComponent implements OnInit {
     { id: '30', name: 'Plus Performance Pkg',  selected: false }
   ]
 
-  filteredSecletedArray = [true];
+  
   filteredStandardEquipmentsArray = []; 
+  filteredEntertainmentsArray = []; 
   filteredWheelsArray = []; 
   filteredAccessoryPackagesArray = []; 
 
@@ -924,8 +925,13 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     }else{ 
 
       this.isMyCarFound = false; 
+      //this.isVehicleDetailsSubmitted = false; 
       this.vehicleDetails.reset();
       this.selectvehicleDetails();
+
+
+      const userData = JSON.parse(localStorage.getItem('loggedinUser'));//parsing the local store data
+      this.vehicleDetails.controls.vehicle_location.patchValue(userData.location);
 
       this.standardOptionsWizard.reset(); 
       this.standardOptions();          // Initialize Basic Info Wizard Fields 
@@ -1051,6 +1057,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
     if(array_name == 'equipment'){
       this.standardEquipmentsArray[index].selected = event.target.checked;
+           
     }  
     if(array_name == 'entertainment'){
       this.entertainmentsArray[index].selected = event.target.checked;
@@ -1061,6 +1068,8 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     if(array_name == 'wheel'){
       this.wheelsArray[index].selected = event.target.checked;
     }
+
+    
   }
 
 
@@ -1160,11 +1169,35 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    */
   validateStandardOptionsWizard() : void {    
 
+    let filteredSelectedArray = [true];
+
+    this.filteredStandardEquipmentsArray = this.standardEquipmentsArray.filter(function(equipment){
+      return filteredSelectedArray.indexOf(equipment.selected) !== -1;
+    });
+
+    this.filteredEntertainmentsArray = this.entertainmentsArray.filter(function(equipment){
+      return filteredSelectedArray.indexOf(equipment.selected) !== -1;
+    });
+
+
+    this.filteredWheelsArray = this.wheelsArray.filter(function(equipment){
+      return filteredSelectedArray.indexOf(equipment.selected) !== -1;
+    });
+
+
+    this.filteredAccessoryPackagesArray = this.accessoryPackagesArray.filter(function(equipment){
+      return filteredSelectedArray.indexOf(equipment.selected) !== -1;
+    });
+
+    
+
     this.isStandardOptionsSubmitted = true;   
 
     if(this.standardOptionsWizard.invalid) {
       return;
-    }    
+    }  
+    
+     
 
   }
 
@@ -1658,8 +1691,15 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
           .subscribe(
           (response) => { 
 
-            _this.isMyCarFound = true;
-            _this.trims = response;
+            if(response.length > 0) {
+              _this.isMyCarFound = true;
+              _this.trims = response;
+            }else{
+              _this.commonUtilsService.onError(environment.MESSAGES.NO_RECORDS_FOUND);
+              _this.isMyCarFound = false;
+            }
+            
+            
             //console.log(response);
             _this.commonUtilsService.hidePageLoader();
             

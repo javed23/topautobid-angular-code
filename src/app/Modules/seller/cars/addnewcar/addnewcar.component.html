@@ -93,7 +93,7 @@
                                                 </div>
                                             <div class="col-md-6 my-3">                                                 
                                                 <select class="simple_select selectpicker" (change)="onSelectTrim($event)" #vehicle_trim formControlName="vehicle_trim" [ngClass]="{ 'is-invalid': (vehicleDetails.controls.vehicle_trim.touched || isVehicleDetailsSubmitted) && vehicleDetails.controls.vehicle_trim.errors }">
-                                                    <option value=''>Select Trim</option>
+                                                    <option value="" selected>Select Trim</option>
                                                     <option *ngFor="let trim of trims;" [attr.data-modelId]="trim.id_car_trim" value='{{trim.name}}'>{{trim.name}}</option> 
                                                 </select>
                                                 <p class="error_msg" *ngIf="vehicleDetails.controls.vehicle_trim.touched || isVehicleDetailsSubmitted">                      
@@ -123,7 +123,7 @@
     <div *ngIf="isThisYourCar" [@AnimateList]>
       
         <aw-wizard #wizard class="step_col">    
-                <aw-wizard-step stepTitle="Standard Options" (stepEnter)="scrollToSpecificDiv()" [canExit]="moveDirection.bind(this, standardOptionsWizard.valid)">  
+                <aw-wizard-step stepTitle="Standard/Additional Options" (stepEnter)="scrollToSpecificDiv()" [canExit]="moveDirection.bind(this, standardOptionsWizard.valid)">  
                     
                     <div class="container">
                         <div class="steps_info">
@@ -244,12 +244,12 @@
                                             <h4>Here is your vehicle</h4>                                           
                                             <div class="vehicle_thumb_outer">
                                                 <div class="vehicle_thumb"><img src="assets/images/car_thumb.png" alt=""></div>
-                                                <span class="vehicle_name">Mercedes 2019</span>
+                                                <span class="vehicle_name">{{vehicleMakeLabel}} {{vehicleYearLabel}}</span>
 
                                             </div>
 
                                             <div class="vehicle_thumb_outer">
-                                                <div class="vehicle_thumb"><img onError="this.src='/assets/images/sort_icon.png';" src="assets/images/logo/{{vehicleMakeLabel | lowercase}}.png" alt=""></div>
+                                                <div class="vehicle_thumb"><img onError="this.src='/assets/images/no_vehicle.png';" src="assets/images/logo/{{vehicleMakeLabel | lowercase}}.png" alt="" class="img-fluid"></div>
                                             </div>
 
 
@@ -269,7 +269,7 @@
     
     
                                                     <div class="option_box">
-                                                        <h5>Options that are most likekly on your vehicle</h5>
+                                                        <h5>Options that are most likely on your vehicle</h5>
                                                             <ol class="three_column">
                                                                 <li *ngFor="let equipment of standardEquipmentsArray; let i=index">
                                                         
@@ -401,7 +401,7 @@
                                             <button class="button red d-inline-block width-auto boder0 mt-4" type="button" awPreviousStep>Previous Step</button>
                                        
 
-                                            <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="((checkObjectLength(exteriorImagesArray) == 0) || (checkObjectLength(interiorImagesArray) == 0))" (click)="validateVehicleImagesWizard()" type="button" awNextStep>Next Step</button>	
+                                            <button class="button red d-inline-block width-auto boder0 mt-4" [disabled]="((checkObjectLength(exteriorImagesArray) == 0) && (checkObjectLength(interiorImagesArray) == 0))" (click)="validateVehicleImagesWizard()" type="button" awNextStep>Next Step</button>	
                                             
                                             
                                             
@@ -415,7 +415,7 @@
                                             </div>
                                             
                                             <div class="details_inner">
-                                                <h6>Your Vehicle info</h6>
+                                                <h6>Standard/Additional Options</h6>
                                                 <ul>
                                                     <li><label>Year: </label><span>{{vehicleYearLabel}}</span></li>   
 
@@ -428,36 +428,36 @@
                                                     <li><label>Interior Color: </label><span>{{!isOtherInteriorColorSelected?interiorColor:vehicle_other_interior_color.value}}</span></li>                                         
                                                     <li><label>Exterior Color: </label><span>{{!isOtherExteriorColorSelected?exteriorColor:vehicle_other_exterior_color.value}}</span></li>                                       
                                                     <li><label>Interior Material: </label><span>{{vehicle_interior_material.value}}</span></li>
-                                                    <li>
+                                                    <li *ngIf="checkObjectLength(filteredStandardEquipmentsArray) > 0">
                                                         <label>Standard Equipments: </label>
                                                         <ul class="vehicle_options">
-                                                        <li *ngFor="let equipment of standardEquipmentsArray; let i=index">
-                                                            <span *ngIf="equipment.selected">{{equipment.name}}</span>
+                                                        <li *ngFor="let equipment of filteredStandardEquipmentsArray; let i=index">
+                                                            <span>{{equipment.name}}</span>
                                                         </li>
                                                         </ul>
                                                     </li>
-                                                    <li>
+                                                    <li *ngIf="checkObjectLength(filteredEntertainmentsArray) > 0">
                                                             <label>Entertainment & Instrumentation: </label>
                                                             <ul class="vehicle_options">
-                                                            <li *ngFor="let entertainment of entertainmentsArray; let i=index">
-                                                                <span *ngIf="entertainment.selected">{{entertainment.name}}</span>
+                                                            <li *ngFor="let entertainment of filteredEntertainmentsArray; let i=index">
+                                                                <span>{{entertainment.name}}</span>
                                                             </li>
                                                             </ul>
 
                                                         </li>
-                                                    <li>
+                                                    <li *ngIf="checkObjectLength(filteredWheelsArray) > 0">
                                                         <label>Wheels & Tires: </label>
                                                         <ul class="vehicle_options">
-                                                        <li *ngFor="let wheel of wheelsArray; let i=index">
-                                                            <span *ngIf="wheel.selected">{{wheel.name}}</span>
+                                                        <li *ngFor="let wheel of filteredWheelsArray; let i=index">
+                                                            <span>{{wheel.name}}</span>
                                                         </li>
                                                         </ul>
                                                     </li>
-                                                    <li>
+                                                    <li *ngIf="checkObjectLength(filteredAccessoryPackagesArray) > 0">
                                                         <label>Accessory Packages: </label>
                                                         <ul class="vehicle_options">
-                                                        <li *ngFor="let accessory of accessoryPackagesArray; let i=index">
-                                                            <span *ngIf="accessory.selected">{{accessory.name}}</span>
+                                                        <li *ngFor="let accessory of filteredAccessoryPackagesArray; let i=index">
+                                                            <span>{{accessory.name}}</span>
                                                         </li>
                                                         </ul>
                                                     </li>      
@@ -711,54 +711,54 @@
                                     
                                     <div class="details_inner">
                                         
-                                        <h6>Your Vehicle info</h6>
-                                        <ul>
-                                            <li><label>Year: </label><span>{{vehicleYearLabel}}</span></li>   
+                                        <h6>Standard/Additional Options</h6>
+                                                <ul>
+                                                    <li><label>Year: </label><span>{{vehicleYearLabel}}</span></li>   
 
-                                            <li><label>Make: </label><span>{{vehicleMakeLabel}}</span></li>
+                                                    <li><label>Make: </label><span>{{vehicleMakeLabel}}</span></li>
 
-                                            <li><label>Model: </label><span>{{vehicleModelLabel}}</span></li>
+                                                    <li><label>Model: </label><span>{{vehicleModelLabel}}</span></li>
 
-                                            <li><label>Trim: </label><span>{{vehicleTrimLabel}}</span></li>                                         
-                                            <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>                
-                                            <li><label>Interior Color: </label><span>{{!isOtherInteriorColorSelected?interiorColor:vehicle_other_interior_color.value}}</span></li>                                         
-                                            <li><label>Exterior Color: </label><span>{{!isOtherExteriorColorSelected?exteriorColor:vehicle_other_exterior_color.value}}</span></li>                                       
-                                            <li><label>Interior Material: </label><span>{{vehicle_interior_material.value}}</span></li>
-                                            <li>
-                                                <label>Standard Equipments: </label>
-                                                <ul class="vehicle_options">
-                                                <li *ngFor="let equipment of standardEquipmentsArray; let i=index">
-                                                    <span *ngIf="equipment.selected">{{equipment.name}}</span>
-                                                </li>
-                                                </ul>
-                                            </li>
-                                            <li>
-                                                    <label>Entertainment & Instrumentation: </label>
-                                                    <ul class="vehicle_options">
-                                                    <li *ngFor="let entertainment of entertainmentsArray; let i=index">
-                                                        <span *ngIf="entertainment.selected">{{entertainment.name}}</span>
+                                                    <li><label>Trim: </label><span>{{vehicleTrimLabel}}</span></li>                                         
+                                                    <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>                
+                                                    <li><label>Interior Color: </label><span>{{!isOtherInteriorColorSelected?interiorColor:vehicle_other_interior_color.value}}</span></li>                                         
+                                                    <li><label>Exterior Color: </label><span>{{!isOtherExteriorColorSelected?exteriorColor:vehicle_other_exterior_color.value}}</span></li>                                       
+                                                    <li><label>Interior Material: </label><span>{{vehicle_interior_material.value}}</span></li>
+                                                    <li *ngIf="checkObjectLength(filteredStandardEquipmentsArray) > 0">
+                                                        <label>Standard Equipments: </label>
+                                                        <ul class="vehicle_options">
+                                                        <li *ngFor="let equipment of filteredStandardEquipmentsArray; let i=index">
+                                                            <span>{{equipment.name}}</span>
+                                                        </li>
+                                                        </ul>
                                                     </li>
-                                                    </ul>
+                                                    <li *ngIf="checkObjectLength(filteredEntertainmentsArray) > 0">
+                                                            <label>Entertainment & Instrumentation: </label>
+                                                            <ul class="vehicle_options">
+                                                            <li *ngFor="let entertainment of filteredEntertainmentsArray; let i=index">
+                                                                <span>{{entertainment.name}}</span>
+                                                            </li>
+                                                            </ul>
 
-                                                </li>
-                                            <li>
-                                                <label>Wheels & Tires: </label>
-                                                <ul class="vehicle_options">
-                                                <li *ngFor="let wheel of wheelsArray; let i=index">
-                                                    <span *ngIf="wheel.selected">{{wheel.name}}</span>
-                                                </li>
+                                                        </li>
+                                                    <li *ngIf="checkObjectLength(filteredWheelsArray) > 0">
+                                                        <label>Wheels & Tires: </label>
+                                                        <ul class="vehicle_options">
+                                                        <li *ngFor="let wheel of filteredWheelsArray; let i=index">
+                                                            <span>{{wheel.name}}</span>
+                                                        </li>
+                                                        </ul>
+                                                    </li>
+                                                    <li *ngIf="checkObjectLength(filteredAccessoryPackagesArray) > 0">
+                                                        <label>Accessory Packages: </label>
+                                                        <ul class="vehicle_options">
+                                                        <li *ngFor="let accessory of filteredAccessoryPackagesArray; let i=index">
+                                                            <span>{{accessory.name}}</span>
+                                                        </li>
+                                                        </ul>
+                                                    </li>      
+                                                    
                                                 </ul>
-                                            </li>
-                                            <li>
-                                                <label>Accessory Packages: </label>
-                                                <ul class="vehicle_options">
-                                                <li *ngFor="let accessory of accessoryPackagesArray; let i=index">
-                                                    <span *ngIf="accessory.selected">{{accessory.name}}</span>
-                                                </li>
-                                                </ul>
-                                            </li>      
-                                            
-                                        </ul>
                                     </div>
                                     <div class="details_inner" *ngIf="interiorImagesArray?.length > 0 || exteriorImagesArray?.length > 0">
                                             <div *ngIf="interiorImagesArray?.length > 0">
@@ -933,54 +933,54 @@
                                                     </div>
                                                     
                                                     <div class="details_inner">
-                                                        <h6>Your Vehicle info</h6>
-                                                        <ul>
-                                                            <li><label>Year: </label><span>{{vehicleYearLabel}}</span></li>   
-        
-                                                            <li><label>Make: </label><span>{{vehicleMakeLabel}}</span></li>
-        
-                                                            <li><label>Model: </label><span>{{vehicleModelLabel}}</span></li>
-        
-                                                            <li><label>Trim: </label><span>{{vehicleTrimLabel}}</span></li>                                         
-                                                            <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>                
-                                                            <li><label>Interior Color: </label><span>{{!isOtherInteriorColorSelected?interiorColor:vehicle_other_interior_color.value}}</span></li>                                         
-                                                            <li><label>Exterior Color: </label><span>{{!isOtherExteriorColorSelected?exteriorColor:vehicle_other_exterior_color.value}}</span></li>                                       
-                                                            <li><label>Interior Material: </label><span>{{vehicle_interior_material.value}}</span></li>
-                                                            <li>
-                                                                <label>Standard Equipments: </label>
-                                                                <ul class="vehicle_options">
-                                                                <li *ngFor="let equipment of standardEquipmentsArray; let i=index">
-                                                                    <span *ngIf="equipment.selected">{{equipment.name}}</span>
-                                                                </li>
-                                                                </ul>
-                                                            </li>
-                                                            <li>
-                                                                    <label>Entertainment & Instrumentation: </label>
-                                                                    <ul class="vehicle_options">
-                                                                    <li *ngFor="let entertainment of entertainmentsArray; let i=index">
-                                                                        <span *ngIf="entertainment.selected">{{entertainment.name}}</span>
-                                                                    </li>
-                                                                    </ul>
-        
-                                                                </li>
-                                                            <li>
-                                                                <label>Wheels & Tires: </label>
-                                                                <ul class="vehicle_options">
-                                                                <li *ngFor="let wheel of wheelsArray; let i=index">
-                                                                    <span *ngIf="wheel.selected">{{wheel.name}}</span>
-                                                                </li>
-                                                                </ul>
-                                                            </li>
-                                                            <li>
-                                                                <label>Accessory Packages: </label>
-                                                                <ul class="vehicle_options">
-                                                                <li *ngFor="let accessory of accessoryPackagesArray; let i=index">
-                                                                    <span *ngIf="accessory.selected">{{accessory.name}}</span>
-                                                                </li>
-                                                                </ul>
-                                                            </li>      
-                                                            
+                                                        <h6>Standard/Additional Options</h6>
+                                                <ul>
+                                                    <li><label>Year: </label><span>{{vehicleYearLabel}}</span></li>   
+
+                                                    <li><label>Make: </label><span>{{vehicleMakeLabel}}</span></li>
+
+                                                    <li><label>Model: </label><span>{{vehicleModelLabel}}</span></li>
+
+                                                    <li><label>Trim: </label><span>{{vehicleTrimLabel}}</span></li>                                         
+                                                    <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>                
+                                                    <li><label>Interior Color: </label><span>{{!isOtherInteriorColorSelected?interiorColor:vehicle_other_interior_color.value}}</span></li>                                         
+                                                    <li><label>Exterior Color: </label><span>{{!isOtherExteriorColorSelected?exteriorColor:vehicle_other_exterior_color.value}}</span></li>                                       
+                                                    <li><label>Interior Material: </label><span>{{vehicle_interior_material.value}}</span></li>
+                                                    <li *ngIf="checkObjectLength(filteredStandardEquipmentsArray) > 0">
+                                                        <label>Standard Equipments: </label>
+                                                        <ul class="vehicle_options">
+                                                        <li *ngFor="let equipment of filteredStandardEquipmentsArray; let i=index">
+                                                            <span>{{equipment.name}}</span>
+                                                        </li>
                                                         </ul>
+                                                    </li>
+                                                    <li *ngIf="checkObjectLength(filteredEntertainmentsArray) > 0">
+                                                            <label>Entertainment & Instrumentation: </label>
+                                                            <ul class="vehicle_options">
+                                                            <li *ngFor="let entertainment of filteredEntertainmentsArray; let i=index">
+                                                                <span>{{entertainment.name}}</span>
+                                                            </li>
+                                                            </ul>
+
+                                                        </li>
+                                                    <li *ngIf="checkObjectLength(filteredWheelsArray) > 0">
+                                                        <label>Wheels & Tires: </label>
+                                                        <ul class="vehicle_options">
+                                                        <li *ngFor="let wheel of filteredWheelsArray; let i=index">
+                                                            <span>{{wheel.name}}</span>
+                                                        </li>
+                                                        </ul>
+                                                    </li>
+                                                    <li *ngIf="checkObjectLength(filteredAccessoryPackagesArray) > 0">
+                                                        <label>Accessory Packages: </label>
+                                                        <ul class="vehicle_options">
+                                                        <li *ngFor="let accessory of filteredAccessoryPackagesArray; let i=index">
+                                                            <span>{{accessory.name}}</span>
+                                                        </li>
+                                                        </ul>
+                                                    </li>      
+                                                    
+                                                </ul>
                                                     </div>
                                                     <div class="details_inner" *ngIf="interiorImagesArray?.length > 0 || exteriorImagesArray?.length > 0">
                                                             <div *ngIf="interiorImagesArray?.length > 0">
@@ -1047,7 +1047,7 @@
                                     
 
                                         <div class="col-md-12">
-                                            <div class="head_section">
+                                            <div class="text-center">
                                                 <h2 class="underline_heading">Finance Details</h2>
                                             </div>    
                                                 <div class="form-group ">
@@ -1136,54 +1136,54 @@
                                         </div>
                                         
                                         <div class="details_inner">
-                                            <h6>Your Vehicle info</h6>
-                                            <ul>
-                                                <li><label>Year: </label><span>{{vehicleYearLabel}}</span></li>   
+                                            <h6>Standard/Additional Options</h6>
+                                                <ul>
+                                                    <li><label>Year: </label><span>{{vehicleYearLabel}}</span></li>   
 
-                                                <li><label>Make: </label><span>{{vehicleMakeLabel}}</span></li>
+                                                    <li><label>Make: </label><span>{{vehicleMakeLabel}}</span></li>
 
-                                                <li><label>Model: </label><span>{{vehicleModelLabel}}</span></li>
+                                                    <li><label>Model: </label><span>{{vehicleModelLabel}}</span></li>
 
-                                                <li><label>Trim: </label><span>{{vehicleTrimLabel}}</span></li>                                         
-                                                <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>                
-                                                <li><label>Interior Color: </label><span>{{!isOtherInteriorColorSelected?interiorColor:vehicle_other_interior_color.value}}</span></li>                                         
-                                                <li><label>Exterior Color: </label><span>{{!isOtherExteriorColorSelected?exteriorColor:vehicle_other_exterior_color.value}}</span></li>                                       
-                                                <li><label>Interior Material: </label><span>{{vehicle_interior_material.value}}</span></li>
-                                                <li>
-                                                    <label>Standard Equipments: </label>
-                                                    <ul class="vehicle_options">
-                                                    <li *ngFor="let equipment of standardEquipmentsArray; let i=index">
-                                                        <span *ngIf="equipment.selected">{{equipment.name}}</span>
-                                                    </li>
-                                                    </ul>
-                                                </li>
-                                                <li>
-                                                        <label>Entertainment & Instrumentation: </label>
+                                                    <li><label>Trim: </label><span>{{vehicleTrimLabel}}</span></li>                                         
+                                                    <li><label>Mileage: </label><span>{{vehicle_mileage.value}}</span></li>                
+                                                    <li><label>Interior Color: </label><span>{{!isOtherInteriorColorSelected?interiorColor:vehicle_other_interior_color.value}}</span></li>                                         
+                                                    <li><label>Exterior Color: </label><span>{{!isOtherExteriorColorSelected?exteriorColor:vehicle_other_exterior_color.value}}</span></li>                                       
+                                                    <li><label>Interior Material: </label><span>{{vehicle_interior_material.value}}</span></li>
+                                                    <li *ngIf="checkObjectLength(filteredStandardEquipmentsArray) > 0">
+                                                        <label>Standard Equipments: </label>
                                                         <ul class="vehicle_options">
-                                                        <li *ngFor="let entertainment of entertainmentsArray; let i=index">
-                                                            <span *ngIf="entertainment.selected">{{entertainment.name}}</span>
+                                                        <li *ngFor="let equipment of filteredStandardEquipmentsArray; let i=index">
+                                                            <span>{{equipment.name}}</span>
                                                         </li>
                                                         </ul>
+                                                    </li>
+                                                    <li *ngIf="checkObjectLength(filteredEntertainmentsArray) > 0">
+                                                            <label>Entertainment & Instrumentation: </label>
+                                                            <ul class="vehicle_options">
+                                                            <li *ngFor="let entertainment of filteredEntertainmentsArray; let i=index">
+                                                                <span>{{entertainment.name}}</span>
+                                                            </li>
+                                                            </ul>
 
+                                                        </li>
+                                                    <li *ngIf="checkObjectLength(filteredWheelsArray) > 0">
+                                                        <label>Wheels & Tires: </label>
+                                                        <ul class="vehicle_options">
+                                                        <li *ngFor="let wheel of filteredWheelsArray; let i=index">
+                                                            <span>{{wheel.name}}</span>
+                                                        </li>
+                                                        </ul>
                                                     </li>
-                                                <li>
-                                                    <label>Wheels & Tires: </label>
-                                                    <ul class="vehicle_options">
-                                                    <li *ngFor="let wheel of wheelsArray; let i=index">
-                                                        <span *ngIf="wheel.selected">{{wheel.name}}</span>
-                                                    </li>
-                                                    </ul>
-                                                </li>
-                                                <li>
-                                                    <label>Accessory Packages: </label>
-                                                    <ul class="vehicle_options">
-                                                    <li *ngFor="let accessory of accessoryPackagesArray; let i=index">
-                                                        <span *ngIf="accessory.selected">{{accessory.name}}</span>
-                                                    </li>
-                                                    </ul>
-                                                </li>      
-                                                
-                                            </ul>
+                                                    <li *ngIf="checkObjectLength(filteredAccessoryPackagesArray) > 0">
+                                                        <label>Accessory Packages: </label>
+                                                        <ul class="vehicle_options">
+                                                        <li *ngFor="let accessory of filteredAccessoryPackagesArray; let i=index">
+                                                            <span>{{accessory.name}}</span>
+                                                        </li>
+                                                        </ul>
+                                                    </li>      
+                                                    
+                                                </ul>
                                         </div>
                                         <div class="details_inner" *ngIf="interiorImagesArray?.length > 0 || exteriorImagesArray?.length > 0">
                                                 <div *ngIf="interiorImagesArray?.length > 0">
@@ -1270,7 +1270,7 @@
                                 <div class="col-lg-6">
                                     <div class="detail_box">
                                         <div class="detail_head">
-                                            <h5>Your Vehicle Info</h5>
+                                            <h5>Standard/Additional Options</h5>
                                             <button class="edit ml-auto" [awGoToStep]="{ stepIndex: 0 }">Edit <i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>           
                                         </div>
                                         <div class="detail_body">
@@ -1289,35 +1289,35 @@
                                                 <li><span class="label">Interior Material : </span><span class="value">{{vehicle_interior_material?.value}}</span></li>
 
 
-                                                <li>
+                                                    <li *ngIf="checkObjectLength(filteredStandardEquipmentsArray) > 0">
                                                         <span class="label">Standard Equipments: </span>
                                                         <ol class="vehicle_options">
-                                                            <li *ngFor="let equipment of standardEquipmentsArray; let i=index">
-                                                                <span *ngIf="equipment.selected">{{equipment.name}}</span>
+                                                            <li *ngFor="let equipment of filteredStandardEquipmentsArray; let i=index">
+                                                                <span>{{equipment.name}}</span>
                                                             </li>
                                                         </ol>
                                                     </li>
-                                                    <li>
+                                                    <li *ngIf="checkObjectLength(filteredEntertainmentsArray) > 0">
                                                             <span class="label">Entertainment & Instrumentation: </span>
                                                             <ol class="vehicle_options">
-                                                                <li *ngFor="let entertainment of entertainmentsArray; let i=index">
-                                                                    <span *ngIf="entertainment.selected">{{entertainment.name}}</span>
+                                                                <li *ngFor="let entertainment of filteredEntertainmentsArray; let i=index">
+                                                                    <span>{{entertainment.name}}</span>
                                                                 </li>
                                                             </ol>
                                                         </li>
-                                                    <li>
+                                                    <li *ngIf="checkObjectLength(filteredWheelsArray) > 0">
                                                         <span class="label">Wheels & Tires: </span>
                                                         <ol class="vehicle_options">
-                                                        <li *ngFor="let wheel of wheelsArray; let i=index">
-                                                            <span *ngIf="wheel.selected">{{wheel.name}}</span>
+                                                        <li *ngFor="let wheel of filteredWheelsArray; let i=index">
+                                                            <span>{{wheel.name}}</span>
                                                         </li>
                                                         </ol>
                                                     </li>
-                                                    <li>
+                                                    <li *ngIf="checkObjectLength(filteredAccessoryPackagesArray) > 0">
                                                         <span class="label">Accessory Packages: </span>
                                                         <ol class="vehicle_options">
-                                                            <li *ngFor="let accessory of accessoryPackagesArray; let i=index">
-                                                                <span *ngIf="accessory.selected">{{accessory.name}}</span>
+                                                            <li *ngFor="let accessory of filteredAccessoryPackagesArray; let i=index">
+                                                                <span>{{accessory.name}}</span>
                                                             </li>
                                                         </ol>    
                                                     </li>    
@@ -1458,7 +1458,7 @@
                                     <div class="detail_box">
                                         <div class="detail_head">
                                             <h5>Pickup Location</h5>
-                                            <button class="edit ml-auto" [awGoToStep]="{ stepIndex: 4 }">Edit <i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                            <button class="edit ml-auto" [awGoToStep]="{ stepIndex: 2 }">Edit <i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                                         </div>
                                         <div class="detail_body">
                                             <ul>
@@ -1479,7 +1479,7 @@
                                     <div class="detail_box">
                                         <div class="detail_head">
                                             <h5>Finance Details</h5>
-                                            
+                                            <button class="edit ml-auto" [awGoToStep]="{ stepIndex: 4 }">Edit <i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                                         </div>
                                         <div class="detail_body">
                                             <ul>
