@@ -113,6 +113,12 @@ const routes: Routes = [
     canActivate: [SellerAuthGuardService]
   },
   {
+    path: 'addnewcar/:type',
+    component: AddNewCarComponent,
+    data: { title: 'Seller AddCar' },
+    canActivate: [SellerAuthGuardService]
+  },
+  {
     path: 'addcar/:type',
     component: AddCarComponent,
     data: { title: 'Seller AddCar' },
