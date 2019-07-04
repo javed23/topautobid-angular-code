@@ -52,7 +52,7 @@ export class ListingComponent implements OnInit {
   private _defaultPagination = {
     count: 0,
     limit: this.currentPageLimit,
-    offset: 1,
+    offset: 0,
     pageSize: this.currentPageLimit
   }
 
@@ -170,7 +170,8 @@ export class ListingComponent implements OnInit {
 
     //Do not show page loader if fetching results using search
     if(!this.page.search){
-      this.commonUtilsService.showPageLoader();    }
+      this.commonUtilsService.showPageLoader(); 
+    }
     
     //hit api to fetch data
     this.carService.listingDealersCars(this.page).subscribe(
@@ -205,9 +206,10 @@ export class ListingComponent implements OnInit {
   }
 
   onPageChange(pageNumber:number){
-    //console.log(pageNumber);
+    console.log('pageNumber',pageNumber);
     this.currentPage = pageNumber
-    this.setPage({offset:pageNumber,pageSize:this.currentPageLimit}, this.page.type)
+    console.log('currentPage',this.currentPage);
+    this.setPage({offset:pageNumber-1,pageSize:this.currentPageLimit}, this.page.type)
   }
 
 /**

@@ -493,6 +493,7 @@ ngx-image-zoom .ngxImageZoomContainer[_ngcontent-c7] {
     padding-left: 13px;
     position: absolute;
 }
+
 .ngx-gallery-arrow-left .ngx-gallery-icon .ngx-gallery-icon-content:hover {
     background: #db2d2e;
     border-color: #db2d2e;
@@ -574,13 +575,15 @@ ngx-image-zoom .ngxImageZoomContainer[_ngcontent-c7] {
     color: #444444;
     text-transform: uppercase;
     display: block;
-    margin: 0 0 30px 0;
+    margin: 0 0 15x 0;
     font-weight:600;
 }
 
 .ui-widget-content {
     background: #d6d6d6;
     height: 3px;
+    width: 92%;
+    margin: auto;
     margin-bottom: 30px;
 }
 
@@ -602,6 +605,7 @@ ngx-image-zoom .ngxImageZoomContainer[_ngcontent-c7] {
     color: #444444;
     font-size: 16px;
     background: none;
+    margin-bottom: 25px;
 }
 
 .range_filter.dark {
@@ -754,29 +758,68 @@ button {
     font-size: 15px;
 }
 
+/* Toggle Button CSS Start  *********************/
+.switch_outer {
+    margin: 0;
+    padding: 0px 0;
+    color: #413e3e;
+}
+.switch_outer .switch {
+    margin: 0;
+    vertical-align: middle;
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
 
 
-.table_outer{width:100%;height:auto;float:left;border:1px solid #e0e0e0;-webkit-box-shadow:0 0 20px 0 rgba(0,0,0,0.1);-moz-box-shadow:0 0 20px 0 rgba(0,0,0,0.1);box-shadow:0 0 20px 0 rgba(0,0,0,0.1);-ms-box-shadow:0 0 20px 0 rgba(0,0,0,0.1);-o-box-shadow:0 0 20px 0 rgba(0,0,0,0.1);border-collapse:collapse;overflow-x:auto}
-table.responsive_tables{margin:0;padding:0;width:100%;table-layout:auto;background:#fff}
-table.responsive_tables tr{border-bottom:1px solid #e0e0e0;padding:5px}
-table.responsive_tables thead{background:#fafcfe}
-table.responsive_tables th{font-size:13px;color:#282828;padding:4px 10px;background-color:#fafcfe}
-table.responsive_tables th a,table.responsive_tables th a:link,table.responsive_tables th a:visited{font-size:13px;color:#282828}
-table.responsive_tables td{font-size:14px;line-height:21px!important;color:#909090;padding:5px 10px;background-color:#fff}
-table.responsive_tables td a:hover,table.responsive_tables td a:focus{text-decoration:underline}
-.responsive_tables.last_action th:last-of-type{text-align:right}
-.text-input__profile{border-radius:4px;width:100%}
-.text-input__tables{border-radius:4px;width:100%}
-.text-table--line{height:10px;width:50%;margin:10px;animation:pulse 1s infinite ease-in-out}
-.text-input__tables div:nth-child(1){width:20%;margin-bottom:40px;float:left}
-.text-input__tables div:nth-child(2){width:20%;margin-bottom:40px;float:right}
-.text-input__profile div:nth-child(1){width:20%}
-.text-profile--line{height:10px;margin:10px;animation:pulse 1s infinite ease-in-out}
-.text-input__profile div:nth-child(2){width:35%}
-@keyframes pulse {
-0%{background-color:rgba(165,165,165,0.1)}
-50%{background-color:rgba(165,165,165,0.3)}
-100%{background-color:rgba(165,165,165,0.1)}
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+
+.switch .slider.round {
+    border-radius: 34px;
+    width: 100%;
+    display: block;
+    height: 100%;
+}
+
+.switch .slider.round:before {
+    border-radius: 50%;
+}
+.switch  .slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 1px;
+    bottom: auto;
+    background-color: white;
+    transition: .4s;
+    top: 1px;
+}
+
+.switch input:checked + .slider {
+    background-color: #46ab55;
+}
+
+/* Toggle Button CSS END  ***************************************/
+.bottom_filter.gray-form input {
+    padding: 9px 20px;
 }
 
 

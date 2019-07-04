@@ -8,7 +8,7 @@
   blog  -->
 
 
-<section class="blog page-section-ptb pad-b-30">
+<section #listingSection class="blog page-section-ptb pad-b-30">
   <div class="container">
 
     <div class="row">
@@ -72,16 +72,16 @@
                   </div>
                   <div class="right_sec right_filter ml-auto">
                     <div (click)="show('list')" class="list_view d-inline-block">
-                      <img src="/assets/images/list_view_icon.png" alt="list_view_icon" class="img-fluid">
+                      <img title="Listing" src="/assets/images/list_view_icon.png" alt="list_view_icon" class="img-fluid">
                     </div>
-                    <div (click)="show('sort')" class="sort_BTN d-inline-block">
+                    <!-- <div (click)="show('sort')" class="sort_BTN d-inline-block">
                       <img src="/assets/images/sort_icon.png" alt="sort_icon" class="img-fluid">
-                    </div>
+                    </div> -->
                     <div (click)="show('filter')" class="filter_BTN d-inline-block">
-                      <img src="/assets/images/filter_icon_grey.png" alt="filter_icon" class="img-fluid">
+                      <img title="Filters" src="/assets/images/filter_icon_grey.png" alt="filter_icon" class="img-fluid">
                     </div>
 
-                    <app-date-filter (sendDate)="getDateFilter($event)"></app-date-filter>
+                    <app-date-filter  (sendDate)="getDateFilter($event)"></app-date-filter>
                   </div>
 
 
@@ -96,199 +96,23 @@
             <div *ngIf="sectionEnable=='filter'" class="bid-section filter_by">
 
               <div class="d-flex">
-                <h3 class="d-inline-block">Filters</h3>
+                <h3 class="d-inline-block">Basic Filters</h3>
                 <div class="right_sec right_filter ml-auto">
                   <div (click)="show('list')" class="list_view d-inline-block">
-                    <img src="/assets/images/list_view_icon.png" alt="list_view_icon" class="img-fluid">
+                    <img title="Listing" src="/assets/images/list_view_icon.png" alt="list_view_icon" class="img-fluid">
                   </div>
-                  <div (click)="show('sort')" class="sort_BTN d-inline-block">
+                  <!-- <div (click)="show('sort')" class="sort_BTN d-inline-block">
                     <img src="/assets/images/sort_icon.png" alt="sort_icon" class="img-fluid">
-                  </div>
+                  </div> -->
                   <div (click)="show('filter')" class="filter_BTN d-inline-block">
-                    <img src="/assets/images/filter_icon_grey.png" alt="filter_icon" class="img-fluid">
+                    <img title="Filters" src="/assets/images/filter_icon_grey.png" alt="filter_icon" class="img-fluid">
                   </div>
                 </div>
               </div>
 
 
 
-              <div class="filters_inner container">
-                <div class="top_filters">
-                  <div class="row">
-                    <div class="col-md-6 p-md-0">
-                      <div class="range_filter dark">
-                        <label for="year">Year</label>
-                        <div id="year-range"></div>
-                        <input type="text" id="year" class="years" readonly />
-                      </div>
-                    </div>
-                    <div class="col-md-6 p-md-0">
-                      <div class="range_filter ">
-                        <label for="milage">Milage</label>
-                        <div id="slider-range"></div>
-                        <input type="text" id="milage" readonly>
-                        <input type="text" class="bids" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="bottom_filter gray-form">
-                  <div class="row">
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label>Buying Radius</label>
-                        <input class="form-control placeholder" type="text" placeholder="Enter Radius In Miles">
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label>Make</label>
-                        <div class="selected-box">
-                          <select class="selectpicker my_select">
-                            <option>Multiselect</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label>Model</label>
-                        <div class="selected-box">
-                          <select class="selectpicker my_select">
-                            <option>Multiselect</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label>Body Style</label>
-                        <div class="selected-box">
-                          <select class="selectpicker my_select">
-                            <option>Multiselect</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label>Trims</label>
-                        <div class="selected-box">
-                          <select class="selectpicker my_select">
-                            <option>Multiselect</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label>Doors</label>
-                        <div class="selected-box">
-                          <select class="selectpicker my_select">
-                            <option>Multiselect</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label>Engine</label>
-                        <div class="selected-box">
-                          <select class="selectpicker my_select">
-                            <option>Multiselect</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label>Transmission</label>
-                        <div class="selected-box">
-                          <select class="selectpicker my_select">
-                            <option>Multiselect</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label>Fual Type</label>
-                        <div class="selected-box">
-                          <select class="selectpicker my_select">
-                            <option>Multiselect</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label>Drive Type</label>
-                        <div class="selected-box">
-                          <select class="selectpicker my_select">
-                            <option>Multiselect</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label>Interior Colour</label>
-                        <div class="selected-box">
-                          <select class="selectpicker my_select">
-                            <option>Multiselect</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label>Exterior Colour</label>
-                        <div class="selected-box">
-                          <select class="selectpicker my_select">
-                            <option>Multiselect</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label>Drive Type</label>
-                        <div class="selected-box">
-                          <select class="selectpicker my_select">
-                            <option>Multiselect</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label>Interior Colour</label>
-                        <div class="selected-box">
-                          <select class="selectpicker my_select">
-                            <option>Multiselect</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label>Exterior Colour</label>
-                        <div class="selected-box">
-                          <select class="selectpicker my_select">
-                            <option>Multiselect</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="submission_buttons">
-                        <button class="button">Submit</button>
-                        <button class="button">Reset</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <app-filter [filters]="page.filters" (onSubmit)="applyDashboardFilters($event)"></app-filter>
             </div>
             <!--Filter END-->
 
@@ -302,98 +126,21 @@
 
                 <div class="right_sec right_filter ml-auto">
                   <div (click)="show('list')" class="list_view d-inline-block">
-                    <img src="/assets/images/list_view_icon.png" alt="list_view_icon" class="img-fluid">
+                    <img title="Listing" src="/assets/images/list_view_icon.png" alt="list_view_icon" class="img-fluid">
                   </div>
-                  <div (click)="show('sort')" class="sort_BTN d-inline-block">
+                  <!-- <div (click)="show('sort')" class="sort_BTN d-inline-block">
                     <img src="/assets/images/sort_icon.png" alt="sort_icon" class="img-fluid">
-                  </div>
+                  </div> -->
                   <div (click)="show('filter')" class="filter_BTN d-inline-block">
-                    <img src="/assets/images/filter_icon_grey.png" alt="filter_icon" class="img-fluid">
+                    <img title="Filters" src="/assets/images/filter_icon_grey.png" alt="filter_icon" class="img-fluid">
                   </div>
 
 
                 </div>
               </div>
 
-              <div class="filters_inner container">
-                <div class="bottom_filter gray-form">
-                  <div class="row">
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label>Order by</label>
-                        <div class="selected-box">
-                          <select class="selectpicker my_select">
-                            <option>Newest</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label>Bids Recieved</label>
-                        <div class="selected-box">
-                          <select class="selectpicker my_select">
-                            <option>Less Then 5</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label>Listing End in</label>
-                        <div class="selected-box">
-                          <select class="selectpicker my_select">
-                            <option>5 Hrs</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label>Seller Type</label>
-                        <div class="selected-box">
-                          <select class="selectpicker my_select">
-                            <option>New</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label>Seller Rating</label>
-                        <div class="selected-box">
-                          <select class="selectpicker my_select">
-                            <option>4.5 TO 5 Star</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <label>Show only</label>
-
-                        <div class="Radio_BTN">
-                          <input type="radio" name="one" id="one">
-                          <label for="one">My Dealership Bids</label>
-                        </div>
-
-
-                        <div class="Radio_BTN">
-                          <input type="radio" name="one" id="two" checked>
-                          <label for="two">Wishlisted Cars</label>
-                        </div>
-
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="submission_buttons">
-                        <button class="button">Submit</button>
-                        <button class="button">Reset</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <app-sort></app-sort>
+              
             </div>
             <!--Sort End-->
 
@@ -679,16 +426,18 @@
 
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Mileage" prop="basic_info.vehicle_mileage"  [sortable]="true">
-                  <ng-template let-row="row" ngx-datatable-cell-template>
-                    {{ row?.miles }}
-                  </ng-template>
-                </ngx-datatable-column>
+              
                 <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Exterior Color" prop="basic_info.vehicle_exterior_color" [sortable]="true">
                   <ng-template let-row="row" ngx-datatable-cell-template>
                     {{ row?.exterior_color }}
                   </ng-template>
                 </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Mileage" prop="basic_info.vehicle_mileage" [sortable]="true">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      {{ row?.miles }}
+                    </ng-template>
+                  </ngx-datatable-column>
+
                 <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Car Condition" [sortable]="true">
                   <ng-template let-row="row" ngx-datatable-cell-template>
                     <span *ngIf="row?.vehicle_condition?.vehicle_condition_value?.length <= 18" data-toggle="tooltip"
@@ -761,7 +510,7 @@
                                   </button>-->
 
 
-                      <a title="Car Detail" routerLink="/dealer/car-detail/{{row._id}}"><i class="fa fa-eye"></i></a>
+                      <a title="Car Detail" routerLink="/dealer/car-detail/{{row._id}}/dashboard"><i class="fa fa-eye"></i></a>
 
 
 

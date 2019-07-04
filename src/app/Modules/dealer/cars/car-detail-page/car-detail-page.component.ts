@@ -35,6 +35,11 @@ export class CarDetailPageComponent implements OnInit {
     this.titleService.setTitle();
     this.commonUtilsService.showPageLoader();  
 
+    //checking the type to change breadcrumbs
+    if ('type' in this.activatedRoute.snapshot.params) {
+      this.breadcrumbs = [{ page: 'Home', link: '' }, { page: "Dashboard", link: '/dealer/dashboard' }, { page: 'Car Detail', link: '' }]
+    }
+
     //hit api to fetch data
     this.carService.carDetail({ id: this.activatedRoute.snapshot.params._id }).subscribe(
 

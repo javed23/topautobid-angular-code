@@ -20,7 +20,8 @@ declare let POTENZA: any;
 })
 export class ListingComponent implements OnInit {
   @ViewChild('listingTable') listingTable;
-  @ViewChild('bidModal') bidModal: ElementRef;
+  @ViewChild('bidModal') bidModal:ElementRef;
+  @ViewChild("listingSection") listingSection: ElementRef;
 
   sectionEnable: string = 'list'
   sliderOptions: NgxGalleryOptions[];
@@ -46,7 +47,7 @@ export class ListingComponent implements OnInit {
   //title and breadcrumbs
   readonly title: string = 'Dealer Dashboard'
   readonly breadcrumbs: any[] = [{ page: 'Home', link: '/dealer/home' }, { page: 'Dashboard', link: '' }]
-
+  
 
   constructor(private dealerService: DealerService, private realTimeUpdate:RealUpdateService, private commonUtilsService: CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private titleService: TitleService) {
 
@@ -65,7 +66,9 @@ export class ListingComponent implements OnInit {
 
 
 
-
+  hi(){
+    console.log('image error');
+  }
   private dealerBidForm() {
     this.bidForm = this.formBuilder.group({
       car_id: [null, Validators.required],
@@ -77,6 +80,7 @@ export class ListingComponent implements OnInit {
 
 
   setPage(page) {
+    
     this.page.pageNumber = page.offset;
     this.page.size = page.pageSize;
 
@@ -87,7 +91,7 @@ export class ListingComponent implements OnInit {
 
       //case success
       (pagedData) => {
-
+        this.listingSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });//scroll the page to defined section #contentSection
         this.page = pagedData.page;
 
         //this.cars =  pagedData.data; 
@@ -125,40 +129,8 @@ export class ListingComponent implements OnInit {
     this.selectedCarId = '';
   }
 
-  /**
- * Private function to initalize slider 
- * @return  void
-*/
-  private sliderinit(): void {
-    this.sliderOptions = [
-      {
-        "image": false, "height": "90px", "thumbnailsColumns": 1,
-        "previewCloseOnClick": true, "previewCloseOnEsc": true, "width": "100%"
-      },
-      { "breakpoint": 500, "width": "300px", "height": "300px", }
-    ];
 
-    this.sliderImages = [
-      {
-        small: 'assets/images/bg/cars/small/01.jpg',
-        medium: 'assets/images/bg/cars/small/01.jpg',
-        big: 'assets/images/bg/cars/bg/01.jpg',
-      },
-      {
-        small: 'assets/images/bg/cars/small/02.jpg',
-        medium: 'assets/images/bg/cars/small/02.jpg',
-        big: 'assets/images/bg/cars/bg/02.jpg',
-      },
-      {
-        small: 'assets/images/bg/cars/small/03.jpg',
-        medium: 'assets/images/bg/cars/small/03.jpg',
-        big: 'assets/images/bg/cars/bg/03.jpg',
-      }
-    ];
-  }
-
-  ngOnInit() {
-    this.sliderinit()
+  ngOnInit() {    
 
     POTENZA.priceslider()
     POTENZA.yearslider()
@@ -374,6 +346,18 @@ export class ListingComponent implements OnInit {
     if (pos >= 0) this.legalContacts = this.dealerShips[pos].legal_contacts;
     else this.legalContacts = [];
   }
+  /**
+   * Search results according to user inputs
+   * @param searchValue user inputs to search particular data
+   * @return  void
+   */
+  applyDashboardFilters(filters): void {
+    this.page.filters = filters
+    this.sectionEnable = 'list'
+    console.log('filters',this.page.filters);
+    this.setPage(this._defaultPagination);
+  }
+
 
 
 

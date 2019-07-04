@@ -100,11 +100,17 @@ const routes: Routes = [
     canActivate: [DealerAuthGuardService]
   },
   {
-    path: 'car-detail/:_id',
+    path: 'car-detail/:_id/:type',
     component: CarDetailPageComponent,
     data: { title: "Car Details" },
     canActivate: [DealerAuthGuardService]
   },
+  {
+    path: 'car-detail/:_id',
+    component: CarDetailPageComponent,
+    data: { title: "Car Details" },
+    canActivate: [DealerAuthGuardService]
+  },  
   {
     path: 'purchases',
     component: PurchasesListComponent,

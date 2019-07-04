@@ -130,8 +130,9 @@ export class CarService {
 
         return this.httpClient.post('car/carDetail', carIdObject)
             .map((response: any) => {
+                console.log('car response', response);
                 let car = new Car(response);
-                //console.log('car detail', car);
+                console.log('car detail', car);
                 return car;
             })
     }
