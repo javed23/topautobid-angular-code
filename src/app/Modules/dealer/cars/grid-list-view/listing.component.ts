@@ -170,7 +170,8 @@ export class ListingComponent implements OnInit {
 
     //Do not show page loader if fetching results using search
     if(!this.page.search){
-      this.commonUtilsService.showPageLoader();    }
+      this.commonUtilsService.showPageLoader(); 
+    }
     
     //hit api to fetch data
     this.carService.listingDealersCars(this.page).subscribe(

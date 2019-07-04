@@ -66,7 +66,9 @@ export class ListingComponent implements OnInit {
 
 
 
-
+  hi(){
+    console.log('image error');
+  }
   private dealerBidForm() {
     this.bidForm = this.formBuilder.group({
       car_id: [null, Validators.required],

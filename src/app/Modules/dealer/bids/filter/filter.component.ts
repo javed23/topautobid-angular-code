@@ -214,7 +214,7 @@ private mileageSlider():void{
 
   listingModel(event){
     
-    
+    this.trims = []
     if(event.target.value){
       this.commonUtilsService.showPageLoader();
       this.commonUtilsService.listingModels({ make_id:event.target.value}).subscribe(
