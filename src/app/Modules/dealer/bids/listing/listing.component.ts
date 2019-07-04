@@ -92,7 +92,7 @@ export class ListingComponent implements OnInit {
 
         //this.cars =  pagedData.data; 
         this.cars = [...pagedData.data];
-        console.log(this.cars)
+        console.log('the cars are',this.cars)
 
         this.commonUtilsService.hidePageLoader();
         //case error 

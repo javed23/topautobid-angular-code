@@ -40,7 +40,7 @@
                         <tr *ngFor="let bid of bids; let i = index">
 
                          
-                          <td><img  *ngIf="bid?.dealership[0]?.profile_pic" src="{{bid?.dealership[0]?.profile_pic}}"/></td>
+                          <td> <div class="profile_img"><img  class="img-fluid" [src]="bid?.dealership[0]?.profilepic?bid?.dealership[0]?.profilepic:'assets/images/dealershiplogo.png'"/></div> </td>
                           <td>{{ bid?.dealership[0]?.legalcoroporationname}}</td>
                           <td>{{ bid.bids[bid.bids.length-1]?.legal_contact}} </td>
                           <td>{{ bid.bids[bid.bids.length-1]?.price | currency:'USD':true:'2.2-2'}}</td>              

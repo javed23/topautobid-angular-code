@@ -139,38 +139,89 @@ car-details -->
             
            
               <ul class="car_details_tab">
-                <li>
-                  <span class="head">Body</span>
-                  <span class="value">{{carDetail?.body_style | titlecase}}</span>
-                </li>
+                
                 <li>
                     <span class="head">Trim</span>
                     <span class="value">{{carDetail?.trim | titlecase}}</span>
                 </li>
-                <li>
-                    <span class="head">Engine</span>
-                    <span class="value">{{carDetail?.engine | titlecase}}</span>
-                </li>
-  
-  
-                <li>
-                    <span class="head">Transmission</span>
-                    <span class="value">{{carDetail?.transmission | titlecase}}</span>
-                </li>
-                
-                 
+       
                 <li>
                     <span class="head">Interior Material</span>
                     <span class="value">{{carDetail?.interior_material | titlecase}}</span>
                 </li>
-                <li>
-                  <span class="head">Doors</span>
-                  <span class="value">{{carDetail?.doors | titlecase}}</span>
-              </li>
+          
                 
                 
   
-              </ul>
+              </ul> 
+              <div class="car_details_tab">  
+              <div class="option_outer">
+                  <h2>Standard Equipment</h2>
+
+
+                  <div class="option_box">
+                    <ol class="three_column">
+                      <li *ngFor="let se  of carDetail.standard_equipments;let i = index;">
+
+                        <input type="checkbox" disabled [checked]="se.selected" id="o" />
+                        <label for="o">{{se?.name}}</label>
+
+                      </li>
+                    </ol>
+                  </div>
+
+                  <h2>Additional Options</h2>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="option_box">
+                        <h5>Entertainment & Instrumentation</h5>
+                        <ol>
+
+
+                          <li
+                            *ngFor="let aeo of carDetail.additional_options.entertainments;let i = index;">
+                            <input id="aeo_{{i}}" [checked]="aeo.selected" disabled
+                              type="checkbox" />
+                            <label for="aeo_{{i}}">{{aeo?.name}}</label>
+                          </li>
+
+                        </ol>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="option_box">
+                        <h5>Wheels & Tires</h5>
+                        <ol>
+                          <li
+                            *ngFor="let wheel of carDetail.additional_options.wheels;let i = index;">
+                            <input id="wheel_{{i}}" [checked]="wheel.selected" disabled
+                              type="checkbox" />
+                            <label for="wheel_{{i}}">{{wheel?.name}}</label>
+                          </li>
+                        </ol>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="option_box">
+                        <h5>Accessory Packages</h5>
+                        <ol>
+
+
+                          <li
+                            *ngFor="let accessory of carDetail.additional_options.accessory_packages;let i = index;">
+                            <input id="accessory_{{i}}" [checked]="accessory.selected"
+                              type="checkbox" disabled />
+                            <label for="accessory_{{i}}">{{accessory.name}}</label>
+                          </li>
+
+                        </ol>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
             </div>
             <div id="tab2" class="tabcontent">
                 <ul class="car_details_tab">
@@ -242,27 +293,27 @@ car-details -->
                 <ul class="car_details_tab">
                     <li>
                         <span class="head">Estimated Price</span>
-                        <span class="value">{{carDetail?.vehicle_finance?.vehicle_estimated_price | currency:'USD':true:'2.2-2'}}</span>
+                        <span class="value">{{carDetail?.vehicle_finance_details?.vehicle_estimated_price | currency:'USD':true:'2.2-2'}}</span>
                       </li>
   
                     <li>
                       <span class="head">My Pay Off</span>
-                      <span class="value">{{carDetail?.vehicle_finance?.vehicle_pay_off | currency:'USD':true:'2.2-2'}}</span>
+                      <span class="value">{{carDetail?.vehicle_finance_details?.vehicle_pay_off | currency:'USD':true:'2.2-2'}}</span>
                     </li>
   
                     <li>
                         <span class="head">Finance Bank</span>
-                        <span class="value">{{carDetail?.vehicle_finance?.vehicle_finance_bank}}</span>
+                        <span class="value">{{carDetail?.vehicle_finance_details?.vehicle_finance_bank?carDetail?.vehicle_finance_details?.vehicle_finance_bank:'N/A'}}</span>
                       </li>
   
                     <li>
                       <span class="head">Offer In Hand</span>
-                      <span class="value">{{carDetail?.vehicle_finance?.vehicle_offer_in_hands_price | currency:'USD':true:'2.2-2'}}</span>
+                      <span class="value">{{carDetail?.vehicle_finance_details?.vehicle_offer_in_hands_price | currency:'USD':true:'2.2-2'}}</span>
                     </li>
                     <li>
                         <span class="head">Proofs</span>
                         <span class="value" >
-                          <span *ngFor="let proof of carDetail?.vehicle_finance?.vehicle_proof_image">
+                          <span *ngFor="let proof of carDetail?.vehicle_finance_details?.vehicle_proof_image">
                             <img class="img-thumbnail" src="{{proof.file_path}}">
                           </span>
                         </span>

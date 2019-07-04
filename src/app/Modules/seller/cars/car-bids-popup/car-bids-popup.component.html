@@ -21,7 +21,7 @@
                     <table class="table table-bordered-custom-modal table-striped table-image-set">
                       <thead class="thead-dark-custom-modal">
                         <tr>                        
-                          <th>Dealer</th>
+                          <th>Dealership Logo</th>
                           <th>Dealership</th>
                           <th>Legal Contact</th>
                           <th>Price</th>
@@ -41,7 +41,7 @@
                         <tr *ngFor="let bid of bids; let i = index">
 
                          
-                          <td>{{bid?.dealer[0]?.name?.first_name}} {{bid?.dealer[0]?.name.last_name}}</td>
+                          <td><div class="profile_img"><img  class="img-fluid" [src]="bid?.dealership[0]?.profilepic?bid?.dealership[0]?.profilepic:'assets/images/dealershiplogo.png'"/></div></td>
                           <td>{{ bid?.dealership[0]?.legalcoroporationname}}</td>
                           <td>{{ bid.bids[bid.bids.length-1]?.legal_contact}} </td>
                           <td>{{ bid.bids[bid.bids.length-1]?.price | currency:'USD':true:'2.2-2'}}</td>             
@@ -50,7 +50,8 @@
                                 </ngb-rating>
                                 <span class="rating-number">({{bid?.dealer_rating_average}}/5)</span></td>
                           <td> {{ bid?.bids[bid.bids.length-1]?.bid_date | date:'MM-dd-yyyy'}}</td>  
-                          <td> <span class="accept_btn" (click)="acceptBid(bid?._id)">Accept</span></td>                         
+                          <td> <span class="accept_btn" *ngIf="bid?.bid_acceptance =='active'" (click)="acceptBid(bid?._id)">Accept</span>
+                            <span class="accept_btn" *ngIf="bid?.bid_acceptance !='active'" >{{bid?.bid_acceptance}}</span></td>                         
                         </tr>
 
                       </tbody>
