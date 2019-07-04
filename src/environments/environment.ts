@@ -31,6 +31,7 @@ export const environment = {
     { value: 96 },
   ],
 
+
   //rating & review settings 
   MAX_RATE_STARS: 5,
 

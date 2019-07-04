@@ -627,6 +627,10 @@ i.fa-caret-down {position: absolute;font-size: 18px;right:5%;top: 30%;color: #BA
 .detail_head a:hover {color: #da2a2b;text-decoration: none;}
 .detail_body ul {list-style: none;padding: 0;margin: 0 0 95px 0;}
 .detail_body ul>li:nth-child(odd) {background: rgba(238, 238, 238, 0.70);}
+.detail_body ul>li .vehicle_options {
+    padding: 0 16px;
+    padding-bottom: 7px;
+}
 .detail_body ul>li {font-size: 0;}
 .detail_body ul>li .label,.detail_body ul li .value {    color: #424856!important;
     font-size: 15px!important;
@@ -829,7 +833,7 @@ p.error_msg {border:0px; padding:0px;     margin: 0; left:0px;}
 }
 
 .ownership_btns {
-    margin: 20px 0 10px auto;
+    margin: 20px 0 30px auto;
     width: 75%;
 }
 .ownership_btns  .Radio_BTN label{
@@ -995,7 +999,7 @@ p.note {font-size:13px;}
     border: 1px dotted #a7ffb8;
     padding: 15px 25px;
     text-align: left;
-    margin: 25px 0;
+    margin: 3px 0 0 0;
     font-size: 15px;
 }
 .search_result span {
@@ -1012,9 +1016,89 @@ p.note {font-size:13px;}
     min-width: 230px;
 }
 .fields_section {
-    margin-bottom: 40px;
+    margin-bottom: 10px;
+}   
+
+
+.option_box {
+    padding: 5px 20px;
+    margin-bottom: 20px;
 }
 
+.option_outer h2{
+    background: #f6f6f6;
+    color: #313131;
+    line-height: initial;
+    padding: 14px 20px;
+    text-align: left;
+    font-size: 16px;
+    margin-bottom: 15px;
+    font-weight: normal;
+}
+
+.option_box h5 {
+    font-size: 14px;
+    font-weight: normal;
+    text-transform: capitalize;
+    text-decoration: underline;
+    margin-bottom: 15px;
+}
+
+.option_box ol li {
+    list-style: none;
+    line-height: 1;
+    margin-bottom: 5px;
+}
+
+.option_box ol li input {
+    display: none;
+}
+
+.option_box ol li input + label {
+    margin: 0;
+    padding: 0 0 0 25px;
+    line-height: initial;
+    position: relative;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+
+.option_box ol li input + label:after{
+    content: "\f14a";
+    font: normal normal normal 14px/1 FontAwesome;
+    color: #b4b4b4;
+    position: absolute;
+    top: 3px;
+    left: 0;
+}
+
+.option_box ol li input:checked + label:after{
+
+    color: #e12c33;
+}
+
+.three_column
+{
+    -webkit-column-count: 3; /* Chrome, Safari, Opera */
+  -moz-column-count: 3; /* Firefox */
+  column-count: 3;
+}
+
+.vehicle_options li {
+    width: auto!important;
+    display: inline-block;
+    border: 1px solid #cccccc!important;
+    margin: 0px 5px 5px 0px;
+    border-radius: 50px;
+    padding: 4px 7px;
+    line-height: 1;
+    background: #fff;
+}
+.vehicle_options li span {
+    margin: 0!important;
+    font-size: 10px!important;
+}
 /*-----Please do not include any other css at the bottom of responsive css-------*/
 /*------------Responsive Css----------------*/
 /*----------------------------*/
@@ -1082,6 +1166,12 @@ p.note {font-size:13px;}
     .category_images ul li {
         width: calc(100% / 7) !important;
         height: 56px;
+    }
+    
+    .three_column {
+        -webkit-column-count: 1;
+        -moz-column-count: 1;
+        column-count: 1;
     }
     }
     

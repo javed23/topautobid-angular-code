@@ -13,6 +13,7 @@ import { ListingComponent as CarsGridListComponent } from './cars/grid-list-view
 import { ListComponent as CarsTableComponent } from './cars/table-view/list.component';
 import { CarDetailPageComponent } from './cars/car-detail-page/car-detail-page.component';
 import { AddCarComponent } from './cars/addcar/addcar.component';
+import { AddNewCarComponent } from './cars/addnewcar/addnewcar.component';
 import { CarBidsComponent } from './cars/car-bids/car-bids.component';
 import { RateReviewComponent } from './rate-review/rate-review.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
@@ -20,7 +21,6 @@ import { AccountVerifyComponent } from './account-verify/account-verify.componen
 import { EditCarComponent } from './cars/editcar/editcar.component';
 import {ChangePasswordComponent} from  './change-password/change-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
-import { AddNewCarComponent } from './cars/addnewcar/addnewcar.component';
 
 
 //importing guards
@@ -103,6 +103,13 @@ const routes: Routes = [
   {
     path: 'addcar',
     component: AddCarComponent,
+    data: { title: 'Seller AddCar' },
+    canActivate: [SellerAuthGuardService]
+  }, 
+
+  {
+    path: 'addnewcar',
+    component: AddNewCarComponent,
     data: { title: 'Seller AddCar' },
     canActivate: [SellerAuthGuardService]
   },

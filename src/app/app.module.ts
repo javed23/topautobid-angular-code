@@ -20,7 +20,7 @@ import { PageNotFoundComponent } from './core/components/page-not-found/page-not
 //components
 import { AlertComponent } from './shared/components/alert/alert.component';
 import { PageLoaderComponent } from './shared/components/page-loader/page-loader.component';
-//services
+//services 
 import { AlertService, PageLoaderService } from './shared/_services'
 
 //import core services

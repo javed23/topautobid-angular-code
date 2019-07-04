@@ -35,7 +35,7 @@
                                 <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                                     <h5>Select Vehicle Year</h5>
                                     <div class="registrationyear category_Box">
-                                        <!--start-->
+                                        
                                         <ul>
                                             <li *ngFor="let year of yearRange;">
                                                 <input (click)="setVehicleYear(year.value)" type="radio" formControlName="vehicle_year" value="{{year.value}}" id="new_{{year.value}}">
@@ -56,7 +56,7 @@
                                             </li>
                                                 
                                         </ul> 
-                                        <!--end--> 
+                                         
                                         <input mask="0000" *ngIf="isMoreSelected" formControlName="vehicle_year_value" type="text" data-typeahead="sellCarModelYear" class="gs_ta" placeholder="Year" autocomplete="off"  [ngClass]="{ 'is-invalid': (vehicleOption.controls.vehicle_year_value.touched || isVehicleOptionSubmitted) && vehicleOption.controls.vehicle_year_value.errors }">
                                         <p class="error_label" *ngIf="(vehicleOption.controls.vehicle_year_value.touched || isVehicleOptionSubmitted) ">                      
                                             <app-form-validation-errors errorPrefix="Year " [isPrice]=false minValue={{minYear}}  maxValue={{maxYear}}  [errors]="vehicleOption.controls.vehicle_year_value.errors"></app-form-validation-errors>
@@ -67,7 +67,15 @@
                                 <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
                                     <h5>Select from Existing Vehicle</h5>
                                     
-                                        <input #existing_vehicle type="text" placeholder="VIN, Make, Model" [ngClass]="{ 'is-invalid': (vehicleOption.controls.existing_vehicle.touched || isVehicleOptionSubmitted) && vehicleOption.controls.existing_vehicle.errors }" formControlName="existing_vehicle"/> 
+                                        <input #existing_vehicle type="text" id="existing_vehicle" placeholder="VIN, Make, Model" [ngClass]="{ 'is-invalid': (vehicleOption.controls.existing_vehicle.touched || isVehicleOptionSubmitted) && vehicleOption.controls.existing_vehicle.errors }" formControlName="existing_vehicle"/> 
+
+
+                                        <ul class="filter-select">
+                                            <li *ngFor="let result of results" class="filter-select-list">
+                                                <p class="artist-name">{{result.name}}</p>
+                                            </li>
+                                           
+                                        </ul>
 
                                         <p class="error_label" *ngIf="vehicleOption.controls.existing_vehicle.touched || isVehicleOptionSubmitted">                      
                                             <app-form-validation-errors errorPrefix="Select from Existing Vehicle " [errors]="vehicleOption.controls.existing_vehicle.errors"></app-form-validation-errors>   
