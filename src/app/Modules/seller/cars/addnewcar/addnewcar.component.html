@@ -1291,35 +1291,35 @@
 
                                                 <li>
                                                         <span class="label">Standard Equipments: </span>
-                                                        <ul class="vehicle_options">
+                                                        <ol class="vehicle_options">
                                                             <li *ngFor="let equipment of standardEquipmentsArray; let i=index">
                                                                 <span *ngIf="equipment.selected">{{equipment.name}}</span>
                                                             </li>
-                                                        </ul>
+                                                        </ol>
                                                     </li>
                                                     <li>
                                                             <span class="label">Entertainment & Instrumentation: </span>
-                                                            <ul class="vehicle_options">
+                                                            <ol class="vehicle_options">
                                                                 <li *ngFor="let entertainment of entertainmentsArray; let i=index">
                                                                     <span *ngIf="entertainment.selected">{{entertainment.name}}</span>
                                                                 </li>
-                                                            </ul>
+                                                            </ol>
                                                         </li>
                                                     <li>
                                                         <span class="label">Wheels & Tires: </span>
-                                                        <ul class="vehicle_options">
+                                                        <ol class="vehicle_options">
                                                         <li *ngFor="let wheel of wheelsArray; let i=index">
                                                             <span *ngIf="wheel.selected">{{wheel.name}}</span>
                                                         </li>
-                                                        </ul>
+                                                        </ol>
                                                     </li>
                                                     <li>
                                                         <span class="label">Accessory Packages: </span>
-                                                        <ul class="vehicle_options">
+                                                        <ol class="vehicle_options">
                                                             <li *ngFor="let accessory of accessoryPackagesArray; let i=index">
                                                                 <span *ngIf="accessory.selected">{{accessory.name}}</span>
                                                             </li>
-                                                        </ul>    
+                                                        </ol>    
                                                     </li>    
                                                                         
                                             </ul>

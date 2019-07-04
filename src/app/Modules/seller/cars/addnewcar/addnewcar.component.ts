@@ -170,6 +170,11 @@ export class AddNewCarComponent implements OnInit {
     { id: '30', name: 'Plus Performance Pkg',  selected: false }
   ]
 
+  filteredSecletedArray = [true];
+  filteredStandardEquipmentsArray = []; 
+  filteredWheelsArray = []; 
+  filteredAccessoryPackagesArray = []; 
+
   interiorMaterials= [{name: "Faux Leather"}, {name: "Brushed Nylon"}, {name: "Nylon Fabric"}];
   standardOptionsDetails= {model_doors: "", model_engine_cyl: "", model_transmission_type: "", model_engine_fuel: "", model_drive: "", model_body: ""};
 
