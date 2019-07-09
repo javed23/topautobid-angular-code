@@ -6,8 +6,8 @@ export const environment = {
   WEB_ENDPOINT: 'http://52.34.203.60',
   ADDRESS_API:{
     ENDPOINT:'https://us-zipcode.api.smartystreets.com',
-    KEY: '17135398116542866',
-    TOKEN: '8tPPY9pdSJuGSksk4aYQ',
+    KEY: '20163011484284547',
+    TOKEN: 'OVpdWTMnyJGunJbOq7BM',
   },
   VEHICLE_STATS_API:{
     ENDPOINT:'https://www.carqueryapi.com/api/0.3',    
@@ -102,6 +102,8 @@ export const environment = {
     ATLEAST_ONE_CONTACT:'Please add atleast one legal contact',
     SELECT_PRIMARY:'Please select primary contact.',
     MAXIMUM_PRIMARY_CONTACT:'Primary contact can not be more than one.',
-    CAR_STATUS_CHANGED:'Status has been changed successfully.'
+    CAR_STATUS_CHANGED:'Status has been changed successfully.',
+    BID_SUCCESS:'The bid has been applied successfully!',
+    BID_ACCEPTED:'The bid has been accepted.The car has been moved to transaction tab.'
   }
 };

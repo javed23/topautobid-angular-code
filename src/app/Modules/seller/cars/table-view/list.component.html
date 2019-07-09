@@ -73,7 +73,7 @@
                           (click)="onChangeListType('active')">Active</button></li>
                       <li [ngClass]="{ active: page.type=='inactive'}"><button
                           (click)="onChangeListType('inactive')">Inactive</button></li>
-                      <li [ngClass]="{ active: page.type=='transactions'}"><button
+                      <li [ngClass]="{ active: page.type=='accepted'}"><button
                           (click)="onChangeListType('accepted')">Transactions</button></li>
                       <li [ngClass]="{ active: page.type=='sold'}"><button
                           (click)="onChangeListType('sold')">Sold</button></li>
@@ -349,14 +349,16 @@
                   [sortable]="true">
                   <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
                     <!-- $<b>0.00</b> -->
-                    <b>{{row?.higest_bid ? row?.higest_bid:00 | currency:'USD':true:'2.2-2'}} </b>
+                    <b>
+                      {{row?.higest_bid | currency:'USD':true:'2.2-2'}}
+                    </b>
                     
                     <span *ngIf="row?.totalBids" class="left_bids">
 
                       <button *ngIf="row?.type == 'active' && row.totalBids == 1" (click)="show(row?._id)">See
                         ({{row?.totalBids}}) bid</button>
                       <button *ngIf="row?.type == 'active' && row.totalBids > 1" (click)="show(row?._id)">See all
-                        ({{row?.totalBids}}) totalBids</button>
+                        ({{row?.totalBids}}) bids</button>
 
                     </span>
                   </ng-template>
@@ -372,12 +374,18 @@
                   </ng-template>
                 </ngx-datatable-column>
 
-                <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Created At" prop="created_at"
+                <ngx-datatable-column *ngIf="page.type!='accepted'" [resizeable]="false" [draggable]="false" name="Created At" prop="created_at"
                   [sortable]="true">
                   <ng-template let-row="row" ngx-datatable-cell-template>
                     {{ row.created_at | date:'MM-dd-yy'}}
                   </ng-template>
                 </ngx-datatable-column>
+                <ngx-datatable-column *ngIf="page.type=='accepted'" [resizeable]="false" [draggable]="false" name="Updated At" prop="updated_at"
+                [sortable]="true">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row.updated_at | date:'MM-dd-yy'}}
+                </ng-template>
+              </ngx-datatable-column>
                 <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Action" [sortable]="false">
                   <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
 

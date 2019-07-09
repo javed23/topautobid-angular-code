@@ -27,6 +27,9 @@ export class RealUpdateService {
         this.socket.emit('placebid');
     }
   
+    public updateRealTimeOnAcceptBid() {
+      this.socket.emit('acceptbid');
+  }
 
 
 
@@ -43,8 +46,19 @@ export class RealUpdateService {
     return observable
     }
     
-
+    public updateLsitingOnBidAcception(){
+      let observable = new Observable(observer => {
+       
+        this.socket.on('bidaccepted', (data) => {
+          observer.next(data);
+        })
+        return () => {
+          this.socket.disconnect();
+        }
+    });
+    return observable
+    }
   
-
+    
 
 }

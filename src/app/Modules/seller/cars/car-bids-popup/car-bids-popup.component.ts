@@ -5,6 +5,7 @@ import { CommonUtilsService, CarService,SellerService  } from '../../../../core/
 //import models
 import {  Bid } from "../../../../core/_models";
 import Swal from 'sweetalert2'
+import { environment } from 'src/environments/environment';
 declare let $: any;
 @Component({
   selector: 'app-car-bids-popup',
@@ -65,8 +66,7 @@ export class CarBidsPopupComponent {
     console.log('the bid id is', bidId);
     this.bidId = bidId;
     Swal.fire({
-      title: 'Are you sure you want to Accept this bid? ',
-      text: 'You will not be able to cancel it again!',
+      title: 'Are you sure you want to accept this bid? ',
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Yes, Accept it!',
@@ -96,11 +96,7 @@ export class CarBidsPopupComponent {
     this.sellerService.acceptBid(obj).subscribe(response => {
       // console.log('');
      
-        Swal.fire(
-          'success!',
-          'Your bid  has been Accepted.',
-          'success'
-        );
+         this.commonUtilsService.onSuccess(environment.MESSAGES.BID_ACCEPTED)
         // this.setPage(this._defaultPagination);
         this.isOpen = false;
         $(this.contentSection.nativeElement).modal('hide')

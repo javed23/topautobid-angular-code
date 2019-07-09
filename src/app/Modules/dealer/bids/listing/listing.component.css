@@ -193,6 +193,10 @@ app-listing .fa-gavel{
         color:#d90f22;
 }
 
+
+.ngx-datatable.fixed-row .datatable-scroll .datatable-body-row .datatable-body-cell:first-child {
+    width: 14px!important;
+}
 .ngx-datatable.bootstrap .datatable-header .datatable-header-cell {
     padding: 10px 8px;
     border-bottom: 0px solid #d1d4d7;

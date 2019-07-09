@@ -79,7 +79,7 @@ private initalizeFilterForm():void {
     interior_color:[''],
     exterior_color:[''], 
     mileagerange: [`1 - ${maxMileage}`],
-    yearrange:[`2010 - ${currentYear}`],
+    yearrange:[`1970 - ${currentYear}`],
     year_range:'' ,
     mileage_range:''  
   })
@@ -122,10 +122,12 @@ async resetFilters(){
     return;
   }
 
-  this.filtersForm.reset();
+  this.initalizeFilterForm();
   this.filtersForm.get('mileagerange').patchValue(`1 - 10000`) 
-  this.filtersForm.get('yearrange').patchValue(`2010 - ${new Date().getFullYear()}`) 
-  
+  this.filtersForm.get('yearrange').patchValue(`1970 - ${new Date().getFullYear()}`) 
+  this.yearSlider()
+  this.mileageSlider();
+  this.onSubmit.emit(this.filtersForm.value); 
 }
 /**
 * Initalize year range slider
@@ -133,11 +135,11 @@ async resetFilters(){
 */
 private yearSlider():void{
   let selectedMaximumYear = (_.has(this.filters, ['year_range']) && this.filters['year_range'].length > 0)?this.filters['year_range'][1]:new Date().getFullYear();  
-  let selectedMinimumYear = (_.has(this.filters, ['year_range']) && this.filters['year_range'].length > 0)?this.filters['year_range'][0]:2010;  
+  let selectedMinimumYear = (_.has(this.filters, ['year_range']) && this.filters['year_range'].length > 0)?this.filters['year_range'][0]:1970;  
   if($(".year-slide").exists()) {       
         $("#year-range").slider({
             range: true,
-            min: 2010,
+            min: 1970,
             max: new Date().getFullYear(),
             values: [selectedMinimumYear, selectedMaximumYear]            
         });

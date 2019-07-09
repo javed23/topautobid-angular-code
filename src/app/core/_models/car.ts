@@ -24,6 +24,7 @@ export class Car {
     interior_material: string;
     best_bid: number;
     created_at: Date;
+    updated_at:Date;
     offer_in_hand: number;
     comments: string;
     car_selleing_radius: number;  
@@ -85,6 +86,7 @@ export class Car {
         this.offer_in_hand = object.vehicle_finance_details.vehicle_estimated_price;
         this.offer_in_hand_images = object.vehicle_finance_details.vehicle_proof_image;
         this.created_at = object.created_at;
+        this.updated_at  = object.updated_at;
 
 
         this.totalBids = object.totalBids
@@ -102,7 +104,7 @@ export class Car {
         
         this.dealers_bids = object.dealers_bids;
         this.my_bid = (object.my_bid && object.my_bid.length >0) ?object.my_bid[0].bids:[];
-        this.higest_bid = object.higest_bid ? object.higest_bid :null;
+        this.higest_bid = object.higest_bid ? object.higest_bid :0;
         this.seller_distance = (object.distance)?object.distance : 0
         
     }

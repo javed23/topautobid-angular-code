@@ -20,7 +20,7 @@ declare let POTENZA: any;
 })
 export class ListingComponent implements OnInit {
   @ViewChild('listingTable') listingTable;
-  @ViewChild('bidModal') bidModal:ElementRef;
+  @ViewChild('bidModal') bidModal: ElementRef;
   @ViewChild("listingSection") listingSection: ElementRef;
 
   sectionEnable: string = 'list'
@@ -47,16 +47,24 @@ export class ListingComponent implements OnInit {
   //title and breadcrumbs
   readonly title: string = 'Dealer Dashboard'
   readonly breadcrumbs: any[] = [{ page: 'Home', link: '/dealer/home' }, { page: 'Dashboard', link: '' }]
-  
 
-  constructor(private dealerService: DealerService, private realTimeUpdate:RealUpdateService, private commonUtilsService: CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private titleService: TitleService) {
+
+  constructor(private dealerService: DealerService, private realTimeUpdate: RealUpdateService, private commonUtilsService: CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private titleService: TitleService) {
 
 
     //setting the page title
-    
-    this.realTimeUpdate.updateLsiting().subscribe(res=>{
-        this.setPage(this._defaultPagination) // this willbe called after real time updation of listing
+
+    this.realTimeUpdate.updateLsiting().subscribe(res => {
+      this.loadRealTimeLsiting() // this willbe called after real time updation of listing
     })
+
+
+    //update will be invoked on acception of bid from seller side
+    this.realTimeUpdate.updateLsitingOnBidAcception().subscribe(res => {
+      this.loadRealTimeLsiting() // this willbe called after real time updation of listing
+    })
+
+
     this.titleService.setTitle();
 
     this.setPage(this._defaultPagination);
@@ -66,7 +74,7 @@ export class ListingComponent implements OnInit {
 
 
 
-  hi(){
+  hi() {
     console.log('image error');
   }
   private dealerBidForm() {
@@ -78,9 +86,38 @@ export class ListingComponent implements OnInit {
     });
   }
 
+  /**
+   * it will be invoked for realtime data update
+   */
+  loadRealTimeLsiting() {
+    this.page.pageNumber = this._defaultPagination.offset;
+    this.page.size = this._defaultPagination.pageSize;
+
+
+    //hit api to fetch data
+    this.carService.listingDealersCars(this.page).pipe(untilDestroyed(this)).subscribe(
+
+      //case success
+      (pagedData) => {
+        this.listingSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });//scroll the page to defined section #contentSection
+        this.page = pagedData.page;
+
+        //this.cars =  pagedData.data; 
+        this.cars = [...pagedData.data];
+        console.log('the cars are', this.cars)
+
+        //case error 
+      }, error => {
+        this.commonUtilsService.onError(error);
+      });
+
+
+
+  }
+
 
   setPage(page) {
-    
+
     this.page.pageNumber = page.offset;
     this.page.size = page.pageSize;
 
@@ -96,7 +133,7 @@ export class ListingComponent implements OnInit {
 
         //this.cars =  pagedData.data; 
         this.cars = [...pagedData.data];
-        console.log('the cars are',this.cars)
+        console.log('the cars are', this.cars)
 
         this.commonUtilsService.hidePageLoader();
         //case error 
@@ -130,7 +167,7 @@ export class ListingComponent implements OnInit {
   }
 
 
-  ngOnInit() {    
+  ngOnInit() {
 
     POTENZA.priceslider()
     POTENZA.yearslider()
@@ -284,7 +321,6 @@ export class ListingComponent implements OnInit {
   private confirmBid(): void {
     Swal.fire({
       title: 'Are you sure you want to apply?',
-      text: 'You will not be able to revert this change!',
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Yes, Apply!',
@@ -313,6 +349,7 @@ export class ListingComponent implements OnInit {
       this.submitted = false;
 
       $(this.bidModal.nativeElement).modal('hide');
+      this.page.type = "applied";
       this.setPage(this._defaultPagination);
     }, error => {
       this.commonUtilsService.onError(error);
@@ -328,6 +365,7 @@ export class ListingComponent implements OnInit {
       this.submitted = false;
 
       $(this.bidModal.nativeElement).modal('hide');
+      this.page.type = "applied";
       this.setPage(this._defaultPagination);
     }, error => {
       this.commonUtilsService.onError(error);
@@ -354,25 +392,25 @@ export class ListingComponent implements OnInit {
   applyDashboardFilters(filters): void {
     this.page.filters = filters
     this.sectionEnable = 'list'
-    console.log('filters',this.page.filters);
+    console.log('filters', this.page.filters);
     this.setPage(this._defaultPagination);
   }
 
 
 
 
-      /**
- * To sort the records on dattable columns
- * @param event event object which have column name and direction data
- * @return  void
+  /**
+* To sort the records on dattable columns
+* @param event event object which have column name and direction data
+* @return  void
 */
-onSort(event) {
-  
-  const sort = event.sorts[0];
-  this.page.sortProperty = sort.prop
-  this.page.sortDirection = sort.dir   
-  this.setPage(this._defaultPagination);    
-}
+  onSort(event) {
+
+    const sort = event.sorts[0];
+    this.page.sortProperty = sort.prop
+    this.page.sortDirection = sort.dir
+    this.setPage(this._defaultPagination);
+  }
 
   /**
    * will invoke on the discard of the bid

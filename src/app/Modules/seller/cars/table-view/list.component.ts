@@ -7,7 +7,7 @@ import { NgbDateAdapter,  NgbDateNativeAdapter, NgbDateParserFormatter, NgbDateS
 //import services
 
   //modules core services
-  import { TitleService, CarService, CommonUtilsService  } from '../../../../core/_services'
+  import { TitleService, CarService,RealUpdateService, CommonUtilsService  } from '../../../../core/_services'
 
 //import models
 import { PagedData, Car, Page } from "../../../../core/_models";
@@ -68,7 +68,7 @@ export class ListComponent implements AfterViewInit {
 
 
 
-  constructor(private ngbDateParserFormatter: NgbDateParserFormatter,private router:Router, private commonUtilsService:CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private titleService:TitleService) {
+  constructor(private realTimeUpdate:RealUpdateService,private ngbDateParserFormatter: NgbDateParserFormatter,private router:Router, private commonUtilsService:CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private titleService:TitleService) {
 
     //setting the page title
     this.titleService.setTitle();  
@@ -77,6 +77,11 @@ export class ListComponent implements AfterViewInit {
       startDate: [null, null],
       endDate: [null, null]
     });
+
+      
+    this.realTimeUpdate.updateLsiting().subscribe(res=>{
+      this.loadRealTimeLsiting() // this willbe called after real time updation of listing
+  })
 
     //fetching the data with default settings
     this.setPage(this._defaultPagination,'all');
@@ -103,6 +108,32 @@ export class ListComponent implements AfterViewInit {
   onChangeListingType(listingType:string):void {
     this.isGridListing = (listingType=='list')?false:true
   }
+
+/**
+ * this willbe inviked for real time update
+ */
+  loadRealTimeLsiting(){
+    this.page.type = this.page.type;
+    this.page.pageNumber = this._defaultPagination.offset;
+    this.page.size = this._defaultPagination.pageSize;
+    //hit api to fetch data
+    this.carService.listingCarsOnDatable(this.page).subscribe(
+
+      //case success
+      (pagedData) => {      
+      
+      this.page = pagedData.page;
+     
+      //this.cars =  pagedData.data; 
+      this.cars =  [...pagedData.data];   
+      console.log('Rows',this.cars);  
+    //case error 
+    },error => {
+      this.commonUtilsService.onError(error);
+    });
+  }
+
+
 
   /**
    * Populate the table with new data based on the page number
@@ -429,8 +460,11 @@ onSort(event) {
     acceptBid($event){
 
       if($event){
+        this.realTimeUpdate.updateRealTimeOnAcceptBid();
+        this.page.type = 'accepted'
         this.isModalOpen = false
         this.isBidListingModalOpen = false; //set to false which will reset modal to sho
+        this.setPage(this._defaultPagination,this.page.type);
       }
 
     }
