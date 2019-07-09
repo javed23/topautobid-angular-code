@@ -44,6 +44,7 @@ import { AddNewCarComponent } from './cars/addnewcar/addnewcar.component';
 import {CarBidsPopupComponent} from './cars/car-bids-popup/car-bids-popup.component';
 //loader components
 import { EditCarComponent } from './cars/editcar/editcar.component';
+import { EditSavedCarComponent } from './cars/editsavedcar/editsavedcar.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 
@@ -86,11 +87,10 @@ let config = new AuthServiceConfig([
     RateReviewComponent,
     VerifyEmailComponent,
     AccountVerifyComponent,
-    EditCarComponent,
+    EditSavedCarComponent,
     ContactRequestComponent,
     ResetPasswordComponent,
     ChangePasswordComponent,
-    AddNewCarComponent,
     CarBidsPopupComponent
   ],
   

@@ -2,7 +2,7 @@ import { Component, OnInit,  ViewChild, ElementRef, ViewEncapsulation, NgZone } 
 import { Location } from '@angular/common';
 //import { TranslateService } from '@ngx-translate/core';
 import { AbstractControl,  FormBuilder, FormArray,  FormGroup,  FormControl, Validators } from '@angular/forms';
-import { Router} from "@angular/router";
+import { Router, ActivatedRoute} from "@angular/router";
 import { Subscription } from 'rxjs/Subscription';
 import { of, Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
@@ -19,7 +19,7 @@ import Swal from 'sweetalert2';
 
 
 //import core services
-import { UserAuthService, TitleService, CognitoUserService, VehicleService, CommonUtilsService } from '../../../../core/_services'
+import { UserAuthService, TitleService, VehicleService, CommonUtilsService } from '../../../../core/_services'
 
 //import core services
 import { CustomValidators } from '../../../../core/custom-validators';
@@ -41,9 +41,9 @@ declare let POTENZA:any;
 
 
 @Component({
-  selector: 'app-addnewcar',
-  templateUrl: './addnewcar.component.html',
-  styleUrls: ['./addnewcar.component.css'],
+  selector: 'app-editsavedcar',
+  templateUrl: './editsavedcar.component.html',
+  styleUrls: ['./editsavedcar.component.css'],
   encapsulation: ViewEncapsulation.None,
   animations: [
     trigger('AnimateList', [
@@ -54,16 +54,15 @@ declare let POTENZA:any;
     ])
    ]
 })
-export class AddNewCarComponent implements OnInit {
-  // Offer In Hands Popup
-  @ViewChild("offerInHandsSection") offerInHandsSection: ElementRef;
+export class EditSavedCarComponent implements OnInit {
+  
 
   // Define Page Title and Breadcrumbs
   title:string = 'New Car Listing'; 
   breadcrumbs:any = [{page:'Home',link:'/seller/home'},{ page: "Car Listing", link: '/seller/car-listing' },{page:'New Car Listing',link:''}]
 
   // Smooth Scroll To Add Car Form Wizard
-  @ViewChild("addNewCarSection") addNewCarSection: ElementRef;
+  @ViewChild("editSavedCarSection") editSavedCarSection: ElementRef;
 
   // Array where we are going to do CRUD operations
   //vehicleImagesArray:any = [{Interior: []}, {Exterior: []}];
@@ -73,14 +72,14 @@ export class AddNewCarComponent implements OnInit {
   getVehicleYear:string = "";
   
 
-  // AddNewCar Form Group Wizard
+  // editSavedCar Form Group Wizard
   vehicleDetails: FormGroup;
   standardOptionsWizard: FormGroup;
   uploadVehicleImagesWizard: FormGroup;
   aboutVehicleWizard: FormGroup;
   vehicleConditionWizard: FormGroup;
   financeDetailsWizard: FormGroup;
-  offerInHands: FormGroup;
+
   
 
   isStandardOptionsSubmitted:boolean = false;
@@ -89,7 +88,7 @@ export class AddNewCarComponent implements OnInit {
   isVehicleConditionSubmitted:boolean = false;
   isFinanceDetailsSubmitted:boolean = false;
   isVehicleDetailsSubmitted:boolean = false;
-  isOfferInHandsSubmitted:boolean = false;
+ 
   isMyCarFound:boolean = false;
   isAllVehicleDetailsSelected:boolean=false;
   
@@ -127,48 +126,11 @@ export class AddNewCarComponent implements OnInit {
   trims = [];
   vehicleOptions = [];
   vehicleSpecifications = [];
-
-  standardEquipmentsArray = [
-    { id: '1', name: 'Automatic, CVT',  selected: false },    
-    { id: '2', name: 'FWD',  selected: false },
-    { id: '3', name: '4-CYL, Hybrid, 1.8 Liter',  selected: false },
-    { id: '4', name: 'Traction control',  selected: false },
-    { id: '5', name: 'Stability Control',  selected: false },
-    { id: '6', name: 'ABS, 4 Wheel',  selected: false },
-    { id: '7', name: 'Anti-Theft System',  selected: false },
-    { id: '8', name: 'Keyless Entry',  selected: false },
-    { id: '9', name: 'Keyless Start',  selected: false },
-    { id: '10', name: 'Air Conditioning',  selected: false },
-    { id: '11', name: 'Power Windows',  selected: false },
-    { id: '12', name: 'Power Door Locks',  selected: false },
-    { id: '13', name: 'Cruise Control',  selected: false },
-    { id: '14', name: 'Power steering',  selected: false },
-    { id: '15', name: 'Tilt & Telescoping Wheel',  selected: false },
-    { id: '16', name: 'AM/FM Stereo',  selected: false },
-    { id: '17', name: 'CD/MP3 (Single Disc)',  selected: false },
-    { id: '18', name: 'Bluetooth Wireless',  selected: false },
-    { id: '19', name: 'Dual Airbags',  selected: false },
-    { id: '20', name: 'Side Airbags',  selected: false },
-    { id: '21', name: 'F&R Head Curtain Air Bags',  selected: false },
-    { id: '22', name: 'Daytime Running Lights',  selected: false },
-    { id: '23', name: 'Rear Spoiler',  selected: false } 
-  ];
-
-  entertainmentsArray = [
-    { id: '24', name: 'Premium Sound',  selected: false },
-    { id: '25', name: 'SiriusXM Satellite',  selected: false },
-    { id: '26', name: 'DVD System',  selected: false }
-  ];
-
-  wheelsArray = [
-    { id: '27', name: 'Alloy Wheels',  selected: false },
-    { id: '28', name: 'Premium Wheels',  selected: false },
-    { id: '29', name: 'Premium Wheels 19+',  selected: false }
-  ];
-
-  accessoryPackagesArray = [
-    { id: '30', name: 'Plus Performance Pkg',  selected: false }
-  ]
+  removeFileArray = [];
+  standardEquipmentsArray:any = [];
+  entertainmentsArray:any = [];
+  wheelsArray:any = [];
+  accessoryPackagesArray:any = [];
 
   
   filteredStandardEquipmentsArray = []; 
@@ -220,7 +182,10 @@ export class AddNewCarComponent implements OnInit {
 
 
 
-constructor( private zone:NgZone, private cognitoUserService:CognitoUserService, private location: Location, private alertService: AlertService, private vehicleService: VehicleService, private userAuthService: UserAuthService, private pageLoaderService: PageLoaderService, private formBuilder: FormBuilder, private titleService: TitleService, private commonUtilsService: CommonUtilsService, private toastr: ToastrManager, private router: Router) { 
+constructor( private zone:NgZone, private location: Location, private alertService: AlertService, private vehicleService: VehicleService, private userAuthService: UserAuthService, private pageLoaderService: PageLoaderService, private formBuilder: FormBuilder, private titleService: TitleService, private commonUtilsService: CommonUtilsService, private activatedRoute: ActivatedRoute, private toastr: ToastrManager, private router: Router) { 
+
+
+  this.colors = [{label:'Beige',value:'#F5F5DC'},{label:'Black',value:'#252627'},{label:'Brown',value:'#672E10'},{label:'Burgundy',value:'#75141C'},{label:'Charcoal Grey',value:'#757776'},{label:'Dark Blue',value:'#172356'},{label:'Dark Green',value:'#316241'},{label:'Gold',value:'#D6C17F'},{label:'Grey',value:'#808080'},{label:'Light Blue',value:'#5F7DC5'},{label:'Light Green',value:'#8E9F87'},{label:'Orange',value:'#FF9200'},{label:'Purple',value:'#6A4574'},{label:'Red',value:'#E32F43'},{label:'Silver',value:'#D4D9DC'},{label:'Tan',value:'#D2B48C'},{label:'White',value:'#F2F6F9'},{label:'Yellow',value:'#F8E81C'}];
 
   this.selectvehicleDetails(); // Initialize Vehicle Option Fields 
   this.standardOptions();          // Initialize Basic Info Wizard Fields 
@@ -228,7 +193,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   this.aboutVehicle();       // Initialize About Vehicle Wizard Fields
   this.vehicleCondition();   // Initialize Vehicle Condition Wizard Fields
   this.financeDetails();     // Initialize Pickup Location Wizard Fields
-  this.offerInHandsPopUp();  //
+  
 
   this.vehicleImagesDropzoneInit()        //initalize dropzone library
   this.vehicleAfterMarketDropzoneInit(); //initalize dropzone library
@@ -244,7 +209,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   */
   private selectvehicleDetails(){
     this.vehicleDetails = this.formBuilder.group({
-      _id: [null],
+      _id: [this.activatedRoute.snapshot.params._id],
       seller_id: [localStorage.getItem('loggedinUserId')],
       vin_number: ['', Validators.compose([Validators.required,Validators.minLength(17),Validators.maxLength(17)])],       
       vehicle_year: [''],   
@@ -351,21 +316,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
     });
   }
 
-  /**
-  * Initialize Offer In Hands Fields.
-  */
-  private offerInHandsPopUp(){
-    this.offerInHands = this.formBuilder.group({ 
-      vehicle_finance_details:this.formBuilder.group({
-        vehicle_finance_bank: ['', Validators.compose([Validators.minLength(2),Validators.maxLength(50)])],
-        vehicle_estimated_price: [0, Validators.compose([Validators.required, Validators.min(1)])],       
-        vehicle_pay_off: [0],       
-        vehicle_offer_in_hands_price : [0],
-        vehicle_proof_image: this.formBuilder.array([]), 
-      })      
-    })
-  }
-
+  
   get standardEquipments() {
     return this.standardOptionsWizard.get('standard_equipments') as FormArray;
   }
@@ -388,7 +339,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   /**
    * save Car in DB  
    */
-  onSubmitAddNewCar(): void {
+  onSubmitEditSavedCar(): void {
 
 
     this.standardEquipmentsArray.forEach(equipment => {        
@@ -426,6 +377,14 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       this.financeDetailsWizard.controls.vehicle_finance_details.get('vehicle_pay_off').setValue(0);
     }
 
+
+    // Remove Old File From Vehicle Details 
+    if(this.removeFileArray.length > 0){
+      this.removeFileArray.forEach(file => {
+          this.removeImageFromBucket(file.file_key);  
+      }); 
+    }
+
     // Merge Category Image Array    
     this.vehicleImages = [...this.interiorImagesArray, ...this.exteriorImagesArray];
 
@@ -443,12 +402,12 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
     this.commonUtilsService.showPageLoader('Saving Your Car...');
 
-    this.addVehicleSubscription = this.vehicleService.addYourVehicle(mergeVehicleData)
+    this.addVehicleSubscription = this.vehicleService.editYourVehicle(mergeVehicleData)
       .subscribe(
       (response) => { 
         this.router.navigate(['/seller/car-listing']);
 
-        this.commonUtilsService.onSuccess('Vehicle has been added successfully.');
+        this.commonUtilsService.onSuccess('Vehicle has been updated successfully.');
       },
       error => {
         
@@ -884,13 +843,19 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    */
   removeImage(index, file_category, file_key): void {
     
+    this.commonUtilsService.showPageLoader('Removing File...');
+
     if(file_category == 'interior'){ _.pullAt(this.interiorImagesArray, [index]); }
     if(file_category == 'exterior'){ _.pullAt(this.exteriorImagesArray, [index]); }
     if(file_category == 'condition'){ this.vehicleConditionImagesArray.removeAt(index); }
     if(file_category == 'aftermarket'){ this.afterMarketImagesArray.removeAt(index);  }
-    if(file_category == 'offer_in_hands'){ this.offerInHandsImagesArray.removeAt(index); }    
+    if(file_category == 'offer_in_hands'){ this.offerInHandsImagesArray.removeAt(index); }  
+    
+    this.removeFileArray.push({file_key:file_key});
 
-    this.removeImageFromBucket(file_key);
+    this.commonUtilsService.onSuccess('File has been removed successfully.'); 
+
+    //this.removeImageFromBucket(file_key);
   }
 
   /**
@@ -898,8 +863,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    * @param imagePath image url
    * @param bucket s3 bucket name
    */
-  removeImageFromBucket(file_key){    
-    this.commonUtilsService.showPageLoader('Removing File...');
+  removeImageFromBucket(file_key){  
 
     const params = { fileKey : file_key }
 
@@ -907,80 +871,15 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
       .pipe(untilDestroyed(this))
       .subscribe(
         (response) => {
-          this.commonUtilsService.onSuccess('File has been removed successfully.');                 
+          console.log(response);          
         },
         error => {
-          this.commonUtilsService.onError(error);
+          //this.commonUtilsService.onError(error);
+          console.log(error);
         });
   }  
   
 
-  /**
-  * Show confirmation popup before going to previous step.
-  * @return any
-  */
-  async isPreviousClicked() {
-    if(! await this.commonUtilsService.isPreviousConfirmed()) { 
-      this.isThisYourCar = true;        
-    }else{ 
-
-      this.isMyCarFound = false; 
-      //this.isVehicleDetailsSubmitted = false; 
-      this.vehicleDetails.reset();
-      this.selectvehicleDetails();
-
-
-      const userData = JSON.parse(localStorage.getItem('loggedinUser'));//parsing the local store data
-      this.vehicleDetails.controls.vehicle_location.patchValue(userData.location);
-
-      this.standardOptionsWizard.reset(); 
-      this.standardOptions();          // Initialize Basic Info Wizard Fields 
-      
-      this.uploadVehicleImagesWizard.reset();
-      this.uploadVehicleImages();      
-      this.interiorImagesArray = [];
-      this.exteriorImagesArray = [];
-
-      while (this.vehicleImagesArray.length) {
-        this.vehicleImagesArray.removeAt(this.vehicleImagesArray.length-1);
-      }
-
-      this.aboutVehicleWizard.reset();
-      this.aboutVehicle();       // Initialize About Vehicle Wizard Fields
-
-      while (this.afterMarketImagesArray.length) {
-        this.afterMarketImagesArray.removeAt(this.afterMarketImagesArray.length-1);
-      }
-
-      this.vehicleConditionWizard.reset();
-      this.vehicleCondition();   // Initialize Vehicle Condition Wizard Fields
-
-      while (this.vehicleConditionImagesArray.length) {
-        this.vehicleConditionImagesArray.removeAt(this.vehicleConditionImagesArray.length-1);
-      }
-
-      this.financeDetailsWizard.reset();
-      this.financeDetails();     // Initialize Pickup Location Wizard Fields
-
-      
-
-
-
-      this.isVehicleAftermarketSelected = false;
-      this.isVehicleCleanTitleSelected = false;
-      this.isWillingToDriveSelected = false;
-      this.isOtherSelected = false;
-      this.isVehicleConditionSelected = false;      
-      this.isSkipSubmit = false;
-      this.isOtherInteriorColorSelected = false;
-      this.isOtherExteriorColorSelected = false;
-
-      this.isThisYourCar = false; 
-      
-      this.scrollToSpecificDiv();
-      
-    }
-  }
 
   /**
   * get vehicle Image Category.
@@ -1111,58 +1010,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   }
  
 
-  /**
-   * get Vehicles(Makes, Models, Trim...) By Year
-   * @param year selected year from dropdown
-   * @return  array(vehicle details)
-   */
-  getVehicleStatisticsByYear(year){
-
-    let vehicleMakeControl = this.standardOptionsWizard.controls.basic_info.get('vehicle_make');
-    let vehicleModelControl = this.standardOptionsWizard.controls.basic_info.get('vehicle_model');
-    let vehicleTrimControl = this.standardOptionsWizard.controls.basic_info.get('vehicle_trim');
-
-    if(year == ''){ 
-      vehicleMakeControl.disable(); this.makes = [];
-      vehicleModelControl.disable(); this.models = [];
-      vehicleTrimControl.disable(); this.trims = [];
-
-      this.emptyStandardOptionsFields();
-
-      return;
-    }
-
-    this.commonUtilsService.showPageLoader();
-
-    //manually create a data object which have the car unique id and seller id 
-    const data = { year:year }
-    const _this = this;
-    //hit api to fetch data
-
-    $.getJSON("https://www.carqueryapi.com/api/0.3/?callback=?", {cmd:"getMakes", year:year}, function(response) {
-           
-        
-        if(response.Makes.length > 0){
-
-          _this.isThisYourCar = true;
-          _this.makes = response.Makes;
-          vehicleMakeControl.enable();
-          vehicleModelControl.disable(); _this.models = [];
-          vehicleTrimControl.disable(); _this.trims = []; 
-          
-          _this.emptyStandardOptionsFields();
-          
   
-        }else{
-          _this.isThisYourCar = false;
-          _this.commonUtilsService.onError(environment.MESSAGES.NO_RECORDS_FOUND);
-        } 
-
-        _this.commonUtilsService.hidePageLoader();
-
-        //console.log('makes',response.Makes)
-    });    
-  }
 
   /**
    * validate Basic Info Wizard and move to Upload Images Wizard.   
@@ -1234,20 +1082,6 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   
 
   /**
-   * skip offer in hands.   
-   */
-  skipOfferInHands() : void { 
-    this.isSkipSubmit = true;
-
-    this.offerInHands.controls.vehicle_finance_details.get('vehicle_offer_in_hands_price').setValue(0);
-    while (this.offerInHandsImagesArray.length) {
-      this.offerInHandsImagesArray.removeAt(this.offerInHandsImagesArray.length-1);
-    }
-
-    $(this.offerInHandsSection.nativeElement).modal('hide');
-  } 
-
-  /**
    * show vehicle Images by Catgeory.   
     * @param category vehicle image catgeory 
    */
@@ -1302,14 +1136,7 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 	  return this.uploadVehicleImagesWizard.controls.vehicle_images as FormArray;
   }
 
-  /**
-   * show Offer In Hands Popup.   
-   */
-  showOfferInHands() : void{
-    $(this.offerInHandsSection.nativeElement).modal({backdrop: 'static', keyboard: false});
-  }
-
-
+  
   /**
    * check exterior color
    * @param value color 
@@ -1317,13 +1144,14 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
   setExteriorColor(value: string): void {
     
     const vehicleExteriorColorIfOtherSelected = this.standardOptionsWizard.controls.basic_info.get('vehicle_other_exterior_color');
-    vehicleExteriorColorIfOtherSelected.patchValue('');
+   
     
     if(value == "Other"){
       this.isOtherExteriorColorSelected = true;
       vehicleExteriorColorIfOtherSelected.setValidators(Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(20), Validators.pattern('^[a-zA-Z ]*$')] ));
       vehicleExteriorColorIfOtherSelected.updateValueAndValidity();
     }else{ 
+      vehicleExteriorColorIfOtherSelected.patchValue('');
       this.isOtherExteriorColorSelected = false;
       vehicleExteriorColorIfOtherSelected.clearValidators();
       vehicleExteriorColorIfOtherSelected.updateValueAndValidity();
@@ -1338,13 +1166,14 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
    */
   setInteriorColor(value: string): void {
     const vehicleInteriorColorIfOtherSelected = this.standardOptionsWizard.controls.basic_info.get('vehicle_other_interior_color');
-    vehicleInteriorColorIfOtherSelected.patchValue('');
+    
     
     if(value == "Other"){
       this.isOtherInteriorColorSelected = true;
       vehicleInteriorColorIfOtherSelected.setValidators(Validators.compose([Validators.required,Validators.minLength(2),Validators.maxLength(20), Validators.pattern('^[a-zA-Z ]*$')]));
       vehicleInteriorColorIfOtherSelected.updateValueAndValidity();
     }else{ 
+      vehicleInteriorColorIfOtherSelected.patchValue('');
       this.isOtherInteriorColorSelected = false;
       vehicleInteriorColorIfOtherSelected.clearValidators();
       vehicleInteriorColorIfOtherSelected.updateValueAndValidity();
@@ -1524,17 +1353,19 @@ constructor( private zone:NgZone, private cognitoUserService:CognitoUserService,
 
   /**
    * check vehicle ownership value
+   * @param vehicleCleanTitle values
    * @param vehicleOwnership values
    */
-  checkVehicleOwnershipRadioValue(vehicleOwnership: string): void { 
+  checkVehicleOwnershipRadioValue(vehicleOwnership: string, vehicleCleanTitle): void { 
 
     let vehicleOwnershipDescription = this.aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description');
-    vehicleOwnershipDescription.patchValue('');  
+    
     if(vehicleOwnership == "Other"){
-        this.isOtherSelected = true;        
+        (vehicleCleanTitle)?this.isOtherSelected = false: this.isOtherSelected = true;         
         vehicleOwnershipDescription.setValidators(Validators.compose([Validators.required,Validators.minLength(10),Validators.maxLength(200)]));        
         vehicleOwnershipDescription.updateValueAndValidity();
       }else{
+        vehicleOwnershipDescription.patchValue('');  
         this.isOtherSelected = false;        
         vehicleOwnershipDescription.clearValidators();        
         vehicleOwnershipDescription.updateValueAndValidity();
@@ -1835,6 +1666,186 @@ fetchCityState(zipcode){
  
 }
 
+  /**
+   * check vehicle clean has switched on/off
+   * @param vehicleCleanTitle boolean   
+   */
+  fetchVehicleCleanTitle(vehicleCleanTitle): void {  
+    let vehicleOwnershipDescription = this.aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_description');
+    let vehicleOwnershipValue = this.aboutVehicleWizard.controls.vehicle_ownership.get('vehicle_ownership_value');
+    vehicleOwnershipDescription.patchValue('');
+    if ( vehicleCleanTitle ) {      
+      this.isVehicleCleanTitleSelected = true; 
+           
+      this.cleanTitle = true
+
+      this.isOtherSelected=false; 
+      
+      vehicleOwnershipDescription.clearValidators();        
+      vehicleOwnershipDescription.updateValueAndValidity(); 
+      vehicleOwnershipValue.clearValidators();        
+      vehicleOwnershipValue.updateValueAndValidity();
+
+    }else{
+      this.isVehicleCleanTitleSelected = false; 
+
+      this.cleanTitle = false
+
+      if(this.vehicleOwnership == "Other"){
+        this.isOtherSelected = true;        
+        vehicleOwnershipDescription.setValidators(Validators.compose([Validators.required,Validators.minLength(10),Validators.maxLength(200)]));        
+        vehicleOwnershipDescription.updateValueAndValidity();
+      }else{
+        this.isOtherSelected = false;        
+        vehicleOwnershipDescription.clearValidators();        
+        vehicleOwnershipDescription.updateValueAndValidity();
+      } 
+      
+      vehicleOwnershipValue.setValidators(Validators.compose([Validators.required]));        
+      vehicleOwnershipValue.updateValueAndValidity();
+    }
+    //console.log('isOtherSelected', this.isOtherSelected);
+    
+  }
+
+
+ /**
+  * Fetch Vehicle Data by ID.
+  */
+  private fetchVehicleDetails(){
+    //hit api to fetch data
+    this.commonUtilsService.showPageLoader();
+
+    this.vehicleService.fetchCarDetails({ id: this.activatedRoute.snapshot.params._id }).subscribe(
+
+      //case success
+      (response) => {
+        //console.log('response', response);
+        this.vehicleDetails.controls.vehicle_year.patchValue(response.vehicle_year);
+        this.vehicleDetails.controls.vehicle_make.patchValue(response.vehicle_make);
+        this.vehicleDetails.controls.vehicle_model.patchValue(response.vehicle_model);
+        this.vehicleDetails.controls.vehicle_trim.patchValue(response.vehicle_trim);
+        this.vehicleDetails.controls.vin_number.patchValue(response.vin_number);
+
+
+        this.vehicleMakeLabel = response.vehicle_make;
+        this.vehicleModelLabel = response.vehicle_model;
+        this.vehicleYearLabel = response.vehicle_year;
+        this.vehicleTrimLabel = response.vehicle_trim;
+
+        response.standard_equipments.forEach(equipment => {  
+            this.standardEquipmentsArray.push(equipment);           
+        });
+
+        response.additional_options.entertainments.forEach(entertainment => {  
+            this.entertainmentsArray.push(entertainment);           
+        });
+
+        response.additional_options.wheels.forEach(wheel => {  
+            this.wheelsArray.push(wheel);           
+        });
+
+        response.additional_options.accessory_packages.forEach(accessory_package => {  
+            this.accessoryPackagesArray.push(accessory_package);           
+        });
+
+        
+  
+        // Basic Info Wizard
+        this.standardOptionsWizard.controls.basic_info.patchValue(response.basic_info);
+        this.setInteriorColor(response.basic_info.vehicle_interior_color);
+        this.setExteriorColor(response.basic_info.vehicle_exterior_color);
+         
+  
+        // Vehicle Images Wizard
+         if(response.vehicle_images.length > 0) {
+           response.vehicle_images.forEach(vehicleImage => {
+              if(vehicleImage.file_category == "interior"){
+                this.interiorImagesArray.push({file_path : vehicleImage.file_path, file_key : vehicleImage.file_key, file_name : vehicleImage.file_name, file_category : vehicleImage.file_category});
+              }else{
+                this.exteriorImagesArray.push({file_path : vehicleImage.file_path, file_key : vehicleImage.file_key, file_name : vehicleImage.file_name, file_category : vehicleImage.file_category});
+              }
+              
+            }); 
+          }
+  
+          // About Vehicle Wizard
+          this.aboutVehicleWizard.controls.vehicle_has_second_key.patchValue(response.vehicle_has_second_key);
+          this.secondKey = response.vehicle_has_second_key;
+          this.aboutVehicleWizard.controls.is_vehicle_aftermarket.patchValue(response.is_vehicle_aftermarket);
+          this.isVehicleAftermarketSelected = response.is_vehicle_aftermarket; // check aftermarket option (true or false)
+          this.vehicleAftermarket = response.is_vehicle_aftermarket; // check aftermarket option (true or false)
+          this.fetchVehicleCleanTitle(response.vehicle_ownership.vehicle_clean_title); // check cleantitle option (true or false)
+          this.aboutVehicleWizard.controls.vehicle_aftermarket.patchValue(response.vehicle_aftermarket);
+          if(response.vehicle_aftermarket.vehicle_aftermarket_images.length > 0) {
+            response.vehicle_aftermarket.vehicle_aftermarket_images.forEach(vehicleAfterMarketImage => {             
+                
+                this.afterMarketImagesArray.push(new FormControl({file_path : vehicleAfterMarketImage.file_path, file_key : vehicleAfterMarketImage.file_key, file_name : vehicleAfterMarketImage.file_name, file_category : vehicleAfterMarketImage.file_category}));
+               
+             }); 
+           }
+           this.aboutVehicleWizard.controls.vehicle_ownership.patchValue(response.vehicle_ownership);
+           this.checkVehicleOwnershipRadioValue(response.vehicle_ownership.vehicle_ownership_value, response.vehicle_ownership.vehicle_clean_title);
+  
+           // Vehicle Condition Wizard
+           this.vehicleConditionWizard.controls.vehicle_comments.patchValue(response.vehicle_comments);
+           this.vehicleConditionWizard.controls.vehicle_condition.patchValue(response.vehicle_condition); 
+           if(response.vehicle_condition.vehicle_condition_images.length > 0) {
+            response.vehicle_condition.vehicle_condition_images.forEach(vehicleConditionImage => {             
+                
+                this.vehicleConditionImagesArray.push(new FormControl({file_path : vehicleConditionImage.file_path, file_key : vehicleConditionImage.file_key, file_name : vehicleConditionImage.file_name, file_category : vehicleConditionImage.file_category}));
+               
+             }); 
+           }
+  
+           
+           let vehicleConditionDescription = this.vehicleConditionWizard.controls.vehicle_condition.get('vehicle_condition_description'); 
+  
+          if(response.vehicle_condition.vehicle_condition_value == "Ready For Resale Without Any Reconditioning"){
+  
+            this.isVehicleConditionSelected = false; 
+                   
+            vehicleConditionDescription.clearValidators();        
+            vehicleConditionDescription.updateValueAndValidity();
+            
+          }else{
+            this.isVehicleConditionSelected = true;  
+               
+            vehicleConditionDescription.setValidators(Validators.compose([Validators.required,Validators.minLength(10),Validators.maxLength(200)]));        
+            vehicleConditionDescription.updateValueAndValidity();
+          }
+  
+          this.vehicleConditionValue = response.vehicle_condition.vehicle_condition_value;
+  
+          //Pickup Location Wizard
+          this.aboutVehicleWizard.controls.vehicle_to_be_picked_up.patchValue(response.vehicle_to_be_picked_up);
+          this.vehiclePickedUp = response.vehicle_to_be_picked_up;
+          this.aboutVehicleWizard.controls.willing_to_drive.patchValue(response.willing_to_drive);
+          this.isWillingToDriveSelected = response.willing_to_drive;
+          this.willingToDrive = response.willing_to_drive;
+          this.aboutVehicleWizard.controls.willing_to_drive_how_many_miles.patchValue(response.willing_to_drive_how_many_miles);
+  
+          //Offer In Hands Popup
+          this.financeDetailsWizard.controls.vehicle_finance_details.patchValue(response.vehicle_finance_details);
+          if(response.vehicle_finance_details.vehicle_proof_image.length > 0) {
+            response.vehicle_finance_details.vehicle_proof_image.forEach(vehicleProofImage => {             
+                
+                this.offerInHandsImagesArray.push(new FormControl({file_path : vehicleProofImage.file_path, file_key : vehicleProofImage.file_key, file_name : vehicleProofImage.file_name, file_category : vehicleProofImage.file_category, file_mimetype : vehicleProofImage.file_mimetype}));
+               
+             }); 
+           }
+         
+        
+        this.commonUtilsService.hidePageLoader();
+  
+        //case error 
+      }, error => {
+        this.commonUtilsService.onError(error);
+      }
+    );
+    
+  }
+
 /**
 * set check object array length.
 * @param object
@@ -1862,11 +1873,14 @@ public checkObjectLength(object): number{
    * smooth scroll to specific div*   
    */
   scrollToSpecificDiv(): void {   
-    this.addNewCarSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" }); 
+    this.editSavedCarSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" }); 
   }
 
   ngOnInit() {  
-    this.addNewCarSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });  
+
+    this.fetchVehicleDetails(); //fetch vehcile details
+
+    this.editSavedCarSection.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });  
     
     
     const userData = JSON.parse(localStorage.getItem('loggedinUser'));//parsing the local store data
@@ -1874,10 +1888,6 @@ public checkObjectLength(object): number{
   }
 
   ngAfterViewInit(){    
-    //this.yearRange = this.commonUtilsService.createYearRange();  
-    this.colors = [{label:'Beige',value:'#F5F5DC'},{label:'Black',value:'#252627'},{label:'Brown',value:'#672E10'},{label:'Burgundy',value:'#75141C'},{label:'Charcoal Grey',value:'#757776'},{label:'Dark Blue',value:'#172356'},{label:'Dark Green',value:'#316241'},{label:'Gold',value:'#D6C17F'},{label:'Grey',value:'#808080'},{label:'Light Blue',value:'#5F7DC5'},{label:'Light Green',value:'#8E9F87'},{label:'Orange',value:'#FF9200'},{label:'Purple',value:'#6A4574'},{label:'Red',value:'#E32F43'},{label:'Silver',value:'#D4D9DC'},{label:'Tan',value:'#D2B48C'},{label:'White',value:'#F2F6F9'},{label:'Yellow',value:'#F8E81C'}];
-    
-
     //years range
     for (let i = 0; i < 15; i++) {
       this.yearRange.push({

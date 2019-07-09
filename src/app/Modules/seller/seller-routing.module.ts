@@ -19,6 +19,7 @@ import { RateReviewComponent } from './rate-review/rate-review.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { AccountVerifyComponent } from './account-verify/account-verify.component';
 import { EditCarComponent } from './cars/editcar/editcar.component';
+import { EditSavedCarComponent } from './cars/editsavedcar/editsavedcar.component';
 import {ChangePasswordComponent} from  './change-password/change-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
@@ -114,9 +115,9 @@ const routes: Routes = [
     canActivate: [SellerAuthGuardService]
   },
   {
-    path: 'addnewcar',
-    component: AddNewCarComponent,
-    data: { title: 'Seller AddCar' },
+    path: 'editsavedcar/:_id',
+    component: EditSavedCarComponent,
+    data: { title: 'Seller EditCar' },
     canActivate: [SellerAuthGuardService]
   },
   {

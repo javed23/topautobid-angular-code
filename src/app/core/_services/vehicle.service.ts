@@ -26,6 +26,12 @@ export class VehicleService {
 
     constructor(private httpClient: HttpClient, private router: Router) {}
 
+
+    /**
+     * get Vehicle Details By VIN
+     * @param vin    Vehicle Vin Number.
+     * @return       Vehicle Details<array>
+    */
     public getDataByVIN(vin): Observable<any | false> {
         return this.httpClient
         .get(apiURL+'decodevinvaluesextended/'+vin+'?format=json')
@@ -33,25 +39,7 @@ export class VehicleService {
           return response;
         })
     }
-
-    public getAllMakesByYear(data): Observable<any | false> {   
-              
-        return this.httpClient
-        .get(apiURL+'&cmd=getMakes&year='+data.year)
-        .map((response) => {      
-            console.log('getMakes', response);     
-          //return response;
-        })
-    }
     
-    public getAllModelsByMakeId(makeID): Observable<any | false> {       
-        return this.httpClient
-        //.get(apiURL+'GetModelsForMakeId/'+makeID+'?format=json')
-        .get(apiURL+'getmodelsformake/'+makeID+'?format=json')
-        .map((response: Response) => {           
-          return response;
-        })
-    }
 
     /**
      * Add Your Vehicle
@@ -127,6 +115,21 @@ export class VehicleService {
                 
         });
 
+    }
+
+    /**
+     * Fetch car details
+     * @param carObject    car object to fetch from database.
+     * @return        Observable<any>
+    */
+    public fetchCarDetails(carIdObject): Observable<any> {
+
+        return this.httpClient.post('car/carDetail', carIdObject)
+            .map((response: any) => {
+                //let car = new Car(response);
+                //console.log('car detail', car);
+                return response;
+            })
     }
     
     
