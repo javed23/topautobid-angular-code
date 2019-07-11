@@ -544,6 +544,11 @@
                         (click)="placeBid(row)">
                         <i class="fa fa-gavel" aria-hidden="true"></i>
                       </button>
+                      <button *ngIf="page.type == 'transactions'" title="Start Chat" type="button"
+                      (click)="showChat(row._id)">
+                      <i class="fa fa-comments-o" aria-hidden="true"></i>
+                    </button>
+
 
                       <div class="text-right carfax_img">
 
@@ -691,5 +696,59 @@
 </div>
 <!--=================================
  blog -->
+
+
+
+ <!-- chat window html  -->
+ <div class="chat_box">
+  <div class="chat_head">
+      <div class="img_thumb">
+          <img src="assets/images/man.png" alt="">
+      </div>
+      <div class="info">
+          <h3 class="name">Chat With John Potter</h3>
+          <div class="status">Online</div>
+      </div>
+      <i class="fa fa-times close_BUTN" aria-hidden="true" (click)="chat_close()"></i>
+  </div>
+  <div class="chat_body">
+      <ul>
+          <li  *ngFor="let msg of messages;let i = index;" [ngClass]="msg.is_seller?'replier':'sender'">
+              <div class="message">
+                  <p>{{msg?.message_body}}</p>
+              </div>
+              <span class="sent_time">09:41 PM <img src="assets/images/tick.png" alt=""></span>
+          </li>
+          <!-- <li class="replier">
+              <div class="message">
+                  <p>It is a long established fact that a reader will be distracted by the readable content</p>
+              </div>
+              <span class="sent_time"><img src="assets/images/tick.png" alt="">09:41 PM</span>
+          </li>
+          <li class="sender">
+              <div class="message">
+                  <p>It is a long established fact that a reader will be distracted by the readable content</p>
+              </div>
+              <span class="sent_time">09:41 PM<img src="assets/images/tick.png" alt=""></span>
+          </li> -->
+      </ul>
+  </div>
+  <div class="chat_footer">
+      <div class="sending_area">
+          <input type="text" placeholder="Type Here...." name="message" [(ngModel)]="messageBody">
+          <div class="action">
+              <!-- <div class="attachment">
+                  <input type="file" id="attachment">
+                  <label for="attachment"> <img src="assets/images/attachment.svg" alt=""></label>
+              </div> -->
+              <div class="send_btn">
+                  <button type="submit" class="send_BTN" (click)="sendMessage()"><img src="assets/images/send_icon.svg" alt=""></button>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+
 <app-car-bids-popup (onClose)="hide($event)" [isOpen]="isBidListingModalOpen" [carId]="selectedCarId">
 </app-car-bids-popup>

@@ -91,5 +91,14 @@ export class DealerService {
 
     }
     
+    public getChatDetails(postedData:any): Observable<any> {
+        postedData['dealer_id'] = localStorage.getItem('loggedinUserId');
+        return this.httpClient.post('dealer/getChatDetails', postedData).map((response: any) => response);
 
+    }
+    public saveMessage(postedData:any): Observable<any> {
+        postedData['dealer_id'] = localStorage.getItem('loggedinUserId');
+        return this.httpClient.post('common/saveMessage', postedData).map((response: any) => response);
+
+    }
 }

@@ -32,7 +32,9 @@ export class ListingComponent implements OnInit {
   car: any;
   page = new Page(); //object of Page type  
   cars = new Array<Car>() //array of Car type 
-
+  seller:any;
+  messages: any = [];
+  messageBody: any;
   selectedCarId: any;
   isBidListingModalOpen: boolean = false;
   submitted: boolean = false;
@@ -373,6 +375,37 @@ export class ListingComponent implements OnInit {
   }
 
 
+  showChat(carId: any) {
+    this.dealerService.getChatDetails({ carId: carId }).subscribe(res => {
+      this.messages = res.chat;
+      this.seller = res.seller;
+    $(".chat_box").addClass("opend");
+
+    })
+
+  }
+
+  chat_close() {
+    console.log('hiiiiiiiiiiiiii')
+    $(".chat_box").removeClass("opend");
+  }
+
+  /**
+   * send message to seller
+   */
+  sendMessage() {
+    if (!this.messageBody) return
+
+    let message = {
+            seller_id:this.seller.seller_id._id,
+            messageBody:this.messageBody,
+            isSeller:false,
+            
+    }
+    this.dealerService.saveMessage(message).subscribe(res => {
+           this.messages.push(res)
+    })
+  }
 
   /**after selecting the store assign legal contacts to legal contact array
    * @params value is the target value after selecting the dealership
