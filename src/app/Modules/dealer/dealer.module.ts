@@ -66,7 +66,8 @@ import { SortComponent } from './bids/sort/sort.component';
 import { ListingComponent as BidsListingComponent} from './bids/listing/listing.component';
 import { DateFilterComponent } from './bids/date-filter/date-filter.component';
 import { CarBidsPopupComponent } from './bids/car-bids-popup/car-bids-popup.component';
-
+import { CarPaymentsPopupComponent } from './bids/car-payments-popup/car-payments-popup.component';
+import { NgxPayPalModule } from 'ngx-paypal';
 
 
 //facebook, google authentication configuration
@@ -129,7 +130,8 @@ let config = new AuthServiceConfig([
     RateReviewComponent,
     ChangePasswordComponent,
     CarBidsComponent,
-    CarBidsPopupComponent
+    CarBidsPopupComponent,
+    CarPaymentsPopupComponent
   ]
   ,
 
@@ -149,6 +151,7 @@ let config = new AuthServiceConfig([
     NgScrollbarModule,
     NgxDatatableModule,
     NgxPaginationModule,
+    NgxPayPalModule,
     NgxGalleryModule
 
   ],

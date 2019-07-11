@@ -8,6 +8,9 @@ import { PagedData, Car, Page } from "../../../../core/_models";
 import { environment } from '../../../../../environments/environment'
 import { untilDestroyed } from 'ngx-take-until-destroy';// unsubscribe from observables when the component destroyed
 import Swal from 'sweetalert2/dist/sweetalert2.js'
+
+
+
 declare let jQuery: any;
 declare let $: any;
 declare let POTENZA: any;
@@ -19,6 +22,9 @@ declare let POTENZA: any;
   encapsulation: ViewEncapsulation.None
 })
 export class ListingComponent implements OnInit {
+
+  
+
   @ViewChild('listingTable') listingTable;
   @ViewChild('bidModal') bidModal: ElementRef;
   @ViewChild("listingSection") listingSection: ElementRef;
@@ -34,7 +40,9 @@ export class ListingComponent implements OnInit {
   cars = new Array<Car>() //array of Car type 
 
   selectedCarId: any;
+  selectedCarDetails:any;
   isBidListingModalOpen: boolean = false;
+  isPaymentModalOpen: boolean = false;
   submitted: boolean = false;
   currentPageLimit: number = environment.DEFAULT_RECORDS_LIMIT
   readonly pageLimitOptions = environment.DEFAULT_PAGE_LIMIT_OPTIONS
@@ -71,12 +79,6 @@ export class ListingComponent implements OnInit {
   }
 
 
-
-
-
-  hi() {
-    console.log('image error');
-  }
   private dealerBidForm() {
     this.bidForm = this.formBuilder.group({
       car_id: [null, Validators.required],
@@ -148,7 +150,21 @@ export class ListingComponent implements OnInit {
   }
 
 
+  showPaymentPopup(carDetails): void {
+    this.isPaymentModalOpen = true;
+    this.selectedCarDetails = carDetails
+  }
 
+  /**
+  * Reset modal popup to hide
+  * @param isOpened    boolean value 
+  * @return void
+  */
+  hidePaymentPopup(isOpened: boolean): void {
+    console.log(isOpened)
+    this.isPaymentModalOpen = isOpened; //set to false which will reset modal to show on click again
+    this.selectedCarDetails = [];
+  }
 
   showBids(carId): void {
     this.isBidListingModalOpen = true;
@@ -173,6 +189,8 @@ export class ListingComponent implements OnInit {
     POTENZA.yearslider()
     this.dealerBidForm();
   }
+
+
 
 
   /**
@@ -396,7 +414,12 @@ export class ListingComponent implements OnInit {
     this.setPage(this._defaultPagination);
   }
 
-
+  /**
+   * validate offer in hands popup.   
+   */
+  showPopupToMakePayment() : void { 
+      //$(this.offerInHandsSection.nativeElement).modal('hide');
+  } 
 
 
   /**

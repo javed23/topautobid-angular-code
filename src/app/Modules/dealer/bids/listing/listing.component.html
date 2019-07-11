@@ -501,6 +501,17 @@
                   </ng-template>
                 </ngx-datatable-column>
 
+                <ngx-datatable-column *ngIf="page.type =='transactions'" [resizeable]="false" [draggable]="false"
+                  name="Pay" prop="miles" [sortable]="true">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    
+                    <button type="button" (click)="showPaymentPopup(row)">
+                        Pay
+                    </button>
+
+                  </ng-template>
+                </ngx-datatable-column>
+
                 <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Action" [sortable]="false">
                   <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
 
@@ -693,3 +704,5 @@
  blog -->
 <app-car-bids-popup (onClose)="hide($event)" [isOpen]="isBidListingModalOpen" [carId]="selectedCarId">
 </app-car-bids-popup>
+
+<app-car-payments-popup (onClose)="hidePaymentPopup($event)" [isOpen]="isPaymentModalOpen" [selectedCarDetails]="selectedCarDetails"></app-car-payments-popup>
