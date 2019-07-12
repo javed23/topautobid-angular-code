@@ -22,3 +22,192 @@
 .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row .datatable-body-cell{
     white-space: pre-wrap!important;
 }
+
+
+
+/* chat css */
+/* chat window css */
+.chat_box {
+    width: 340px;
+    background: #fff;
+    -webkit-box-shadow: 0px 0px 18px 0px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0px 0px 18px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 0px 18px 0px rgba(0, 0, 0, 0.2);
+    margin-right: 0;
+    position: fixed;
+    bottom: 0px;
+    right: 10px;
+    z-index: 98988;
+    -webkit-transform: translateY(100%);
+    -moz-transform: translateY(100%);
+    -ms-transform: translateY(100%);
+    -ms-transform: translateY(100%);
+    -o-transform: translateY(100%);
+    -webkit-transition: .9s;
+    -moz-transition: .9s;
+    -ms-transition: .9s;
+    -o-transition: .9s;
+    transition: .9s;
+
+}
+
+.chat_box.opend{
+    -webkit-transform: translateY(0);
+    -moz-transform: translateY(0);
+    -ms-transform: translateY(0);
+    -o-transform: translateY(0);
+    transform: translateY(0);
+}
+
+.chat_head {
+    background: #db2d2e;
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+}
+
+.close_BUTN {
+    color: #fff;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.img_thumb {
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
+    overflow: hidden;
+}
+
+.img_thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.chat_head .info {
+    margin-left: 15px;
+}
+
+.chat_head .name {
+    margin: 0;
+    font-size: 14px;
+    color: #fff;
+    font-weight: 600;
+}
+
+.chat_head .status {
+    opacity: .5;
+    line-height: 1;
+    font-size: 13px;
+    margin-top: 0px;
+    color: #fff;
+}
+
+.chat_body {
+    padding: 15px 20px;
+    max-height: 345px;
+    overflow: auto;
+    min-height: 200px;
+}
+
+.chat_body ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.chat_body ul li {
+    margin-bottom: 12px;
+    list-style: none;
+}
+
+.chat_body .message {
+    color: #696969;
+    font-size: 12px;
+    line-height: 17px;
+    width: 70%;
+    padding: 10px 12px;
+    display: inline-block;
+}
+
+.chat_body .message p {
+    margin: 0;
+}
+
+.chat_body .sender {
+    text-align: right;
+}
+
+.chat_body .sender .message {
+    background: rgba(219, 45, 46, 0.26);
+    text-align: left;
+}
+
+.chat_body .sender .sent_time img {
+    margin-left: 3px;
+}
+
+.chat_body .replier .message {
+    background: rgba(130, 130, 130, 0.26);
+}
+
+.chat_body .replier .sent_time img {
+    margin-right: 3px;
+}
+
+.sent_time {
+    display: block;
+    font-size: 11px;
+    color: #9a9a9a;
+}
+
+.chat_footer {
+    border-top: 1px solid rgba(130, 130, 130, 0.20);
+    padding: 0 20px;
+    position: relative;
+}
+
+.chat_footer input[type="text"] {
+    width: 100%;
+    border: 0;
+    font-size: 13px;
+    padding: 20px 47px 20px 0;
+    color: #000;
+}
+
+.chat_footer input[type="text"]:focus {
+    outline: 0;
+}
+
+.attachment input {
+    display: none;
+}
+
+.attachment,
+.send_btn {
+    display: inline-block;
+}
+
+.attachment label {
+    width: 20px;
+    margin: 0;
+    cursor: pointer;
+}
+
+.send_btn .send_BTN {
+    padding: 0;
+    background: none;
+    border: 0;
+    width: 20px;
+    margin-left: 12px;
+}
+
+.action {
+    position: absolute;
+    top: 18px;
+    right: 30px;
+}

@@ -706,18 +706,18 @@
           <img src="assets/images/man.png" alt="">
       </div>
       <div class="info">
-          <h3 class="name">Chat With John Potter</h3>
-          <div class="status">Online</div>
+          <h3 class="name">{{seller?.seller_id?.name?.first_name}}</h3>
+          <div class="status">{{seller?.isOnline?'Online':'Offline'}}</div>
       </div>
       <i class="fa fa-times close_BUTN" aria-hidden="true" (click)="chat_close()"></i>
   </div>
-  <div class="chat_body">
+  <div class="chat_body" id="chatScroll">
       <ul>
           <li  *ngFor="let msg of messages;let i = index;" [ngClass]="msg.is_seller?'replier':'sender'">
               <div class="message">
                   <p>{{msg?.message_body}}</p>
               </div>
-              <span class="sent_time">09:41 PM <img src="assets/images/tick.png" alt=""></span>
+              <span class="sent_time">{{msg?.created_at | date: 'h:mm a'}}  <img src="assets/images/tick.png" alt=""></span>
           </li>
           <!-- <li class="replier">
               <div class="message">
@@ -735,16 +735,21 @@
   </div>
   <div class="chat_footer">
       <div class="sending_area">
-          <input type="text" placeholder="Type Here...." name="message" [(ngModel)]="messageBody">
+          <form (ngSubmit)="sendMessage()">
+          <input type="text" placeholder="Type Here...." name="fdsfsd" [(ngModel)]="messageBody" autocomplete="off">
           <div class="action">
               <!-- <div class="attachment">
                   <input type="file" id="attachment">
                   <label for="attachment"> <img src="assets/images/attachment.svg" alt=""></label>
               </div> -->
               <div class="send_btn">
-                  <button type="submit" class="send_BTN" (click)="sendMessage()"><img src="assets/images/send_icon.svg" alt=""></button>
+                  
+                  <button type="submit" class="send_BTN"   ><img src="assets/images/send_icon.svg" alt=""></button>
+                  
               </div>
+              
           </div>
+        </form>
       </div>
   </div>
 </div>

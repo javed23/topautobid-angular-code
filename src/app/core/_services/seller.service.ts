@@ -57,4 +57,15 @@ public acceptBid(postedData:any):Observable<any>{
     return this.httpClient.post('car/acceptBid',postedData).map((response:any)=>response);
 
 }
+
+public getChatDetails(postedData:any): Observable<any> {
+    postedData['seller_id'] = localStorage.getItem('loggedinUserId');
+    return this.httpClient.post('seller/getChatDetails', postedData).map((response: any) => response);
+
+}
+public saveMessage(postedData:any): Observable<any> {
+    postedData['seller_id'] = localStorage.getItem('loggedinUserId');
+    return this.httpClient.post('common/saveMessage', postedData).map((response: any) => response);
+
+}
 }

@@ -8,6 +8,7 @@ import { PagedData, Car, Page } from "../../../../core/_models";
 import { environment } from '../../../../../environments/environment'
 import { untilDestroyed } from 'ngx-take-until-destroy';// unsubscribe from observables when the component destroyed
 import Swal from 'sweetalert2/dist/sweetalert2.js'
+import { isArray } from 'util';
 declare let jQuery: any;
 declare let $: any;
 declare let POTENZA: any;
@@ -32,8 +33,10 @@ export class ListingComponent implements OnInit {
   car: any;
   page = new Page(); //object of Page type  
   cars = new Array<Car>() //array of Car type 
-  seller:any;
+  seller: any;
   messages: any = [];
+  users:any = [];
+  isSubmitted:boolean = false;
   messageBody: any;
   selectedCarId: any;
   isBidListingModalOpen: boolean = false;
@@ -53,13 +56,25 @@ export class ListingComponent implements OnInit {
 
   constructor(private dealerService: DealerService, private realTimeUpdate: RealUpdateService, private commonUtilsService: CommonUtilsService, private carService: CarService, private formBuilder: FormBuilder, private titleService: TitleService) {
 
-
+    this.page.type = 'all';
     //setting the page title
 
     this.realTimeUpdate.updateLsiting().subscribe(res => {
       this.loadRealTimeLsiting() // this willbe called after real time updation of listing
     })
+  
+    this.realTimeUpdate.updateUsers().subscribe(res => {
+    this.users  = res;
+    })
+    
 
+   this.realTimeUpdate.haveNewMessage().subscribe(res=>{
+    $("#chatScroll").animate({ scrollTop: $(document).height() }, "slow");
+     delete res['sendTo'];
+     delete res['from'];
+     let message = res;
+     this.messages.push(message)
+   });
 
     //update will be invoked on acception of bid from seller side
     this.realTimeUpdate.updateLsitingOnBidAcception().subscribe(res => {
@@ -76,9 +91,7 @@ export class ListingComponent implements OnInit {
 
 
 
-  hi() {
-    console.log('image error');
-  }
+ 
   private dealerBidForm() {
     this.bidForm = this.formBuilder.group({
       car_id: [null, Validators.required],
@@ -174,6 +187,7 @@ export class ListingComponent implements OnInit {
     POTENZA.priceslider()
     POTENZA.yearslider()
     this.dealerBidForm();
+    this.realTimeUpdate.saveUserOnSocketIo();
   }
 
 
@@ -376,17 +390,23 @@ export class ListingComponent implements OnInit {
 
 
   showChat(carId: any) {
+    
+    this.messages = [];
     this.dealerService.getChatDetails({ carId: carId }).subscribe(res => {
-      this.messages = res.chat;
+      let msgs = [];
+      msgs = res.chat;
+      this.messages = msgs.reverse();
       this.seller = res.seller;
-    $(".chat_box").addClass("opend");
+      this.seller['isOnline'] = this.isInArray(this.seller.seller_id.username);
+      console.log('the seller is ',this.seller)
+      $(".chat_box").addClass("opend");
+      $("#chatScroll").animate({ scrollTop: $(document).height() }, "slow");
 
     })
 
   }
 
   chat_close() {
-    console.log('hiiiiiiiiiiiiii')
     $(".chat_box").removeClass("opend");
   }
 
@@ -394,19 +414,43 @@ export class ListingComponent implements OnInit {
    * send message to seller
    */
   sendMessage() {
-    if (!this.messageBody) return
+    if (!this.messageBody || this.isSubmitted) return
+    this.isSubmitted = true;
 
     let message = {
-            seller_id:this.seller.seller_id._id,
-            messageBody:this.messageBody,
-            isSeller:false,
-            
+      seller_id: this.seller.seller_id._id,
+      messageBody: this.messageBody,
+      isSeller: false,
+
     }
     this.dealerService.saveMessage(message).subscribe(res => {
-           this.messages.push(res)
+      $("#chatScroll").animate({ scrollTop: $(document).height() }, "slow");
+      this.messageBody = ''
+      this.messages.push(res);
+      let message = res;
+      if(this.isInArray(this.seller.seller_id.username)){
+        console.log('inside seller online section')
+        message['sendTo']= this.users[this.users.map(user=>user.username).indexOf(this.seller.seller_id.username)]
+        this.realTimeUpdate.sendMessage(message)
+      }
+      
+      this.isSubmitted = false;
+    },error=>{
+      this.isSubmitted = false;
+      console.log('something went wrong!!!!!!!!!!!')
     })
   }
 
+
+  isInArray(value) {
+    console.log(this.users)
+    if(this.users.length){
+      console.log(this.users)
+      return this.users.map(user=>user.username).indexOf(value) > -1;
+    }
+
+    else false
+  }
   /**after selecting the store assign legal contacts to legal contact array
    * @params value is the target value after selecting the dealership
    * return void
