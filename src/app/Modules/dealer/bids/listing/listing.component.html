@@ -499,18 +499,7 @@
                   <ng-template let-row="row" ngx-datatable-cell-template>
                     {{ row?.my_bid[row?.my_bid?.length - 1]?.bid_date | date:'MM-dd-yyyy'}}
                   </ng-template>
-                </ngx-datatable-column>
-
-                <ngx-datatable-column *ngIf="page.type =='transactions'" [resizeable]="false" [draggable]="false"
-                  name="Pay" prop="miles" [sortable]="true">
-                  <ng-template let-row="row" ngx-datatable-cell-template>
-                    
-                    <button type="button" (click)="showPaymentPopup(row)">
-                        Pay
-                    </button>
-
-                  </ng-template>
-                </ngx-datatable-column>
+                </ngx-datatable-column>               
 
                 <ngx-datatable-column [resizeable]="false" [draggable]="false" name="Action" [sortable]="false">
                   <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
@@ -519,7 +508,9 @@
                       <!--<button type="button" (click)="show(rowIndex, 'car-view')">
                                       <i class="fa fa-eye" aria-hidden="true"></i>
                                   </button>-->
-
+                      <span *ngIf="page.type =='transactions'" class="button red" type="button" (click)="showPaymentPopup(row)">
+                        Pay
+                      </span>
 
                       <a title="Car Detail" routerLink="/dealer/car-detail/{{row._id}}/dashboard"><i class="fa fa-eye"></i></a>
 

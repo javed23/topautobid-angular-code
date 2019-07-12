@@ -49,9 +49,10 @@ app-listing .modal-body {
                 margin-left: 10px;
             }
             .carfax_img img {
-                width: 80px;
+                width: 65px;
                 max-width: 100%;
             }
+ 
             notification_icon span i{
                 position: relative;
             }
@@ -230,3 +231,8 @@ app-listing .fa-gavel{
     padding: 3px;
     cursor: pointer;
 }
+.actions .button{
+    padding: 1px 4px;
+    margin-right: 2px;
+}
+

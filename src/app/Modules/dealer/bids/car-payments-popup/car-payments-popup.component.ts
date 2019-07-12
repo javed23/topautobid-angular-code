@@ -1,4 +1,5 @@
 import { Component, SimpleChanges, OnInit, Output, EventEmitter, ViewChild, Input,  ElementRef } from '@angular/core';
+import { CommonUtilsService, CarService  } from '../../../../core/_services'
 import { IPayPalConfig, ICreateOrderRequest } from 'ngx-paypal';
 
 declare let $: any;
@@ -16,7 +17,7 @@ export class CarPaymentsPopupComponent implements OnInit {
   @ViewChild('contentSection') contentSection :ElementRef;
   @Output() onClose: EventEmitter<any> = new EventEmitter<any>();
   public payPalConfig?: IPayPalConfig;
-  constructor() { }
+  constructor(private carService: CarService, private commonUtilsService:CommonUtilsService) { }
 
   ngOnInit() {
     this.initConfig();
@@ -84,6 +85,23 @@ export class CarPaymentsPopupComponent implements OnInit {
       },
       onClientAuthorization: (data) => {
         console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
+
+        // Update Car Status
+
+         /* this.carService.updateCarStatus({ id:this.selectedCarDetails._id }).subscribe(pagedData => {
+      
+            //this.bids = pagedData;  
+            this.commonUtilsService.hidePageLoader();
+            //console.log('bids',this.bids)
+          },
+          error => {
+            this.commonUtilsService.onError(error);
+          }); */
+
+        // Update Car Status
+
+
+
         //this.showSuccess = true;
       },
       onCancel: (data, actions) => {

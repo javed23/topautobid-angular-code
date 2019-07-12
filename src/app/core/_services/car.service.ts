@@ -298,6 +298,16 @@ public listingCarBids(carObject): Observable<PagedData<Bid>> {
             .map((response: any) => response)
     }
 
+    /**
+     * updateCarStatus car
+     * @param postedData    car object to update car status.
+     * @return   Observable<any>
+     */
+    public updateCarStatus(postedData:any):Observable<any>{        
+        return this.httpClient.post('car/updateCarStatus',postedData).map((response:any)=>response);
+    
+    }
+
 
 
 
