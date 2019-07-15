@@ -52,6 +52,7 @@ export class Car {
     my_bid:any;
     higest_bid:any;
     seller_distance:any;
+    seller_id:any;
     
     constructor(object) {
         this._id = object._id;       
@@ -87,7 +88,7 @@ export class Car {
         this.offer_in_hand_images = object.vehicle_finance_details.vehicle_proof_image;
         this.created_at = object.created_at;
         this.updated_at  = object.updated_at;
-
+        this.seller_id = object.seller_id; 
 
         this.totalBids = object.totalBids
         this.best_bid = object.best_bid;

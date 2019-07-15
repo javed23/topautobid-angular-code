@@ -30,7 +30,7 @@ export class CarPaymentsPopupComponent implements OnInit {
   */
  
   ngOnChanges():void{
-    //console.log('selectedCarDetails',this.selectedCarDetails);
+    console.log('selectedCarDetails',this.selectedCarDetails);
     //console.log('price', this.selectedCarDetails.my_bid[0].price)
     //to show the modal popup
     if(this.isOpen) {
@@ -86,17 +86,27 @@ export class CarPaymentsPopupComponent implements OnInit {
       onClientAuthorization: (data) => {
         console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
 
+
+        const transactionData = {car_id: this.selectedCarDetails._id, seller_id:this.selectedCarDetails.seller_id, dealer_id:localStorage.getItem('loggedinUserId'), 
+
+        payer:{ email_address:  data.payer.email_address, payer_id:  data.payer.payer_id }, 
+
+        payee:{ email_address:  data['purchase_units'][0].payee.email_address, merchant_id:  data['purchase_units'][0].payee.merchant_id }, 
+        
+        vin_number:  data['purchase_units'][0].items[0].name, transaction_id: data.id, transaction_amount: data['purchase_units'][0].amount.value, transaction_status: data.status, fee_status: 'paid', type: 'sold'};
+
+
         // Update Car Status
 
-         /* this.carService.updateCarStatus({ id:this.selectedCarDetails._id }).subscribe(pagedData => {
+         this.carService.onTransctionComplete(transactionData).subscribe(response => {
       
-            //this.bids = pagedData;  
+            
             this.commonUtilsService.hidePageLoader();
-            //console.log('bids',this.bids)
+            console.log('response',response)
           },
           error => {
             this.commonUtilsService.onError(error);
-          }); */
+          });
 
         // Update Car Status
 

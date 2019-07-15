@@ -299,12 +299,12 @@ public listingCarBids(carObject): Observable<PagedData<Bid>> {
     }
 
     /**
-     * updateCarStatus car
+     * onTransctionComplete car
      * @param postedData    car object to update car status.
      * @return   Observable<any>
      */
-    public updateCarStatus(postedData:any):Observable<any>{        
-        return this.httpClient.post('car/updateCarStatus',postedData).map((response:any)=>response);
+    public onTransctionComplete(postedData:any):Observable<any>{        
+        return this.httpClient.post('payment/onTransctionComplete',postedData).map((response:any)=>response);
     
     }
 
