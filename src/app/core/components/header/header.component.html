@@ -33,7 +33,7 @@
 
   <div class="menu">
     <!-- menu start -->
-    <nav id="menu" class="mega-menu">
+    <nav id="menu" class="mega-menu custom_menu">
       <!-- menu list items container -->
       <section class="menu-list-items">
         <div class="container">
@@ -45,20 +45,21 @@
                   <a href="#"><img id="logo_dark_img" src="assets/images/applogo.png" alt="logo"> </a>
                 </li>
               </ul>
+        
+           
               <!-- menu links -->
               <ul *ngIf="isLoggedin" class="menu-links" style="float:right;">
+        
+                  <li class="hoverTrigger"><a href="javascript:void(0)">
+                      
+                    
 
-
-
-
-
-
-
-                <li class="hoverTrigger"><a href="javascript:void(0)">
+                      
                     <div class="profile_img">
                       <img [src]="profileData.profile_pic"
                         alt="" class="img-fluid">
                     </div>
+                    
                     {{profileData.name.first_name}} <i class="fa fa-angle-down fa-indicator"></i>
                     <div class="mobileTriggerButton"></div>
                   </a>
@@ -83,6 +84,38 @@
 
               </ul>
               <!-- menu links -->
+
+
+              <div class="notification_menu">
+                  <a id="filter_toggle_btn" class="notifyme_bell" href="#">
+                      <span class="notification_count">13</span>
+                        <img src="assets/images/envelope.png">
+                  </a>
+  
+  
+                    <div class="msg_notification">
+                        <ul>
+  
+                        <li>
+                            <div class="notification_row"> 
+                          <div class="thumb_left">
+                          <div class="notification_thumb">
+                            <img src="assets/images/envelope.png">
+                        </div>
+                      </div>
+                        
+                        <div class="notification_info">
+                          <P><a href="#"><span>John Brook</span> has a one message for you.</a></P>  
+                        </div>
+                      </div>
+                        </li>
+                        </ul>
+                      <a class="see_all" href="#">See All</a>
+                        </div>
+  
+                      </div>
+        
+
 
             </div>
           </div>

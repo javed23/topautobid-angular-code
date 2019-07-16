@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit ,AfterViewInit} from '@angular/core';
 import { Router } from "@angular/router";
 import { Subscription } from 'rxjs/Subscription';
 import { ToastrManager } from 'ng6-toastr-notifications';//toaster class
-
+declare  var $:any;
 //import core services
 import { UserAuthService } from '../../_services/'
 
@@ -56,6 +56,15 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+
+
+  ngAfterViewInit(){
+    $(function() {
+      $("#filter_toggle_btn").click(function() {
+          $(".msg_notification").slideToggle(300);
+      });
+  });
+  }
   logout() {
     this.toastr.successToastr(environment.MESSAGES.LOGOUT_SUCCESS, 'Success!');//showing success toaster
     const redirectUrl = (this.loggedinUserType).toLowerCase() + '/login';
